@@ -1,0 +1,552 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Registro de Ingreso | INACAP Sede Arica</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/registro.css' %}">
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero-registro">
+        <div class="hero-registro-contenido">
+
+            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
+                ← Volver al inicio
+            </a>
+
+            <h1>
+                Registro de Ingreso
+            </h1>
+
+            <p>
+                Escaneo QR para validar el acceso de estudiantes titulados e invitados oficiales.
+                Si el registro está cerrado, los accesos seguirán funcionando, pero quedarán
+                marcados como atrasados.
+            </p>
+
+        </div>
+    </section>
+
+    {% if messages %}
+        <section class="mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main class="contenido-registro">
+
+        <section class="control-ceremonias">
+            <h2>
+                Control de ceremonias activas
+            </h2>
+
+            <p>
+                Solo una ceremonia puede estar ABIERTA al mismo tiempo.
+                Cuando se cierre, los próximos ingresos quedarán marcados como atrasados.
+            </p>
+
+            <div class="control-scroll">
+                <table class="tabla-ceremonias">
+                    <thead>
+                        <tr>
+                            <th>Ceremonia</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Lugar</th>
+                            <th>Estado</th>
+                            <th>Fecha apertura</th>
+                            <th>Fecha cierre</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for bloque in bloques %}
+                            <tr>
+                                <td>{{ bloque.nombre }}</td>
+                                <td>{{ bloque.fecha|date:"d/m/Y" }}</td>
+                                <td>{{ bloque.hora_inicio|time:"H:i" }}</td>
+                                <td>{{ bloque.ceremonia.lugar }}</td>
+
+                                <td>
+                                    {% if bloque.estado_registro == "ABIERTA" %}
+                                        <span class="estado-registro estado-abierto">
+                                            ABIERTA
+                                        </span>
+                                    {% elif bloque.estado_registro == "CERRADA" %}
+                                        <span class="estado-registro estado-cerrado">
+                                            CERRADA
+                                        </span>
+                                    {% else %}
+                                        <span class="estado-registro estado-programado">
+                                            PROGRAMADA
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if bloque.fecha_apertura_registro %}
+                                        {{ bloque.fecha_apertura_registro|date:"d/m/Y H:i" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if bloque.fecha_cierre_registro %}
+                                        {{ bloque.fecha_cierre_registro|date:"d/m/Y H:i" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="acciones-ceremonia">
+                                        {% if bloque.estado_registro == "PROGRAMADA" %}
+                                            <form
+                                                method="POST"
+                                                action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}"
+                                                onsubmit="return confirm('¿Deseas abrir esta ceremonia para el ingreso oficial?');"
+                                            >
+                                                {% csrf_token %}
+
+                                                <button type="submit" class="btn-abrir">
+                                                    Abrir ceremonia
+                                                </button>
+                                            </form>
+
+                                        {% elif bloque.estado_registro == "ABIERTA" %}
+                                            <form
+                                                method="POST"
+                                                action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}"
+                                                onsubmit="return confirm('¿Deseas cerrar esta ceremonia? Los siguientes ingresos quedarán marcados como atrasados.');"
+                                            >
+                                                {% csrf_token %}
+
+                                                <button type="submit" class="btn-cerrar">
+                                                    Cerrar ceremonia
+                                                </button>
+                                            </form>
+
+                                        {% else %}
+                                            <form
+                                                method="POST"
+                                                action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}"
+                                                onsubmit="return confirm('¿Deseas volver la ceremonia al estado PROGRAMADA?');"
+                                            >
+                                                {% csrf_token %}
+
+                                                <button type="submit" class="btn-reprogramar">
+                                                    Reprogramar
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+
+                        {% empty %}
+                            <tr>
+                                <td colspan="8">
+                                    No existen ceremonias cargadas.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="grid-registro">
+
+            <article class="panel-lector">
+                <h2>
+                    Escáner QR
+                </h2>
+
+                <p>
+                    Utiliza la cámara para leer tarjetas de estudiantes o invitaciones oficiales.
+                </p>
+
+                <div class="lector">
+                    <div id="reader"></div>
+                </div>
+
+                <div class="qr-ayuda">
+                    La lectura se validará automáticamente al detectar un código QR válido.
+                </div>
+            </article>
+
+            <article class="panel-manual">
+                <h2>
+                    Ingreso manual
+                </h2>
+
+                <p>
+                    Si el QR no puede escanearse, ingresa el código manualmente.
+                </p>
+
+                <form class="form-manual" id="formManual">
+                    <input
+                        type="text"
+                        id="codigoManual"
+                        placeholder="Ejemplo: EST-XXXXXXXX o INV-XXXXXXXX"
+                        autocomplete="off"
+                    >
+
+                    <button type="submit">
+                        Validar código
+                    </button>
+                </form>
+            </article>
+
+        </section>
+
+        <section id="resultado" class="resultado-validacion resultado">
+            <h2 id="resultadoTitulo">
+                Resultado
+            </h2>
+
+            <p id="resultadoMensaje">
+                Esperando lectura de QR.
+            </p>
+
+            <div id="estadoVisual" class="estado-grande">
+                Estado
+            </div>
+
+            <div class="detalle-ingreso">
+
+                <div class="item-detalle">
+                    <strong>Nombre</strong>
+                    <span id="detalleNombre">-</span>
+                </div>
+
+                <div class="item-detalle">
+                    <strong>RUT</strong>
+                    <span id="detalleRut">-</span>
+                </div>
+
+                <div class="item-detalle">
+                    <strong>Área</strong>
+                    <span id="detalleArea">-</span>
+                </div>
+
+                <div class="item-detalle">
+                    <strong>Plan de estudio</strong>
+                    <span id="detallePlan">-</span>
+                </div>
+
+                <div class="item-detalle">
+                    <strong>Tipo acceso</strong>
+                    <span id="detalleTipo">-</span>
+                </div>
+
+                <div class="item-detalle">
+                    <strong>Hora validación</strong>
+                    <span id="detalleHora">-</span>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="ultimos-registros">
+            <h2>
+                Últimos registros
+            </h2>
+
+            <p>
+                Últimos movimientos registrados por lectura QR o ingreso manual.
+            </p>
+
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha / hora</th>
+                            <th>Nombre</th>
+                            <th>RUT</th>
+                            <th>Tipo</th>
+                            <th>Resultado</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for registro in ultimos_registros %}
+                            <tr>
+                                <td>{{ registro.fecha_hora|date:"d/m/Y H:i" }}</td>
+
+                                <td>
+                                    {% if registro.estudiante %}
+                                        {{ registro.estudiante.nombre_completo }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if registro.estudiante %}
+                                        {{ registro.estudiante.rut }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ registro.tipo }}</td>
+
+                                <td>
+                                    {% if registro.resultado == "PERMITIDO" %}
+                                        <span class="estado-registro estado-abierto">
+                                            PERMITIDO
+                                        </span>
+                                    {% elif registro.resultado == "ATRASADO" %}
+                                        <span class="estado-registro estado-programado">
+                                            ATRASADO
+                                        </span>
+                                    {% elif registro.resultado == "DUPLICADO" %}
+                                        <span class="estado-registro estado-cerrado">
+                                            DUPLICADO
+                                        </span>
+                                    {% else %}
+                                        <span class="estado-registro estado-cerrado">
+                                            {{ registro.resultado }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ registro.observacion|default:"-" }}</td>
+                            </tr>
+
+                        {% empty %}
+                            <tr>
+                                <td colspan="6">
+                                    Aún no existen registros de ingreso.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    let ultimoCodigoLeido = "";
+    let bloqueoLectura = false;
+
+    const resultado = document.getElementById("resultado");
+
+    const resultadoTitulo = document.getElementById("resultadoTitulo");
+    const resultadoMensaje = document.getElementById("resultadoMensaje");
+
+    const estadoVisual = document.getElementById("estadoVisual");
+
+    const detalleNombre = document.getElementById("detalleNombre");
+    const detalleRut = document.getElementById("detalleRut");
+    const detalleArea = document.getElementById("detalleArea");
+    const detallePlan = document.getElementById("detallePlan");
+    const detalleTipo = document.getElementById("detalleTipo");
+    const detalleHora = document.getElementById("detalleHora");
+
+    function limpiarTexto(valor) {
+        if (!valor) {
+            return "-";
+        }
+
+        return valor;
+    }
+
+    function mostrarResultado(datos) {
+        resultado.classList.remove(
+            "permitido",
+            "rechazado",
+            "error",
+            "atrasado"
+        );
+
+        estadoVisual.classList.remove(
+            "estado-ok",
+            "estado-no",
+            "estado-alerta",
+            "estado-tarde"
+        );
+
+        resultado.classList.add("visible");
+
+        resultadoTitulo.innerText = datos.titulo || "Resultado";
+        resultadoMensaje.innerText = datos.mensaje || "";
+
+        detalleNombre.innerText = limpiarTexto(datos.nombre);
+        detalleRut.innerText = limpiarTexto(datos.rut);
+        detalleArea.innerText = limpiarTexto(datos.area);
+        detallePlan.innerText = limpiarTexto(datos.plan);
+        detalleTipo.innerText = limpiarTexto(datos.tipo);
+
+        const ahora = new Date();
+        detalleHora.innerText = ahora.toLocaleTimeString("es-CL");
+
+        if (datos.atrasado === true) {
+            resultado.classList.add("atrasado");
+            estadoVisual.classList.add("estado-tarde");
+            estadoVisual.innerText = "INGRESO ATRASADO";
+            return;
+        }
+
+        if (datos.estado === "permitido") {
+            resultado.classList.add("permitido");
+            estadoVisual.classList.add("estado-ok");
+            estadoVisual.innerText = "ACCESO AUTORIZADO";
+        } else if (datos.estado === "rechazado") {
+            resultado.classList.add("rechazado");
+            estadoVisual.classList.add("estado-no");
+            estadoVisual.innerText = "ACCESO RECHAZADO";
+        } else {
+            resultado.classList.add("error");
+            estadoVisual.classList.add("estado-alerta");
+            estadoVisual.innerText = "REVISAR CÓDIGO";
+        }
+    }
+
+    async function validarCodigo(codigo) {
+        const codigoLimpio = codigo.trim();
+
+        if (!codigoLimpio) {
+            mostrarResultado({
+                estado: "error",
+                titulo: "Código vacío",
+                mensaje: "Debes ingresar o escanear un código válido."
+            });
+
+            return;
+        }
+
+        const formulario = new FormData();
+        formulario.append("codigo", codigoLimpio);
+
+        const respuesta = await fetch(
+            "{% url 'titulacion:validar_codigo_ingreso' %}",
+            {
+                method: "POST",
+                body: formulario
+            }
+        );
+
+        const datos = await respuesta.json();
+
+        mostrarResultado(datos);
+    }
+
+    function lecturaExitosa(codigo) {
+        if (bloqueoLectura) {
+            return;
+        }
+
+        if (codigo === ultimoCodigoLeido) {
+            return;
+        }
+
+        bloqueoLectura = true;
+        ultimoCodigoLeido = codigo;
+
+        validarCodigo(codigo);
+
+        setTimeout(function () {
+            bloqueoLectura = false;
+            ultimoCodigoLeido = "";
+        }, 2500);
+    }
+
+    document
+        .getElementById("formManual")
+        .addEventListener("submit", function (evento) {
+            evento.preventDefault();
+
+            const codigo = document.getElementById("codigoManual").value;
+
+            validarCodigo(codigo);
+
+            document.getElementById("codigoManual").value = "";
+        });
+
+    function iniciarCamara() {
+        const lector = new Html5QrcodeScanner(
+            "reader",
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
+            false
+        );
+
+        lector.render(
+            lecturaExitosa,
+            function (error) {}
+        );
+    }
+
+    iniciarCamara();
+</script>
+
+</body>
+</html>

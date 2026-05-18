@@ -1,0 +1,494 @@
+/* === RESET === */
+/* Reset, variables globales, header, hero, botones, formularios,
+   tablas, mensajes y responsive base viven en base.css. */
+
+/* === VARIABLES === */
+:root{
+    --registro-width:min(1180px,90%);
+}
+
+/* === LAYOUT === */
+.hero-registro-contenido{
+    width:var(--registro-width);
+}
+
+.contenido-registro{
+    position:relative;
+    padding-bottom:clamp(22px,3vw,36px);
+}
+
+.mensajes{
+    width:var(--registro-width);
+    margin:-28px auto 18px;
+}
+
+.control-ceremonias{
+    width:var(--registro-width);
+    margin:-32px auto 18px;
+    padding:clamp(16px,2vw,20px);
+    position:relative;
+    z-index:6;
+}
+
+.mensajes + .contenido-registro .control-ceremonias{
+    margin-top:0;
+}
+
+.control-ceremonias h2{
+    font-size:clamp(1.25rem,2vw,1.55rem);
+    margin-bottom:8px;
+    color:var(--texto);
+}
+
+.control-ceremonias p{
+    font-size:.88rem;
+    color:var(--texto-suave);
+    margin-bottom:14px;
+    max-width:980px;
+}
+
+.control-scroll{
+    border-radius:16px;
+    border:1px solid var(--borde-suave);
+    overflow-x:auto;
+}
+
+.tabla-ceremonias{
+    min-width:980px;
+}
+
+.tabla-ceremonias th{
+    font-size:.72rem;
+}
+
+.tabla-ceremonias td{
+    font-size:.82rem;
+}
+
+.estado-registro{
+    min-height:28px;
+    padding:6px 11px;
+    font-size:.7rem;
+}
+
+/* === BOTONES DE CONTROL DE BLOQUE === */
+.form-accion-bloque{
+    display:inline-flex;
+    align-items:center;
+}
+
+.btn-abrir,
+.btn-cerrar,
+.btn-reprogramar{
+    min-height:32px;
+    padding:0 13px;
+    border-radius:999px;
+    font-size:.74rem;
+    font-weight:900;
+    white-space:nowrap;
+    color:var(--blanco);
+    border:none;
+}
+
+.btn-abrir{
+    background:#16a34a;
+}
+
+.btn-cerrar{
+    background:#dc2626;
+}
+
+.btn-reprogramar{
+    background:#f59e0b;
+    color:#111827;
+}
+
+/* === ZONA PRINCIPAL REGISTRO === */
+.grid-registro,
+.zona-registro,
+.registro-grid{
+    width:var(--registro-width);
+    margin:18px auto 0;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+}
+
+.panel-lector,
+.panel-manual,
+.panel-resultado,
+.panel-ultimos,
+.resultado-validacion,
+.ultimos-registros{
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:22px;
+    padding:clamp(16px,2vw,22px);
+    box-shadow:var(--sombra-suave);
+}
+
+.panel-lector h2,
+.panel-manual h2,
+.panel-resultado h2,
+.panel-ultimos h2,
+.resultado-validacion h2,
+.ultimos-registros h2{
+    font-size:clamp(1.18rem,1.8vw,1.45rem);
+    margin-bottom:8px;
+    color:var(--texto);
+}
+
+.panel-lector p,
+.panel-manual p,
+.panel-resultado p,
+.panel-ultimos p,
+.resultado-validacion p,
+.ultimos-registros p{
+    font-size:.88rem;
+    color:var(--texto-suave);
+    margin-bottom:14px;
+}
+
+/* === LECTOR QR === */
+#reader,
+.reader,
+.qr-reader{
+    width:100%;
+    max-width:520px;
+    min-height:280px;
+    margin:0 auto;
+    border:2px dashed var(--borde);
+    border-radius:22px;
+    overflow:hidden;
+    background:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#reader video{
+    width:100% !important;
+    height:auto !important;
+    border-radius:18px;
+}
+
+.qr-ayuda,
+.lector-ayuda{
+    margin-top:12px;
+    text-align:center;
+    font-size:.82rem;
+    color:var(--texto-muted);
+    font-weight:700;
+}
+
+/* === INGRESO MANUAL === */
+.form-manual,
+.form-codigo,
+.form-registro-manual{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    align-items:end;
+}
+
+.form-manual input,
+.form-codigo input,
+.form-registro-manual input{
+    min-height:48px;
+    font-weight:800;
+    letter-spacing:.02em;
+}
+
+.form-manual button,
+.form-codigo button,
+.form-registro-manual button{
+    min-height:48px;
+    padding-inline:24px;
+}
+
+/* === RESULTADO VALIDACIÓN === */
+.resultado-box,
+.resultado-contenido{
+    border-radius:18px;
+    padding:16px;
+    background:#f8fafc;
+    border:1px solid var(--borde-suave);
+}
+
+.resultado-ok,
+.resultado-permitido{
+    background:#dcfce7;
+    color:#166534;
+    border-color:#86efac;
+}
+
+.resultado-error,
+.resultado-denegado{
+    background:#fee2e2;
+    color:#991b1b;
+    border-color:#fca5a5;
+}
+
+.resultado-warning,
+.resultado-atrasado{
+    background:#fef3c7;
+    color:#92400e;
+    border-color:#fcd34d;
+}
+
+.resultado-titulo{
+    display:block;
+    font-size:clamp(1.05rem,1.5vw,1.25rem);
+    font-weight:900;
+    margin-bottom:6px;
+}
+
+.resultado-detalle{
+    font-size:.88rem;
+    font-weight:700;
+}
+
+/* === ÚLTIMOS REGISTROS === */
+.ultimos-registros{
+    width:var(--registro-width);
+    margin:18px auto 0;
+}
+
+.lista-registros{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.item-registro{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    align-items:center;
+    padding:13px 14px;
+    border-radius:16px;
+    border:1px solid var(--borde-suave);
+    background:#f8fafc;
+}
+
+.item-registro strong{
+    display:block;
+    font-size:.9rem;
+    color:var(--texto);
+}
+
+.item-registro span{
+    display:block;
+    font-size:.76rem;
+    color:var(--texto-muted);
+    margin-top:3px;
+}
+
+.item-registro .estado-pill{
+    justify-self:end;
+}
+
+/* === RESPONSIVE === */
+
+/* Móvil pequeño: 320px – 480px */
+@media (max-width:480px){
+    :root{
+        --registro-width:90%;
+    }
+
+    .mensajes{
+        margin:-22px auto 14px;
+    }
+
+    .control-ceremonias{
+        margin-top:-24px;
+        padding:14px;
+        border-radius:18px;
+    }
+
+    .control-scroll{
+        border-radius:14px;
+    }
+
+    .tabla-ceremonias{
+        min-width:920px;
+    }
+
+    .grid-registro,
+    .zona-registro,
+    .registro-grid{
+        gap:14px;
+    }
+
+    .panel-lector,
+    .panel-manual,
+    .panel-resultado,
+    .panel-ultimos,
+    .resultado-validacion,
+    .ultimos-registros{
+        padding:14px;
+        border-radius:18px;
+    }
+
+    #reader,
+    .reader,
+    .qr-reader{
+        min-height:240px;
+        border-radius:18px;
+    }
+
+    .form-manual,
+    .form-codigo,
+    .form-registro-manual{
+        grid-template-columns:1fr;
+    }
+
+    .form-manual button,
+    .form-codigo button,
+    .form-registro-manual button{
+        width:100%;
+    }
+
+    .item-registro{
+        grid-template-columns:1fr;
+    }
+
+    .item-registro .estado-pill{
+        justify-self:start;
+    }
+}
+
+/* Móvil grande: 481px – 767px */
+@media (min-width:481px) and (max-width:767px){
+    :root{
+        --registro-width:90%;
+    }
+
+    .control-ceremonias{
+        margin-top:-26px;
+    }
+
+    .form-manual,
+    .form-codigo,
+    .form-registro-manual{
+        grid-template-columns:1fr;
+    }
+
+    .form-manual button,
+    .form-codigo button,
+    .form-registro-manual button{
+        width:100%;
+    }
+
+    #reader,
+    .reader,
+    .qr-reader{
+        max-width:100%;
+    }
+}
+
+/* Tablet: 768px – 1024px */
+@media (min-width:768px) and (max-width:1024px){
+    :root{
+        --registro-width:90%;
+    }
+
+    .grid-registro,
+    .zona-registro,
+    .registro-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .panel-resultado,
+    .resultado-validacion,
+    .ultimos-registros{
+        grid-column:1 / -1;
+    }
+}
+
+/* Notebook: 1025px – 1366px */
+@media (min-width:1025px) and (max-width:1366px){
+    .grid-registro,
+    .zona-registro,
+    .registro-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .panel-resultado,
+    .resultado-validacion{
+        grid-column:1 / -1;
+    }
+}
+
+/* Desktop: 1367px – 1920px */
+@media (min-width:1367px) and (max-width:1920px){
+    :root{
+        --registro-width:min(1240px,88%);
+    }
+
+    .grid-registro,
+    .zona-registro,
+    .registro-grid{
+        grid-template-columns:1.05fr .95fr;
+    }
+
+    .panel-resultado,
+    .resultado-validacion{
+        grid-column:1 / -1;
+    }
+}
+
+/* Pantalla HDMI / monitor externo: 1921px en adelante */
+@media (min-width:1921px){
+    :root{
+        --registro-width:min(1360px,82%);
+    }
+
+    .grid-registro,
+    .zona-registro,
+    .registro-grid{
+        grid-template-columns:1.05fr .95fr;
+    }
+
+    .panel-resultado,
+    .resultado-validacion{
+        grid-column:1 / -1;
+    }
+}
+
+/* Notebooks con poca altura */
+@media (max-height:760px) and (min-width:900px){
+    .hero-registro-contenido{
+        padding-top:16px;
+        padding-bottom:42px;
+    }
+
+    .control-ceremonias{
+        margin-top:-28px;
+        padding:15px;
+    }
+
+    .control-ceremonias h2{
+        font-size:1.25rem;
+    }
+
+    .control-ceremonias p{
+        font-size:.8rem;
+        margin-bottom:10px;
+    }
+
+    #reader,
+    .reader,
+    .qr-reader{
+        min-height:230px;
+    }
+
+    .panel-lector,
+    .panel-manual,
+    .panel-resultado,
+    .panel-ultimos,
+    .resultado-validacion,
+    .ultimos-registros{
+        padding:15px;
+    }
+}

@@ -1,0 +1,194 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ceremonia de Titulación 2026 | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/inicio.css' %}">
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-contenido">
+            <div class="etiqueta">
+                Sistema institucional interno
+            </div>
+
+            <h1>
+                Ceremonia de Titulación 2026
+            </h1>
+
+            <p>
+                Gestión operativa de titulados, invitaciones, validación QR y monitoreo de asistentes.
+            </p>
+        </div>
+    </section>
+
+    {% if messages %}
+        <section class="mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main class="contenido">
+
+        <section class="panel">
+            <h2>
+                Panel Principal
+            </h2>
+
+            <p class="panel-subtitulo">
+                Selecciona el módulo institucional que deseas utilizar.
+            </p>
+
+            <div class="modulos">
+
+                <article class="modulo">
+                    <div>
+                        <div class="icono">📄</div>
+
+                        <h3>
+                            Carga Masiva Excel
+                        </h3>
+
+                        <p>
+                            Importación automática desde archivo oficial curricular.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'titulacion:cargar_excel' %}" class="btn">
+                        Abrir módulo
+                    </a>
+                </article>
+
+                <article class="modulo">
+                    <div>
+                        <div class="icono">🎟️</div>
+
+                        <h3>
+                            Entrega Invitaciones
+                        </h3>
+
+                        <p>
+                            Búsqueda por RUT o nombre para entregar tarjetas.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'titulacion:entrega_invitaciones' %}" class="btn">
+                        Abrir módulo
+                    </a>
+                </article>
+
+                <article class="modulo">
+                    <div>
+                        <div class="icono">📲</div>
+
+                        <h3>
+                            Registro Ingreso
+                        </h3>
+
+                        <p>
+                            Escaneo QR para validar estudiantes e invitados.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'titulacion:registro_ingreso' %}" class="btn">
+                        Abrir módulo
+                    </a>
+                </article>
+
+                <article class="modulo">
+                    <div>
+                        <div class="icono">📊</div>
+
+                        <h3>
+                            Panel Control
+                        </h3>
+
+                        <p>
+                            Seguimiento en vivo de asistentes e ingresos.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'titulacion:panel_control' %}" class="btn">
+                        Abrir módulo
+                    </a>
+                </article>
+
+                <article class="modulo">
+                    <div>
+                        <div class="icono">🔁</div>
+
+                        <h3>
+                            Cambio Ceremonia
+                        </h3>
+
+                        <p>
+                            Cambio controlado de bloque con trazabilidad y regeneración de QR.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'titulacion:cambio_ceremonia' %}" class="btn">
+                        Abrir módulo
+                    </a>
+                </article>
+
+            </div>
+        </section>
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

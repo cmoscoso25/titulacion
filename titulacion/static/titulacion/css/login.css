@@ -1,0 +1,457 @@
+/* === RESET === */
+/* Login mantiene layout propio fullscreen.
+   Reset, variables y estilos base deben venir desde base.css cuando el HTML lo incluya. */
+
+/* === VARIABLES === */
+:root{
+    --login-rojo:#e30613;
+    --login-rojo-oscuro:#b10510;
+    --login-negro:#111111;
+    --login-carbon:#161616;
+    --login-fondo:#f3f5f9;
+    --login-blanco:#ffffff;
+    --login-texto:#0f172a;
+    --login-suave:#64748b;
+    --login-borde:#d9dee8;
+    --login-sombra:0 24px 60px rgba(15,23,42,.22);
+}
+
+/* === LAYOUT === */
+body{
+    background:
+        radial-gradient(circle at 12% 18%, rgba(227,6,19,.16), transparent 28%),
+        linear-gradient(135deg,var(--login-negro) 0%,#1a1a1a 48%,#050505 100%);
+    color:var(--login-texto);
+}
+
+.login-page{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1fr;
+}
+
+.login-brand{
+    min-height:42vh;
+    background:
+        radial-gradient(circle at 18% 24%, rgba(227,6,19,.22), transparent 32%),
+        linear-gradient(135deg,#1d1d1d 0%,#111111 48%,#050505 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(32px,6vw,70px);
+    color:var(--login-blanco);
+    position:relative;
+    overflow:hidden;
+}
+
+.login-brand::after{
+    content:"";
+    position:absolute;
+    width:clamp(160px,18vw,280px);
+    height:clamp(160px,18vw,280px);
+    border:clamp(14px,1.5vw,22px) solid rgba(255,255,255,.06);
+    right:clamp(-40px,4vw,70px);
+    top:clamp(20px,8vw,110px);
+    transform:rotate(35deg);
+}
+
+.brand-content{
+    width:min(720px,100%);
+    position:relative;
+    z-index:2;
+}
+
+.logo-principal{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:10px 22px;
+    border-radius:14px;
+    background:var(--login-rojo);
+    color:var(--login-blanco);
+    font-size:clamp(2rem,5vw,4.4rem);
+    line-height:1;
+    font-weight:1000;
+    letter-spacing:.04em;
+    margin-bottom:24px;
+    box-shadow:0 18px 38px rgba(0,0,0,.26);
+}
+
+.pill{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:36px;
+    padding:0 16px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.08);
+    color:rgba(255,255,255,.92);
+    font-size:clamp(.82rem,1.4vw,1rem);
+    font-weight:900;
+    margin-bottom:22px;
+}
+
+.login-brand h1{
+    font-size:clamp(2rem,5vw,4.5rem);
+    line-height:1.03;
+    font-weight:1000;
+    letter-spacing:-.04em;
+    margin-bottom:18px;
+    color:var(--login-blanco);
+}
+
+.login-brand p{
+    max-width:680px;
+    font-size:clamp(.95rem,1.8vw,1.28rem);
+    line-height:1.55;
+    color:rgba(255,255,255,.9);
+}
+
+.brand-footer{
+    margin-top:32px;
+    font-size:.82rem;
+    font-weight:900;
+    color:rgba(255,255,255,.62);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+/* === PANEL LOGIN === */
+.login-panel{
+    background:
+        radial-gradient(circle at 100% 100%, rgba(227,6,19,.10), transparent 34%),
+        linear-gradient(180deg,#ffffff 0%,#f3f5f9 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(28px,5vw,70px);
+}
+
+.login-card{
+    width:min(480px,100%);
+    background:var(--login-blanco);
+    border-radius:28px;
+    padding:clamp(24px,4vw,38px);
+    box-shadow:var(--login-sombra);
+    border:1px solid rgba(217,222,232,.9);
+}
+
+.card-label{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:32px;
+    padding:0 14px;
+    border-radius:999px;
+    background:#fee2e2;
+    color:#991b1b;
+    font-size:.74rem;
+    font-weight:1000;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:16px;
+}
+
+.login-card h2{
+    font-size:clamp(1.75rem,3vw,2.3rem);
+    line-height:1;
+    color:var(--login-texto);
+    margin-bottom:10px;
+}
+
+.card-description{
+    color:var(--login-suave);
+    font-size:.94rem;
+    line-height:1.45;
+    margin-bottom:22px;
+}
+
+.login-error{
+    padding:13px 15px;
+    border-radius:16px;
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #fca5a5;
+    font-size:.88rem;
+    font-weight:900;
+    margin-bottom:18px;
+}
+
+.login-form{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+}
+
+.form-group label{
+    display:block;
+    font-size:.76rem;
+    font-weight:1000;
+    color:#334155;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    margin-bottom:7px;
+}
+
+.form-group input{
+    width:100%;
+    min-height:50px;
+    border-radius:16px;
+    border:1px solid var(--login-borde);
+    padding:0 16px;
+    background:#ffffff;
+    color:var(--login-texto);
+    font-size:.96rem;
+    font-weight:800;
+    outline:none;
+    transition:.2s ease;
+}
+
+.form-group input:focus{
+    border-color:var(--login-rojo);
+    box-shadow:0 0 0 4px rgba(227,6,19,.10);
+}
+
+.login-button,
+.login-form button[type="submit"]{
+    width:100%;
+    min-height:52px;
+    border:none;
+    border-radius:999px;
+    background:linear-gradient(135deg,var(--login-rojo),var(--login-rojo-oscuro));
+    color:white;
+    font-size:.96rem;
+    font-weight:1000;
+    cursor:pointer;
+    margin-top:4px;
+    transition:.2s ease;
+}
+
+.login-button:hover,
+.login-form button[type="submit"]:hover{
+    transform:translateY(-1px);
+    filter:brightness(.96);
+}
+
+.login-help,
+.login-footer{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid #edf1f7;
+    color:var(--login-suave);
+    font-size:.8rem;
+    line-height:1.45;
+    text-align:center;
+}
+
+.login-help strong,
+.login-footer strong{
+    color:var(--login-texto);
+}
+
+/* === RESPONSIVE === */
+
+/* Móvil pequeño: 320px – 480px */
+@media (max-width:480px){
+    .login-page{
+        min-height:100svh;
+    }
+
+    .login-brand{
+        min-height:auto;
+        padding:28px 20px 34px;
+        align-items:flex-start;
+    }
+
+    .logo-principal{
+        min-height:46px;
+        font-size:2rem;
+        padding:8px 16px;
+        margin-bottom:18px;
+    }
+
+    .pill{
+        min-height:32px;
+        font-size:.78rem;
+        margin-bottom:18px;
+    }
+
+    .login-brand h1{
+        font-size:2.15rem;
+        margin-bottom:14px;
+    }
+
+    .login-brand p{
+        font-size:.92rem;
+    }
+
+    .brand-footer{
+        margin-top:24px;
+        font-size:.74rem;
+    }
+
+    .login-panel{
+        padding:22px 18px 30px;
+    }
+
+    .login-card{
+        border-radius:22px;
+        padding:22px;
+    }
+
+    .form-group input{
+        min-height:48px;
+    }
+
+    .login-button,
+    .login-form button[type="submit"]{
+        min-height:50px;
+    }
+}
+
+/* Móvil grande: 481px – 767px */
+@media (min-width:481px) and (max-width:767px){
+    .login-brand{
+        min-height:auto;
+        padding:38px 30px 44px;
+    }
+
+    .login-panel{
+        padding:34px 26px 44px;
+    }
+
+    .login-card{
+        width:min(520px,100%);
+    }
+}
+
+/* Tablet: 768px – 1024px */
+@media (min-width:768px) and (max-width:1024px){
+    .login-page{
+        grid-template-columns:1fr;
+    }
+
+    .login-brand{
+        min-height:42vh;
+    }
+
+    .login-panel{
+        min-height:58vh;
+    }
+
+    .login-card{
+        width:min(560px,100%);
+    }
+}
+
+/* Notebook: 1025px – 1366px */
+@media (min-width:1025px) and (max-width:1366px){
+    .login-page{
+        grid-template-columns:1.35fr .9fr;
+    }
+
+    .login-brand{
+        min-height:100vh;
+    }
+
+    .login-panel{
+        min-height:100vh;
+    }
+}
+
+/* Desktop: 1367px – 1920px */
+@media (min-width:1367px) and (max-width:1920px){
+    .login-page{
+        grid-template-columns:1.45fr 1fr;
+    }
+
+    .login-brand,
+    .login-panel{
+        min-height:100vh;
+    }
+
+    .login-card{
+        width:min(500px,100%);
+    }
+}
+
+/* Pantalla HDMI / monitor externo: 1921px en adelante */
+@media (min-width:1921px){
+    .login-page{
+        grid-template-columns:1.55fr 1fr;
+        max-width:1920px;
+        margin:0 auto;
+        background:white;
+    }
+
+    body{
+        background:#050505;
+    }
+
+    .login-brand,
+    .login-panel{
+        min-height:100vh;
+    }
+
+    .login-card{
+        width:min(520px,100%);
+    }
+}
+
+/* Notebooks con poca altura */
+@media (max-height:760px) and (min-width:900px){
+    .login-brand{
+        padding:42px;
+    }
+
+    .logo-principal{
+        font-size:3rem;
+        min-height:48px;
+        margin-bottom:18px;
+    }
+
+    .pill{
+        margin-bottom:18px;
+    }
+
+    .login-brand h1{
+        font-size:3rem;
+        margin-bottom:14px;
+    }
+
+    .login-brand p{
+        font-size:1rem;
+    }
+
+    .brand-footer{
+        margin-top:24px;
+    }
+
+    .login-panel{
+        padding:42px;
+    }
+
+    .login-card{
+        padding:28px;
+        border-radius:24px;
+    }
+
+    .card-description{
+        margin-bottom:16px;
+    }
+
+    .login-form{
+        gap:12px;
+    }
+
+    .form-group input{
+        min-height:46px;
+    }
+
+    .login-button,
+    .login-form button[type="submit"]{
+        min-height:48px;
+    }
+}

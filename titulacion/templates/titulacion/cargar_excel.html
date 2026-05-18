@@ -1,0 +1,283 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carga Masiva Excel | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/carga_excel.css' %}">
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero-carga">
+        <div class="hero-carga-contenido">
+
+            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
+                ← Volver al inicio
+            </a>
+
+            <h1>
+                Carga Masiva Excel
+            </h1>
+
+            <p>
+                Importación institucional de titulados y ceremonias desde archivo oficial
+                entregado por Curricular. El sistema genera registros, invitaciones y códigos QR.
+            </p>
+
+        </div>
+    </section>
+
+    {% if messages %}
+        <section class="mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main class="contenido-carga">
+
+        <section class="panel-carga">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="zona-upload">
+
+                    <div class="icono-upload">
+                        📊
+                    </div>
+
+                    <h2>
+                        Seleccionar archivo Excel
+                    </h2>
+
+                    <p>
+                        El sistema detectará automáticamente ceremonias, titulados,
+                        áreas, planes de estudio e invitaciones.
+                    </p>
+
+                    <label class="btn-upload">
+                        Seleccionar archivo
+
+                        <input
+                            type="file"
+                            name="archivo_excel"
+                            id="archivo_excel"
+                            class="input-file"
+                            accept=".xlsx,.xls"
+                            required
+                        >
+                    </label>
+
+                    <div class="nombre-archivo" id="nombreArchivo">
+                        Ningún archivo seleccionado
+                    </div>
+
+                    <div class="acciones">
+
+                        <button type="submit" class="btn-upload">
+                            Procesar carga masiva
+                        </button>
+
+                        <a href="#" class="btn-secundario">
+                            Descargar plantilla oficial
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <section class="resumen">
+
+            <article class="card-resumen verde">
+                <div class="titulo">
+                    Estudiantes cargados
+                </div>
+
+                <div class="valor">
+                    {{ total_estudiantes|default:"0" }}
+                </div>
+
+                <div class="detalle">
+                    Registros procesados correctamente
+                </div>
+            </article>
+
+            <article class="card-resumen">
+                <div class="titulo">
+                    Ceremonias detectadas
+                </div>
+
+                <div class="valor">
+                    {{ total_ceremonias|default:"0" }}
+                </div>
+
+                <div class="detalle">
+                    Jornadas institucionales creadas
+                </div>
+            </article>
+
+            <article class="card-resumen dorado">
+                <div class="titulo">
+                    Invitaciones generadas
+                </div>
+
+                <div class="valor">
+                    {{ total_invitaciones|default:"0" }}
+                </div>
+
+                <div class="detalle">
+                    Tarjetas QR creadas automáticamente
+                </div>
+            </article>
+
+            <article class="card-resumen rojo">
+                <div class="titulo">
+                    Registros con alerta
+                </div>
+
+                <div class="valor">
+                    {{ total_alertas|default:"0" }}
+                </div>
+
+                <div class="detalle">
+                    Filas incompletas o con revisión manual
+                </div>
+            </article>
+
+        </section>
+
+        <section class="tabla-preview panel-preview">
+
+            <div class="titulo-preview">
+                Vista previa de registros procesados
+            </div>
+
+            <div class="cuerpo-preview">
+
+                <div class="scroll-preview tabla-scroll">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>RUT</th>
+                                <th>Área</th>
+                                <th>Plan</th>
+                                <th>Ceremonia</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for estudiante in estudiantes_preview %}
+
+                                <tr>
+                                    <td>{{ estudiante.nombre_completo }}</td>
+                                    <td>{{ estudiante.rut }}</td>
+                                    <td>{{ estudiante.plan_estudio.area.nombre }}</td>
+                                    <td>{{ estudiante.plan_estudio.nombre }}</td>
+                                    <td>{{ estudiante.bloque_ceremonia.nombre }}</td>
+
+                                    <td>
+                                        <span class="estado-carga estado-ok">
+                                            Procesado
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="6">
+                                        Aún no existen registros cargados.
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    const inputArchivo = document.getElementById("archivo_excel");
+    const nombreArchivo = document.getElementById("nombreArchivo");
+
+    inputArchivo.addEventListener("change", function() {
+
+        if (this.files.length > 0) {
+            nombreArchivo.innerText = this.files[0].name;
+        } else {
+            nombreArchivo.innerText = "Ningún archivo seleccionado";
+        }
+
+    });
+</script>
+
+</body>
+</html>

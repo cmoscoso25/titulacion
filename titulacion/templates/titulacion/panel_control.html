@@ -1,0 +1,684 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Control | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero-dashboard">
+        <div class="hero-dashboard-contenido">
+            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
+                ← Volver al inicio
+            </a>
+
+            <h1>
+                Dashboard de Control
+            </h1>
+
+            <p>
+                Monitoreo operativo en tiempo real por bloque de ceremonia,
+                titulados, invitados y registros de acceso.
+            </p>
+        </div>
+    </section>
+
+    <main class="contenido-dashboard">
+
+        <section class="resumen-contexto">
+            <div>
+                <span>Ceremonia activa del sistema</span>
+                <strong>
+                    {% if ceremonia_principal %}
+                        {{ ceremonia_principal.nombre }} · {{ ceremonia_principal.anio }}
+                    {% else %}
+                        Ceremonia de Titulación 2026
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div>
+                <span>Uso principal</span>
+                <strong>
+                    Consulta rápida por bloque, RUT o nombre
+                </strong>
+            </div>
+        </section>
+
+        <section class="filtros-dashboard">
+
+            <input
+                type="hidden"
+                id="filtroCeremonia"
+                value="{% if ceremonia_principal %}{{ ceremonia_principal.id }}{% endif %}"
+            >
+
+            <div class="grupo-filtro filtro-bloque">
+                <label for="filtroBloque">Bloque / horario</label>
+
+                <select id="filtroBloque">
+                    <option value="">Todos los bloques</option>
+
+                    {% for bloque in bloques %}
+                        <option value="{{ bloque.id }}">
+                            {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} · {{ bloque.estado_registro }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="grupo-filtro filtro-busqueda">
+                <label for="filtroBusqueda">Buscar titulado</label>
+
+                <input
+                    type="text"
+                    id="filtroBusqueda"
+                    placeholder="Nombre, apellido, RUT, plan o bloque"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="grupo-filtro">
+                <label for="filtroArea">Área</label>
+
+                <select id="filtroArea">
+                    <option value="">Todas</option>
+
+                    {% for area in areas %}
+                        <option value="{{ area.nombre }}">
+                            {{ area.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="grupo-filtro">
+                <label for="filtroPlan">Plan de estudio</label>
+
+                <select id="filtroPlan">
+                    <option value="">Todos</option>
+
+                    {% for plan in planes %}
+                        <option value="{{ plan.nombre }}">
+                            {{ plan.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="grupo-filtro grupo-boton">
+                <button type="button" onclick="cargarDashboard()">
+                    Aplicar
+                </button>
+            </div>
+
+            <div class="filtros-secundarios">
+
+                <div class="grupo-filtro">
+                    <label for="filtroEstado">Estado estudiante</label>
+
+                    <select id="filtroEstado">
+                        <option value="">Todos</option>
+                        <option value="presentes">Presentes</option>
+                        <option value="pendientes">Pendientes</option>
+                        <option value="atrasados">Atrasados</option>
+                    </select>
+                </div>
+
+                <div class="grupo-filtro">
+                    <label for="filtroTipoAcceso">Tipo acceso</label>
+
+                    <select id="filtroTipoAcceso">
+                        <option value="">Todos</option>
+                        <option value="ESTUDIANTE">Estudiante</option>
+                        <option value="INVITADO">Invitado</option>
+                    </select>
+                </div>
+
+                <div class="grupo-filtro">
+                    <label for="filtroResultado">Resultado QR</label>
+
+                    <select id="filtroResultado">
+                        <option value="">Todos</option>
+                        <option value="PERMITIDO">Permitido</option>
+                        <option value="ATRASADO">Atrasado</option>
+                        <option value="DUPLICADO">Duplicado</option>
+                        <option value="DENEGADO">Denegado</option>
+                        <option value="OTRA_CEREMONIA">Otra ceremonia</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn-limpiar" onclick="limpiarFiltros()">
+                    Limpiar filtros
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="resultado-busqueda" id="resultadoBusqueda">
+            Mostrando información general de la ceremonia.
+        </section>
+
+        <section class="kpis-dashboard">
+
+            <article class="kpi-card kpi-verde">
+                <span>Estudiantes presentes</span>
+                <strong id="kpiEstudiantesPresentes">0</strong>
+                <small id="kpiPctEstudiantes">0% de titulados</small>
+            </article>
+
+            <article class="kpi-card kpi-azul">
+                <span>Estudiantes pendientes</span>
+                <strong id="kpiEstudiantesPendientes">0</strong>
+                <small>Aún no registrados</small>
+            </article>
+
+            <article class="kpi-card kpi-verde">
+                <span>Invitados presentes</span>
+                <strong id="kpiInvitadosPresentes">0</strong>
+                <small id="kpiPctInvitados">0% de invitaciones</small>
+            </article>
+
+            <article class="kpi-card kpi-dorado">
+                <span>Total asistentes</span>
+                <strong id="kpiTotalAsistentes">0</strong>
+                <small>Estudiantes + invitados</small>
+            </article>
+
+            <article class="kpi-card kpi-rojo">
+                <span>Total atrasados</span>
+                <strong id="kpiTotalAtrasados">0</strong>
+                <small>Después del cierre</small>
+            </article>
+
+            <article class="kpi-card kpi-rojo">
+                <span>Alertas QR</span>
+                <strong id="kpiAlertasQr">0</strong>
+                <small>Denegados, duplicados u otra ceremonia</small>
+            </article>
+
+        </section>
+
+        <section class="grid-dashboard">
+
+            <article class="panel-tabla">
+                <div class="panel-titulo">
+                    Avance por plan de estudio
+                </div>
+
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plan</th>
+                                <th>Presentes</th>
+                                <th>Pendientes</th>
+                                <th>Atrasados</th>
+                                <th>Avance</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tablaAvancePlanes">
+                            <tr>
+                                <td colspan="5">Cargando información...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="panel-tabla">
+                <div class="panel-titulo">
+                    Últimos movimientos
+                </div>
+
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hora</th>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tablaUltimosMovimientos">
+                            <tr>
+                                <td colspan="4">Cargando información...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="panel-tabla panel-atrasados">
+            <div class="panel-titulo">
+                Ingresos atrasados
+            </div>
+
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Nombre</th>
+                            <th>RUT</th>
+                            <th>Tipo</th>
+                            <th>Ceremonia</th>
+                            <th>Plan</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaAtrasados">
+                        <tr>
+                            <td colspan="6">No hay ingresos atrasados registrados.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel-tabla panel-seguimiento">
+            <div class="panel-titulo panel-titulo-seguimiento">
+                <span>Seguimiento por estudiante</span>
+                <small>
+                    Permite validar rápidamente si un titulado está presente, pendiente o atrasado.
+                </small>
+            </div>
+
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>RUT</th>
+                            <th>Área</th>
+                            <th>Plan</th>
+                            <th>Ceremonia</th>
+                            <th>Estado</th>
+                            <th>Invitación 1</th>
+                            <th>Invitación 2</th>
+                            <th>Gestión</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaSeguimiento">
+                        <tr>
+                            <td colspan="9">Cargando información...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="actualizacion">
+            Última actualización:
+            <span id="ultimaActualizacion">-</span>
+        </div>
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    const urlDatosPanel = "{% url 'titulacion:datos_panel_control' %}";
+    const urlPlanesPorArea = "{% url 'titulacion:obtener_planes_por_area' %}";
+
+    const filtroCeremonia = document.getElementById("filtroCeremonia");
+    const filtroBloque = document.getElementById("filtroBloque");
+    const filtroBusqueda = document.getElementById("filtroBusqueda");
+    const filtroArea = document.getElementById("filtroArea");
+    const filtroPlan = document.getElementById("filtroPlan");
+    const filtroEstado = document.getElementById("filtroEstado");
+    const filtroTipoAcceso = document.getElementById("filtroTipoAcceso");
+    const filtroResultado = document.getElementById("filtroResultado");
+    const resultadoBusqueda = document.getElementById("resultadoBusqueda");
+
+    let temporizadorBusqueda = null;
+
+    function badge(valor, atrasado = false) {
+        if (atrasado) {
+            return '<span class="badge badge-atrasado">Atrasado</span>';
+        }
+
+        if (valor) {
+            return '<span class="badge badge-si">Sí</span>';
+        }
+
+        return '<span class="badge badge-no">No</span>';
+    }
+
+    function badgeEstadoSeguimiento(item) {
+        if (item.estado_clase === "presente") {
+            return '<span class="badge badge-si">Presente</span>';
+        }
+
+        if (item.estado_clase === "atrasado") {
+            return '<span class="badge badge-atrasado">Atrasado</span>';
+        }
+
+        return '<span class="badge badge-no">Pendiente</span>';
+    }
+
+    function badgeResultado(resultado, codigo, atrasado) {
+        if (atrasado || codigo === "ATRASADO") {
+            return '<span class="badge badge-atrasado">' + resultado + '</span>';
+        }
+
+        if (codigo === "PERMITIDO") {
+            return '<span class="badge badge-si">' + resultado + '</span>';
+        }
+
+        if (codigo === "DUPLICADO" || codigo === "DENEGADO" || codigo === "OTRA_CEREMONIA") {
+            return '<span class="badge badge-no">' + resultado + '</span>';
+        }
+
+        return '<span class="badge">' + resultado + '</span>';
+    }
+
+    function parametrosFiltros() {
+        const params = new URLSearchParams();
+
+        if (filtroCeremonia.value) {
+            params.append("ceremonia", filtroCeremonia.value);
+        }
+
+        if (filtroBloque.value) {
+            params.append("bloque", filtroBloque.value);
+        }
+
+        if (filtroBusqueda.value.trim()) {
+            params.append("q", filtroBusqueda.value.trim());
+        }
+
+        if (filtroArea.value) {
+            params.append("area", filtroArea.value);
+        }
+
+        if (filtroPlan.value) {
+            params.append("plan", filtroPlan.value);
+        }
+
+        if (filtroEstado.value) {
+            params.append("estado", filtroEstado.value);
+        }
+
+        if (filtroTipoAcceso.value) {
+            params.append("tipo_acceso", filtroTipoAcceso.value);
+        }
+
+        if (filtroResultado.value) {
+            params.append("resultado", filtroResultado.value);
+        }
+
+        return params;
+    }
+
+    async function cargarPlanesPorArea() {
+        const areaSeleccionada = filtroArea.value;
+        const planActual = filtroPlan.value;
+        const params = new URLSearchParams();
+
+        if (areaSeleccionada) {
+            params.append("area", areaSeleccionada);
+        }
+
+        const respuesta = await fetch(urlPlanesPorArea + "?" + params.toString());
+        const datos = await respuesta.json();
+
+        filtroPlan.innerHTML = '<option value="">Todos</option>';
+
+        datos.planes.forEach(function(plan) {
+            const option = document.createElement("option");
+            option.value = plan;
+            option.textContent = plan;
+
+            if (plan === planActual) {
+                option.selected = true;
+            }
+
+            filtroPlan.appendChild(option);
+        });
+    }
+
+    async function cargarDashboard() {
+        const params = parametrosFiltros();
+
+        const respuesta = await fetch(urlDatosPanel + "?" + params.toString());
+        const datos = await respuesta.json();
+
+        document.getElementById("kpiEstudiantesPresentes").innerText = datos.kpis.estudiantes_presentes;
+        document.getElementById("kpiEstudiantesPendientes").innerText = datos.kpis.estudiantes_pendientes;
+        document.getElementById("kpiInvitadosPresentes").innerText = datos.kpis.invitados_presentes;
+        document.getElementById("kpiTotalAsistentes").innerText = datos.kpis.total_asistentes;
+        document.getElementById("kpiTotalAtrasados").innerText = datos.kpis.total_atrasados;
+        document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
+
+        document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
+        document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
+
+        actualizarTextoBusqueda(datos);
+        cargarTablaAvance(datos.avance_por_plan);
+        cargarTablaMovimientos(datos.ultimos_registros);
+        cargarTablaAtrasados(datos.ingresos_atrasados);
+        cargarTablaSeguimiento(datos.seguimiento_estudiantes);
+
+        const ahora = new Date();
+        document.getElementById("ultimaActualizacion").innerText = ahora.toLocaleTimeString("es-CL");
+    }
+
+    function actualizarTextoBusqueda(datos) {
+        const texto = filtroBusqueda.value.trim();
+
+        if (texto) {
+            resultadoBusqueda.innerHTML =
+                'Resultado para búsqueda: <strong>' +
+                texto +
+                '</strong> · Titulados encontrados: <strong>' +
+                datos.kpis.estudiantes_totales +
+                '</strong>';
+            resultadoBusqueda.classList.add("activo");
+            return;
+        }
+
+        resultadoBusqueda.innerHTML = "Mostrando información general de la ceremonia.";
+        resultadoBusqueda.classList.remove("activo");
+    }
+
+    function cargarTablaAvance(items) {
+        const tbody = document.getElementById("tablaAvancePlanes");
+        tbody.innerHTML = "";
+
+        if (!items.length) {
+            tbody.innerHTML = '<tr><td colspan="5">No hay información para los filtros seleccionados.</td></tr>';
+            return;
+        }
+
+        items.forEach(function(item) {
+            const fila = document.createElement("tr");
+
+            fila.innerHTML = `
+                <td>${item.plan}</td>
+                <td>${item.presentes} / ${item.total}</td>
+                <td>${item.pendientes}</td>
+                <td>${item.atrasados}</td>
+                <td>
+                    <strong>${item.porcentaje}%</strong>
+                    <div class="barra-progreso">
+                        <div style="width:${item.porcentaje}%"></div>
+                    </div>
+                </td>
+            `;
+
+            tbody.appendChild(fila);
+        });
+    }
+
+    function cargarTablaMovimientos(items) {
+        const tbody = document.getElementById("tablaUltimosMovimientos");
+        tbody.innerHTML = "";
+
+        if (!items.length) {
+            tbody.innerHTML = '<tr><td colspan="4">No hay movimientos registrados.</td></tr>';
+            return;
+        }
+
+        items.forEach(function(item) {
+            const fila = document.createElement("tr");
+
+            fila.innerHTML = `
+                <td>${item.hora}</td>
+                <td>${item.nombre}</td>
+                <td>${item.tipo_acceso}</td>
+                <td>${badgeResultado(item.resultado, item.codigo_resultado, item.ingreso_atrasado)}</td>
+            `;
+
+            tbody.appendChild(fila);
+        });
+    }
+
+    function cargarTablaAtrasados(items) {
+        const tbody = document.getElementById("tablaAtrasados");
+        tbody.innerHTML = "";
+
+        if (!items.length) {
+            tbody.innerHTML = '<tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>';
+            return;
+        }
+
+        items.forEach(function(item) {
+            const fila = document.createElement("tr");
+
+            fila.innerHTML = `
+                <td>${item.hora}</td>
+                <td>${item.nombre}</td>
+                <td>${item.rut}</td>
+                <td>${item.tipo_acceso}</td>
+                <td>${item.bloque}</td>
+                <td>${item.plan}</td>
+            `;
+
+            tbody.appendChild(fila);
+        });
+    }
+
+    function cargarTablaSeguimiento(items) {
+        const tbody = document.getElementById("tablaSeguimiento");
+        tbody.innerHTML = "";
+
+        if (!items.length) {
+            tbody.innerHTML = '<tr><td colspan="9">No hay estudiantes para los filtros seleccionados.</td></tr>';
+            return;
+        }
+
+        items.forEach(function(item) {
+            const fila = document.createElement("tr");
+
+            fila.classList.add("fila-estado-" + item.estado_clase);
+
+            fila.innerHTML = `
+                <td>${item.nombre}</td>
+                <td>${item.rut}</td>
+                <td>${item.area}</td>
+                <td>${item.plan}</td>
+                <td>${item.bloque}</td>
+                <td>${badgeEstadoSeguimiento(item)}</td>
+                <td>${badge(item.invitacion_1, item.invitacion_1_atrasada)}</td>
+                <td>${badge(item.invitacion_2, item.invitacion_2_atrasada)}</td>
+                <td>${badge(item.invitaciones_gestionadas)}</td>
+            `;
+
+            tbody.appendChild(fila);
+        });
+    }
+
+    function limpiarFiltros() {
+        filtroBloque.value = "";
+        filtroBusqueda.value = "";
+        filtroArea.value = "";
+        filtroPlan.value = "";
+        filtroEstado.value = "";
+        filtroTipoAcceso.value = "";
+        filtroResultado.value = "";
+
+        cargarPlanesPorArea();
+        cargarDashboard();
+    }
+
+    filtroArea.addEventListener("change", async function() {
+        await cargarPlanesPorArea();
+        await cargarDashboard();
+    });
+
+    filtroBloque.addEventListener("change", cargarDashboard);
+    filtroPlan.addEventListener("change", cargarDashboard);
+    filtroEstado.addEventListener("change", cargarDashboard);
+    filtroTipoAcceso.addEventListener("change", cargarDashboard);
+    filtroResultado.addEventListener("change", cargarDashboard);
+
+    filtroBusqueda.addEventListener("input", function() {
+        clearTimeout(temporizadorBusqueda);
+
+        temporizadorBusqueda = setTimeout(function() {
+            cargarDashboard();
+        }, 450);
+    });
+
+    cargarDashboard();
+
+    setInterval(cargarDashboard, 15000);
+</script>
+
+</body>
+</html>

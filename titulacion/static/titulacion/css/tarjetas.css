@@ -1,0 +1,515 @@
+/* === RESET === */
+/* Reset, variables globales, header, hero, botones, formularios,
+   tablas, mensajes y responsive base viven en base.css. */
+
+/* === VARIABLES === */
+:root{
+    --tarjetas-width:min(1240px,90%);
+    --card-tarjeta-width:100%;
+}
+
+/* === LAYOUT === */
+.hero-tarjetas-contenido{
+    width:var(--tarjetas-width);
+}
+
+.contenido-tarjetas{
+    position:relative;
+    padding-bottom:clamp(24px,3vw,40px);
+}
+
+/* === FILTROS === */
+.panel-filtros{
+    width:var(--tarjetas-width);
+    margin:-32px auto 18px;
+    padding:clamp(16px,2vw,20px);
+    position:relative;
+    z-index:5;
+}
+
+.form-filtros{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    align-items:end;
+}
+
+.campo label{
+    display:block;
+    font-size:.72rem;
+    font-weight:900;
+    color:var(--texto-muted);
+    margin-bottom:6px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+}
+
+.campo select,
+.campo input{
+    min-height:44px;
+    border-radius:14px;
+    font-size:.88rem;
+    font-weight:700;
+}
+
+.btn-filtrar{
+    min-height:44px;
+    width:100%;
+}
+
+/* === BARRA SUPERIOR === */
+.barra-superior{
+    width:var(--tarjetas-width);
+    margin:0 auto 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.contador{
+    font-size:.9rem;
+    color:var(--texto-suave);
+    font-weight:800;
+}
+
+.acciones{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.acciones .btn-secundario,
+.acciones .btn-accion{
+    min-height:38px;
+}
+
+/* === GRILLA TARJETAS === */
+.grid-tarjetas,
+.lista-tarjetas{
+    width:var(--tarjetas-width);
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+}
+
+.tarjeta-preview,
+.card-tarjeta,
+.tarjeta-item{
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:24px;
+    box-shadow:var(--sombra-suave);
+    overflow:hidden;
+}
+
+.tarjeta-preview-header,
+.card-tarjeta-header,
+.tarjeta-item-header{
+    padding:18px 20px;
+    background:linear-gradient(135deg,var(--azul),#081b3f);
+    color:var(--blanco);
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:flex-start;
+}
+
+.tarjeta-preview-header h2,
+.card-tarjeta-header h2,
+.tarjeta-item-header h2{
+    font-size:clamp(1.1rem,1.8vw,1.45rem);
+    line-height:1.12;
+}
+
+.tarjeta-preview-header p,
+.card-tarjeta-header p,
+.tarjeta-item-header p{
+    margin-top:6px;
+    color:rgba(255,255,255,.82);
+    font-size:.82rem;
+}
+
+.tipo-tarjeta,
+.badge-tarjeta{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:30px;
+    padding:0 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.25);
+    color:white;
+    font-size:.72rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    white-space:nowrap;
+}
+
+.tarjeta-preview-body,
+.card-tarjeta-body,
+.tarjeta-item-body{
+    padding:20px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+}
+
+.info-tarjeta,
+.detalle-tarjeta{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+}
+
+.info-item span,
+.detalle-item span{
+    display:block;
+    color:var(--texto-muted);
+    font-size:.72rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-bottom:3px;
+}
+
+.info-item strong,
+.detalle-item strong{
+    display:block;
+    color:var(--texto);
+    font-size:.94rem;
+    line-height:1.25;
+}
+
+.qr-tarjeta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    border-radius:18px;
+    background:#f8fafc;
+    border:1px dashed var(--borde);
+}
+
+.qr-tarjeta img{
+    width:150px;
+    height:150px;
+    object-fit:contain;
+    background:white;
+    border-radius:14px;
+    padding:8px;
+    border:1px solid var(--borde-suave);
+}
+
+.tarjeta-preview-footer,
+.card-tarjeta-footer,
+.tarjeta-item-footer{
+    padding:14px 20px 18px;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    border-top:1px solid var(--borde-suave);
+    background:#fbfcff;
+}
+
+.tarjeta-preview-footer .btn,
+.card-tarjeta-footer .btn,
+.tarjeta-item-footer .btn,
+.tarjeta-preview-footer button,
+.card-tarjeta-footer button,
+.tarjeta-item-footer button{
+    min-height:38px;
+}
+
+/* === TARJETA OFICIAL ESCALADA === */
+.tarjeta-oficial-mini{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    border-radius:22px;
+    overflow:hidden;
+    border:1px solid var(--borde-suave);
+    box-shadow:var(--sombra-suave);
+    background:white;
+}
+
+.tarjeta-oficial-mini .mini-header{
+    background:linear-gradient(135deg,var(--rojo),var(--rojo-oscuro));
+    color:white;
+    padding:18px;
+}
+
+.tarjeta-oficial-mini .mini-header strong{
+    display:block;
+    font-size:1.15rem;
+}
+
+.tarjeta-oficial-mini .mini-header span{
+    display:block;
+    margin-top:4px;
+    color:rgba(255,255,255,.85);
+    font-size:.82rem;
+    font-weight:800;
+}
+
+.tarjeta-oficial-mini .mini-body{
+    padding:18px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:18px;
+    align-items:center;
+}
+
+.tarjeta-oficial-mini .mini-info{
+    display:grid;
+    gap:8px;
+}
+
+.tarjeta-oficial-mini .mini-info p{
+    font-size:.88rem;
+    color:var(--texto-suave);
+}
+
+.tarjeta-oficial-mini .mini-info strong{
+    color:var(--texto);
+}
+
+.tarjeta-oficial-mini .mini-qr img{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+}
+
+/* === ESTADO VACÍO === */
+.estado-vacio,
+.sin-tarjetas{
+    width:var(--tarjetas-width);
+    margin:18px auto 0;
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:22px;
+    padding:clamp(24px,4vw,42px);
+    box-shadow:var(--sombra-suave);
+    text-align:center;
+    color:var(--texto-suave);
+}
+
+.estado-vacio h2,
+.sin-tarjetas h2{
+    color:var(--texto);
+    font-size:clamp(1.3rem,2vw,1.6rem);
+    margin-bottom:8px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width:480px){
+    :root{
+        --tarjetas-width:90%;
+    }
+
+    .panel-filtros{
+        margin-top:-24px;
+        padding:14px;
+        border-radius:18px;
+    }
+
+    .barra-superior{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .acciones,
+    .acciones .btn-secundario,
+    .acciones .btn-accion{
+        width:100%;
+    }
+
+    .tarjeta-preview-header,
+    .card-tarjeta-header,
+    .tarjeta-item-header{
+        flex-direction:column;
+    }
+
+    .tarjeta-preview-body,
+    .card-tarjeta-body,
+    .tarjeta-item-body{
+        padding:16px;
+    }
+
+    .tarjeta-preview-footer,
+    .card-tarjeta-footer,
+    .tarjeta-item-footer{
+        flex-direction:column;
+    }
+
+    .tarjeta-preview-footer .btn,
+    .card-tarjeta-footer .btn,
+    .tarjeta-item-footer .btn,
+    .tarjeta-preview-footer button,
+    .card-tarjeta-footer button,
+    .tarjeta-item-footer button{
+        width:100%;
+    }
+
+    .tarjeta-oficial-mini .mini-body{
+        grid-template-columns:1fr;
+        text-align:left;
+    }
+
+    .tarjeta-oficial-mini .mini-qr{
+        display:flex;
+        justify-content:center;
+    }
+}
+
+@media (min-width:481px) and (max-width:767px){
+    :root{
+        --tarjetas-width:90%;
+    }
+
+    .panel-filtros{
+        margin-top:-26px;
+    }
+
+    .tarjeta-oficial-mini .mini-body{
+        grid-template-columns:1fr auto;
+    }
+}
+
+@media (min-width:768px) and (max-width:1024px){
+    :root{
+        --tarjetas-width:90%;
+    }
+
+    .form-filtros{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .form-filtros .btn-filtrar{
+        grid-column:1 / -1;
+    }
+
+    .grid-tarjetas,
+    .lista-tarjetas{
+        grid-template-columns:1fr;
+    }
+
+    .tarjeta-preview-body,
+    .card-tarjeta-body,
+    .tarjeta-item-body{
+        grid-template-columns:1fr auto;
+    }
+
+    .info-tarjeta,
+    .detalle-tarjeta{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media (min-width:1025px) and (max-width:1366px){
+    .form-filtros{
+        grid-template-columns:repeat(4,minmax(0,1fr)) auto;
+    }
+
+    .grid-tarjetas,
+    .lista-tarjetas{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .tarjeta-preview-body,
+    .card-tarjeta-body,
+    .tarjeta-item-body{
+        grid-template-columns:1fr auto;
+    }
+
+    .info-tarjeta,
+    .detalle-tarjeta{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media (min-width:1367px) and (max-width:1920px){
+    :root{
+        --tarjetas-width:min(1320px,88%);
+    }
+
+    .form-filtros{
+        grid-template-columns:repeat(4,minmax(0,1fr)) auto;
+    }
+
+    .grid-tarjetas,
+    .lista-tarjetas{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .tarjeta-preview-body,
+    .card-tarjeta-body,
+    .tarjeta-item-body{
+        grid-template-columns:1fr auto;
+    }
+
+    .info-tarjeta,
+    .detalle-tarjeta{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media (min-width:1921px){
+    :root{
+        --tarjetas-width:min(1460px,82%);
+    }
+
+    .form-filtros{
+        grid-template-columns:repeat(4,minmax(0,1fr)) auto;
+    }
+
+    .grid-tarjetas,
+    .lista-tarjetas{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .tarjeta-preview-body,
+    .card-tarjeta-body,
+    .tarjeta-item-body{
+        grid-template-columns:1fr auto;
+    }
+
+    .info-tarjeta,
+    .detalle-tarjeta{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media (max-height:760px) and (min-width:900px){
+    .hero-tarjetas-contenido{
+        padding-top:16px;
+        padding-bottom:42px;
+    }
+
+    .panel-filtros{
+        margin-top:-28px;
+        padding:16px;
+    }
+
+    .tarjeta-preview-header,
+    .card-tarjeta-header,
+    .tarjeta-item-header{
+        padding:16px 18px;
+    }
+
+    .tarjeta-preview-body,
+    .card-tarjeta-body,
+    .tarjeta-item-body{
+        padding:16px 18px;
+    }
+
+    .qr-tarjeta img{
+        width:120px;
+        height:120px;
+    }
+}

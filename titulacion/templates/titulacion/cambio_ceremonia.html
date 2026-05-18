@@ -1,0 +1,362 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambio de Ceremonia | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/cambio_ceremonia.css' %}">
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero-cambio">
+        <div class="hero-cambio-contenido">
+            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
+                ← Volver al inicio
+            </a>
+
+            <h1>
+                Cambio de Ceremonia
+            </h1>
+
+            <p>
+                Módulo institucional para cambiar a un estudiante de bloque de ceremonia,
+                dejando trazabilidad del motivo, usuario responsable y regeneración de códigos QR.
+            </p>
+        </div>
+    </section>
+
+    {% if messages %}
+        <section class="mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main class="contenido-cambio">
+
+        <section class="panel-busqueda">
+            <h2>
+                Buscar estudiante
+            </h2>
+
+            <form method="GET" class="form-busqueda">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ busqueda }}"
+                    placeholder="Buscar por RUT, nombre o plan de estudio"
+                    autocomplete="off"
+                    autofocus
+                >
+
+                <button type="submit">
+                    Buscar
+                </button>
+            </form>
+
+            <p>
+                Selecciona el registro exacto del estudiante, considerando que un mismo RUT
+                puede existir en más de una ceremonia.
+            </p>
+        </section>
+
+        {% if estudiantes %}
+            <section class="panel-resultados">
+                <h2>
+                    Resultados encontrados
+                </h2>
+
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>RUT</th>
+                                <th>Área</th>
+                                <th>Plan</th>
+                                <th>Bloque actual</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for estudiante in estudiantes %}
+                                <tr>
+                                    <td>{{ estudiante.nombre_completo }}</td>
+                                    <td>{{ estudiante.rut }}</td>
+                                    <td>{{ estudiante.plan_estudio.area.nombre }}</td>
+                                    <td>{{ estudiante.plan_estudio.nombre }}</td>
+                                    <td>
+                                        {{ estudiante.bloque_ceremonia.nombre }}
+                                        <br>
+                                        <small>
+                                            {{ estudiante.bloque_ceremonia.fecha|date:"d/m/Y" }}
+                                            ·
+                                            {{ estudiante.bloque_ceremonia.hora_inicio|time:"H:i" }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        {% if estudiante.ingreso_confirmado %}
+                                            <span class="badge badge-no">
+                                                Con ingreso
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-si">
+                                                Sin ingreso
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="{% url 'titulacion:cambio_ceremonia' %}?q={{ busqueda }}&estudiante={{ estudiante.id }}"
+                                            class="btn-seleccionar"
+                                        >
+                                            Seleccionar
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        {% elif busqueda %}
+            <section class="sin-resultados">
+                No se encontraron estudiantes para la búsqueda realizada.
+            </section>
+        {% endif %}
+
+        {% if estudiante_seleccionado %}
+            <section class="panel-cambio">
+
+                <div class="bloque-datos">
+                    <h2>
+                        Estudiante seleccionado
+                    </h2>
+
+                    <div class="resumen-estudiante grid-datos">
+
+                        <div>
+                            <span>Nombre</span>
+                            <strong>{{ estudiante_seleccionado.nombre_completo }}</strong>
+                        </div>
+
+                        <div>
+                            <span>RUT</span>
+                            <strong>{{ estudiante_seleccionado.rut }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Área</span>
+                            <strong>{{ estudiante_seleccionado.plan_estudio.area.nombre }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Plan</span>
+                            <strong>{{ estudiante_seleccionado.plan_estudio.nombre }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Bloque actual</span>
+                            <strong>{{ estudiante_seleccionado.bloque_ceremonia.nombre }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Fecha / hora</span>
+                            <strong>
+                                {{ estudiante_seleccionado.bloque_ceremonia.fecha|date:"d/m/Y" }}
+                                ·
+                                {{ estudiante_seleccionado.bloque_ceremonia.hora_inicio|time:"H:i" }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Ingreso estudiante</span>
+
+                            {% if estudiante_seleccionado.ingreso_confirmado %}
+                                <strong class="texto-rojo">
+                                    Registrado
+                                </strong>
+                            {% else %}
+                                <strong class="texto-verde">
+                                    Sin registro
+                                </strong>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <span>Invitaciones generadas</span>
+                            <strong>
+                                {{ estudiante_seleccionado.invitaciones.all|dictsort:"id"|length }}
+                                invitaciones
+                            </strong>
+                        </div>
+
+                    </div>
+                </div>
+
+                <form method="POST" class="form-cambio">
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="estudiante_id"
+                        value="{{ estudiante_seleccionado.id }}"
+                    >
+
+                    <div class="campo">
+                        <label for="bloque_destino">
+                            Nueva ceremonia / bloque
+                        </label>
+
+                        <select name="bloque_destino" id="bloque_destino" required>
+                            <option value="">
+                                Selecciona bloque destino
+                            </option>
+
+                            {% for bloque in bloques_destino %}
+                                {% if bloque.id != estudiante_seleccionado.bloque_ceremonia.id %}
+                                    <option value="{{ bloque.id }}">
+                                        {{ bloque.nombre }}
+                                        ·
+                                        {{ bloque.fecha|date:"d/m/Y" }}
+                                        ·
+                                        {{ bloque.hora_inicio|time:"H:i" }}
+                                        ·
+                                        {{ bloque.estado_registro }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="campo campo-completo">
+                        <label for="motivo">
+                            Motivo institucional del cambio
+                        </label>
+
+                        <textarea
+                            name="motivo"
+                            id="motivo"
+                            rows="5"
+                            placeholder="Ejemplo: solicitud autorizada por coordinación, cruce de horario, situación familiar, corrección de asignación, etc."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="alerta-cambio campo-completo">
+                        Al confirmar el cambio, el sistema actualizará el bloque del estudiante,
+                        regenerará el QR del titulado y regenerará las invitaciones asociadas.
+                        Las invitaciones anteriores quedarán reemplazadas.
+                    </div>
+
+                    <div class="acciones-cambio campo-completo">
+                        <button
+                            type="submit"
+                            class="btn-confirmar"
+                            onclick="return confirm('¿Confirmas el cambio de ceremonia? Se regenerarán los QR del estudiante y sus invitaciones.');"
+                        >
+                            Confirmar cambio de ceremonia
+                        </button>
+                    </div>
+                </form>
+
+            </section>
+        {% endif %}
+
+        <section class="panel-historial">
+            <h2>
+                Últimos cambios registrados
+            </h2>
+
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Estudiante</th>
+                            <th>RUT</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Usuario</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for cambio in historial %}
+                            <tr>
+                                <td>{{ cambio.fecha_cambio|date:"d/m/Y H:i" }}</td>
+                                <td>{{ cambio.estudiante.nombre_completo }}</td>
+                                <td>{{ cambio.estudiante.rut }}</td>
+                                <td>{{ cambio.bloque_origen.nombre }}</td>
+                                <td>{{ cambio.bloque_destino.nombre }}</td>
+                                <td>{{ cambio.usuario_responsable|default:"-" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6">
+                                    Aún no existen cambios registrados.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

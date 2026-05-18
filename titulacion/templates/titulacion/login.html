@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Ingreso institucional | Sistema Titulación INACAP</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/login.css' %}">
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-brand">
+
+            <div class="brand-content">
+
+                <div class="logo-principal">
+                    INACAP
+                </div>
+
+                <div class="pill">
+                    Sistema institucional
+                </div>
+
+                <h1>
+                    Ceremonia de<br>
+                    Titulación 2026
+                </h1>
+
+                <p>
+                    Plataforma interna para gestión de invitaciones,
+                    registro de ingreso, control de ceremonias y seguimiento
+                    operativo de asistentes.
+                </p>
+
+                <div class="brand-footer">
+                    INACAP Sede Arica
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="login-panel">
+
+            <div class="login-card">
+
+                <div class="card-label">
+                    Acceso institucional
+                </div>
+
+                <h2>
+                    Iniciar sesión
+                </h2>
+
+                <p class="card-description">
+                    Ingresa con tu usuario autorizado para acceder al módulo correspondiente.
+                </p>
+
+                {% if form.errors %}
+                    <div class="login-error">
+                        Usuario o contraseña incorrectos.
+                    </div>
+                {% endif %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="login-error">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" class="login-form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    <div class="form-group">
+                        <label for="id_username">
+                            Usuario
+                        </label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            id="id_username"
+                            placeholder="Ingresa tu usuario"
+                            autocomplete="username"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_password">
+                            Contraseña
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="id_password"
+                            placeholder="Ingresa tu contraseña"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="login-button">
+                        Ingresar al sistema
+                    </button>
+
+                </form>
+
+                <div class="login-help">
+                    <strong>Uso interno institucional.</strong><br>
+                    El acceso está limitado a usuarios autorizados para la gestión
+                    de la Ceremonia de Titulación 2026.
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

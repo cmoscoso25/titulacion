@@ -1,0 +1,473 @@
+/* === RESET === */
+/* Reset, variables globales, header, hero, botones, formularios,
+   tablas, mensajes y responsive base viven en base.css. */
+
+/* === VARIABLES === */
+:root{
+    --cambio-width:min(1300px,90%);
+}
+
+/* === LAYOUT === */
+.hero-cambio-contenido{
+    width:var(--cambio-width);
+}
+
+.contenido-cambio{
+    width:var(--cambio-width);
+    margin:-42px auto 60px;
+    position:relative;
+    z-index:5;
+}
+
+.mensajes{
+    width:var(--cambio-width);
+    margin:-34px auto 18px;
+}
+
+.mensajes + .contenido-cambio{
+    margin-top:0;
+}
+
+/* === PANEL BÚSQUEDA === */
+.panel-busqueda{
+    padding:clamp(18px,2vw,24px);
+    margin-bottom:20px;
+}
+
+.panel-busqueda h2{
+    font-size:clamp(1.3rem,2vw,1.65rem);
+    color:var(--texto);
+    margin-bottom:8px;
+}
+
+.panel-busqueda p{
+    color:var(--texto-suave);
+    font-size:.9rem;
+    margin-top:12px;
+    max-width:980px;
+}
+
+.form-busqueda{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    align-items:center;
+}
+
+.form-busqueda input{
+    min-height:52px;
+    border-radius:16px;
+    font-weight:800;
+}
+
+.form-busqueda button{
+    min-height:52px;
+    border-radius:16px;
+}
+
+/* === RESULTADOS === */
+.panel-resultados{
+    padding:clamp(18px,2vw,24px);
+    margin-bottom:20px;
+}
+
+.panel-resultados h2{
+    font-size:clamp(1.25rem,1.8vw,1.5rem);
+    color:var(--texto);
+    margin-bottom:14px;
+}
+
+.panel-resultados .tabla-scroll{
+    border:1px solid var(--borde-suave);
+    border-radius:16px;
+    overflow:auto;
+}
+
+.panel-resultados table{
+    min-width:1040px;
+}
+
+.panel-resultados th{
+    font-size:.72rem;
+}
+
+.panel-resultados td{
+    font-size:.82rem;
+}
+
+.btn-seleccionar,
+.btn-cambiar,
+.btn-confirmar{
+    min-height:34px;
+    padding:0 14px;
+    font-size:.76rem;
+    white-space:nowrap;
+}
+
+/* === FORMULARIO CAMBIO === */
+.panel-cambio,
+.formulario-cambio,
+.detalle-cambio{
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:22px;
+    padding:clamp(18px,2vw,24px);
+    box-shadow:var(--sombra-suave);
+    margin-bottom:20px;
+}
+
+.panel-cambio h2,
+.formulario-cambio h2,
+.detalle-cambio h2{
+    font-size:clamp(1.25rem,1.8vw,1.5rem);
+    color:var(--texto);
+    margin-bottom:8px;
+}
+
+.panel-cambio p,
+.formulario-cambio p,
+.detalle-cambio p{
+    color:var(--texto-suave);
+    font-size:.9rem;
+    margin-bottom:14px;
+}
+
+.resumen-estudiante{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    padding:16px;
+    border-radius:18px;
+    background:#f8fafc;
+    border:1px solid var(--borde-suave);
+    margin-bottom:18px;
+}
+
+.resumen-estudiante div{
+    border-left:4px solid var(--rojo);
+    padding-left:12px;
+}
+
+.resumen-estudiante span{
+    display:block;
+    color:var(--texto-muted);
+    font-size:.72rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-bottom:3px;
+}
+
+.resumen-estudiante strong{
+    display:block;
+    color:var(--texto);
+    font-size:.95rem;
+    line-height:1.25;
+}
+
+.form-cambio,
+.formulario-cambio form{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+}
+
+.form-cambio textarea,
+.formulario-cambio textarea{
+    min-height:120px;
+}
+
+.acciones-cambio{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    margin-top:4px;
+}
+
+/* === ALERTAS / BLOQUEOS === */
+.alerta-bloqueo,
+.alerta-duplicidad,
+.alerta-cambio{
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:18px;
+    font-size:.9rem;
+    font-weight:800;
+    border:1px solid transparent;
+}
+
+.alerta-bloqueo{
+    background:#fee2e2;
+    color:#991b1b;
+    border-color:#fca5a5;
+}
+
+.alerta-duplicidad{
+    background:#fef3c7;
+    color:#92400e;
+    border-color:#fcd34d;
+}
+
+.alerta-cambio{
+    background:#dbeafe;
+    color:#1d4ed8;
+    border-color:#93c5fd;
+}
+
+/* === HISTORIAL === */
+.panel-historial,
+.historial-cambios{
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:22px;
+    padding:clamp(18px,2vw,24px);
+    box-shadow:var(--sombra-suave);
+    margin-top:20px;
+}
+
+.panel-historial h2,
+.historial-cambios h2{
+    font-size:clamp(1.25rem,1.8vw,1.5rem);
+    color:var(--texto);
+    margin-bottom:14px;
+}
+
+.lista-historial{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.item-historial{
+    padding:14px;
+    border-radius:16px;
+    border:1px solid var(--borde-suave);
+    background:#f8fafc;
+}
+
+.item-historial strong{
+    display:block;
+    color:var(--texto);
+    font-size:.92rem;
+}
+
+.item-historial span{
+    display:block;
+    color:var(--texto-muted);
+    font-size:.78rem;
+    margin-top:4px;
+}
+
+.item-historial p{
+    margin-top:8px;
+    margin-bottom:0;
+    color:var(--texto-suave);
+    font-size:.84rem;
+}
+
+/* === ESTADO VACÍO === */
+.sin-resultados,
+.estado-vacio{
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:22px;
+    padding:clamp(22px,4vw,40px);
+    box-shadow:var(--sombra-suave);
+    text-align:center;
+    color:var(--texto-suave);
+    margin-top:18px;
+}
+
+.sin-resultados h2,
+.estado-vacio h2{
+    color:var(--texto);
+    font-size:clamp(1.3rem,2vw,1.6rem);
+    margin-bottom:8px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width:480px){
+    :root{
+        --cambio-width:90%;
+    }
+
+    .contenido-cambio{
+        margin-top:-28px;
+        margin-bottom:36px;
+    }
+
+    .mensajes{
+        margin:-24px auto 14px;
+    }
+
+    .panel-busqueda,
+    .panel-resultados,
+    .panel-cambio,
+    .formulario-cambio,
+    .detalle-cambio,
+    .panel-historial,
+    .historial-cambios{
+        border-radius:18px;
+        padding:14px;
+    }
+
+    .form-busqueda{
+        grid-template-columns:1fr;
+    }
+
+    .acciones-cambio{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .acciones-cambio .btn,
+    .acciones-cambio button,
+    .acciones-cambio a{
+        width:100%;
+    }
+
+    .panel-resultados table{
+        min-width:980px;
+    }
+}
+
+@media (min-width:481px) and (max-width:767px){
+    :root{
+        --cambio-width:90%;
+    }
+
+    .contenido-cambio{
+        margin-top:-34px;
+    }
+
+    .form-busqueda{
+        grid-template-columns:1fr;
+    }
+
+    .acciones-cambio{
+        justify-content:flex-start;
+    }
+}
+
+@media (min-width:768px) and (max-width:1024px){
+    :root{
+        --cambio-width:90%;
+    }
+
+    .form-busqueda{
+        grid-template-columns:1fr 180px;
+    }
+
+    .resumen-estudiante{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .form-cambio,
+    .formulario-cambio form{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-cambio .campo-completo,
+    .formulario-cambio textarea,
+    .acciones-cambio{
+        grid-column:1 / -1;
+    }
+}
+
+@media (min-width:1025px) and (max-width:1366px){
+    .form-busqueda{
+        grid-template-columns:1fr 190px;
+    }
+
+    .resumen-estudiante{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+    .form-cambio,
+    .formulario-cambio form{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-cambio .campo-completo,
+    .formulario-cambio textarea,
+    .acciones-cambio{
+        grid-column:1 / -1;
+    }
+}
+
+@media (min-width:1367px) and (max-width:1920px){
+    :root{
+        --cambio-width:min(1360px,88%);
+    }
+
+    .form-busqueda{
+        grid-template-columns:1fr 200px;
+    }
+
+    .resumen-estudiante{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+
+    .form-cambio,
+    .formulario-cambio form{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-cambio .campo-completo,
+    .formulario-cambio textarea,
+    .acciones-cambio{
+        grid-column:1 / -1;
+    }
+}
+
+@media (min-width:1921px){
+    :root{
+        --cambio-width:min(1480px,82%);
+    }
+
+    .form-busqueda{
+        grid-template-columns:1fr 220px;
+    }
+
+    .resumen-estudiante{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+
+    .form-cambio,
+    .formulario-cambio form{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-cambio .campo-completo,
+    .formulario-cambio textarea,
+    .acciones-cambio{
+        grid-column:1 / -1;
+    }
+}
+
+@media (max-height:760px) and (min-width:900px){
+    .hero-cambio-contenido{
+        padding-top:16px;
+        padding-bottom:42px;
+    }
+
+    .contenido-cambio{
+        margin-top:-32px;
+    }
+
+    .panel-busqueda,
+    .panel-resultados,
+    .panel-cambio,
+    .formulario-cambio,
+    .detalle-cambio,
+    .panel-historial,
+    .historial-cambios{
+        padding:16px;
+    }
+
+    .form-busqueda input,
+    .form-busqueda button{
+        min-height:46px;
+    }
+}

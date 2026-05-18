@@ -1,0 +1,342 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarjetas Oficiales | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/tarjetas.css' %}">
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero-tarjetas">
+        <div class="hero-tarjetas-contenido">
+            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
+                ← Volver al inicio
+            </a>
+
+            <h1>
+                Tarjetas Oficiales
+            </h1>
+
+            <p>
+                Visualización institucional de tarjetas de estudiantes titulados
+                e invitaciones oficiales con validación QR.
+            </p>
+        </div>
+    </section>
+
+    <main class="contenido-tarjetas">
+
+        <section class="panel-filtros">
+
+            <form method="GET" class="form-filtros">
+
+                <div class="campo">
+                    <label for="q">
+                        Buscar estudiante
+                    </label>
+
+                    <input
+                        type="text"
+                        name="q"
+                        id="q"
+                        value="{{ busqueda }}"
+                        placeholder="Nombre o RUT"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="ceremonia">
+                        Ceremonia
+                    </label>
+
+                    <select name="ceremonia" id="ceremonia">
+                        <option value="">Todas</option>
+
+                        {% for ceremonia in ceremonias %}
+                            <option
+                                value="{{ ceremonia.id }}"
+                                {% if ceremonia_seleccionada == ceremonia.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ ceremonia.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="bloque">
+                        Bloque
+                    </label>
+
+                    <select name="bloque" id="bloque">
+                        <option value="">Todos</option>
+
+                        {% for bloque in bloques %}
+                            <option
+                                value="{{ bloque.id }}"
+                                {% if bloque_seleccionado == bloque.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="area">
+                        Área
+                    </label>
+
+                    <select name="area" id="area">
+                        <option value="">Todas</option>
+
+                        {% for area in areas %}
+                            <option
+                                value="{{ area.nombre }}"
+                                {% if area_seleccionada == area.nombre %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ area.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="tipo">
+                        Tipo tarjeta
+                    </label>
+
+                    <select name="tipo" id="tipo">
+                        <option value="">Todas</option>
+
+                        <option
+                            value="ESTUDIANTE"
+                            {% if tipo_seleccionado == "ESTUDIANTE" %}
+                                selected
+                            {% endif %}
+                        >
+                            Estudiante
+                        </option>
+
+                        <option
+                            value="INVITACION"
+                            {% if tipo_seleccionado == "INVITACION" %}
+                                selected
+                            {% endif %}
+                        >
+                            Invitaciones
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-filtrar">
+                    Filtrar
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="barra-superior">
+
+            <div class="contador">
+                Total tarjetas:
+                <strong>{{ total_tarjetas }}</strong>
+            </div>
+
+            <div class="acciones">
+                <button type="button" onclick="window.print()" class="btn-secundario">
+                    Imprimir tarjetas
+                </button>
+
+                <a href="{% url 'titulacion:inicio' %}" class="btn-secundario">
+                    Volver al panel
+                </a>
+            </div>
+
+        </section>
+
+        {% if tarjetas %}
+
+            <section class="grid-tarjetas">
+
+                {% for tarjeta in tarjetas %}
+
+                    <article class="tarjeta-preview {% if tarjeta.tipo == 'ESTUDIANTE' %}tarjeta-estudiante-preview{% else %}tarjeta-invitacion-preview{% endif %}">
+
+                        <div class="tarjeta-preview-header">
+                            <div>
+                                <h2>
+                                    {{ tarjeta.nombre }}
+                                </h2>
+
+                                <p>
+                                    {{ tarjeta.rut }} · {{ tarjeta.bloque }}
+                                </p>
+                            </div>
+
+                            <span class="tipo-tarjeta">
+                                {% if tarjeta.tipo == "ESTUDIANTE" %}
+                                    Titulado
+                                {% else %}
+                                    Invitación {{ tarjeta.numero_invitacion }}
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="tarjeta-preview-body">
+
+                            <div class="info-tarjeta">
+
+                                <div class="info-item">
+                                    <span>Área</span>
+                                    <strong>{{ tarjeta.area }}</strong>
+                                </div>
+
+                                <div class="info-item">
+                                    <span>Plan de estudio</span>
+                                    <strong>{{ tarjeta.plan }}</strong>
+                                </div>
+
+                                <div class="info-item">
+                                    <span>Fecha</span>
+                                    <strong>
+                                        {{ tarjeta.dia_semana }} {{ tarjeta.numero_dia }} {{ tarjeta.mes }}
+                                    </strong>
+                                </div>
+
+                                <div class="info-item">
+                                    <span>Hora</span>
+                                    <strong>{{ tarjeta.hora }} hrs.</strong>
+                                </div>
+
+                                <div class="info-item">
+                                    <span>Lugar</span>
+                                    <strong>{{ tarjeta.lugar }}</strong>
+                                </div>
+
+                                <div class="info-item">
+                                    <span>Código</span>
+                                    <strong>{{ tarjeta.codigo }}</strong>
+                                </div>
+
+                                <div class="info-item">
+                                    <span>Estado</span>
+
+                                    {% if tarjeta.utilizado %}
+                                        <strong>Utilizado</strong>
+                                    {% else %}
+                                        <strong>Disponible</strong>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                            <div class="qr-tarjeta">
+                                {% if tarjeta.qr %}
+                                    <img
+                                        src="{{ tarjeta.qr }}"
+                                        alt="QR {{ tarjeta.nombre }}"
+                                    >
+                                {% else %}
+                                    <span>QR no disponible</span>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+                        <div class="tarjeta-preview-footer">
+                            <span>
+                                Ceremonia de Titulación 2026 · INACAP Sede Arica
+                            </span>
+
+                            {% if tarjeta.utilizado %}
+                                <span class="estado-pill estado-abierto">
+                                    Utilizado
+                                </span>
+                            {% else %}
+                                <span class="estado-pill estado-programado">
+                                    Disponible
+                                </span>
+                            {% endif %}
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </section>
+
+        {% else %}
+
+            <section class="estado-vacio">
+                <h2>
+                    Sin tarjetas disponibles
+                </h2>
+
+                <p>
+                    No existen tarjetas para los filtros seleccionados.
+                </p>
+            </section>
+
+        {% endif %}
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Entrega de Invitaciones | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+
+            <div class="sede">
+                Sede Arica
+            </div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">
+                Ceremonia de Titulación 2026
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn-cerrar-sesion">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <section class="hero-entrega">
+        <div class="hero-inner">
+            <a href="{% url 'titulacion:inicio' %}" class="volver-link">
+                ← Volver al inicio
+            </a>
+
+            <h1>
+                Entrega de Invitaciones
+            </h1>
+
+            <p>
+                Búsqueda por RUT o nombre. Si un estudiante participa en más de una ceremonia,
+                se mostrarán todas sus invitaciones oficiales por separado.
+            </p>
+        </div>
+    </section>
+
+    {% if messages %}
+        <section class="mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main class="contenedor-entrega">
+
+        <section class="buscador-box">
+            <form method="GET" class="form-busqueda">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ busqueda }}"
+                    class="input-busqueda"
+                    placeholder="Buscar por RUT o nombre completo"
+                    autofocus
+                >
+
+                <button type="submit" class="btn-buscar">
+                    Buscar invitaciones
+                </button>
+            </form>
+
+            <div class="helper">
+                El resultado mostrará todas las ceremonias asociadas al estudiante buscado.
+            </div>
+        </section>
+
+        {% if resultados %}
+
+            <section class="resumen-resultados">
+                <strong>{{ total_resultados }}</strong>
+                ceremonia{% if total_resultados != 1 %}s{% endif %} encontrada{% if total_resultados != 1 %}s{% endif %}
+                para la búsqueda realizada.
+            </section>
+
+            <div class="acciones-globales">
+                <button
+                    type="button"
+                    class="btn-accion btn-imprimir"
+                    onclick="descargarTodasLasInvitaciones()"
+                >
+                    Descargar todas
+                </button>
+            </div>
+
+            {% for item in resultados %}
+
+                {% with estudiante=item.estudiante %}
+
+                    <section class="estudiante-box bloque-resultado">
+
+                        <div class="encabezado-estudiante">
+                            <div>
+                                <h2 class="nombre-estudiante">
+                                    {{ estudiante.nombre_completo|upper }}
+                                </h2>
+
+                                <div class="grid-info">
+                                    <p><strong>RUT:</strong> {{ estudiante.rut }}</p>
+                                    <p><strong>Área:</strong> {{ estudiante.plan_estudio.area.nombre }}</p>
+                                    <p><strong>Plan:</strong> {{ estudiante.plan_estudio.nombre }}</p>
+                                    <p><strong>Ceremonia:</strong> {{ estudiante.bloque_ceremonia.nombre }}</p>
+
+                                    <p class="info-larga">
+                                        <strong>Fecha:</strong> {{ item.fecha_es }}
+                                        <span>•</span>
+                                        <strong>Hora:</strong> {{ item.hora_es }}
+                                        <span>•</span>
+                                        <strong>Lugar:</strong> Avenida Chile 1108
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="estado-pill">
+                                {% if estudiante.invitaciones_entregadas %}
+                                    Invitaciones gestionadas
+                                {% else %}
+                                    Pendiente de gestión
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="botones-acciones">
+                            <button
+                                type="button"
+                                class="btn-accion btn-imprimir"
+                                onclick="descargarGrupoInvitaciones('grupo-{{ estudiante.id }}')"
+                            >
+                                Descargar esta ceremonia
+                            </button>
+
+                            <form
+                                method="POST"
+                                action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}"
+                            >
+                                {% csrf_token %}
+
+                                <button type="submit" class="btn-accion btn-entregado">
+                                    Marcar gestionadas
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="lista-invitaciones grupo-{{ estudiante.id }}">
+
+                            <article
+                                id="tarjeta-titulado-{{ estudiante.id }}"
+                                class="tarjeta tarjeta-titulado"
+                                data-nombre-archivo="Invitacion_Titulado_{{ estudiante.bloque_ceremonia.nombre|slugify }}_{{ estudiante.rut }}.png"
+                            >
+
+                                <div class="tarjeta-left">
+                                    <div class="logo-card">
+                                        <span>I</span>nacap
+                                    </div>
+
+                                    <div class="bloque-tipo">
+                                        <div class="tipo-invitacion">
+                                            INVITACIÓN
+                                        </div>
+
+                                        <div class="tipo-sub">
+                                            TITULADO
+                                        </div>
+                                    </div>
+
+                                    <div class="texto-mini">
+                                        Ceremonia de Titulación 2026
+                                    </div>
+
+                                    <div class="anio">
+                                        2026
+                                    </div>
+
+                                    <div class="linea-deco"></div>
+                                </div>
+
+                                <div class="tarjeta-center">
+                                    <div class="texto-logro">
+                                        <small>
+                                            TE INVITAMOS A CELEBRAR
+                                        </small>
+
+                                        <h3>
+                                            tu logro
+                                        </h3>
+
+                                        <span>
+                                            Y EL INICIO DE TU NUEVA HISTORIA
+                                        </span>
+                                    </div>
+
+                                    <div class="nombre-central">
+                                        {{ estudiante.nombre_completo|upper }}
+                                    </div>
+
+                                    <div class="rut-central">
+                                        RUT: {{ estudiante.rut }}
+                                    </div>
+
+                                    <div class="info-evento">
+                                        <div class="info-item">
+                                            <div class="icono-info">•</div>
+
+                                            <div>
+                                                <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
+                                                <span>2026</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="info-item">
+                                            <div class="icono-info">•</div>
+
+                                            <div>
+                                                <strong>{{ item.hora_es }}</strong>
+                                                <span>HORAS</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="info-item">
+                                            <div class="icono-info">•</div>
+
+                                            <div>
+                                                <strong>Av. Chile 1108</strong>
+                                                <span>Arica</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sede-central">
+                                        Sede Arica
+                                    </div>
+
+                                    <div class="carrera-box">
+                                        <p>
+                                            <strong>CEREMONIA:</strong> {{ estudiante.bloque_ceremonia.nombre }}<br>
+                                            <strong>ÁREA:</strong> {{ estudiante.plan_estudio.area.nombre }}<br>
+                                            <strong>PLAN:</strong> {{ estudiante.plan_estudio.nombre }}
+                                        </p>
+                                    </div>
+
+                                    <div class="indicaciones-invitacion">
+                                        Tenida formal · No está permitido el ingreso de menores de 10 años.
+                                    </div>
+                                </div>
+
+                                <div class="tarjeta-right tarjeta-right-titulado">
+                                    <div class="badge-acceso badge-titulado">
+                                        ACCESO TITULADO
+                                    </div>
+
+                                    <div class="qr-box">
+                                        <img src="{{ estudiante.imagen_qr_estudiante.url }}" alt="QR estudiante">
+                                    </div>
+
+                                    <div class="codigo-label">
+                                        CÓDIGO DE ACCESO
+                                    </div>
+
+                                    <div class="codigo-acceso">
+                                        {{ estudiante.codigo_qr_estudiante }}
+                                    </div>
+
+                                    <div class="texto-acceso">
+                                        Acceso exclusivo<br>
+                                        del estudiante titulado.
+                                    </div>
+                                </div>
+
+                            </article>
+
+                            {% for invitacion in item.invitaciones %}
+
+                                <article
+                                    id="tarjeta-invitado-{{ estudiante.id }}-{{ invitacion.numero_invitacion }}"
+                                    class="tarjeta tarjeta-invitado"
+                                    data-nombre-archivo="Invitacion_Invitado_{{ invitacion.numero_invitacion }}_{{ estudiante.bloque_ceremonia.nombre|slugify }}_{{ estudiante.rut }}.png"
+                                >
+
+                                    <div class="tarjeta-left">
+                                        <div class="logo-card">
+                                            <span>I</span>nacap
+                                        </div>
+
+                                        <div class="bloque-tipo">
+                                            <div class="tipo-invitacion">
+                                                INVITACIÓN
+                                            </div>
+
+                                            <div class="tipo-sub">
+                                                INVITADO {{ invitacion.numero_invitacion }}
+                                            </div>
+                                        </div>
+
+                                        <div class="texto-mini">
+                                            Ceremonia de Titulación 2026
+                                        </div>
+
+                                        <div class="anio">
+                                            2026
+                                        </div>
+
+                                        <div class="linea-deco"></div>
+                                    </div>
+
+                                    <div class="tarjeta-center">
+                                        <div class="texto-logro">
+                                            <small>
+                                                TE INVITAMOS A CELEBRAR
+                                            </small>
+
+                                            <h3>
+                                                tu logro
+                                            </h3>
+
+                                            <span>
+                                                Y EL INICIO DE TU NUEVA HISTORIA
+                                            </span>
+                                        </div>
+
+                                        <div class="nombre-central">
+                                            {{ estudiante.nombre_completo|upper }}
+                                        </div>
+
+                                        <div class="rut-central">
+                                            RUT: {{ estudiante.rut }}
+                                        </div>
+
+                                        <div class="info-evento">
+                                            <div class="info-item">
+                                                <div class="icono-info">•</div>
+
+                                                <div>
+                                                    <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
+                                                    <span>2026</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="info-item">
+                                                <div class="icono-info">•</div>
+
+                                                <div>
+                                                    <strong>{{ item.hora_es }}</strong>
+                                                    <span>HORAS</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="info-item">
+                                                <div class="icono-info">•</div>
+
+                                                <div>
+                                                    <strong>Av. Chile 1108</strong>
+                                                    <span>Arica</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sede-central">
+                                            Sede Arica
+                                        </div>
+
+                                        <div class="carrera-box">
+                                            <p>
+                                                <strong>CEREMONIA:</strong> {{ estudiante.bloque_ceremonia.nombre }}<br>
+                                                <strong>ÁREA:</strong> {{ estudiante.plan_estudio.area.nombre }}<br>
+                                                <strong>PLAN:</strong> {{ estudiante.plan_estudio.nombre }}
+                                            </p>
+                                        </div>
+
+                                        <div class="indicaciones-invitacion">
+                                            Tenida formal · No está permitido el ingreso de menores de 10 años.
+                                        </div>
+                                    </div>
+
+                                    <div class="tarjeta-right tarjeta-right-invitado">
+                                        <div class="badge-acceso badge-invitado">
+                                            ACCESO INVITADO
+                                        </div>
+
+                                        <div class="qr-box">
+                                            <img src="{{ invitacion.imagen_qr.url }}" alt="QR invitación">
+                                        </div>
+
+                                        <div class="codigo-label">
+                                            CÓDIGO DE ACCESO
+                                        </div>
+
+                                        <div class="codigo-acceso">
+                                            {{ invitacion.codigo_qr }}
+                                        </div>
+
+                                        <div class="texto-acceso">
+                                            Invitación oficial<br>
+                                            válida para un ingreso.
+                                        </div>
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+                {% endwith %}
+
+            {% endfor %}
+
+        {% elif busqueda %}
+
+            <section class="sin-resultados">
+                No se encontraron estudiantes para la búsqueda realizada.
+            </section>
+
+        {% endif %}
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    const ANCHO_CARTA_HORIZONTAL = 3300;
+    const ALTO_CARTA_HORIZONTAL = 2550;
+    const MARGEN_IMPRESION = 135;
+
+    async function esperarImagenesDentro(elemento) {
+        const imagenes = elemento.querySelectorAll("img");
+
+        const promesas = Array.from(imagenes).map(function(imagen) {
+            if (imagen.complete) {
+                return Promise.resolve();
+            }
+
+            return new Promise(function(resolve) {
+                imagen.onload = resolve;
+                imagen.onerror = resolve;
+            });
+        });
+
+        await Promise.all(promesas);
+    }
+
+    function limpiarNombreArchivo(nombre) {
+        return nombre
+            .replace(/[\\/:*?"<>|]/g, "-")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-");
+    }
+
+    function crearLienzoCarta() {
+        const lienzo = document.createElement("canvas");
+        lienzo.width = ANCHO_CARTA_HORIZONTAL;
+        lienzo.height = ALTO_CARTA_HORIZONTAL;
+
+        const contexto = lienzo.getContext("2d");
+
+        contexto.fillStyle = "#ffffff";
+        contexto.fillRect(
+            0,
+            0,
+            ANCHO_CARTA_HORIZONTAL,
+            ALTO_CARTA_HORIZONTAL
+        );
+
+        return {
+            lienzo: lienzo,
+            contexto: contexto
+        };
+    }
+
+    function dibujarTarjetaCentradaEnCarta(contexto, imagenTarjeta) {
+        const anchoDisponible = ANCHO_CARTA_HORIZONTAL - (MARGEN_IMPRESION * 2);
+        const altoDisponible = ALTO_CARTA_HORIZONTAL - (MARGEN_IMPRESION * 2);
+
+        const escala = Math.min(
+            anchoDisponible / imagenTarjeta.width,
+            altoDisponible / imagenTarjeta.height
+        );
+
+        const anchoFinal = imagenTarjeta.width * escala;
+        const altoFinal = imagenTarjeta.height * escala;
+
+        const posicionX = (ANCHO_CARTA_HORIZONTAL - anchoFinal) / 2;
+        const posicionY = (ALTO_CARTA_HORIZONTAL - altoFinal) / 2;
+
+        contexto.imageSmoothingEnabled = true;
+        contexto.imageSmoothingQuality = "high";
+
+        contexto.drawImage(
+            imagenTarjeta,
+            posicionX,
+            posicionY,
+            anchoFinal,
+            altoFinal
+        );
+    }
+
+    async function convertirCanvasAImagen(canvas) {
+        const dataUrl = canvas.toDataURL("image/png");
+
+        return new Promise(function(resolve) {
+            const imagen = new Image();
+            imagen.onload = function() {
+                resolve(imagen);
+            };
+            imagen.src = dataUrl;
+        });
+    }
+
+    async function descargarTarjetaComoImagen(elemento) {
+        const nombreArchivoBase = elemento.dataset.nombreArchivo || "invitacion.png";
+        const nombreArchivo = limpiarNombreArchivo(nombreArchivoBase);
+
+        await esperarImagenesDentro(elemento);
+
+        const canvasTarjeta = await html2canvas(elemento, {
+            scale: 4,
+            backgroundColor: "#ffffff",
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            removeContainer: true,
+            imageTimeout: 15000,
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: document.documentElement.scrollWidth,
+            windowHeight: document.documentElement.scrollHeight
+        });
+
+        const imagenTarjeta = await convertirCanvasAImagen(canvasTarjeta);
+
+        const carta = crearLienzoCarta();
+
+        dibujarTarjetaCentradaEnCarta(
+            carta.contexto,
+            imagenTarjeta
+        );
+
+        const enlace = document.createElement("a");
+        enlace.href = carta.lienzo.toDataURL("image/png");
+        enlace.download = nombreArchivo;
+        document.body.appendChild(enlace);
+        enlace.click();
+        document.body.removeChild(enlace);
+    }
+
+    async function descargarTodasLasInvitaciones() {
+        const tarjetas = document.querySelectorAll(".tarjeta");
+
+        for (const tarjeta of tarjetas) {
+            await descargarTarjetaComoImagen(tarjeta);
+            await new Promise(resolve => setTimeout(resolve, 450));
+        }
+    }
+
+    async function descargarGrupoInvitaciones(claseGrupo) {
+        const tarjetas = document.querySelectorAll("." + claseGrupo + " .tarjeta");
+
+        for (const tarjeta of tarjetas) {
+            await descargarTarjetaComoImagen(tarjeta);
+            await new Promise(resolve => setTimeout(resolve, 450));
+        }
+    }
+</script>
+
+</body>
+</html>
