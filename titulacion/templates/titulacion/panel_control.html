@@ -56,30 +56,27 @@
                 ← Volver al inicio
             </a>
 
-            <h1>
-                Dashboard de Control
-            </h1>
+            <h1>Dashboard de Control</h1>
 
             <p>
-                Monitoreo operativo en tiempo real por bloque de ceremonia,
-                titulados, invitados y registros de acceso.
+                Monitoreo operativo en tiempo real · titulados, invitados y registros de acceso.
             </p>
         </div>
     </section>
 
-    <div class="barra-estado">
-        {% if bloque_abierto %}
-            <span class="estado-pill estado-abierto">● ABIERTA</span>
-            <span class="info-ceremonia">
-                {{ bloque_abierto.nombre }} · {{ bloque_abierto.fecha|date:"d/m/Y" }} · {{ bloque_abierto.hora_inicio|time:"H:i" }} hrs
-            </span>
-        {% else %}
-            <span class="estado-pill estado-programado">● SIN CEREMONIA ABIERTA</span>
-            <span class="info-ceremonia">No hay ningún bloque activo en este momento.</span>
-        {% endif %}
-    </div>
-
     <main class="contenido-dashboard">
+
+        <div class="barra-estado">
+            {% if bloque_abierto %}
+                <span class="estado-pill estado-abierto">● ABIERTA</span>
+                <span class="info-ceremonia">
+                    {{ bloque_abierto.nombre }} · {{ bloque_abierto.fecha|date:"d/m/Y" }} · {{ bloque_abierto.hora_inicio|time:"H:i" }} hrs
+                </span>
+            {% else %}
+                <span class="estado-pill estado-programado">● SIN CEREMONIA ABIERTA</span>
+                <span class="info-ceremonia">No hay ningún bloque activo en este momento.</span>
+            {% endif %}
+        </div>
 
         <div class="buscador-dashboard">
             <div class="buscador-row">
@@ -101,9 +98,9 @@
 
             <div class="sep-filtros"></div>
 
-            <div class="filtros-dashboard" style="box-shadow:none;border:none;border-radius:0;padding:12px 0 0;margin-bottom:0">
+            <div class="filtros-dashboard" style="box-shadow:none;border:none;border-radius:0;padding:10px 0 0;margin-bottom:0">
 
-                <div class="grupo-filtro filtro-bloque">
+                <div class="grupo-filtro">
                     <label for="filtroBloque">Bloque / horario</label>
                     <select id="filtroBloque">
                         <option value="">Todos los bloques</option>
@@ -360,51 +357,34 @@
         document.querySelectorAll(".panel-tab").forEach(function(p) {
             p.classList.remove("activo");
         });
-
         document.querySelectorAll(".tab-dashboard").forEach(function(t) {
             t.classList.remove("activo");
         });
-
         document.getElementById("tab-" + nombre).classList.add("activo");
         elemento.classList.add("activo");
     }
 
     function badge(valor, atrasado = false) {
-        if (atrasado) {
-            return '<span class="badge badge-atrasado">Atrasado</span>';
-        }
-        if (valor) {
-            return '<span class="badge badge-si">Sí</span>';
-        }
+        if (atrasado) return '<span class="badge badge-atrasado">Atrasado</span>';
+        if (valor) return '<span class="badge badge-si">Sí</span>';
         return '<span class="badge badge-no">No</span>';
     }
 
     function badgeEstadoSeguimiento(item) {
-        if (item.estado_clase === "presente") {
-            return '<span class="badge badge-si">Presente</span>';
-        }
-        if (item.estado_clase === "atrasado") {
-            return '<span class="badge badge-atrasado">Atrasado</span>';
-        }
+        if (item.estado_clase === "presente") return '<span class="badge badge-si">Presente</span>';
+        if (item.estado_clase === "atrasado") return '<span class="badge badge-atrasado">Atrasado</span>';
         return '<span class="badge badge-no">Pendiente</span>';
     }
 
     function badgeResultado(resultado, codigo, atrasado) {
-        if (atrasado || codigo === "ATRASADO") {
-            return '<span class="badge badge-atrasado">' + resultado + '</span>';
-        }
-        if (codigo === "PERMITIDO") {
-            return '<span class="badge badge-si">' + resultado + '</span>';
-        }
-        if (codigo === "DUPLICADO" || codigo === "DENEGADO" || codigo === "OTRA_CEREMONIA") {
-            return '<span class="badge badge-no">' + resultado + '</span>';
-        }
+        if (atrasado || codigo === "ATRASADO") return '<span class="badge badge-atrasado">' + resultado + '</span>';
+        if (codigo === "PERMITIDO") return '<span class="badge badge-si">' + resultado + '</span>';
+        if (codigo === "DUPLICADO" || codigo === "DENEGADO" || codigo === "OTRA_CEREMONIA") return '<span class="badge badge-no">' + resultado + '</span>';
         return '<span class="badge">' + resultado + '</span>';
     }
 
     function parametrosFiltros() {
         const params = new URLSearchParams();
-
         if (filtroCeremonia.value) params.append("ceremonia", filtroCeremonia.value);
         if (filtroBloque.value) params.append("bloque", filtroBloque.value);
         if (filtroBusqueda.value.trim()) params.append("q", filtroBusqueda.value.trim());
@@ -413,7 +393,6 @@
         if (filtroEstado.value) params.append("estado", filtroEstado.value);
         if (filtroTipoAcceso.value) params.append("tipo_acceso", filtroTipoAcceso.value);
         if (filtroResultado.value) params.append("resultado", filtroResultado.value);
-
         return params;
     }
 
@@ -421,14 +400,12 @@
         const areaSeleccionada = filtroArea.value;
         const planActual = filtroPlan.value;
         const params = new URLSearchParams();
-
         if (areaSeleccionada) params.append("area", areaSeleccionada);
 
         const respuesta = await fetch(urlPlanesPorArea + "?" + params.toString());
         const datos = await respuesta.json();
 
         filtroPlan.innerHTML = '<option value="">Todos</option>';
-
         datos.planes.forEach(function(plan) {
             const option = document.createElement("option");
             option.value = plan;
@@ -464,7 +441,6 @@
 
     function actualizarTextoBusqueda(datos) {
         const texto = filtroBusqueda.value.trim();
-
         if (texto) {
             resultadoBusqueda.innerHTML =
                 'Resultado para búsqueda: <strong>' + texto +
@@ -473,7 +449,6 @@
             resultadoBusqueda.classList.add("activo");
             return;
         }
-
         resultadoBusqueda.innerHTML = "Mostrando información general de la ceremonia.";
         resultadoBusqueda.classList.remove("activo");
     }
@@ -481,12 +456,10 @@
     function cargarTablaAvance(items) {
         const tbody = document.getElementById("tablaAvancePlanes");
         tbody.innerHTML = "";
-
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="5">No hay información para los filtros seleccionados.</td></tr>';
             return;
         }
-
         items.forEach(function(item) {
             const fila = document.createElement("tr");
             fila.innerHTML = `
@@ -508,12 +481,10 @@
     function cargarTablaMovimientos(items) {
         const tbody = document.getElementById("tablaUltimosMovimientos");
         tbody.innerHTML = "";
-
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="4">No hay movimientos registrados.</td></tr>';
             return;
         }
-
         items.forEach(function(item) {
             const fila = document.createElement("tr");
             fila.innerHTML = `
@@ -529,12 +500,10 @@
     function cargarTablaAtrasados(items) {
         const tbody = document.getElementById("tablaAtrasados");
         tbody.innerHTML = "";
-
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>';
             return;
         }
-
         items.forEach(function(item) {
             const fila = document.createElement("tr");
             fila.innerHTML = `
@@ -552,12 +521,10 @@
     function cargarTablaSeguimiento(items) {
         const tbody = document.getElementById("tablaSeguimiento");
         tbody.innerHTML = "";
-
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="9">No hay estudiantes para los filtros seleccionados.</td></tr>';
             return;
         }
-
         items.forEach(function(item) {
             const fila = document.createElement("tr");
             fila.classList.add("fila-estado-" + item.estado_clase);
