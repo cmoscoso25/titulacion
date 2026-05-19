@@ -1,37 +1,37 @@
 /* === RESET === */
-/* El reset, variables globales, header, hero, botones, formularios,
+/* Reset, variables globales, header, hero, botones, formularios,
    tablas y responsive base viven en base.css. */
 
 /* === VARIABLES ESPECÍFICAS DE INICIO === */
 :root{
-    --inicio-panel-width:min(1080px, 88%);
-    --inicio-card-min:178px;
+    --inicio-panel-width:min(1040px,88%);
+    --inicio-card-min:170px;
 }
 
 /* === LAYOUT === */
 .contenido{
     position:relative;
-    padding-bottom:clamp(18px,2vw,28px);
+    padding-bottom:clamp(16px,2vw,24px);
 }
 
 .hero-contenido{
-    width:min(1060px,88%);
-    padding:clamp(22px,2.5vw,30px) 0 clamp(72px,7vw,96px);
+    width:min(1040px,88%);
+    padding:clamp(18px,2.2vw,26px) 0 clamp(60px,6vw,84px);
 }
 
 .hero h1{
-    font-size:clamp(2.1rem,3.4vw,3rem);
-    letter-spacing:-.8px;
-    margin-bottom:10px;
+    font-size:clamp(1.7rem,2.8vw,2.5rem);
+    letter-spacing:-.6px;
+    margin-bottom:8px;
 }
 
 .hero p{
-    max-width:820px;
-    font-size:clamp(.9rem,1.2vw,1rem);
+    max-width:780px;
+    font-size:clamp(.85rem,1.1vw,.95rem);
 }
 
 .etiqueta{
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
 .datos{
@@ -40,13 +40,13 @@
 
 .mensajes{
     width:var(--inicio-panel-width);
-    margin:-28px auto 18px;
+    margin:-22px auto 16px;
 }
 
 .panel{
     width:var(--inicio-panel-width);
-    margin:-48px auto 0;
-    padding:clamp(18px,2vw,24px);
+    margin:-42px auto 0;
+    padding:clamp(16px,1.8vw,22px);
     position:relative;
     z-index:5;
 }
@@ -56,29 +56,30 @@
 }
 
 .panel h2{
-    font-size:clamp(1.5rem,2.4vw,1.9rem);
+    font-size:clamp(1.3rem,2vw,1.7rem);
     line-height:1;
-    margin-bottom:6px;
+    margin-bottom:5px;
     color:var(--texto);
 }
 
 .panel-subtitulo{
-    font-size:clamp(.82rem,1.2vw,.95rem);
+    font-size:clamp(.78rem,1vw,.9rem);
     color:var(--texto-suave);
-    margin-bottom:18px;
-    max-width:860px;
+    margin-bottom:16px;
+    max-width:820px;
 }
 
+/* === MÓDULOS === */
 .modulos{
     display:grid;
     grid-template-columns:1fr;
-    gap:14px;
+    gap:12px;
 }
 
 .modulo{
     border:1px solid var(--borde);
-    border-radius:18px;
-    padding:16px 14px;
+    border-radius:16px;
+    padding:15px 13px;
     min-height:var(--inicio-card-min);
     display:flex;
     flex-direction:column;
@@ -88,231 +89,110 @@
 }
 
 .modulo:hover{
-    transform:translateY(-3px);
-    box-shadow:0 12px 28px rgba(15,23,42,.10);
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(15,23,42,.09);
     border-color:rgba(227,6,19,.22);
 }
 
 .icono{
-    font-size:clamp(1.7rem,2.4vw,2rem);
-    margin-bottom:10px;
+    font-size:clamp(1.5rem,2vw,1.8rem);
+    margin-bottom:9px;
     line-height:1;
 }
 
 .modulo h3{
-    font-size:clamp(.98rem,1.2vw,1.08rem);
+    font-size:clamp(.9rem,1.1vw,1rem);
     line-height:1.12;
-    margin-bottom:8px;
+    margin-bottom:7px;
     color:var(--texto);
 }
 
 .modulo p{
-    font-size:clamp(.76rem,1vw,.84rem);
+    font-size:clamp(.72rem,.9vw,.8rem);
     line-height:1.35;
     color:var(--texto-suave);
 }
 
 .modulo .btn{
     width:100%;
-    margin-top:14px;
-    min-height:36px;
+    margin-top:12px;
+    min-height:34px;
+    font-size:.8rem;
 }
 
-/* === RESPONSIVE === */
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
-/* Móvil pequeño: 320px – 480px */
+/* 320px – 480px */
 @media (max-width:480px){
-    :root{
-        --inicio-panel-width:90%;
-    }
+    :root{ --inicio-panel-width:90%; }
 
-    .hero-contenido{
-        width:90%;
-        padding:22px 0 54px;
-    }
-
-    .hero h1{
-        font-size:clamp(2rem,10vw,2.35rem);
-    }
-
-    .hero p{
-        font-size:.9rem;
-    }
-
-    .panel{
-        margin-top:-28px;
-        padding:16px;
-        border-radius:18px;
-    }
-
-    .mensajes{
-        margin:-20px auto 14px;
-    }
-
-    .modulos{
-        grid-template-columns:1fr;
-        gap:12px;
-    }
-
-    .modulo{
-        min-height:auto;
-        padding:15px;
-    }
+    .hero-contenido{ width:90%; padding:18px 0 48px; }
+    .hero h1{ font-size:clamp(1.7rem,8vw,2.1rem); }
+    .panel{ margin-top:-24px; padding:14px; border-radius:16px; }
+    .mensajes{ margin:-18px auto 12px; }
+    .modulos{ grid-template-columns:1fr; gap:10px; }
+    .modulo{ min-height:auto; padding:14px; }
 }
 
-/* Móvil grande: 481px – 767px */
+/* 481px – 767px */
 @media (min-width:481px) and (max-width:767px){
-    :root{
-        --inicio-panel-width:90%;
-    }
+    :root{ --inicio-panel-width:90%; }
 
-    .hero-contenido{
-        width:90%;
-        padding:24px 0 58px;
-    }
-
-    .panel{
-        margin-top:-30px;
-        padding:18px;
-    }
-
-    .modulos{
-        grid-template-columns:1fr;
-    }
-
-    .modulo{
-        min-height:auto;
-    }
+    .hero-contenido{ width:90%; padding:20px 0 52px; }
+    .panel{ margin-top:-26px; padding:16px; }
+    .modulos{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .modulo{ min-height:auto; }
 }
 
-/* Tablet: 768px – 1024px */
+/* 768px – 1024px */
 @media (min-width:768px) and (max-width:1024px){
-    :root{
-        --inicio-panel-width:90%;
-    }
+    :root{ --inicio-panel-width:90%; }
 
-    .modulos{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-
-    .modulo{
-        min-height:170px;
-    }
+    .modulos{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .modulo{ min-height:160px; }
 }
 
-/* Notebook: 1025px – 1366px */
+/* 1025px – 1366px */
 @media (min-width:1025px) and (max-width:1366px){
-    .modulos{
-        grid-template-columns:repeat(5,minmax(0,1fr));
-        gap:12px;
-    }
-
-    .modulo{
-        min-height:178px;
-    }
+    .modulos{ grid-template-columns:repeat(5,minmax(0,1fr)); gap:11px; }
+    .modulo{ min-height:170px; }
 }
 
-/* Desktop: 1367px – 1920px */
+/* 1367px – 1920px */
 @media (min-width:1367px) and (max-width:1920px){
-    :root{
-        --inicio-panel-width:min(1180px,86%);
-    }
+    :root{ --inicio-panel-width:min(1100px,84%); }
 
-    .modulos{
-        grid-template-columns:repeat(5,minmax(0,1fr));
-        gap:14px;
-    }
-
-    .modulo{
-        min-height:184px;
-    }
+    .modulos{ grid-template-columns:repeat(5,minmax(0,1fr)); gap:13px; }
+    .modulo{ min-height:176px; }
 }
 
-/* Pantalla HDMI / monitor externo: 1921px en adelante */
+/* 1921px+ — TV / HDMI */
 @media (min-width:1921px){
-    :root{
-        --inicio-panel-width:min(1280px,82%);
-    }
+    :root{ --inicio-panel-width:min(1160px,78%); }
 
-    .hero-contenido{
-        width:min(1280px,82%);
-    }
-
-    .modulos{
-        grid-template-columns:repeat(5,minmax(0,1fr));
-        gap:18px;
-    }
-
-    .modulo{
-        min-height:190px;
-    }
+    .hero-contenido{ width:min(1160px,78%); padding:20px 0 72px; }
+    .mensajes{ width:min(1160px,78%); margin:-24px auto 16px; }
+    .modulos{ grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px; }
+    .modulo{ min-height:180px; }
+    .panel h2{ font-size:1.55rem; }
+    .panel-subtitulo{ font-size:.88rem; }
 }
 
-/* Ajuste para pantallas bajas, notebooks conectados o resoluciones compactas */
-@media (max-height:760px) and (min-width:900px){
-    .hero-contenido{
-        padding:16px 0 54px;
-        width:min(980px,86%);
-    }
-
-    .etiqueta{
-        min-height:28px;
-        font-size:.72rem;
-        padding:5px 12px;
-        margin-bottom:8px;
-    }
-
-    .hero h1{
-        font-size:clamp(2rem,3vw,2.25rem);
-        margin-bottom:7px;
-    }
-
-    .hero p{
-        font-size:.82rem;
-    }
-
-    .mensajes{
-        width:min(1000px,82%);
-        margin:-22px auto 14px;
-    }
-
-    .panel{
-        width:min(1000px,82%);
-        margin-top:-34px;
-        padding:16px;
-    }
-
-    .panel h2{
-        font-size:1.55rem;
-    }
-
-    .panel-subtitulo{
-        font-size:.78rem;
-        margin-bottom:12px;
-    }
-
-    .modulo{
-        min-height:152px;
-        padding:13px 12px;
-    }
-
-    .icono{
-        font-size:1.55rem;
-        margin-bottom:8px;
-    }
-
-    .modulo h3{
-        font-size:.88rem;
-        margin-bottom:6px;
-    }
-
-    .modulo p{
-        font-size:.68rem;
-    }
-
-    .modulo .btn{
-        min-height:30px;
-        font-size:.75rem;
-        margin-top:9px;
-    }
+/* Pantalla baja: notebook con TV via HDMI */
+@media (max-height:800px) and (min-width:900px){
+    .hero-contenido{ padding:14px 0 48px; width:min(960px,86%); }
+    .etiqueta{ min-height:26px; font-size:.7rem; padding:4px 11px; margin-bottom:7px; }
+    .hero h1{ font-size:clamp(1.5rem,2.4vw,2rem); margin-bottom:6px; }
+    .hero p{ font-size:.82rem; }
+    .mensajes{ width:min(960px,82%); margin:-18px auto 12px; }
+    .panel{ width:min(960px,82%); margin-top:-30px; padding:14px; }
+    .panel h2{ font-size:1.4rem; }
+    .panel-subtitulo{ font-size:.76rem; margin-bottom:10px; }
+    .modulo{ min-height:144px; padding:12px 11px; }
+    .icono{ font-size:1.4rem; margin-bottom:7px; }
+    .modulo h3{ font-size:.86rem; margin-bottom:5px; }
+    .modulo p{ font-size:.66rem; }
+    .modulo .btn{ min-height:28px; font-size:.72rem; margin-top:8px; }
 }
