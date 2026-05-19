@@ -67,100 +67,81 @@
         </div>
     </section>
 
+    <div class="barra-estado">
+        {% for bloque in bloques %}
+            {% if bloque.estado_registro == "ABIERTA" %}
+                <span class="estado-pill estado-abierto">● ABIERTA</span>
+                <span class="info-ceremonia">
+                    {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} hrs
+                </span>
+                {% break %}
+            {% endif %}
+        {% empty %}
+            <span class="estado-pill estado-programado">● SIN CEREMONIA ABIERTA</span>
+        {% endfor %}
+        {% if not bloques %}
+            <span class="estado-pill estado-programado">● SIN CEREMONIAS</span>
+        {% endif %}
+    </div>
+
     <main class="contenido-dashboard">
 
-        <section class="resumen-contexto">
-            <div>
-                <span>Ceremonia activa del sistema</span>
-                <strong>
-                    {% if ceremonia_principal %}
-                        {{ ceremonia_principal.nombre }} · {{ ceremonia_principal.anio }}
-                    {% else %}
-                        Ceremonia de Titulación 2026
-                    {% endif %}
-                </strong>
-            </div>
-
-            <div>
-                <span>Uso principal</span>
-                <strong>
-                    Consulta rápida por bloque, RUT o nombre
-                </strong>
-            </div>
-        </section>
-
-        <section class="filtros-dashboard">
-
-            <input
-                type="hidden"
-                id="filtroCeremonia"
-                value="{% if ceremonia_principal %}{{ ceremonia_principal.id }}{% endif %}"
-            >
-
-            <div class="grupo-filtro filtro-bloque">
-                <label for="filtroBloque">Bloque / horario</label>
-
-                <select id="filtroBloque">
-                    <option value="">Todos los bloques</option>
-
-                    {% for bloque in bloques %}
-                        <option value="{{ bloque.id }}">
-                            {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} · {{ bloque.estado_registro }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="grupo-filtro filtro-busqueda">
-                <label for="filtroBusqueda">Buscar titulado</label>
-
+        <div class="buscador-dashboard">
+            <div class="buscador-row">
+                <input
+                    type="hidden"
+                    id="filtroCeremonia"
+                    value="{% if ceremonia_principal %}{{ ceremonia_principal.id }}{% endif %}"
+                >
                 <input
                     type="text"
                     id="filtroBusqueda"
-                    placeholder="Nombre, apellido, RUT, plan o bloque"
+                    placeholder="Buscar por nombre, RUT, plan o bloque..."
                     autocomplete="off"
                 >
-            </div>
-
-            <div class="grupo-filtro">
-                <label for="filtroArea">Área</label>
-
-                <select id="filtroArea">
-                    <option value="">Todas</option>
-
-                    {% for area in areas %}
-                        <option value="{{ area.nombre }}">
-                            {{ area.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="grupo-filtro">
-                <label for="filtroPlan">Plan de estudio</label>
-
-                <select id="filtroPlan">
-                    <option value="">Todos</option>
-
-                    {% for plan in planes %}
-                        <option value="{{ plan.nombre }}">
-                            {{ plan.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="grupo-filtro grupo-boton">
-                <button type="button" onclick="cargarDashboard()">
-                    Aplicar
+                <button type="button" class="btn-buscar-dash" onclick="cargarDashboard()">
+                    Buscar
                 </button>
             </div>
 
-            <div class="filtros-secundarios">
+            <div class="sep-filtros"></div>
+
+            <div class="filtros-dashboard" style="box-shadow:none;border:none;border-radius:0;padding:12px 0 0;margin-bottom:0">
+
+                <div class="grupo-filtro filtro-bloque">
+                    <label for="filtroBloque">Bloque / horario</label>
+                    <select id="filtroBloque">
+                        <option value="">Todos los bloques</option>
+                        {% for bloque in bloques %}
+                            <option value="{{ bloque.id }}">
+                                {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} · {{ bloque.estado_registro }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="grupo-filtro">
+                    <label for="filtroArea">Área</label>
+                    <select id="filtroArea">
+                        <option value="">Todas</option>
+                        {% for area in areas %}
+                            <option value="{{ area.nombre }}">{{ area.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="grupo-filtro">
+                    <label for="filtroPlan">Plan de estudio</label>
+                    <select id="filtroPlan">
+                        <option value="">Todos</option>
+                        {% for plan in planes %}
+                            <option value="{{ plan.nombre }}">{{ plan.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
                 <div class="grupo-filtro">
                     <label for="filtroEstado">Estado estudiante</label>
-
                     <select id="filtroEstado">
                         <option value="">Todos</option>
                         <option value="presentes">Presentes</option>
@@ -169,36 +150,43 @@
                     </select>
                 </div>
 
-                <div class="grupo-filtro">
-                    <label for="filtroTipoAcceso">Tipo acceso</label>
-
-                    <select id="filtroTipoAcceso">
-                        <option value="">Todos</option>
-                        <option value="ESTUDIANTE">Estudiante</option>
-                        <option value="INVITADO">Invitado</option>
-                    </select>
+                <div class="grupo-filtro grupo-boton">
+                    <button type="button" onclick="cargarDashboard()">
+                        Aplicar
+                    </button>
                 </div>
 
-                <div class="grupo-filtro">
-                    <label for="filtroResultado">Resultado QR</label>
+                <div class="filtros-secundarios">
 
-                    <select id="filtroResultado">
-                        <option value="">Todos</option>
-                        <option value="PERMITIDO">Permitido</option>
-                        <option value="ATRASADO">Atrasado</option>
-                        <option value="DUPLICADO">Duplicado</option>
-                        <option value="DENEGADO">Denegado</option>
-                        <option value="OTRA_CEREMONIA">Otra ceremonia</option>
-                    </select>
+                    <div class="grupo-filtro">
+                        <label for="filtroTipoAcceso">Tipo acceso</label>
+                        <select id="filtroTipoAcceso">
+                            <option value="">Todos</option>
+                            <option value="ESTUDIANTE">Estudiante</option>
+                            <option value="INVITADO">Invitado</option>
+                        </select>
+                    </div>
+
+                    <div class="grupo-filtro">
+                        <label for="filtroResultado">Resultado QR</label>
+                        <select id="filtroResultado">
+                            <option value="">Todos</option>
+                            <option value="PERMITIDO">Permitido</option>
+                            <option value="ATRASADO">Atrasado</option>
+                            <option value="DUPLICADO">Duplicado</option>
+                            <option value="DENEGADO">Denegado</option>
+                            <option value="OTRA_CEREMONIA">Otra ceremonia</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-limpiar" onclick="limpiarFiltros()">
+                        Limpiar filtros
+                    </button>
+
                 </div>
-
-                <button type="button" class="btn-limpiar" onclick="limpiarFiltros()">
-                    Limpiar filtros
-                </button>
 
             </div>
-
-        </section>
+        </div>
 
         <section class="resultado-busqueda" id="resultadoBusqueda">
             Mostrando información general de la ceremonia.
@@ -244,13 +232,15 @@
 
         </section>
 
-        <section class="grid-dashboard">
+        <div class="tabs-dashboard">
+            <div class="tab-dashboard activo" onclick="cambiarTab('avance', this)">Avance por plan</div>
+            <div class="tab-dashboard" onclick="cambiarTab('movimientos', this)">Últimos movimientos</div>
+            <div class="tab-dashboard" onclick="cambiarTab('atrasados', this)">Atrasados</div>
+            <div class="tab-dashboard" onclick="cambiarTab('seguimiento', this)">Seguimiento</div>
+        </div>
 
-            <article class="panel-tabla">
-                <div class="panel-titulo">
-                    Avance por plan de estudio
-                </div>
-
+        <div id="tab-avance" class="panel-tab activo">
+            <section class="panel-tabla">
                 <div class="tabla-scroll">
                     <table>
                         <thead>
@@ -262,21 +252,16 @@
                                 <th>Avance</th>
                             </tr>
                         </thead>
-
                         <tbody id="tablaAvancePlanes">
-                            <tr>
-                                <td colspan="5">Cargando información...</td>
-                            </tr>
+                            <tr><td colspan="5">Cargando información...</td></tr>
                         </tbody>
                     </table>
                 </div>
-            </article>
+            </section>
+        </div>
 
-            <article class="panel-tabla">
-                <div class="panel-titulo">
-                    Últimos movimientos
-                </div>
-
+        <div id="tab-movimientos" class="panel-tab">
+            <section class="panel-tabla">
                 <div class="tabla-scroll">
                     <table>
                         <thead>
@@ -287,77 +272,64 @@
                                 <th>Resultado</th>
                             </tr>
                         </thead>
-
                         <tbody id="tablaUltimosMovimientos">
-                            <tr>
-                                <td colspan="4">Cargando información...</td>
-                            </tr>
+                            <tr><td colspan="4">Cargando información...</td></tr>
                         </tbody>
                     </table>
                 </div>
-            </article>
+            </section>
+        </div>
 
-        </section>
+        <div id="tab-atrasados" class="panel-tab">
+            <section class="panel-tabla">
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hora</th>
+                                <th>Nombre</th>
+                                <th>RUT</th>
+                                <th>Tipo</th>
+                                <th>Ceremonia</th>
+                                <th>Plan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaAtrasados">
+                            <tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
 
-        <section class="panel-tabla panel-atrasados">
-            <div class="panel-titulo">
-                Ingresos atrasados
-            </div>
-
-            <div class="tabla-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Nombre</th>
-                            <th>RUT</th>
-                            <th>Tipo</th>
-                            <th>Ceremonia</th>
-                            <th>Plan</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tablaAtrasados">
-                        <tr>
-                            <td colspan="6">No hay ingresos atrasados registrados.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section class="panel-tabla panel-seguimiento">
-            <div class="panel-titulo panel-titulo-seguimiento">
-                <span>Seguimiento por estudiante</span>
-                <small>
-                    Permite validar rápidamente si un titulado está presente, pendiente o atrasado.
-                </small>
-            </div>
-
-            <div class="tabla-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>RUT</th>
-                            <th>Área</th>
-                            <th>Plan</th>
-                            <th>Ceremonia</th>
-                            <th>Estado</th>
-                            <th>Invitación 1</th>
-                            <th>Invitación 2</th>
-                            <th>Gestión</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tablaSeguimiento">
-                        <tr>
-                            <td colspan="9">Cargando información...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        <div id="tab-seguimiento" class="panel-tab">
+            <section class="panel-tabla">
+                <div class="panel-titulo panel-titulo-seguimiento">
+                    <span>Seguimiento por estudiante</span>
+                    <small>Permite validar rápidamente si un titulado está presente, pendiente o atrasado.</small>
+                </div>
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>RUT</th>
+                                <th>Área</th>
+                                <th>Plan</th>
+                                <th>Ceremonia</th>
+                                <th>Estado</th>
+                                <th>Invitación 1</th>
+                                <th>Invitación 2</th>
+                                <th>Gestión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaSeguimiento">
+                            <tr><td colspan="9">Cargando información...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
 
         <div class="actualizacion">
             Última actualización:
@@ -388,6 +360,19 @@
     const resultadoBusqueda = document.getElementById("resultadoBusqueda");
 
     let temporizadorBusqueda = null;
+
+    function cambiarTab(nombre, elemento) {
+        document.querySelectorAll(".panel-tab").forEach(function(p) {
+            p.classList.remove("activo");
+        });
+
+        document.querySelectorAll(".tab-dashboard").forEach(function(t) {
+            t.classList.remove("activo");
+        });
+
+        document.getElementById("tab-" + nombre).classList.add("activo");
+        elemento.classList.add("activo");
+    }
 
     function badge(valor, atrasado = false) {
         if (atrasado) {
