@@ -68,19 +68,14 @@
     </section>
 
     <div class="barra-estado">
-        {% for bloque in bloques %}
-            {% if bloque.estado_registro == "ABIERTA" %}
-                <span class="estado-pill estado-abierto">● ABIERTA</span>
-                <span class="info-ceremonia">
-                    {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} hrs
-                </span>
-                {% break %}
-            {% endif %}
-        {% empty %}
+        {% if bloque_abierto %}
+            <span class="estado-pill estado-abierto">● ABIERTA</span>
+            <span class="info-ceremonia">
+                {{ bloque_abierto.nombre }} · {{ bloque_abierto.fecha|date:"d/m/Y" }} · {{ bloque_abierto.hora_inicio|time:"H:i" }} hrs
+            </span>
+        {% else %}
             <span class="estado-pill estado-programado">● SIN CEREMONIA ABIERTA</span>
-        {% endfor %}
-        {% if not bloques %}
-            <span class="estado-pill estado-programado">● SIN CEREMONIAS</span>
+            <span class="info-ceremonia">No hay ningún bloque activo en este momento.</span>
         {% endif %}
     </div>
 
@@ -378,11 +373,9 @@
         if (atrasado) {
             return '<span class="badge badge-atrasado">Atrasado</span>';
         }
-
         if (valor) {
             return '<span class="badge badge-si">Sí</span>';
         }
-
         return '<span class="badge badge-no">No</span>';
     }
 
@@ -390,11 +383,9 @@
         if (item.estado_clase === "presente") {
             return '<span class="badge badge-si">Presente</span>';
         }
-
         if (item.estado_clase === "atrasado") {
             return '<span class="badge badge-atrasado">Atrasado</span>';
         }
-
         return '<span class="badge badge-no">Pendiente</span>';
     }
 
@@ -402,52 +393,26 @@
         if (atrasado || codigo === "ATRASADO") {
             return '<span class="badge badge-atrasado">' + resultado + '</span>';
         }
-
         if (codigo === "PERMITIDO") {
             return '<span class="badge badge-si">' + resultado + '</span>';
         }
-
         if (codigo === "DUPLICADO" || codigo === "DENEGADO" || codigo === "OTRA_CEREMONIA") {
             return '<span class="badge badge-no">' + resultado + '</span>';
         }
-
         return '<span class="badge">' + resultado + '</span>';
     }
 
     function parametrosFiltros() {
         const params = new URLSearchParams();
 
-        if (filtroCeremonia.value) {
-            params.append("ceremonia", filtroCeremonia.value);
-        }
-
-        if (filtroBloque.value) {
-            params.append("bloque", filtroBloque.value);
-        }
-
-        if (filtroBusqueda.value.trim()) {
-            params.append("q", filtroBusqueda.value.trim());
-        }
-
-        if (filtroArea.value) {
-            params.append("area", filtroArea.value);
-        }
-
-        if (filtroPlan.value) {
-            params.append("plan", filtroPlan.value);
-        }
-
-        if (filtroEstado.value) {
-            params.append("estado", filtroEstado.value);
-        }
-
-        if (filtroTipoAcceso.value) {
-            params.append("tipo_acceso", filtroTipoAcceso.value);
-        }
-
-        if (filtroResultado.value) {
-            params.append("resultado", filtroResultado.value);
-        }
+        if (filtroCeremonia.value) params.append("ceremonia", filtroCeremonia.value);
+        if (filtroBloque.value) params.append("bloque", filtroBloque.value);
+        if (filtroBusqueda.value.trim()) params.append("q", filtroBusqueda.value.trim());
+        if (filtroArea.value) params.append("area", filtroArea.value);
+        if (filtroPlan.value) params.append("plan", filtroPlan.value);
+        if (filtroEstado.value) params.append("estado", filtroEstado.value);
+        if (filtroTipoAcceso.value) params.append("tipo_acceso", filtroTipoAcceso.value);
+        if (filtroResultado.value) params.append("resultado", filtroResultado.value);
 
         return params;
     }
@@ -457,9 +422,7 @@
         const planActual = filtroPlan.value;
         const params = new URLSearchParams();
 
-        if (areaSeleccionada) {
-            params.append("area", areaSeleccionada);
-        }
+        if (areaSeleccionada) params.append("area", areaSeleccionada);
 
         const respuesta = await fetch(urlPlanesPorArea + "?" + params.toString());
         const datos = await respuesta.json();
@@ -470,18 +433,13 @@
             const option = document.createElement("option");
             option.value = plan;
             option.textContent = plan;
-
-            if (plan === planActual) {
-                option.selected = true;
-            }
-
+            if (plan === planActual) option.selected = true;
             filtroPlan.appendChild(option);
         });
     }
 
     async function cargarDashboard() {
         const params = parametrosFiltros();
-
         const respuesta = await fetch(urlDatosPanel + "?" + params.toString());
         const datos = await respuesta.json();
 
@@ -491,7 +449,6 @@
         document.getElementById("kpiTotalAsistentes").innerText = datos.kpis.total_asistentes;
         document.getElementById("kpiTotalAtrasados").innerText = datos.kpis.total_atrasados;
         document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
-
         document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
         document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
 
@@ -510,11 +467,9 @@
 
         if (texto) {
             resultadoBusqueda.innerHTML =
-                'Resultado para búsqueda: <strong>' +
-                texto +
+                'Resultado para búsqueda: <strong>' + texto +
                 '</strong> · Titulados encontrados: <strong>' +
-                datos.kpis.estudiantes_totales +
-                '</strong>';
+                datos.kpis.estudiantes_totales + '</strong>';
             resultadoBusqueda.classList.add("activo");
             return;
         }
@@ -534,7 +489,6 @@
 
         items.forEach(function(item) {
             const fila = document.createElement("tr");
-
             fila.innerHTML = `
                 <td>${item.plan}</td>
                 <td>${item.presentes} / ${item.total}</td>
@@ -547,7 +501,6 @@
                     </div>
                 </td>
             `;
-
             tbody.appendChild(fila);
         });
     }
@@ -563,14 +516,12 @@
 
         items.forEach(function(item) {
             const fila = document.createElement("tr");
-
             fila.innerHTML = `
                 <td>${item.hora}</td>
                 <td>${item.nombre}</td>
                 <td>${item.tipo_acceso}</td>
                 <td>${badgeResultado(item.resultado, item.codigo_resultado, item.ingreso_atrasado)}</td>
             `;
-
             tbody.appendChild(fila);
         });
     }
@@ -586,7 +537,6 @@
 
         items.forEach(function(item) {
             const fila = document.createElement("tr");
-
             fila.innerHTML = `
                 <td>${item.hora}</td>
                 <td>${item.nombre}</td>
@@ -595,7 +545,6 @@
                 <td>${item.bloque}</td>
                 <td>${item.plan}</td>
             `;
-
             tbody.appendChild(fila);
         });
     }
@@ -611,9 +560,7 @@
 
         items.forEach(function(item) {
             const fila = document.createElement("tr");
-
             fila.classList.add("fila-estado-" + item.estado_clase);
-
             fila.innerHTML = `
                 <td>${item.nombre}</td>
                 <td>${item.rut}</td>
@@ -625,7 +572,6 @@
                 <td>${badge(item.invitacion_2, item.invitacion_2_atrasada)}</td>
                 <td>${badge(item.invitaciones_gestionadas)}</td>
             `;
-
             tbody.appendChild(fila);
         });
     }
@@ -638,7 +584,6 @@
         filtroEstado.value = "";
         filtroTipoAcceso.value = "";
         filtroResultado.value = "";
-
         cargarPlanesPorArea();
         cargarDashboard();
     }
@@ -656,14 +601,12 @@
 
     filtroBusqueda.addEventListener("input", function() {
         clearTimeout(temporizadorBusqueda);
-
         temporizadorBusqueda = setTimeout(function() {
             cargarDashboard();
         }, 450);
     });
 
     cargarDashboard();
-
     setInterval(cargarDashboard, 15000);
 </script>
 

@@ -56,7 +56,6 @@ MESES = {
 def formatear_hora(hora):
     if not hora:
         return ""
-
     return hora.strftime("%H:%M")
 
 
@@ -84,21 +83,18 @@ def datos_fecha_bloque(bloque):
 def obtener_area_estudiante(estudiante):
     if estudiante and estudiante.plan_estudio and estudiante.plan_estudio.area:
         return estudiante.plan_estudio.area.nombre
-
     return ""
 
 
 def obtener_plan_estudiante(estudiante):
     if estudiante and estudiante.plan_estudio:
         return estudiante.plan_estudio.nombre
-
     return ""
 
 
 def obtener_bloque_estudiante(estudiante):
     if estudiante and estudiante.bloque_ceremonia:
         return estudiante.bloque_ceremonia.nombre
-
     return ""
 
 
@@ -113,7 +109,6 @@ def obtener_ceremonia_activa():
 def bloque_esta_cerrado(bloque):
     if not bloque:
         return False
-
     return bloque.estado_registro == "CERRADA"
 
 
@@ -298,9 +293,7 @@ def cargar_excel(request):
         "bloque_ceremonia__ceremonia",
         "plan_estudio",
         "plan_estudio__area",
-    ).order_by(
-        "-id"
-    )[:30]
+    ).order_by("-id")[:30]
 
     return render(
         request,
@@ -337,9 +330,7 @@ def registro_ingreso(request):
         "estudiante__bloque_ceremonia",
         "estudiante__plan_estudio",
         "estudiante__plan_estudio__area",
-    ).order_by(
-        "-fecha_hora"
-    )[:20]
+    ).order_by("-fecha_hora")[:20]
 
     return render(
         request,
@@ -620,22 +611,11 @@ def panel_control(request):
         "nombre"
     )
 
-    ceremonias = Ceremonia.objects.all().order_by(
-        "-anio",
-        "nombre"
-    )
-
+    ceremonias = Ceremonia.objects.all().order_by("-anio", "nombre")
     ceremonia_principal = ceremonias.first()
-
-    areas = AreaAcademica.objects.all().order_by(
-        "nombre"
-    )
-
-    planes = PlanEstudio.objects.select_related(
-        "area"
-    ).all().order_by(
-        "nombre"
-    )
+    areas = AreaAcademica.objects.all().order_by("nombre")
+    planes = PlanEstudio.objects.select_related("area").all().order_by("nombre")
+    bloque_abierto = bloques.filter(estado_registro="ABIERTA").first()
 
     return render(
         request,
@@ -646,6 +626,7 @@ def panel_control(request):
             "ceremonia_principal": ceremonia_principal,
             "areas": areas,
             "planes": planes,
+            "bloque_abierto": bloque_abierto,
         }
     )
 
@@ -656,14 +637,9 @@ def datos_panel_control(request):
         "bloque_ceremonia__ceremonia",
         "plan_estudio",
         "plan_estudio__area",
-    ).prefetch_related(
-        "invitaciones"
-    ).all()
+    ).prefetch_related("invitaciones").all()
 
-    estudiantes_filtrados = aplicar_filtros_estudiantes(
-        estudiantes_base,
-        request
-    )
+    estudiantes_filtrados = aplicar_filtros_estudiantes(estudiantes_base, request)
 
     registros_base = RegistroIngreso.objects.select_related(
         "estudiante",
@@ -674,41 +650,26 @@ def datos_panel_control(request):
         "estudiante__plan_estudio__area",
     ).all()
 
-    registros_filtrados = aplicar_filtros_registros(
-        registros_base,
-        request
-    )
+    registros_filtrados = aplicar_filtros_registros(registros_base, request)
 
     estudiantes_totales = estudiantes_filtrados.count()
-
-    estudiantes_presentes = estudiantes_filtrados.filter(
-        ingreso_confirmado=True
-    ).count()
-
-    estudiantes_pendientes = estudiantes_filtrados.filter(
-        ingreso_confirmado=False
-    ).count()
+    estudiantes_presentes = estudiantes_filtrados.filter(ingreso_confirmado=True).count()
+    estudiantes_pendientes = estudiantes_filtrados.filter(ingreso_confirmado=False).count()
 
     estudiantes_atrasados = RegistroIngreso.objects.filter(
         estudiante__in=estudiantes_filtrados,
         tipo="ESTUDIANTE",
         resultado="ATRASADO",
-    ).values(
-        "estudiante_id"
-    ).distinct().count()
+    ).values("estudiante_id").distinct().count()
 
     invitaciones_filtradas = Invitacion.objects.select_related(
         "estudiante",
         "estudiante__bloque_ceremonia",
         "estudiante__plan_estudio",
         "estudiante__plan_estudio__area",
-    ).filter(
-        estudiante__in=estudiantes_filtrados
-    )
+    ).filter(estudiante__in=estudiantes_filtrados)
 
-    invitados_presentes = invitaciones_filtradas.filter(
-        usada=True
-    ).count()
+    invitados_presentes = invitaciones_filtradas.filter(usada=True).count()
 
     invitados_atrasados = RegistroIngreso.objects.filter(
         estudiante__in=estudiantes_filtrados,
@@ -718,7 +679,6 @@ def datos_panel_control(request):
 
     invitaciones_totales = invitaciones_filtradas.count()
     invitaciones_pendientes = invitaciones_totales - invitados_presentes
-
     total_asistentes = estudiantes_presentes + invitados_presentes
     total_atrasados = estudiantes_atrasados + invitados_atrasados
 
@@ -727,19 +687,15 @@ def datos_panel_control(request):
     ).count()
 
     porcentaje_estudiantes = 0
-
     if estudiantes_totales > 0:
         porcentaje_estudiantes = round(
-            (estudiantes_presentes / estudiantes_totales) * 100,
-            1
+            (estudiantes_presentes / estudiantes_totales) * 100, 1
         )
 
     porcentaje_invitaciones = 0
-
     if invitaciones_totales > 0:
         porcentaje_invitaciones = round(
-            (invitados_presentes / invitaciones_totales) * 100,
-            1
+            (invitados_presentes / invitaciones_totales) * 100, 1
         )
 
     avance_por_plan = []
@@ -749,16 +705,13 @@ def datos_panel_control(request):
     ).annotate(
         total=Count("id"),
         presentes=Count("id", filter=Q(ingreso_confirmado=True)),
-    ).order_by(
-        "plan_estudio__nombre"
-    )
+    ).order_by("plan_estudio__nombre")
 
     for item in planes:
         total = item["total"]
         presentes = item["presentes"]
 
         porcentaje = 0
-
         if total > 0:
             porcentaje = round((presentes / total) * 100, 1)
 
@@ -843,10 +796,8 @@ def datos_panel_control(request):
     ultimos_registros = registros_filtrados.order_by("-fecha_hora")[:30]
 
     registros = []
-
     for registro in ultimos_registros:
         estudiante = registro.estudiante
-
         registros.append({
             "nombre": estudiante.nombre_completo if estudiante else "Sin estudiante",
             "rut": estudiante.rut if estudiante else "-",
@@ -862,15 +813,11 @@ def datos_panel_control(request):
 
     registros_atrasados = registros_filtrados.filter(
         resultado="ATRASADO"
-    ).order_by(
-        "-fecha_hora"
-    )[:80]
+    ).order_by("-fecha_hora")[:80]
 
     atrasados = []
-
     for registro in registros_atrasados:
         estudiante = registro.estudiante
-
         atrasados.append({
             "nombre": estudiante.nombre_completo if estudiante else "Sin estudiante",
             "rut": estudiante.rut if estudiante else "-",
@@ -916,21 +863,16 @@ def datos_panel_control(request):
 def obtener_planes_por_area(request):
     area = request.GET.get("area", "").strip()
 
-    planes = PlanEstudio.objects.select_related(
-        "area"
-    ).all()
+    planes = PlanEstudio.objects.select_related("area").all()
 
     if area:
         planes = planes.filter(area__nombre=area)
 
     planes = planes.values_list(
-        "nombre",
-        flat=True
+        "nombre", flat=True
     ).distinct().order_by("nombre")
 
-    return JsonResponse({
-        "planes": list(planes)
-    })
+    return JsonResponse({"planes": list(planes)})
 
 
 def tarjetas_invitacion(request):
@@ -945,9 +887,7 @@ def tarjetas_invitacion(request):
         "bloque_ceremonia__ceremonia",
         "plan_estudio",
         "plan_estudio__area",
-    ).prefetch_related(
-        "invitaciones"
-    ).all().order_by(
+    ).prefetch_related("invitaciones").all().order_by(
         "nombre_completo",
         "bloque_ceremonia__fecha",
         "bloque_ceremonia__hora_inicio",
@@ -972,7 +912,6 @@ def tarjetas_invitacion(request):
 
     for estudiante in estudiantes:
         asegurar_qr_estudiante(estudiante)
-
         datos_fecha = datos_fecha_bloque(estudiante.bloque_ceremonia)
 
         if tipo in ["", "ESTUDIANTE"]:
@@ -1034,8 +973,6 @@ def tarjetas_invitacion(request):
 
 def entrega_invitaciones(request):
     busqueda = request.GET.get("q", "").strip()
-
-    estudiantes = EstudianteTitulado.objects.none()
     resultados = []
 
     if busqueda:
@@ -1044,9 +981,7 @@ def entrega_invitaciones(request):
             "bloque_ceremonia__ceremonia",
             "plan_estudio",
             "plan_estudio__area",
-        ).prefetch_related(
-            "invitaciones"
-        ).filter(
+        ).prefetch_related("invitaciones").filter(
             Q(rut__icontains=busqueda) |
             Q(nombre_completo__icontains=busqueda) |
             Q(plan_estudio__nombre__icontains=busqueda)
@@ -1059,7 +994,6 @@ def entrega_invitaciones(request):
 
         for estudiante in estudiantes:
             asegurar_qr_estudiante(estudiante)
-
             datos_fecha = datos_fecha_bloque(estudiante.bloque_ceremonia)
 
             resultados.append({
@@ -1087,10 +1021,7 @@ def entrega_invitaciones(request):
 
 @require_POST
 def marcar_entrega_invitaciones(request, estudiante_id):
-    estudiante = get_object_or_404(
-        EstudianteTitulado,
-        id=estudiante_id
-    )
+    estudiante = get_object_or_404(EstudianteTitulado, id=estudiante_id)
 
     estudiante.invitaciones_entregadas = True
     estudiante.save()
@@ -1100,9 +1031,7 @@ def marcar_entrega_invitaciones(request, estudiante_id):
         f"Invitaciones de {estudiante.nombre_completo} para {estudiante.bloque_ceremonia.nombre} marcadas como gestionadas."
     )
 
-    return redirect(
-        f"/entrega-invitaciones/?q={estudiante.rut}"
-    )
+    return redirect(f"/entrega-invitaciones/?q={estudiante.rut}")
 
 
 def cambio_ceremonia(request):
@@ -1114,19 +1043,13 @@ def cambio_ceremonia(request):
 
     bloques_destino = BloqueCeremonia.objects.select_related(
         "ceremonia"
-    ).order_by(
-        "fecha",
-        "hora_inicio",
-        "nombre"
-    )
+    ).order_by("fecha", "hora_inicio", "nombre")
 
     historial = CambioCeremonia.objects.select_related(
         "estudiante",
         "bloque_origen",
         "bloque_destino",
-    ).order_by(
-        "-fecha_cambio"
-    )[:25]
+    ).order_by("-fecha_cambio")[:25]
 
     if busqueda:
         estudiantes = EstudianteTitulado.objects.select_related(
@@ -1134,9 +1057,7 @@ def cambio_ceremonia(request):
             "bloque_ceremonia__ceremonia",
             "plan_estudio",
             "plan_estudio__area",
-        ).prefetch_related(
-            "invitaciones"
-        ).filter(
+        ).prefetch_related("invitaciones").filter(
             Q(rut__icontains=busqueda) |
             Q(nombre_completo__icontains=busqueda) |
             Q(plan_estudio__nombre__icontains=busqueda)
@@ -1153,9 +1074,7 @@ def cambio_ceremonia(request):
                 "bloque_ceremonia__ceremonia",
                 "plan_estudio",
                 "plan_estudio__area",
-            ).prefetch_related(
-                "invitaciones"
-            ),
+            ).prefetch_related("invitaciones"),
             id=estudiante_id
         )
 
@@ -1168,31 +1087,19 @@ def cambio_ceremonia(request):
             EstudianteTitulado.objects.select_related(
                 "bloque_ceremonia",
                 "plan_estudio",
-            ).prefetch_related(
-                "invitaciones"
-            ),
+            ).prefetch_related("invitaciones"),
             id=estudiante_id_post
         )
 
-        bloque_destino = get_object_or_404(
-            BloqueCeremonia,
-            id=bloque_destino_id
-        )
-
+        bloque_destino = get_object_or_404(BloqueCeremonia, id=bloque_destino_id)
         bloque_origen = estudiante.bloque_ceremonia
 
         if not motivo:
-            messages.error(
-                request,
-                "Debes ingresar el motivo institucional del cambio."
-            )
+            messages.error(request, "Debes ingresar el motivo institucional del cambio.")
             return redirect(f"{request.path}?q={estudiante.rut}&estudiante={estudiante.id}")
 
         if bloque_destino.id == bloque_origen.id:
-            messages.error(
-                request,
-                "El estudiante ya pertenece a la ceremonia seleccionada."
-            )
+            messages.error(request, "El estudiante ya pertenece a la ceremonia seleccionada.")
             return redirect(f"{request.path}?q={estudiante.rut}&estudiante={estudiante.id}")
 
         if estudiante.ingreso_confirmado:
@@ -1213,9 +1120,7 @@ def cambio_ceremonia(request):
             rut=estudiante.rut,
             bloque_ceremonia=bloque_destino,
             plan_estudio=estudiante.plan_estudio,
-        ).exclude(
-            id=estudiante.id
-        ).exists()
+        ).exclude(id=estudiante.id).exists()
 
         if duplicado:
             messages.error(
@@ -1225,7 +1130,6 @@ def cambio_ceremonia(request):
             return redirect(f"{request.path}?q={estudiante.rut}&estudiante={estudiante.id}")
 
         usuario_responsable = None
-
         if request.user.is_authenticated:
             usuario_responsable = request.user.get_username()
 
@@ -1283,127 +1187,65 @@ def cambio_ceremonia(request):
 
 @require_POST
 def abrir_bloque_ceremonia(request, bloque_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=bloque_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
     bloque.abrir()
-
-    messages.success(
-        request,
-        f"La ceremonia {bloque.nombre} fue abierta correctamente."
-    )
-
+    messages.success(request, f"La ceremonia {bloque.nombre} fue abierta correctamente.")
     return redirect("titulacion:registro_ingreso")
 
 
 @require_POST
 def cerrar_bloque_ceremonia(request, bloque_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=bloque_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
     bloque.cerrar()
-
     messages.success(
         request,
         f"La ceremonia {bloque.nombre} fue cerrada correctamente. Los próximos ingresos quedarán como atrasados."
     )
-
     return redirect("titulacion:registro_ingreso")
 
 
 @require_POST
 def reprogramar_bloque_ceremonia(request, bloque_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=bloque_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
     bloque.reprogramar()
-
-    messages.success(
-        request,
-        f"La ceremonia {bloque.nombre} volvió al estado programada."
-    )
-
+    messages.success(request, f"La ceremonia {bloque.nombre} volvió al estado programada.")
     return redirect("titulacion:registro_ingreso")
 
 
 @require_POST
 def cerrar_registro_ceremonia(request, ceremonia_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=ceremonia_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=ceremonia_id)
     bloque.cerrar()
-
-    messages.success(
-        request,
-        f"Registro de ingreso cerrado para {bloque.nombre}."
-    )
-
+    messages.success(request, f"Registro de ingreso cerrado para {bloque.nombre}.")
     return redirect("titulacion:registro_ingreso")
 
 
 @require_POST
 def reabrir_registro_ceremonia(request, ceremonia_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=ceremonia_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=ceremonia_id)
     bloque.abrir()
-
-    messages.success(
-        request,
-        f"Registro de ingreso reabierto para {bloque.nombre}."
-    )
-
+    messages.success(request, f"Registro de ingreso reabierto para {bloque.nombre}.")
     return redirect("titulacion:registro_ingreso")
 
 
 @require_POST
 def cerrar_registro_bloque(request, bloque_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=bloque_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
     bloque.cerrar()
-
-    messages.success(
-        request,
-        f"Registro cerrado para {bloque.nombre}."
-    )
-
+    messages.success(request, f"Registro cerrado para {bloque.nombre}.")
     return redirect("titulacion:panel_control")
 
 
 @require_POST
 def reabrir_registro_bloque(request, bloque_id):
-    bloque = get_object_or_404(
-        BloqueCeremonia,
-        id=bloque_id
-    )
-
+    bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
     bloque.abrir()
-
-    messages.success(
-        request,
-        f"Registro reabierto para {bloque.nombre}."
-    )
-
+    messages.success(request, f"Registro reabierto para {bloque.nombre}.")
     return redirect("titulacion:panel_control")
 
 
 def descargar_invitacion_pdf(request, tipo, estudiante_id):
-    return redirect(
-        f"/entrega-invitaciones/?q={estudiante_id}"
-    )
+    return redirect(f"/entrega-invitaciones/?q={estudiante_id}")
 
 
 def api_dashboard(request):
