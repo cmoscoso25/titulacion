@@ -4,66 +4,25 @@
 
 /* === VARIABLES === */
 :root{
-    --entrega-width:min(1500px,90%);
+    --entrega-width:min(1260px,90%);
     --tarjeta-ancho:1120px;
     --tarjeta-alto:720px;
 }
 
 /* === LAYOUT === */
-.topbar{
-    background:var(--negro);
-    color:var(--blanco);
-    border-bottom:8px solid var(--rojo);
-}
-
-.topbar-inner{
-    min-height:64px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:18px;
-    padding:0 clamp(16px,2vw,28px);
-}
-
-.topbar-left{
-    display:flex;
-    align-items:center;
-    gap:clamp(10px,1.6vw,18px);
-}
-
-.topbar .logo-inacap{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:38px;
-    padding:8px 18px;
-    border-radius:10px;
-    background:var(--rojo);
-    color:var(--blanco);
-    font-size:clamp(1.1rem,2vw,1.6rem);
-    font-weight:1000;
-    letter-spacing:.02em;
-}
-
-.topbar-right{
-    font-size:clamp(.78rem,1vw,.9rem);
-    font-weight:800;
-    color:var(--blanco);
-    white-space:nowrap;
-}
-
 .hero-inner{
     width:var(--entrega-width);
+    padding:clamp(14px,2vw,20px) 0 clamp(48px,5vw,68px);
 }
 
 .mensajes{
     width:var(--entrega-width);
-    margin:-34px auto 18px;
+    margin:-28px auto 14px;
 }
 
 .contenedor-entrega{
     width:var(--entrega-width);
-    margin:-48px auto 60px;
+    margin:-38px auto 48px;
     position:relative;
     z-index:4;
 }
@@ -74,90 +33,90 @@
 
 /* === BUSCADOR === */
 .buscador-box{
-    padding:clamp(18px,2vw,24px);
-    margin-bottom:24px;
+    padding:clamp(14px,1.8vw,20px);
+    margin-bottom:16px;
 }
 
 .form-busqueda{
     display:grid;
     grid-template-columns:1fr;
-    gap:14px;
+    gap:12px;
     align-items:center;
 }
 
 .input-busqueda{
-    min-height:56px;
-    border-radius:16px;
-    padding:0 18px;
-    font-size:clamp(.95rem,1.5vw,1.12rem);
+    min-height:44px;
+    border-radius:14px;
+    padding:0 16px;
+    font-size:clamp(.88rem,1.2vw,1rem);
     font-weight:800;
 }
 
 .btn-buscar{
-    min-height:56px;
-    border-radius:16px;
-    font-size:clamp(.9rem,1.4vw,1.05rem);
+    min-height:44px;
+    border-radius:14px;
+    font-size:clamp(.84rem,1.1vw,.96rem);
 }
 
 .helper{
-    margin-top:12px;
+    margin-top:10px;
     color:var(--texto-suave);
-    font-size:.84rem;
+    font-size:.78rem;
     font-weight:700;
 }
 
 .resumen-resultados{
     background:var(--blanco);
-    border-radius:18px;
-    padding:16px 20px;
+    border-radius:16px;
+    padding:13px 18px;
     box-shadow:var(--sombra-suave);
-    margin-bottom:16px;
-    font-size:.95rem;
+    margin-bottom:13px;
+    font-size:.88rem;
     color:var(--texto);
     border:1px solid var(--borde-suave);
 }
 
 .resumen-resultados strong{
     color:var(--rojo);
-    font-size:1.25rem;
+    font-size:1.1rem;
 }
 
 .acciones-globales{
     display:flex;
     justify-content:flex-end;
-    gap:12px;
+    gap:10px;
     flex-wrap:wrap;
-    margin-bottom:18px;
+    margin-bottom:14px;
 }
 
 /* === RESULTADOS === */
 .estudiante-box{
-    padding:clamp(18px,2vw,24px);
-    margin-bottom:26px;
+    padding:clamp(14px,1.8vw,20px);
+    margin-bottom:20px;
 }
 
 .encabezado-estudiante{
     display:grid;
     grid-template-columns:1fr;
-    gap:16px;
+    gap:14px;
     align-items:start;
-    margin-bottom:18px;
+    margin-bottom:14px;
 }
 
 .nombre-estudiante{
-    font-size:clamp(1.25rem,2.2vw,1.8rem);
+    font-size:clamp(1.1rem,1.8vw,1.5rem);
     color:var(--texto);
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
 .grid-info{
     display:grid;
     grid-template-columns:1fr;
-    gap:8px 18px;
+    gap:6px 16px;
 }
 
 .grid-info p{
-    font-size:.88rem;
+    font-size:.82rem;
     color:var(--texto-suave);
 }
 
@@ -172,15 +131,15 @@
 .info-larga span{
     color:var(--rojo);
     font-weight:900;
-    padding-inline:6px;
+    padding-inline:5px;
 }
 
 .botones-acciones{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:10px;
     flex-wrap:wrap;
-    margin-bottom:18px;
+    margin-bottom:14px;
 }
 
 .botones-acciones form{
@@ -188,7 +147,7 @@
 }
 
 .btn-imprimir{
-    min-height:42px;
+    min-height:38px;
 }
 
 .btn-accion.btn-gestionar,
@@ -208,7 +167,7 @@
 .grupo-invitaciones{
     display:grid;
     grid-template-columns:1fr;
-    gap:18px;
+    gap:16px;
 }
 
 .tarjeta-wrapper{
@@ -403,8 +362,8 @@
 .estado-vacio{
     background:var(--blanco);
     border:1px solid var(--borde-suave);
-    border-radius:22px;
-    padding:clamp(22px,4vw,40px);
+    border-radius:20px;
+    padding:clamp(20px,3vw,36px);
     box-shadow:var(--sombra-suave);
     text-align:center;
     color:var(--texto-suave);
@@ -413,11 +372,15 @@
 .sin-resultados h2,
 .estado-vacio h2{
     color:var(--texto);
-    font-size:clamp(1.3rem,2vw,1.6rem);
+    font-size:clamp(1.2rem,1.8vw,1.5rem);
     margin-bottom:8px;
 }
 
-/* === RESPONSIVE === */
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* 320px – 480px */
 @media (max-width:480px){
     :root{
         --entrega-width:90%;
@@ -425,65 +388,21 @@
         --tarjeta-alto:620px;
     }
 
-    .topbar-inner{
-        flex-direction:column;
-        align-items:flex-start;
-        padding:14px;
-    }
-
-    .topbar-right{
-        white-space:normal;
-    }
-
-    .mensajes{
-        margin:-24px auto 14px;
-    }
-
-    .contenedor-entrega{
-        margin-top:-28px;
-        margin-bottom:36px;
-    }
-
-    .buscador-box,
-    .estudiante-box{
-        border-radius:18px;
-        padding:14px;
-    }
-
-    .acciones-globales,
-    .botones-acciones{
-        justify-content:stretch;
-    }
-
+    .mensajes{ margin:-20px auto 12px; }
+    .contenedor-entrega{ margin-top:-24px; margin-bottom:28px; }
+    .buscador-box, .estudiante-box{ border-radius:16px; padding:13px; }
+    .acciones-globales, .botones-acciones{ justify-content:stretch; }
     .acciones-globales .btn-accion,
     .botones-acciones .btn-accion,
-    .botones-acciones form{
-        width:100%;
-    }
-
-    .botones-acciones form button{
-        width:100%;
-    }
-
-    .tarjeta-header{
-        padding:24px;
-    }
-
-    .tarjeta-body{
-        grid-template-columns:1fr .95fr;
-        padding:16px 24px 28px;
-    }
-
-    .tarjeta-info h3{
-        font-size:1.9rem;
-    }
-
-    .qr-box img{
-        width:130px;
-        height:130px;
-    }
+    .botones-acciones form{ width:100%; }
+    .botones-acciones form button{ width:100%; }
+    .tarjeta-header{ padding:24px; }
+    .tarjeta-body{ grid-template-columns:1fr .95fr; padding:16px 24px 28px; }
+    .tarjeta-info h3{ font-size:1.9rem; }
+    .qr-box img{ width:130px; height:130px; }
 }
 
+/* 481px – 767px */
 @media (min-width:481px) and (max-width:767px){
     :root{
         --entrega-width:90%;
@@ -491,109 +410,51 @@
         --tarjeta-alto:650px;
     }
 
-    .topbar-inner{
-        flex-wrap:wrap;
-        padding:14px 18px;
-    }
-
-    .contenedor-entrega{
-        margin-top:-34px;
-    }
-
-    .acciones-globales{
-        justify-content:flex-start;
-    }
+    .contenedor-entrega{ margin-top:-28px; }
+    .acciones-globales{ justify-content:flex-start; }
 }
 
+/* 768px – 1024px */
 @media (min-width:768px) and (max-width:1024px){
-    :root{
-        --entrega-width:90%;
-    }
+    :root{ --entrega-width:90%; }
 
-    .form-busqueda{
-        grid-template-columns:1fr 250px;
-    }
-
-    .encabezado-estudiante{
-        grid-template-columns:1fr auto;
-    }
-
-    .grid-info{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-    }
+    .form-busqueda{ grid-template-columns:1fr 220px; }
+    .encabezado-estudiante{ grid-template-columns:1fr auto; }
+    .grid-info{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 
+/* 1025px – 1366px — NOTEBOOK */
 @media (min-width:1025px) and (max-width:1366px){
-    .form-busqueda{
-        grid-template-columns:1fr 260px;
-    }
+    :root{ --entrega-width:min(1180px,90%); }
 
-    .encabezado-estudiante{
-        grid-template-columns:1fr auto;
-    }
-
-    .grid-info{
-        grid-template-columns:repeat(4,minmax(0,1fr));
-    }
-
-    .grupo-invitaciones{
-        grid-template-columns:1fr;
-    }
+    .form-busqueda{ grid-template-columns:1fr 240px; }
+    .encabezado-estudiante{ grid-template-columns:1fr auto; }
+    .grid-info{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .grupo-invitaciones{ grid-template-columns:1fr; }
 }
 
+/* 1367px – 1920px — DESKTOP */
 @media (min-width:1367px) and (max-width:1920px){
-    :root{
-        --entrega-width:min(1540px,88%);
-    }
+    :root{ --entrega-width:min(1300px,88%); }
 
-    .form-busqueda{
-        grid-template-columns:1fr 280px;
-    }
-
-    .encabezado-estudiante{
-        grid-template-columns:1fr auto;
-    }
-
-    .grid-info{
-        grid-template-columns:repeat(4,minmax(0,1fr));
-    }
+    .form-busqueda{ grid-template-columns:1fr 260px; }
+    .encabezado-estudiante{ grid-template-columns:1fr auto; }
+    .grid-info{ grid-template-columns:repeat(4,minmax(0,1fr)); }
 }
 
+/* 1921px+ — TV / HDMI */
 @media (min-width:1921px){
-    :root{
-        --entrega-width:min(1640px,82%);
-    }
+    :root{ --entrega-width:min(1420px,80%); }
 
-    .form-busqueda{
-        grid-template-columns:1fr 300px;
-    }
-
-    .encabezado-estudiante{
-        grid-template-columns:1fr auto;
-    }
-
-    .grid-info{
-        grid-template-columns:repeat(4,minmax(0,1fr));
-    }
+    .form-busqueda{ grid-template-columns:1fr 280px; }
+    .encabezado-estudiante{ grid-template-columns:1fr auto; }
+    .grid-info{ grid-template-columns:repeat(4,minmax(0,1fr)); }
 }
 
-@media (max-height:760px) and (min-width:900px){
-    .hero-inner{
-        padding-top:16px;
-        padding-bottom:42px;
-    }
-
-    .contenedor-entrega{
-        margin-top:-32px;
-    }
-
-    .buscador-box,
-    .estudiante-box{
-        padding:16px;
-    }
-
-    .input-busqueda,
-    .btn-buscar{
-        min-height:48px;
-    }
+/* Pantalla baja: notebook con TV via HDMI */
+@media (max-height:800px) and (min-width:900px){
+    .hero-inner{ padding-top:12px; padding-bottom:40px; }
+    .contenedor-entrega{ margin-top:-28px; }
+    .buscador-box, .estudiante-box{ padding:13px; }
+    .input-busqueda, .btn-buscar{ min-height:40px; font-size:.86rem; }
 }

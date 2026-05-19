@@ -4,24 +4,25 @@
 
 /* === VARIABLES === */
 :root{
-    --cambio-width:min(1300px,90%);
+    --cambio-width:min(1180px,90%);
 }
 
 /* === LAYOUT === */
 .hero-cambio-contenido{
     width:var(--cambio-width);
+    padding:clamp(14px,2vw,20px) 0 clamp(48px,5vw,68px);
 }
 
 .contenido-cambio{
     width:var(--cambio-width);
-    margin:-42px auto 60px;
+    margin:-38px auto 48px;
     position:relative;
     z-index:5;
 }
 
 .mensajes{
     width:var(--cambio-width);
-    margin:-34px auto 18px;
+    margin:-28px auto 14px;
 }
 
 .mensajes + .contenido-cambio{
@@ -30,77 +31,81 @@
 
 /* === PANEL BÚSQUEDA === */
 .panel-busqueda{
-    padding:clamp(18px,2vw,24px);
-    margin-bottom:20px;
+    padding:clamp(13px,1.6vw,20px);
+    margin-bottom:14px;
 }
 
 .panel-busqueda h2{
-    font-size:clamp(1.3rem,2vw,1.65rem);
+    font-size:clamp(1.15rem,1.6vw,1.45rem);
     color:var(--texto);
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
 .panel-busqueda p{
     color:var(--texto-suave);
-    font-size:.9rem;
-    margin-top:12px;
-    max-width:980px;
+    font-size:.84rem;
+    margin-top:10px;
+    max-width:900px;
 }
 
 .form-busqueda{
     display:grid;
     grid-template-columns:1fr;
-    gap:14px;
+    gap:12px;
     align-items:center;
 }
 
 .form-busqueda input{
-    min-height:52px;
-    border-radius:16px;
+    min-height:44px;
+    border-radius:14px;
     font-weight:800;
+    font-size:.9rem;
 }
 
 .form-busqueda button{
-    min-height:52px;
-    border-radius:16px;
+    min-height:44px;
+    border-radius:14px;
+    font-size:.88rem;
 }
 
 /* === RESULTADOS === */
 .panel-resultados{
-    padding:clamp(18px,2vw,24px);
-    margin-bottom:20px;
+    padding:clamp(13px,1.6vw,20px);
+    margin-bottom:14px;
 }
 
 .panel-resultados h2{
-    font-size:clamp(1.25rem,1.8vw,1.5rem);
+    font-size:clamp(1.1rem,1.5vw,1.35rem);
     color:var(--texto);
-    margin-bottom:14px;
+    margin-bottom:12px;
 }
 
 .panel-resultados .tabla-scroll{
     border:1px solid var(--borde-suave);
-    border-radius:16px;
+    border-radius:14px;
     overflow:auto;
 }
 
 .panel-resultados table{
-    min-width:1040px;
+    min-width:980px;
 }
 
 .panel-resultados th{
-    font-size:.72rem;
+    font-size:.68rem;
+    padding:10px 11px;
 }
 
 .panel-resultados td{
-    font-size:.82rem;
+    font-size:.78rem;
+    padding:10px 11px;
 }
 
 .btn-seleccionar,
 .btn-cambiar,
 .btn-confirmar{
-    min-height:34px;
-    padding:0 14px;
-    font-size:.76rem;
+    min-height:32px;
+    padding:0 12px;
+    font-size:.72rem;
     white-space:nowrap;
 }
 
@@ -110,48 +115,48 @@
 .detalle-cambio{
     background:var(--blanco);
     border:1px solid var(--borde-suave);
-    border-radius:22px;
-    padding:clamp(18px,2vw,24px);
+    border-radius:20px;
+    padding:clamp(13px,1.6vw,20px);
     box-shadow:var(--sombra-suave);
-    margin-bottom:20px;
+    margin-bottom:14px;
 }
 
 .panel-cambio h2,
 .formulario-cambio h2,
 .detalle-cambio h2{
-    font-size:clamp(1.25rem,1.8vw,1.5rem);
+    font-size:clamp(1.1rem,1.5vw,1.35rem);
     color:var(--texto);
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
 .panel-cambio p,
 .formulario-cambio p,
 .detalle-cambio p{
     color:var(--texto-suave);
-    font-size:.9rem;
-    margin-bottom:14px;
+    font-size:.84rem;
+    margin-bottom:12px;
 }
 
 .resumen-estudiante{
     display:grid;
     grid-template-columns:1fr;
-    gap:12px;
-    padding:16px;
-    border-radius:18px;
+    gap:10px;
+    padding:14px;
+    border-radius:16px;
     background:#f8fafc;
     border:1px solid var(--borde-suave);
-    margin-bottom:18px;
+    margin-bottom:14px;
 }
 
 .resumen-estudiante div{
     border-left:4px solid var(--rojo);
-    padding-left:12px;
+    padding-left:11px;
 }
 
 .resumen-estudiante span{
     display:block;
     color:var(--texto-muted);
-    font-size:.72rem;
+    font-size:.68rem;
     font-weight:900;
     text-transform:uppercase;
     letter-spacing:.04em;
@@ -161,7 +166,7 @@
 .resumen-estudiante strong{
     display:block;
     color:var(--texto);
-    font-size:.95rem;
+    font-size:.88rem;
     line-height:1.25;
 }
 
@@ -169,17 +174,17 @@
 .formulario-cambio form{
     display:grid;
     grid-template-columns:1fr;
-    gap:14px;
+    gap:12px;
 }
 
 .form-cambio textarea,
 .formulario-cambio textarea{
-    min-height:120px;
+    min-height:100px;
 }
 
 .acciones-cambio{
     display:flex;
-    gap:12px;
+    gap:10px;
     flex-wrap:wrap;
     justify-content:flex-end;
     margin-top:4px;
@@ -189,59 +194,45 @@
 .alerta-bloqueo,
 .alerta-duplicidad,
 .alerta-cambio{
-    border-radius:18px;
-    padding:16px;
-    margin-bottom:18px;
-    font-size:.9rem;
+    border-radius:16px;
+    padding:13px 15px;
+    margin-bottom:14px;
+    font-size:.84rem;
     font-weight:800;
     border:1px solid transparent;
 }
 
-.alerta-bloqueo{
-    background:#fee2e2;
-    color:#991b1b;
-    border-color:#fca5a5;
-}
-
-.alerta-duplicidad{
-    background:#fef3c7;
-    color:#92400e;
-    border-color:#fcd34d;
-}
-
-.alerta-cambio{
-    background:#dbeafe;
-    color:#1d4ed8;
-    border-color:#93c5fd;
-}
+.alerta-bloqueo{ background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
+.alerta-duplicidad{ background:#fef3c7; color:#92400e; border-color:#fcd34d; }
+.alerta-cambio{ background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
 
 /* === HISTORIAL === */
 .panel-historial,
 .historial-cambios{
     background:var(--blanco);
     border:1px solid var(--borde-suave);
-    border-radius:22px;
-    padding:clamp(18px,2vw,24px);
+    border-radius:20px;
+    padding:clamp(13px,1.6vw,20px);
     box-shadow:var(--sombra-suave);
-    margin-top:20px;
+    margin-top:14px;
 }
 
 .panel-historial h2,
 .historial-cambios h2{
-    font-size:clamp(1.25rem,1.8vw,1.5rem);
+    font-size:clamp(1.1rem,1.5vw,1.35rem);
     color:var(--texto);
-    margin-bottom:14px;
+    margin-bottom:12px;
 }
 
 .lista-historial{
     display:grid;
     grid-template-columns:1fr;
-    gap:10px;
+    gap:8px;
 }
 
 .item-historial{
-    padding:14px;
-    border-radius:16px;
+    padding:12px 13px;
+    border-radius:14px;
     border:1px solid var(--borde-suave);
     background:#f8fafc;
 }
@@ -249,21 +240,21 @@
 .item-historial strong{
     display:block;
     color:var(--texto);
-    font-size:.92rem;
+    font-size:.86rem;
 }
 
 .item-historial span{
     display:block;
     color:var(--texto-muted);
-    font-size:.78rem;
-    margin-top:4px;
+    font-size:.74rem;
+    margin-top:3px;
 }
 
 .item-historial p{
-    margin-top:8px;
+    margin-top:7px;
     margin-bottom:0;
     color:var(--texto-suave);
-    font-size:.84rem;
+    font-size:.8rem;
 }
 
 /* === ESTADO VACÍO === */
@@ -271,203 +262,103 @@
 .estado-vacio{
     background:var(--blanco);
     border:1px solid var(--borde-suave);
-    border-radius:22px;
-    padding:clamp(22px,4vw,40px);
+    border-radius:20px;
+    padding:clamp(18px,3vw,34px);
     box-shadow:var(--sombra-suave);
     text-align:center;
     color:var(--texto-suave);
-    margin-top:18px;
+    margin-top:14px;
 }
 
 .sin-resultados h2,
 .estado-vacio h2{
     color:var(--texto);
-    font-size:clamp(1.3rem,2vw,1.6rem);
-    margin-bottom:8px;
+    font-size:clamp(1.1rem,1.6vw,1.4rem);
+    margin-bottom:7px;
 }
 
-/* === RESPONSIVE === */
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* 320px – 480px */
 @media (max-width:480px){
-    :root{
-        --cambio-width:90%;
-    }
-
-    .contenido-cambio{
-        margin-top:-28px;
-        margin-bottom:36px;
-    }
-
-    .mensajes{
-        margin:-24px auto 14px;
-    }
-
-    .panel-busqueda,
-    .panel-resultados,
-    .panel-cambio,
-    .formulario-cambio,
-    .detalle-cambio,
-    .panel-historial,
-    .historial-cambios{
-        border-radius:18px;
-        padding:14px;
-    }
-
-    .form-busqueda{
-        grid-template-columns:1fr;
-    }
-
-    .acciones-cambio{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
+    :root{ --cambio-width:90%; }
+    .contenido-cambio{ margin-top:-24px; margin-bottom:28px; }
+    .mensajes{ margin:-20px auto 12px; }
+    .panel-busqueda,.panel-resultados,.panel-cambio,
+    .formulario-cambio,.detalle-cambio,
+    .panel-historial,.historial-cambios{ border-radius:16px; padding:13px; }
+    .form-busqueda{ grid-template-columns:1fr; }
+    .acciones-cambio{ flex-direction:column; align-items:stretch; }
     .acciones-cambio .btn,
     .acciones-cambio button,
-    .acciones-cambio a{
-        width:100%;
-    }
-
-    .panel-resultados table{
-        min-width:980px;
-    }
+    .acciones-cambio a{ width:100%; }
+    .panel-resultados table{ min-width:920px; }
 }
 
+/* 481px – 767px */
 @media (min-width:481px) and (max-width:767px){
-    :root{
-        --cambio-width:90%;
-    }
-
-    .contenido-cambio{
-        margin-top:-34px;
-    }
-
-    .form-busqueda{
-        grid-template-columns:1fr;
-    }
-
-    .acciones-cambio{
-        justify-content:flex-start;
-    }
+    :root{ --cambio-width:90%; }
+    .contenido-cambio{ margin-top:-28px; }
+    .acciones-cambio{ justify-content:flex-start; }
 }
 
+/* 768px – 1024px */
 @media (min-width:768px) and (max-width:1024px){
-    :root{
-        --cambio-width:90%;
-    }
-
-    .form-busqueda{
-        grid-template-columns:1fr 180px;
-    }
-
-    .resumen-estudiante{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-
+    :root{ --cambio-width:90%; }
+    .form-busqueda{ grid-template-columns:1fr 160px; }
+    .resumen-estudiante{ grid-template-columns:repeat(2,minmax(0,1fr)); }
     .form-cambio,
-    .formulario-cambio form{
-        grid-template-columns:1fr 1fr;
-    }
-
+    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
     .form-cambio .campo-completo,
     .formulario-cambio textarea,
-    .acciones-cambio{
-        grid-column:1 / -1;
-    }
+    .acciones-cambio{ grid-column:1 / -1; }
 }
 
+/* 1025px – 1366px — NOTEBOOK */
 @media (min-width:1025px) and (max-width:1366px){
-    .form-busqueda{
-        grid-template-columns:1fr 190px;
-    }
-
-    .resumen-estudiante{
-        grid-template-columns:repeat(3,minmax(0,1fr));
-    }
-
+    :root{ --cambio-width:min(1120px,90%); }
+    .form-busqueda{ grid-template-columns:1fr 170px; }
+    .resumen-estudiante{ grid-template-columns:repeat(3,minmax(0,1fr)); }
     .form-cambio,
-    .formulario-cambio form{
-        grid-template-columns:1fr 1fr;
-    }
-
+    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
     .form-cambio .campo-completo,
     .formulario-cambio textarea,
-    .acciones-cambio{
-        grid-column:1 / -1;
-    }
+    .acciones-cambio{ grid-column:1 / -1; }
 }
 
+/* 1367px – 1920px — DESKTOP */
 @media (min-width:1367px) and (max-width:1920px){
-    :root{
-        --cambio-width:min(1360px,88%);
-    }
-
-    .form-busqueda{
-        grid-template-columns:1fr 200px;
-    }
-
-    .resumen-estudiante{
-        grid-template-columns:repeat(4,minmax(0,1fr));
-    }
-
+    :root{ --cambio-width:min(1240px,88%); }
+    .form-busqueda{ grid-template-columns:1fr 180px; }
+    .resumen-estudiante{ grid-template-columns:repeat(4,minmax(0,1fr)); }
     .form-cambio,
-    .formulario-cambio form{
-        grid-template-columns:1fr 1fr;
-    }
-
+    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
     .form-cambio .campo-completo,
     .formulario-cambio textarea,
-    .acciones-cambio{
-        grid-column:1 / -1;
-    }
+    .acciones-cambio{ grid-column:1 / -1; }
 }
 
+/* 1921px+ — TV / HDMI */
 @media (min-width:1921px){
-    :root{
-        --cambio-width:min(1480px,82%);
-    }
-
-    .form-busqueda{
-        grid-template-columns:1fr 220px;
-    }
-
-    .resumen-estudiante{
-        grid-template-columns:repeat(4,minmax(0,1fr));
-    }
-
+    :root{ --cambio-width:min(1340px,80%); }
+    .form-busqueda{ grid-template-columns:1fr 200px; }
+    .resumen-estudiante{ grid-template-columns:repeat(4,minmax(0,1fr)); }
     .form-cambio,
-    .formulario-cambio form{
-        grid-template-columns:1fr 1fr;
-    }
-
+    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
     .form-cambio .campo-completo,
     .formulario-cambio textarea,
-    .acciones-cambio{
-        grid-column:1 / -1;
-    }
+    .acciones-cambio{ grid-column:1 / -1; }
 }
 
-@media (max-height:760px) and (min-width:900px){
-    .hero-cambio-contenido{
-        padding-top:16px;
-        padding-bottom:42px;
-    }
-
-    .contenido-cambio{
-        margin-top:-32px;
-    }
-
-    .panel-busqueda,
-    .panel-resultados,
-    .panel-cambio,
-    .formulario-cambio,
-    .detalle-cambio,
-    .panel-historial,
-    .historial-cambios{
-        padding:16px;
-    }
-
+/* Pantalla baja: notebook con TV via HDMI */
+@media (max-height:800px) and (min-width:900px){
+    .hero-cambio-contenido{ padding-top:12px; padding-bottom:40px; }
+    .contenido-cambio{ margin-top:-28px; }
+    .panel-busqueda,.panel-resultados,.panel-cambio,
+    .formulario-cambio,.detalle-cambio,
+    .panel-historial,.historial-cambios{ padding:13px; }
     .form-busqueda input,
-    .form-busqueda button{
-        min-height:46px;
-    }
+    .form-busqueda button{ min-height:40px; font-size:.84rem; }
 }
