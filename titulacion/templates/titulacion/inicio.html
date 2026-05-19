@@ -38,14 +38,15 @@
             {% if request.user.is_authenticated %}
                 <form method="POST" action="{% url 'titulacion:logout' %}">
                     {% csrf_token %}
-
                     <button type="submit" class="btn-cerrar-sesion">
                         Cerrar sesión
                     </button>
                 </form>
             {% endif %}
 
-            <div class="avatar"></div>
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
         </div>
     </header>
 
@@ -91,16 +92,9 @@
                 <article class="modulo">
                     <div>
                         <div class="icono">📄</div>
-
-                        <h3>
-                            Carga Masiva Excel
-                        </h3>
-
-                        <p>
-                            Importación automática desde archivo oficial curricular.
-                        </p>
+                        <h3>Carga Masiva Excel</h3>
+                        <p>Importación automática desde archivo oficial curricular.</p>
                     </div>
-
                     <a href="{% url 'titulacion:cargar_excel' %}" class="btn">
                         Abrir módulo
                     </a>
@@ -109,16 +103,9 @@
                 <article class="modulo">
                     <div>
                         <div class="icono">🎟️</div>
-
-                        <h3>
-                            Entrega Invitaciones
-                        </h3>
-
-                        <p>
-                            Búsqueda por RUT o nombre para entregar tarjetas.
-                        </p>
+                        <h3>Entrega Invitaciones</h3>
+                        <p>Búsqueda por RUT o nombre para entregar tarjetas.</p>
                     </div>
-
                     <a href="{% url 'titulacion:entrega_invitaciones' %}" class="btn">
                         Abrir módulo
                     </a>
@@ -127,16 +114,9 @@
                 <article class="modulo">
                     <div>
                         <div class="icono">📲</div>
-
-                        <h3>
-                            Registro Ingreso
-                        </h3>
-
-                        <p>
-                            Escaneo QR para validar estudiantes e invitados.
-                        </p>
+                        <h3>Registro Ingreso</h3>
+                        <p>Escaneo QR para validar estudiantes e invitados.</p>
                     </div>
-
                     <a href="{% url 'titulacion:registro_ingreso' %}" class="btn">
                         Abrir módulo
                     </a>
@@ -145,16 +125,9 @@
                 <article class="modulo">
                     <div>
                         <div class="icono">📊</div>
-
-                        <h3>
-                            Panel Control
-                        </h3>
-
-                        <p>
-                            Seguimiento en vivo de asistentes e ingresos.
-                        </p>
+                        <h3>Panel Control</h3>
+                        <p>Seguimiento en vivo de asistentes e ingresos.</p>
                     </div>
-
                     <a href="{% url 'titulacion:panel_control' %}" class="btn">
                         Abrir módulo
                     </a>
@@ -163,16 +136,9 @@
                 <article class="modulo">
                     <div>
                         <div class="icono">🔁</div>
-
-                        <h3>
-                            Cambio Ceremonia
-                        </h3>
-
-                        <p>
-                            Cambio controlado de bloque con trazabilidad y regeneración de QR.
-                        </p>
+                        <h3>Cambio Ceremonia</h3>
+                        <p>Cambio controlado de bloque con trazabilidad y regeneración de QR.</p>
                     </div>
-
                     <a href="{% url 'titulacion:cambio_ceremonia' %}" class="btn">
                         Abrir módulo
                     </a>

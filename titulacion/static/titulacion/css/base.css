@@ -261,8 +261,17 @@ strong{
     height:32px;
     flex:0 0 auto;
     border-radius:50%;
-    background:var(--gris-medio);
+    background:var(--rojo);
     border:2px solid var(--blanco);
+    color:var(--blanco);
+    font-size:.65rem;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    user-select:none;
 }
 
 /* === HERO GLOBAL === */

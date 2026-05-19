@@ -44,7 +44,9 @@
                 </form>
             {% endif %}
 
-            <div class="avatar"></div>
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
         </div>
     </header>
 
@@ -151,7 +153,7 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a
+                                        
                                             href="{% url 'titulacion:cambio_ceremonia' %}?q={{ busqueda }}&estudiante={{ estudiante.id }}"
                                             class="btn-seleccionar"
                                         >
@@ -217,15 +219,10 @@
 
                         <div>
                             <span>Ingreso estudiante</span>
-
                             {% if estudiante_seleccionado.ingreso_confirmado %}
-                                <strong class="texto-rojo">
-                                    Registrado
-                                </strong>
+                                <strong class="texto-rojo">Registrado</strong>
                             {% else %}
-                                <strong class="texto-verde">
-                                    Sin registro
-                                </strong>
+                                <strong class="texto-verde">Sin registro</strong>
                             {% endif %}
                         </div>
 

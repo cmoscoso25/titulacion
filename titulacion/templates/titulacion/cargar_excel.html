@@ -44,7 +44,9 @@
                 </form>
             {% endif %}
 
-            <div class="avatar"></div>
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
         </div>
     </header>
 
@@ -137,59 +139,27 @@
         <section class="resumen">
 
             <article class="card-resumen verde">
-                <div class="titulo">
-                    Estudiantes cargados
-                </div>
-
-                <div class="valor">
-                    {{ total_estudiantes|default:"0" }}
-                </div>
-
-                <div class="detalle">
-                    Registros procesados correctamente
-                </div>
+                <div class="titulo">Estudiantes cargados</div>
+                <div class="valor">{{ total_estudiantes|default:"0" }}</div>
+                <div class="detalle">Registros procesados correctamente</div>
             </article>
 
             <article class="card-resumen">
-                <div class="titulo">
-                    Ceremonias detectadas
-                </div>
-
-                <div class="valor">
-                    {{ total_ceremonias|default:"0" }}
-                </div>
-
-                <div class="detalle">
-                    Jornadas institucionales creadas
-                </div>
+                <div class="titulo">Ceremonias detectadas</div>
+                <div class="valor">{{ total_ceremonias|default:"0" }}</div>
+                <div class="detalle">Jornadas institucionales creadas</div>
             </article>
 
             <article class="card-resumen dorado">
-                <div class="titulo">
-                    Invitaciones generadas
-                </div>
-
-                <div class="valor">
-                    {{ total_invitaciones|default:"0" }}
-                </div>
-
-                <div class="detalle">
-                    Tarjetas QR creadas automáticamente
-                </div>
+                <div class="titulo">Invitaciones generadas</div>
+                <div class="valor">{{ total_invitaciones|default:"0" }}</div>
+                <div class="detalle">Tarjetas QR creadas automáticamente</div>
             </article>
 
             <article class="card-resumen rojo">
-                <div class="titulo">
-                    Registros con alerta
-                </div>
-
-                <div class="valor">
-                    {{ total_alertas|default:"0" }}
-                </div>
-
-                <div class="detalle">
-                    Filas incompletas o con revisión manual
-                </div>
+                <div class="titulo">Registros con alerta</div>
+                <div class="valor">{{ total_alertas|default:"0" }}</div>
+                <div class="detalle">Filas incompletas o con revisión manual</div>
             </article>
 
         </section>
@@ -201,11 +171,8 @@
             </div>
 
             <div class="cuerpo-preview">
-
                 <div class="scroll-preview tabla-scroll">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -218,39 +185,29 @@
                         </thead>
 
                         <tbody>
-
                             {% for estudiante in estudiantes_preview %}
-
                                 <tr>
                                     <td>{{ estudiante.nombre_completo }}</td>
                                     <td>{{ estudiante.rut }}</td>
                                     <td>{{ estudiante.plan_estudio.area.nombre }}</td>
                                     <td>{{ estudiante.plan_estudio.nombre }}</td>
                                     <td>{{ estudiante.bloque_ceremonia.nombre }}</td>
-
                                     <td>
                                         <span class="estado-carga estado-ok">
                                             Procesado
                                         </span>
                                     </td>
                                 </tr>
-
                             {% empty %}
-
                                 <tr>
                                     <td colspan="6">
                                         Aún no existen registros cargados.
                                     </td>
                                 </tr>
-
                             {% endfor %}
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
 
         </section>
@@ -269,13 +226,11 @@
     const nombreArchivo = document.getElementById("nombreArchivo");
 
     inputArchivo.addEventListener("change", function() {
-
         if (this.files.length > 0) {
             nombreArchivo.innerText = this.files[0].name;
         } else {
             nombreArchivo.innerText = "Ningún archivo seleccionado";
         }
-
     });
 </script>
 

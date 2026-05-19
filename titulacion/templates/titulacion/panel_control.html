@@ -44,7 +44,9 @@
                 </form>
             {% endif %}
 
-            <div class="avatar"></div>
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
         </div>
     </header>
 

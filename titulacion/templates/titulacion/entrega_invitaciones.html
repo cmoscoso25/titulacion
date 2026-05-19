@@ -40,14 +40,15 @@
             {% if request.user.is_authenticated %}
                 <form method="POST" action="{% url 'titulacion:logout' %}">
                     {% csrf_token %}
-
                     <button type="submit" class="btn-cerrar-sesion">
                         Cerrar sesión
                     </button>
                 </form>
             {% endif %}
 
-            <div class="avatar"></div>
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
         </div>
     </header>
 
@@ -170,7 +171,6 @@
                                 action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}"
                             >
                                 {% csrf_token %}
-
                                 <button type="submit" class="btn-accion btn-entregado">
                                     Marcar gestionadas
                                 </button>
@@ -191,39 +191,24 @@
                                     </div>
 
                                     <div class="bloque-tipo">
-                                        <div class="tipo-invitacion">
-                                            INVITACIÓN
-                                        </div>
-
-                                        <div class="tipo-sub">
-                                            TITULADO
-                                        </div>
+                                        <div class="tipo-invitacion">INVITACIÓN</div>
+                                        <div class="tipo-sub">TITULADO</div>
                                     </div>
 
                                     <div class="texto-mini">
                                         Ceremonia de Titulación 2026
                                     </div>
 
-                                    <div class="anio">
-                                        2026
-                                    </div>
+                                    <div class="anio">2026</div>
 
                                     <div class="linea-deco"></div>
                                 </div>
 
                                 <div class="tarjeta-center">
                                     <div class="texto-logro">
-                                        <small>
-                                            TE INVITAMOS A CELEBRAR
-                                        </small>
-
-                                        <h3>
-                                            tu logro
-                                        </h3>
-
-                                        <span>
-                                            Y EL INICIO DE TU NUEVA HISTORIA
-                                        </span>
+                                        <small>TE INVITAMOS A CELEBRAR</small>
+                                        <h3>tu logro</h3>
+                                        <span>Y EL INICIO DE TU NUEVA HISTORIA</span>
                                     </div>
 
                                     <div class="nombre-central">
@@ -237,7 +222,6 @@
                                     <div class="info-evento">
                                         <div class="info-item">
                                             <div class="icono-info">•</div>
-
                                             <div>
                                                 <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
                                                 <span>2026</span>
@@ -246,7 +230,6 @@
 
                                         <div class="info-item">
                                             <div class="icono-info">•</div>
-
                                             <div>
                                                 <strong>{{ item.hora_es }}</strong>
                                                 <span>HORAS</span>
@@ -255,7 +238,6 @@
 
                                         <div class="info-item">
                                             <div class="icono-info">•</div>
-
                                             <div>
                                                 <strong>Av. Chile 1108</strong>
                                                 <span>Arica</span>
@@ -263,9 +245,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="sede-central">
-                                        Sede Arica
-                                    </div>
+                                    <div class="sede-central">Sede Arica</div>
 
                                     <div class="carrera-box">
                                         <p>
@@ -289,9 +269,7 @@
                                         <img src="{{ estudiante.imagen_qr_estudiante.url }}" alt="QR estudiante">
                                     </div>
 
-                                    <div class="codigo-label">
-                                        CÓDIGO DE ACCESO
-                                    </div>
+                                    <div class="codigo-label">CÓDIGO DE ACCESO</div>
 
                                     <div class="codigo-acceso">
                                         {{ estudiante.codigo_qr_estudiante }}
@@ -319,39 +297,24 @@
                                         </div>
 
                                         <div class="bloque-tipo">
-                                            <div class="tipo-invitacion">
-                                                INVITACIÓN
-                                            </div>
-
-                                            <div class="tipo-sub">
-                                                INVITADO {{ invitacion.numero_invitacion }}
-                                            </div>
+                                            <div class="tipo-invitacion">INVITACIÓN</div>
+                                            <div class="tipo-sub">INVITADO {{ invitacion.numero_invitacion }}</div>
                                         </div>
 
                                         <div class="texto-mini">
                                             Ceremonia de Titulación 2026
                                         </div>
 
-                                        <div class="anio">
-                                            2026
-                                        </div>
+                                        <div class="anio">2026</div>
 
                                         <div class="linea-deco"></div>
                                     </div>
 
                                     <div class="tarjeta-center">
                                         <div class="texto-logro">
-                                            <small>
-                                                TE INVITAMOS A CELEBRAR
-                                            </small>
-
-                                            <h3>
-                                                tu logro
-                                            </h3>
-
-                                            <span>
-                                                Y EL INICIO DE TU NUEVA HISTORIA
-                                            </span>
+                                            <small>TE INVITAMOS A CELEBRAR</small>
+                                            <h3>tu logro</h3>
+                                            <span>Y EL INICIO DE TU NUEVA HISTORIA</span>
                                         </div>
 
                                         <div class="nombre-central">
@@ -365,7 +328,6 @@
                                         <div class="info-evento">
                                             <div class="info-item">
                                                 <div class="icono-info">•</div>
-
                                                 <div>
                                                     <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
                                                     <span>2026</span>
@@ -374,7 +336,6 @@
 
                                             <div class="info-item">
                                                 <div class="icono-info">•</div>
-
                                                 <div>
                                                     <strong>{{ item.hora_es }}</strong>
                                                     <span>HORAS</span>
@@ -383,7 +344,6 @@
 
                                             <div class="info-item">
                                                 <div class="icono-info">•</div>
-
                                                 <div>
                                                     <strong>Av. Chile 1108</strong>
                                                     <span>Arica</span>
@@ -391,9 +351,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="sede-central">
-                                            Sede Arica
-                                        </div>
+                                        <div class="sede-central">Sede Arica</div>
 
                                         <div class="carrera-box">
                                             <p>
@@ -417,9 +375,7 @@
                                             <img src="{{ invitacion.imagen_qr.url }}" alt="QR invitación">
                                         </div>
 
-                                        <div class="codigo-label">
-                                            CÓDIGO DE ACCESO
-                                        </div>
+                                        <div class="codigo-label">CÓDIGO DE ACCESO</div>
 
                                         <div class="codigo-acceso">
                                             {{ invitacion.codigo_qr }}
@@ -497,17 +453,9 @@
         const contexto = lienzo.getContext("2d");
 
         contexto.fillStyle = "#ffffff";
-        contexto.fillRect(
-            0,
-            0,
-            ANCHO_CARTA_HORIZONTAL,
-            ALTO_CARTA_HORIZONTAL
-        );
+        contexto.fillRect(0, 0, ANCHO_CARTA_HORIZONTAL, ALTO_CARTA_HORIZONTAL);
 
-        return {
-            lienzo: lienzo,
-            contexto: contexto
-        };
+        return { lienzo: lienzo, contexto: contexto };
     }
 
     function dibujarTarjetaCentradaEnCarta(contexto, imagenTarjeta) {
@@ -528,13 +476,7 @@
         contexto.imageSmoothingEnabled = true;
         contexto.imageSmoothingQuality = "high";
 
-        contexto.drawImage(
-            imagenTarjeta,
-            posicionX,
-            posicionY,
-            anchoFinal,
-            altoFinal
-        );
+        contexto.drawImage(imagenTarjeta, posicionX, posicionY, anchoFinal, altoFinal);
     }
 
     async function convertirCanvasAImagen(canvas) {
@@ -542,9 +484,7 @@
 
         return new Promise(function(resolve) {
             const imagen = new Image();
-            imagen.onload = function() {
-                resolve(imagen);
-            };
+            imagen.onload = function() { resolve(imagen); };
             imagen.src = dataUrl;
         });
     }
@@ -570,13 +510,9 @@
         });
 
         const imagenTarjeta = await convertirCanvasAImagen(canvasTarjeta);
-
         const carta = crearLienzoCarta();
 
-        dibujarTarjetaCentradaEnCarta(
-            carta.contexto,
-            imagenTarjeta
-        );
+        dibujarTarjetaCentradaEnCarta(carta.contexto, imagenTarjeta);
 
         const enlace = document.createElement("a");
         enlace.href = carta.lienzo.toDataURL("image/png");

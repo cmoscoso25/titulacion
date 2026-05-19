@@ -4,9 +4,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-
     <title>Registro de Ingreso | INACAP Sede Arica</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
@@ -48,7 +46,9 @@
                 </form>
             {% endif %}
 
-            <div class="avatar"></div>
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
         </div>
     </header>
 
@@ -158,7 +158,6 @@
                                                 onsubmit="return confirm('¿Deseas abrir esta ceremonia para el ingreso oficial?');"
                                             >
                                                 {% csrf_token %}
-
                                                 <button type="submit" class="btn-abrir">
                                                     Abrir ceremonia
                                                 </button>
@@ -171,7 +170,6 @@
                                                 onsubmit="return confirm('¿Deseas cerrar esta ceremonia? Los siguientes ingresos quedarán marcados como atrasados.');"
                                             >
                                                 {% csrf_token %}
-
                                                 <button type="submit" class="btn-cerrar">
                                                     Cerrar ceremonia
                                                 </button>
@@ -184,7 +182,6 @@
                                                 onsubmit="return confirm('¿Deseas volver la ceremonia al estado PROGRAMADA?');"
                                             >
                                                 {% csrf_token %}
-
                                                 <button type="submit" class="btn-reprogramar">
                                                     Reprogramar
                                                 </button>
@@ -393,12 +390,9 @@
     let bloqueoLectura = false;
 
     const resultado = document.getElementById("resultado");
-
     const resultadoTitulo = document.getElementById("resultadoTitulo");
     const resultadoMensaje = document.getElementById("resultadoMensaje");
-
     const estadoVisual = document.getElementById("estadoVisual");
-
     const detalleNombre = document.getElementById("detalleNombre");
     const detalleRut = document.getElementById("detalleRut");
     const detalleArea = document.getElementById("detalleArea");
@@ -407,27 +401,13 @@
     const detalleHora = document.getElementById("detalleHora");
 
     function limpiarTexto(valor) {
-        if (!valor) {
-            return "-";
-        }
-
+        if (!valor) { return "-"; }
         return valor;
     }
 
     function mostrarResultado(datos) {
-        resultado.classList.remove(
-            "permitido",
-            "rechazado",
-            "error",
-            "atrasado"
-        );
-
-        estadoVisual.classList.remove(
-            "estado-ok",
-            "estado-no",
-            "estado-alerta",
-            "estado-tarde"
-        );
+        resultado.classList.remove("permitido", "rechazado", "error", "atrasado");
+        estadoVisual.classList.remove("estado-ok", "estado-no", "estado-alerta", "estado-tarde");
 
         resultado.classList.add("visible");
 
@@ -474,7 +454,6 @@
                 titulo: "Código vacío",
                 mensaje: "Debes ingresar o escanear un código válido."
             });
-
             return;
         }
 
@@ -483,32 +462,23 @@
 
         const respuesta = await fetch(
             "{% url 'titulacion:validar_codigo_ingreso' %}",
-            {
-                method: "POST",
-                body: formulario
-            }
+            { method: "POST", body: formulario }
         );
 
         const datos = await respuesta.json();
-
         mostrarResultado(datos);
     }
 
     function lecturaExitosa(codigo) {
-        if (bloqueoLectura) {
-            return;
-        }
-
-        if (codigo === ultimoCodigoLeido) {
-            return;
-        }
+        if (bloqueoLectura) { return; }
+        if (codigo === ultimoCodigoLeido) { return; }
 
         bloqueoLectura = true;
         ultimoCodigoLeido = codigo;
 
         validarCodigo(codigo);
 
-        setTimeout(function () {
+        setTimeout(function() {
             bloqueoLectura = false;
             ultimoCodigoLeido = "";
         }, 2500);
@@ -516,33 +486,21 @@
 
     document
         .getElementById("formManual")
-        .addEventListener("submit", function (evento) {
+        .addEventListener("submit", function(evento) {
             evento.preventDefault();
-
             const codigo = document.getElementById("codigoManual").value;
-
             validarCodigo(codigo);
-
             document.getElementById("codigoManual").value = "";
         });
 
     function iniciarCamara() {
         const lector = new Html5QrcodeScanner(
             "reader",
-            {
-                fps: 10,
-                qrbox: {
-                    width: 250,
-                    height: 250
-                }
-            },
+            { fps: 10, qrbox: { width: 250, height: 250 } },
             false
         );
 
-        lector.render(
-            lecturaExitosa,
-            function (error) {}
-        );
+        lector.render(lecturaExitosa, function(error) {});
     }
 
     iniciarCamara();
