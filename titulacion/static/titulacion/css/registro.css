@@ -143,27 +143,83 @@
     margin-bottom:12px;
 }
 
-/* === LECTOR QR === */
-#reader,
-.reader,
-.qr-reader{
+/* === LECTOR QR USB HID === */
+.lector-usb{
     width:100%;
-    max-width:460px;
-    min-height:240px;
-    margin:0 auto;
-    border:2px dashed var(--borde);
-    border-radius:20px;
-    overflow:hidden;
-    background:#f8fafc;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.indicador-lector{
+    width:100%;
+    min-height:80px;
+    border-radius:16px;
+    border:2px solid var(--borde-suave);
+    background:#f0fdf4;
     display:flex;
     align-items:center;
     justify-content:center;
+    gap:12px;
+    font-size:.9rem;
+    font-weight:800;
+    color:#166534;
+    transition:background .25s, border-color .25s, color .25s;
 }
 
-#reader video{
-    width:100% !important;
-    height:auto !important;
-    border-radius:16px;
+.indicador-lector.lector-enfocado{
+    border-color:#16a34a;
+    background:#dcfce7;
+}
+
+.indicador-lector.lector-procesando{
+    background:#fef3c7;
+    border-color:#f59e0b;
+    color:#92400e;
+}
+
+.pulso-qr{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#16a34a;
+    animation:pulso 1.4s ease-in-out infinite;
+}
+
+.lector-procesando .pulso-qr{
+    background:#f59e0b;
+    animation:none;
+}
+
+@keyframes pulso{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.45; transform:scale(.75); }
+}
+
+.input-qr-usb{
+    width:100%;
+    min-height:48px;
+    padding:0 16px;
+    border-radius:12px;
+    border:2px solid var(--borde-suave);
+    background:var(--blanco);
+    font-size:.9rem;
+    font-weight:700;
+    letter-spacing:.04em;
+    color:var(--texto);
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
+}
+
+.input-qr-usb:focus{
+    border-color:#16a34a;
+    box-shadow:0 0 0 3px rgba(22,163,74,.15);
+}
+
+.input-qr-usb::placeholder{
+    color:var(--texto-muted);
+    font-weight:500;
+    letter-spacing:0;
 }
 
 .qr-ayuda,
@@ -285,7 +341,8 @@
     .panel-lector,.panel-manual,.panel-resultado,
     .panel-ultimos,.resultado-validacion,
     .ultimos-registros{ padding:13px; border-radius:16px; }
-    #reader,.reader,.qr-reader{ min-height:210px; border-radius:16px; }
+    .input-qr-usb{ font-size:.85rem; }
+    .indicador-lector{ min-height:68px; font-size:.82rem; }
     .form-manual,.form-codigo,.form-registro-manual{ grid-template-columns:1fr; }
     .form-manual button,
     .form-codigo button,
@@ -302,7 +359,7 @@
     .form-manual button,
     .form-codigo button,
     .form-registro-manual button{ width:100%; }
-    #reader,.reader,.qr-reader{ max-width:100%; }
+    .lector-usb{ gap:10px; }
 }
 
 /* 768px – 1024px */
@@ -339,7 +396,7 @@
     .control-ceremonias{ margin-top:-24px; padding:13px; }
     .control-ceremonias h2{ font-size:1.1rem; }
     .control-ceremonias p{ font-size:.78rem; margin-bottom:9px; }
-    #reader,.reader,.qr-reader{ min-height:200px; }
+    .indicador-lector{ min-height:64px; }
     .panel-lector,.panel-manual,.panel-resultado,
     .panel-ultimos,.resultado-validacion,
     .ultimos-registros{ padding:13px; }

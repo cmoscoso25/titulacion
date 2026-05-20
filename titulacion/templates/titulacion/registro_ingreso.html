@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'titulacion/css/registro.css' %}">
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 
 <body>
@@ -207,19 +206,33 @@
 
             <article class="panel-lector">
                 <h2>
-                    Escáner QR
+                    Lector QR USB
                 </h2>
 
                 <p>
-                    Utiliza la cámara para leer tarjetas de estudiantes o invitaciones oficiales.
+                    Conecta el lector QR USB y apúntalo al código QR de la tarjeta del estudiante o invitado.
                 </p>
 
-                <div class="lector">
-                    <div id="reader"></div>
+                <div class="lector-usb">
+                    <div class="indicador-lector" id="indicadorLector">
+                        <div class="pulso-qr"></div>
+                        <span id="textoIndicador">Listo para escanear</span>
+                    </div>
+
+                    <input
+                        id="inputQR"
+                        type="text"
+                        class="input-qr-usb"
+                        autofocus
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="Apunta el lector QR aquí..."
+                        aria-label="Campo de lectura QR USB"
+                    >
                 </div>
 
                 <div class="qr-ayuda">
-                    La lectura se validará automáticamente al detectar un código QR válido.
+                    La lectura se valida automáticamente al detectar el código.
                 </div>
             </article>
 
@@ -399,6 +412,9 @@
     const detallePlan = document.getElementById("detallePlan");
     const detalleTipo = document.getElementById("detalleTipo");
     const detalleHora = document.getElementById("detalleHora");
+    const inputQR = document.getElementById("inputQR");
+    const indicadorLector = document.getElementById("indicadorLector");
+    const textoIndicador = document.getElementById("textoIndicador");
 
     function limpiarTexto(valor) {
         if (!valor) { return "-"; }
@@ -469,20 +485,62 @@
         mostrarResultado(datos);
     }
 
-    function lecturaExitosa(codigo) {
+    /* === LECTOR QR USB HID === */
+
+    function activarIndicador() {
+        indicadorLector.classList.remove("lector-procesando");
+        indicadorLector.classList.add("lector-activo");
+        textoIndicador.innerText = "Listo para escanear";
+    }
+
+    function procesarLecturaQR(codigo) {
         if (bloqueoLectura) { return; }
         if (codigo === ultimoCodigoLeido) { return; }
 
         bloqueoLectura = true;
         ultimoCodigoLeido = codigo;
 
-        validarCodigo(codigo);
+        indicadorLector.classList.remove("lector-activo");
+        indicadorLector.classList.add("lector-procesando");
+        textoIndicador.innerText = "Procesando...";
 
-        setTimeout(function() {
-            bloqueoLectura = false;
-            ultimoCodigoLeido = "";
-        }, 2500);
+        validarCodigo(codigo).finally(function() {
+            setTimeout(function() {
+                bloqueoLectura = false;
+                ultimoCodigoLeido = "";
+                activarIndicador();
+                inputQR.focus();
+            }, 2500);
+        });
     }
+
+    inputQR.addEventListener("keydown", function(e) {
+        if (e.key !== "Enter") { return; }
+        e.preventDefault();
+        const codigo = inputQR.value.trim();
+        inputQR.value = "";
+        if (codigo) {
+            procesarLecturaQR(codigo);
+        }
+    });
+
+    /* Refocus automático si el operador hace clic fuera del formulario manual */
+    document.addEventListener("click", function(e) {
+        if (!e.target.closest("#formManual")) {
+            inputQR.focus();
+        }
+    });
+
+    /* Indicador de foco activo / perdido */
+    inputQR.addEventListener("focus", function() {
+        indicadorLector.classList.add("lector-enfocado");
+    });
+
+    inputQR.addEventListener("blur", function() {
+        indicadorLector.classList.remove("lector-enfocado");
+    });
+
+    /* === INGRESO MANUAL === */
 
     document
         .getElementById("formManual")
@@ -491,19 +549,11 @@
             const codigo = document.getElementById("codigoManual").value;
             validarCodigo(codigo);
             document.getElementById("codigoManual").value = "";
+            setTimeout(function() { inputQR.focus(); }, 2600);
         });
 
-    function iniciarCamara() {
-        const lector = new Html5QrcodeScanner(
-            "reader",
-            { fps: 10, qrbox: { width: 250, height: 250 } },
-            false
-        );
-
-        lector.render(lecturaExitosa, function(error) {});
-    }
-
-    iniciarCamara();
+    /* Inicializar indicador */
+    activarIndicador();
 </script>
 
 </body>
