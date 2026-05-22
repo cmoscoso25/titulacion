@@ -540,7 +540,7 @@
     /* === LECTOR QR USB HID === */
 
     function activarIndicador() {
-        indicadorLector.classList.remove("lector-procesando");
+        indicadorLector.classList.remove("lector-procesando", "lector-capturando");
         if (document.activeElement === inputQR) {
             indicadorLector.classList.remove("lector-sin-foco");
             indicadorLector.classList.add("lector-activo");
@@ -559,7 +559,7 @@
         bloqueoLectura = true;
         ultimoCodigoLeido = codigo;
 
-        indicadorLector.classList.remove("lector-activo");
+        indicadorLector.classList.remove("lector-activo", "lector-capturando", "lector-sin-foco");
         indicadorLector.classList.add("lector-procesando");
         textoIndicador.innerText = "Procesando...";
 
@@ -573,13 +573,51 @@
         });
     }
 
-    inputQR.addEventListener("keydown", function(e) {
-        if (e.key !== "Enter") { return; }
-        e.preventDefault();
-        const codigo = inputQR.value.trim();
-        inputQR.value = "";
-        if (codigo) {
-            procesarLecturaQR(codigo);
+    /* === CAPTURA GLOBAL QR (HID teclado) — funciona sin importar el foco === */
+    /* Los lectores HID USB envían caracteres muy rápido (~5-20ms entre teclas).  */
+    /* 80ms de silencio = no es un lector → descartamos el buffer.               */
+    let bufferQR = "";
+    let timerQR = null;
+    const MAX_MS_ENTRE_CHARS = 80;
+    const MIN_CHARS_QR = 4;
+
+    document.addEventListener("keydown", function(e) {
+        /* No interceptar el campo de ingreso manual */
+        if (e.target === document.getElementById("codigoManual")) { return; }
+        /* Ignorar combos de teclado (Ctrl, Alt, Meta) */
+        if (e.ctrlKey || e.altKey || e.metaKey) { return; }
+        /* Ignorar teclas de control especiales (F1, Escape, Tab, etc.) */
+        if (e.key.length > 1 && e.key !== "Enter") { return; }
+
+        if (e.key === "Enter") {
+            const codigo = bufferQR.trim();
+            bufferQR = "";
+            clearTimeout(timerQR);
+            inputQR.value = "";
+            if (codigo.length >= MIN_CHARS_QR && !bloqueoLectura) {
+                e.preventDefault();
+                procesarLecturaQR(codigo);
+            }
+        } else {
+            bufferQR += e.key;
+            inputQR.value = bufferQR;
+
+            /* Mostrar actividad del lector en tiempo real (azul = capturando) */
+            if (!bloqueoLectura) {
+                indicadorLector.classList.remove("lector-activo", "lector-sin-foco", "lector-procesando");
+                indicadorLector.classList.add("lector-capturando");
+                textoIndicador.innerText = "Capturando código...";
+            }
+
+            /* Si pasan más de 80ms sin nueva tecla, no es un lector QR → limpiar */
+            clearTimeout(timerQR);
+            timerQR = setTimeout(function() {
+                bufferQR = "";
+                if (!bloqueoLectura) {
+                    inputQR.value = "";
+                    activarIndicador();
+                }
+            }, MAX_MS_ENTRE_CHARS);
         }
     });
 

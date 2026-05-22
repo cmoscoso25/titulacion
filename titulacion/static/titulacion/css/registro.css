@@ -178,6 +178,12 @@
     color:#92400e;
 }
 
+.indicador-lector.lector-capturando{
+    background:#dbeafe;
+    border-color:#3b82f6;
+    color:#1d4ed8;
+}
+
 .pulso-qr{
     width:18px;
     height:18px;
@@ -189,6 +195,11 @@
 .lector-procesando .pulso-qr{
     background:#f59e0b;
     animation:none;
+}
+
+.lector-capturando .pulso-qr{
+    background:#3b82f6;
+    animation:pulso .5s ease-in-out infinite;
 }
 
 @keyframes pulso{
