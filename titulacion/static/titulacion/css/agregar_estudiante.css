@@ -1,0 +1,291 @@
+/* === RESET === */
+/* Reset, variables globales, header, hero, botones, formularios,
+   tablas, mensajes y responsive base viven en base.css. */
+
+/* === VARIABLES === */
+:root{
+    --agregar-width: min(1060px, 90%);
+}
+
+/* === HERO === */
+.hero-agregar-contenido{
+    width: var(--agregar-width);
+    padding: clamp(14px, 2vw, 20px) 0 clamp(48px, 5vw, 68px);
+}
+
+/* === MENSAJES === */
+.mensajes-agregar{
+    width: var(--agregar-width);
+    margin: -28px auto 14px;
+}
+
+/* === LAYOUT === */
+.contenido-agregar{
+    position: relative;
+    padding-bottom: clamp(18px, 2vw, 28px);
+}
+
+/* === PANELES === */
+.panel-formulario,
+.panel-recientes{
+    width: var(--agregar-width);
+    margin: -30px auto 18px;
+    padding: clamp(16px, 2vw, 28px);
+    position: relative;
+    z-index: 5;
+}
+
+.panel-recientes{
+    margin-top: 0;
+    z-index: 4;
+}
+
+.panel-formulario h2,
+.panel-recientes h2{
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    color: var(--texto);
+    margin-bottom: 6px;
+}
+
+.panel-subtitulo{
+    font-size: .82rem;
+    color: var(--texto-suave);
+    margin-bottom: 20px;
+    max-width: 760px;
+}
+
+/* === SECCIONES DEL FORMULARIO === */
+.seccion-form{
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--borde-suave);
+}
+
+.seccion-form:last-of-type{
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.seccion-titulo{
+    font-size: .72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--rojo);
+    margin-bottom: 14px;
+}
+
+/* === GRID DE CAMPOS === */
+.grid-campos{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+.campo-form{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo-form label{
+    font-size: .68rem;
+    font-weight: 900;
+    color: var(--texto-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.requerido{
+    color: var(--rojo);
+    font-size: .8rem;
+}
+
+.campo-form input,
+.campo-form select{
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: .86rem;
+    font-weight: 700;
+    padding: 0 14px;
+    border: 1.5px solid var(--borde-suave);
+    background: var(--blanco);
+    color: var(--texto);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    width: 100%;
+}
+
+.campo-form input:focus,
+.campo-form select:focus{
+    border-color: var(--rojo);
+    box-shadow: 0 0 0 3px rgba(227, 6, 19, .1);
+}
+
+.campo-form select:disabled{
+    background: #f1f5f9;
+    color: var(--texto-muted);
+    cursor: not-allowed;
+    opacity: .7;
+}
+
+.campo-readonly{
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: .86rem;
+    font-weight: 700;
+    padding: 0 14px;
+    border: 1.5px solid var(--borde-suave);
+    background: #f8fafc;
+    color: var(--texto-suave);
+    display: flex;
+    align-items: center;
+    font-style: italic;
+}
+
+/* === ACCIONES === */
+.form-acciones{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.btn-guardar{
+    min-height: 44px;
+    padding: 0 28px;
+    background: var(--rojo);
+    color: var(--blanco);
+    border: none;
+    border-radius: 999px;
+    font-size: .88rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background .18s, transform .12s;
+    letter-spacing: .02em;
+}
+
+.btn-guardar:hover{
+    background: var(--rojo-oscuro);
+    transform: translateY(-1px);
+}
+
+.btn-guardar:active{
+    transform: translateY(0);
+}
+
+.btn-cancelar{
+    min-height: 44px;
+    padding: 0 22px;
+    border: 2px solid var(--borde-suave);
+    border-radius: 999px;
+    font-size: .86rem;
+    font-weight: 800;
+    color: var(--texto-suave);
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: border-color .18s, color .18s;
+}
+
+.btn-cancelar:hover{
+    border-color: var(--texto-suave);
+    color: var(--texto);
+}
+
+/* === TABLA RECIENTES === */
+.tabla-scroll{
+    border-radius: 14px;
+    border: 1px solid var(--borde-suave);
+    overflow-x: auto;
+}
+
+.tabla-recientes{
+    min-width: 780px;
+    width: 100%;
+}
+
+.tabla-recientes th{
+    font-size: .66rem;
+    padding: 10px 12px;
+    background: #f8fafc;
+    color: var(--texto-muted);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    text-align: left;
+    border-bottom: 1px solid var(--borde-suave);
+}
+
+.tabla-recientes td{
+    font-size: .78rem;
+    padding: 10px 12px;
+    color: var(--texto);
+    border-bottom: 1px solid var(--borde-suave);
+    vertical-align: middle;
+}
+
+.tabla-recientes tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.tabla-recientes tbody tr:hover td{
+    background: #f8fafc;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* 320px – 480px */
+@media (max-width: 480px){
+    :root{ --agregar-width: 90%; }
+    .panel-formulario{ margin-top: -22px; padding: 14px; border-radius: 16px; }
+    .mensajes-agregar{ margin: -18px auto 12px; }
+    .form-acciones{ flex-direction: column; }
+    .btn-guardar, .btn-cancelar{ width: 100%; justify-content: center; }
+}
+
+/* 481px – 767px */
+@media (min-width: 481px) and (max-width: 767px){
+    :root{ --agregar-width: 90%; }
+    .panel-formulario{ margin-top: -24px; }
+    .grid-campos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .campo-ancho{ grid-column: 1 / -1; }
+}
+
+/* 768px – 1024px */
+@media (min-width: 768px) and (max-width: 1024px){
+    :root{ --agregar-width: 90%; }
+    .grid-campos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .campo-ancho{ grid-column: 1 / -1; }
+}
+
+/* 1025px – 1366px — NOTEBOOK */
+@media (min-width: 1025px) and (max-width: 1366px){
+    :root{ --agregar-width: min(1020px, 90%); }
+    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .campo-ancho{ grid-column: span 2; }
+}
+
+/* 1367px – 1920px — DESKTOP */
+@media (min-width: 1367px) and (max-width: 1920px){
+    :root{ --agregar-width: min(1060px, 88%); }
+    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .campo-ancho{ grid-column: span 2; }
+}
+
+/* 1921px+ — TV / HDMI */
+@media (min-width: 1921px){
+    :root{ --agregar-width: min(1140px, 80%); }
+    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .campo-ancho{ grid-column: span 2; }
+}
+
+/* Pantalla baja: notebook con TV via HDMI */
+@media (max-height: 800px) and (min-width: 900px){
+    .hero-agregar-contenido{ padding-top: 12px; padding-bottom: 40px; }
+    .panel-formulario{ margin-top: -24px; padding: 16px; }
+}

@@ -43,6 +43,12 @@ urlpatterns = [
     ),
 
     path(
+        "agregar-estudiante/",
+        acceso_admin(views.agregar_estudiante),
+        name="agregar_estudiante",
+    ),
+
+    path(
         "tarjetas/",
         acceso_admin(views.tarjetas_invitacion),
         name="tarjetas",

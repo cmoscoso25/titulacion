@@ -1,5 +1,7 @@
+import json
+
 from django.contrib import messages
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import Count, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -20,7 +22,7 @@ from .models import (
     generar_codigo_qr_estudiante,
     generar_codigo_qr_invitacion,
 )
-from .procesador_excel import procesar_excel_titulados
+from .procesador_excel import crear_invitaciones_para_estudiante, procesar_excel_titulados
 
 
 DIRECCION_CEREMONIA = "Avenida Chile 1108"
@@ -1263,6 +1265,122 @@ def api_dashboard(request):
         ).count(),
         "timestamp": timezone.now().strftime("%H:%M:%S"),
     })
+
+
+def agregar_estudiante(request):
+    bloques = BloqueCeremonia.objects.select_related(
+        "ceremonia"
+    ).order_by("ceremonia__nombre", "fecha", "hora_inicio", "nombre")
+
+    areas = AreaAcademica.objects.order_by("nombre")
+
+    planes = PlanEstudio.objects.select_related("area").order_by(
+        "area__nombre", "nombre"
+    )
+
+    planes_json = json.dumps([
+        {
+            "id": p.id,
+            "nombre": p.nombre,
+            "area": p.area.nombre,
+            "institucion": p.institucion or "",
+        }
+        for p in planes
+    ])
+
+    ultimos = EstudianteTitulado.objects.select_related(
+        "bloque_ceremonia__ceremonia",
+        "plan_estudio__area",
+    ).order_by("-fecha_creacion")[:10]
+
+    if request.method == "POST":
+        rut = request.POST.get("rut", "").strip()
+        nombre_completo = request.POST.get("nombre_completo", "").strip()
+        bloque_id = request.POST.get("bloque_id", "").strip()
+        plan_id = request.POST.get("plan_id", "").strip()
+        jornada = request.POST.get("jornada", "").strip() or None
+        correo = request.POST.get("correo", "").strip() or None
+        telefono = request.POST.get("telefono", "").strip() or None
+
+        errores = []
+
+        if not rut:
+            errores.append("El RUT es obligatorio.")
+        if not nombre_completo:
+            errores.append("El nombre completo es obligatorio.")
+        if not bloque_id:
+            errores.append("Debe seleccionar un bloque de ceremonia.")
+        if not plan_id:
+            errores.append("Debe seleccionar un plan de estudio.")
+
+        bloque = None
+        plan = None
+
+        if not errores:
+            try:
+                bloque = BloqueCeremonia.objects.select_related("ceremonia").get(id=bloque_id)
+            except BloqueCeremonia.DoesNotExist:
+                errores.append("El bloque de ceremonia seleccionado no existe.")
+
+            try:
+                plan = PlanEstudio.objects.select_related("area").get(id=plan_id)
+            except PlanEstudio.DoesNotExist:
+                errores.append("El plan de estudio seleccionado no existe.")
+
+        if not errores:
+            duplicado = EstudianteTitulado.objects.filter(
+                rut=rut,
+                bloque_ceremonia=bloque,
+                plan_estudio=plan,
+            ).exists()
+
+            if duplicado:
+                errores.append(
+                    f"El estudiante con RUT {rut} ya está registrado en el bloque "
+                    f"'{bloque.nombre}' con el plan '{plan.nombre}'. No se puede duplicar."
+                )
+
+        if not errores:
+            try:
+                with transaction.atomic():
+                    estudiante = EstudianteTitulado.objects.create(
+                        rut=rut,
+                        nombre_completo=nombre_completo,
+                        bloque_ceremonia=bloque,
+                        plan_estudio=plan,
+                        jornada=jornada,
+                        correo=correo,
+                        telefono=telefono,
+                    )
+                    generar_qr_estudiante(estudiante)
+                    crear_invitaciones_para_estudiante(estudiante)
+
+                messages.success(
+                    request,
+                    f"Estudiante '{nombre_completo}' (RUT: {rut}) agregado correctamente "
+                    f"al bloque '{bloque.nombre}'. Se generaron 2 invitaciones con QR."
+                )
+                return redirect("titulacion:agregar_estudiante")
+
+            except IntegrityError:
+                errores.append(
+                    f"No se pudo guardar el estudiante con RUT {rut}. "
+                    "Verifique que no exista un registro duplicado."
+                )
+
+        for error in errores:
+            messages.error(request, error)
+
+    return render(
+        request,
+        "titulacion/agregar_estudiante.html",
+        {
+            "bloques": bloques,
+            "areas": areas,
+            "planes_json": planes_json,
+            "ultimos": ultimos,
+        }
+    )
 
 
 def healthcheck(request):
