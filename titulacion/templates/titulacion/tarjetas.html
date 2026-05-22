@@ -15,7 +15,7 @@
 
 <div class="marco">
 
-    <header class="barra">
+    <header class="barra np">
         <div class="marca">
             <div class="logo-contenedor">
                 <img
@@ -48,7 +48,7 @@
         </div>
     </header>
 
-    <section class="hero-tarjetas">
+    <section class="hero-tarjetas np">
         <div class="hero-tarjetas-contenido">
             <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
                 ← Volver al inicio
@@ -67,7 +67,7 @@
 
     <main class="contenido-tarjetas">
 
-        <section class="panel-filtros">
+        <section class="panel-filtros np">
 
             <form method="GET" class="form-filtros">
 
@@ -185,7 +185,7 @@
 
         </section>
 
-        <section class="barra-superior">
+        <section class="barra-superior np">
 
             <div class="contador">
                 Total tarjetas:
@@ -194,7 +194,7 @@
 
             <div class="acciones">
                 <button type="button" onclick="window.print()" class="btn-secundario">
-                    Imprimir tarjetas
+                    Imprimir / Descargar PDF
                 </button>
 
                 <a href="{% url 'titulacion:inicio' %}" class="btn-secundario">
@@ -210,106 +210,186 @@
 
                 {% for tarjeta in tarjetas %}
 
-                    <article class="tarjeta-preview {% if tarjeta.tipo == 'ESTUDIANTE' %}tarjeta-estudiante-preview{% else %}tarjeta-invitacion-preview{% endif %}">
+                    {% if tarjeta.tipo == "ESTUDIANTE" %}
 
-                        <div class="tarjeta-preview-header">
-                            <div>
-                                <h2>
-                                    {{ tarjeta.nombre }}
-                                </h2>
+                        <!-- ══ TARJETA TITULADO ══ -->
+                        <article class="tarjeta-fisica tarjeta-titulado">
 
-                                <p>
-                                    {{ tarjeta.rut }} · {{ tarjeta.bloque }}
-                                </p>
-                            </div>
-
-                            <span class="tipo-tarjeta">
-                                {% if tarjeta.tipo == "ESTUDIANTE" %}
-                                    Titulado
-                                {% else %}
-                                    Invitación {{ tarjeta.numero_invitacion }}
-                                {% endif %}
-                            </span>
-                        </div>
-
-                        <div class="tarjeta-preview-body">
-
-                            <div class="info-tarjeta">
-
-                                <div class="info-item">
-                                    <span>Área</span>
-                                    <strong>{{ tarjeta.area }}</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span>Plan de estudio</span>
-                                    <strong>{{ tarjeta.plan }}</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span>Fecha</span>
-                                    <strong>
-                                        {{ tarjeta.dia_semana }} {{ tarjeta.numero_dia }} {{ tarjeta.mes }}
-                                    </strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span>Hora</span>
-                                    <strong>{{ tarjeta.hora }} hrs.</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span>Lugar</span>
-                                    <strong>{{ tarjeta.lugar }}</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span>Código</span>
-                                    <strong>{{ tarjeta.codigo }}</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span>Estado</span>
-
-                                    {% if tarjeta.utilizado %}
-                                        <strong>Utilizado</strong>
-                                    {% else %}
-                                        <strong>Disponible</strong>
-                                    {% endif %}
-                                </div>
-
-                            </div>
-
-                            <div class="qr-tarjeta">
-                                {% if tarjeta.qr %}
+                            <div class="tf-header tf-header-titulado">
+                                <div class="tf-marca">
                                     <img
-                                        src="{{ tarjeta.qr }}"
-                                        alt="QR {{ tarjeta.nombre }}"
+                                        src="{% static 'titulacion/img/logo.png' %}"
+                                        alt="INACAP"
+                                        class="tf-logo"
                                     >
+                                    <span class="tf-sede-txt">Sede Arica</span>
+                                </div>
+                                <span class="tf-badge">TITULADO</span>
+                            </div>
+
+                            <div class="tf-strip-titulo">
+                                CEREMONIA DE TITULACIÓN 2026
+                            </div>
+
+                            <div class="tf-body">
+
+                                <div class="tf-info">
+                                    <p class="tf-nombre">{{ tarjeta.nombre }}</p>
+                                    <p class="tf-rut">RUT {{ tarjeta.rut }}</p>
+
+                                    <div class="tf-detalles">
+
+                                        <div class="tf-di">
+                                            <span>Área</span>
+                                            <strong>{{ tarjeta.area }}</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Plan de estudio</span>
+                                            <strong>{{ tarjeta.plan }}</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Ceremonia</span>
+                                            <strong>{{ tarjeta.bloque }}</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Fecha</span>
+                                            <strong>{{ tarjeta.dia_semana }} {{ tarjeta.numero_dia }} {{ tarjeta.mes }}</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Hora</span>
+                                            <strong>{{ tarjeta.hora }} hrs.</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Lugar</span>
+                                            <strong>{{ tarjeta.lugar }}</strong>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tf-qr-zona">
+                                    {% if tarjeta.qr %}
+                                        <img src="{{ tarjeta.qr }}" alt="QR {{ tarjeta.nombre }}">
+                                    {% else %}
+                                        <span class="tf-qr-nd">QR no disponible</span>
+                                    {% endif %}
+                                    <span class="tf-acceso-txt">ACCESO<br>TITULADO</span>
+                                </div>
+
+                            </div>
+
+                            <div class="tf-codigo-zona tf-codigo-azul">
+                                <span class="tf-codigo-label">Código de acceso</span>
+                                <span class="tf-codigo-val">{{ tarjeta.codigo }}</span>
+                                <span class="tf-codigo-sub">Acceso exclusivo del estudiante titulado</span>
+                            </div>
+
+                            <div class="tf-pie">
+                                <span>Ceremonia de Titulación 2026 · INACAP Sede Arica</span>
+
+                                {% if tarjeta.utilizado %}
+                                    <span class="estado-pill estado-cerrado">UTILIZADO</span>
                                 {% else %}
-                                    <span>QR no disponible</span>
+                                    <span class="estado-pill estado-abierto">DISPONIBLE</span>
                                 {% endif %}
                             </div>
 
-                        </div>
+                        </article>
 
-                        <div class="tarjeta-preview-footer">
-                            <span>
-                                Ceremonia de Titulación 2026 · INACAP Sede Arica
-                            </span>
+                    {% else %}
 
-                            {% if tarjeta.utilizado %}
-                                <span class="estado-pill estado-abierto">
-                                    Utilizado
-                                </span>
-                            {% else %}
-                                <span class="estado-pill estado-programado">
-                                    Disponible
-                                </span>
-                            {% endif %}
-                        </div>
+                        <!-- ══ TARJETA INVITACIÓN ══ -->
+                        <article class="tarjeta-fisica tarjeta-invitacion">
 
-                    </article>
+                            <div class="tf-header tf-header-invitacion">
+                                <div class="tf-deco-1"></div>
+                                <div class="tf-deco-2"></div>
+
+                                <div class="tf-header-inv-top">
+                                    <div class="tf-marca">
+                                        <img
+                                            src="{% static 'titulacion/img/logo.png' %}"
+                                            alt="INACAP"
+                                            class="tf-logo"
+                                        >
+                                        <span class="tf-sede-txt">Sede Arica</span>
+                                    </div>
+                                    <span class="tf-badge">INVITADO {{ tarjeta.numero_invitacion }}</span>
+                                </div>
+
+                                <div class="tf-inv-mensaje">
+                                    <span class="tf-inv-pre">TE INVITAMOS A CELEBRAR</span>
+                                    <span class="tf-inv-logro">tu logro</span>
+                                    <span class="tf-inv-post">y el inicio de tu nueva historia</span>
+                                </div>
+
+                            </div>
+
+                            <div class="tf-body">
+
+                                <div class="tf-info">
+                                    <p class="tf-nombre">{{ tarjeta.nombre }}</p>
+                                    <p class="tf-rut">RUT {{ tarjeta.rut }}</p>
+
+                                    <div class="tf-detalles">
+
+                                        <div class="tf-di">
+                                            <span>Ceremonia</span>
+                                            <strong>{{ tarjeta.bloque }}</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Fecha</span>
+                                            <strong>{{ tarjeta.dia_semana }} {{ tarjeta.numero_dia }} {{ tarjeta.mes }}</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Hora</span>
+                                            <strong>{{ tarjeta.hora }} hrs.</strong>
+                                        </div>
+
+                                        <div class="tf-di">
+                                            <span>Lugar</span>
+                                            <strong>{{ tarjeta.lugar }}</strong>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tf-qr-zona">
+                                    {% if tarjeta.qr %}
+                                        <img src="{{ tarjeta.qr }}" alt="QR {{ tarjeta.nombre }}">
+                                    {% else %}
+                                        <span class="tf-qr-nd">QR no disponible</span>
+                                    {% endif %}
+                                    <span class="tf-acceso-txt">ACCESO<br>INVITADO</span>
+                                </div>
+
+                            </div>
+
+                            <div class="tf-codigo-zona tf-codigo-rojo">
+                                <span class="tf-codigo-label">Código de acceso</span>
+                                <span class="tf-codigo-val">{{ tarjeta.codigo }}</span>
+                            </div>
+
+                            <div class="tf-pie">
+                                <span>Ceremonia de Titulación 2026 · INACAP Sede Arica</span>
+
+                                {% if tarjeta.utilizado %}
+                                    <span class="estado-pill estado-cerrado">UTILIZADO</span>
+                                {% else %}
+                                    <span class="estado-pill estado-abierto">DISPONIBLE</span>
+                                {% endif %}
+                            </div>
+
+                        </article>
+
+                    {% endif %}
 
                 {% endfor %}
 
@@ -317,7 +397,7 @@
 
         {% else %}
 
-            <section class="estado-vacio">
+            <section class="estado-vacio np">
                 <h2>
                     Sin tarjetas disponibles
                 </h2>
@@ -329,7 +409,7 @@
 
         {% endif %}
 
-        <footer class="footer">
+        <footer class="footer np">
             © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
             Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
         </footer>
