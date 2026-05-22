@@ -83,6 +83,23 @@ Cada página tiene su propio CSS. El CSS y el HTML DEBEN usar exactamente las mi
 
 **REGLA CRÍTICA**: Antes de modificar cualquier CSS, leer el HTML correspondiente para verificar las clases reales. Antes de modificar cualquier HTML, leer el CSS correspondiente. Una discrepancia de nombres de clase rompe el diseño silenciosamente.
 
+## Regla crítica: base.css define los heroes y paneles
+
+**IMPORTANTE**: Cuando se agrega un nuevo módulo, sus clases `.hero-X`, `.hero-X-contenido` y `.hero-X h1/p` deben agregarse a las listas de selectores en `base.css`. Si no están en esas listas, el banner rojo y los estilos de tipografía del hero NO se aplicarán.
+
+Lo mismo aplica para paneles: las clases `.panel-X` deben agregarse a la lista de paneles en `base.css` para recibir `background`, `border-radius`, `box-shadow` y `border`.
+
+**Listas a actualizar en `base.css` al crear nuevo módulo:**
+1. Selector principal del hero (línea ~278) — fondo rojo gradiente
+2. Selector `::after` del hero (línea ~291) — círculo decorativo
+3. Selector de contenido del hero (línea ~309) — ancho y padding
+4. Selector `h1` del hero (línea ~323)
+5. Selector `p` del hero (línea ~335)
+6. Lista de paneles (línea ~387) — sombra, borde, fondo blanco
+7. Responsive 320-480px: contenedor hero (línea ~622)
+8. Responsive 481-767px: contenedor hero (línea ~645)
+9. Responsive max-height 800px: contenedor y h1 (línea ~683)
+
 ## Clases principales por página
 
 ### tarjetas.html → tarjetas.css
@@ -108,6 +125,17 @@ Diseño horizontal 3 columnas (descargable como PNG via html2canvas):
 - `.tipo-invitacion` — "INVITACIÓN" en Georgia itálica dorada
 - `.texto-logro h3` — "tu logro" en Georgia itálica dorada
 - `.codigo-acceso` — código en Courier New blanco
+
+### agregar_estudiante.html → agregar_estudiante.css
+Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes:
+- `.hero-agregar` / `.hero-agregar-contenido` — registrados en `base.css`
+- `.panel-formulario` / `.panel-recientes` — registrados en `base.css`
+- `.seccion-form` — sección con separador horizontal dentro del formulario
+- `.grid-campos` — grid responsivo de campos (1→2→3 columnas)
+- `.campo-ancho` — campo que ocupa 2 columnas en layouts anchos
+- `.campo-readonly` — display de institución (no editable)
+- `.btn-guardar` / `.btn-cancelar` — acciones del formulario
+- `.tabla-recientes` — tabla con últimos 10 estudiantes agregados
 
 ### registro_ingreso.html → registro.css
 Lector QR USB HID (modo teclado HID, no cámara):

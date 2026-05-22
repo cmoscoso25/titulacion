@@ -281,7 +281,8 @@ strong{
 .hero-dashboard,
 .hero-cambio,
 .hero-tarjetas,
-.hero-entrega{
+.hero-entrega,
+.hero-agregar{
     position:relative;
     background:linear-gradient(135deg,var(--rojo),var(--rojo-oscuro));
     color:var(--blanco);
@@ -294,7 +295,8 @@ strong{
 .hero-dashboard::after,
 .hero-cambio::after,
 .hero-tarjetas::after,
-.hero-entrega::after{
+.hero-entrega::after,
+.hero-agregar::after{
     content:"";
     position:absolute;
     width:clamp(100px,10vw,180px);
@@ -312,7 +314,8 @@ strong{
 .hero-dashboard-contenido,
 .hero-cambio-contenido,
 .hero-tarjetas-contenido,
-.hero-inner{
+.hero-inner,
+.hero-agregar-contenido{
     width:min(var(--container-lg),90%);
     margin-inline:auto;
     padding:clamp(16px,2vw,24px) 0 clamp(40px,5vw,68px);
@@ -326,7 +329,8 @@ strong{
 .hero-dashboard h1,
 .hero-cambio h1,
 .hero-tarjetas h1,
-.hero-entrega h1{
+.hero-entrega h1,
+.hero-agregar h1{
     font-size:clamp(1.6rem,2.8vw,2.5rem);
     line-height:1.05;
     margin-bottom:8px;
@@ -338,7 +342,8 @@ strong{
 .hero-dashboard p,
 .hero-cambio p,
 .hero-tarjetas p,
-.hero-entrega p{
+.hero-entrega p,
+.hero-agregar p{
     font-size:clamp(.85rem,1.1vw,.95rem);
     line-height:1.45;
     max-width:860px;
@@ -393,7 +398,9 @@ strong{
 .resumen-contexto,
 .panel-busqueda,
 .panel-resultados,
-.estudiante-box{
+.estudiante-box,
+.panel-formulario,
+.panel-recientes{
     background:var(--blanco);
     border-radius:var(--radio-xl);
     box-shadow:var(--sombra);
@@ -625,7 +632,8 @@ tbody tr:hover{ background:#f8fafc; }
     .hero-dashboard-contenido,
     .hero-cambio-contenido,
     .hero-tarjetas-contenido,
-    .hero-inner{ width:90%; padding:16px 0 42px; }
+    .hero-inner,
+    .hero-agregar-contenido{ width:90%; padding:16px 0 42px; }
     .mensajes{ width:90%; }
     .grid-2,.grid-3,.grid-4{ grid-template-columns:1fr; }
     .footer{ padding:18px 14px; font-size:.7rem; }
@@ -643,7 +651,8 @@ tbody tr:hover{ background:#f8fafc; }
     .hero-dashboard-contenido,
     .hero-cambio-contenido,
     .hero-tarjetas-contenido,
-    .hero-inner{ width:90%; }
+    .hero-inner,
+    .hero-agregar-contenido{ width:90%; }
     .grid-2,.grid-3,.grid-4{ grid-template-columns:1fr; }
 }
 
@@ -689,12 +698,14 @@ tbody tr:hover{ background:#f8fafc; }
     .hero-dashboard-contenido,
     .hero-cambio-contenido,
     .hero-tarjetas-contenido,
-    .hero-inner{ padding:14px 0 44px; }
+    .hero-inner,
+    .hero-agregar-contenido{ padding:14px 0 44px; }
     .hero h1,
     .hero-carga h1,
     .hero-registro h1,
     .hero-dashboard h1,
     .hero-cambio h1,
     .hero-tarjetas h1,
-    .hero-entrega h1{ font-size:clamp(1.5rem,2.2vw,2rem); margin-bottom:6px; }
+    .hero-entrega h1,
+    .hero-agregar h1{ font-size:clamp(1.5rem,2.2vw,2rem); margin-bottom:6px; }
 }
