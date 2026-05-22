@@ -461,6 +461,13 @@
         }
     }
 
+    function getCsrfToken() {
+        const cookie = document.cookie.split(";").find(function(c) {
+            return c.trim().startsWith("csrftoken=");
+        });
+        return cookie ? decodeURIComponent(cookie.trim().split("=")[1]) : "";
+    }
+
     async function validarCodigo(codigo) {
         const codigoLimpio = codigo.trim();
 
@@ -476,13 +483,35 @@
         const formulario = new FormData();
         formulario.append("codigo", codigoLimpio);
 
-        const respuesta = await fetch(
-            "{% url 'titulacion:validar_codigo_ingreso' %}",
-            { method: "POST", body: formulario }
-        );
+        try {
+            const respuesta = await fetch(
+                "{% url 'titulacion:validar_codigo_ingreso' %}",
+                {
+                    method: "POST",
+                    headers: { "X-CSRFToken": getCsrfToken() },
+                    body: formulario
+                }
+            );
 
-        const datos = await respuesta.json();
-        mostrarResultado(datos);
+            if (!respuesta.ok) {
+                mostrarResultado({
+                    estado: "error",
+                    titulo: "Error del servidor (" + respuesta.status + ")",
+                    mensaje: "No se pudo procesar el código. Intenta nuevamente."
+                });
+                return;
+            }
+
+            const datos = await respuesta.json();
+            mostrarResultado(datos);
+
+        } catch (err) {
+            mostrarResultado({
+                estado: "error",
+                titulo: "Error de conexión",
+                mensaje: "No se pudo conectar con el servidor. Verifica la red."
+            });
+        }
     }
 
     /* === LECTOR QR USB HID === */
