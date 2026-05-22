@@ -231,6 +231,87 @@
     font-weight:700;
 }
 
+/* === ESTADO: SIN FOCO === */
+.indicador-lector.lector-sin-foco{
+    background:#fef3c7;
+    border-color:#f59e0b;
+    color:#92400e;
+}
+.lector-sin-foco .pulso-qr{
+    background:#f59e0b;
+    animation:none;
+}
+
+/* === ESTADO VISUAL GRANDE (resultado) === */
+.estado-grande{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:64px;
+    border-radius:14px;
+    font-size:clamp(1rem,1.6vw,1.35rem);
+    font-weight:900;
+    letter-spacing:.06em;
+    margin:12px 0;
+    background:#f1f5f9;
+    color:var(--texto-suave);
+    transition:background .2s, color .2s, border-color .2s;
+    border:2px solid transparent;
+    text-align:center;
+    padding:8px 16px;
+}
+
+.estado-grande.estado-ok{
+    background:#dcfce7;
+    border-color:#86efac;
+    color:#166534;
+}
+
+.estado-grande.estado-tarde{
+    background:#fef3c7;
+    border-color:#fcd34d;
+    color:#92400e;
+}
+
+.estado-grande.estado-no{
+    background:#fee2e2;
+    border-color:#fca5a5;
+    color:#991b1b;
+}
+
+.estado-grande.estado-alerta{
+    background:#fef3c7;
+    border-color:#fcd34d;
+    color:#92400e;
+}
+
+.estado-grande.estado-duplicado{
+    background:#fef3c7;
+    border-color:#fcd34d;
+    color:#92400e;
+}
+
+/* === ESTADOS DEL PANEL DE RESULTADO === */
+.resultado-validacion.permitido{
+    border-color:#86efac;
+    background:#f0fdf4;
+}
+
+.resultado-validacion.atrasado{
+    border-color:#fcd34d;
+    background:#fffbeb;
+}
+
+.resultado-validacion.rechazado{
+    border-color:#fca5a5;
+    background:#fff1f1;
+}
+
+.resultado-validacion.error{
+    border-color:#d1d5db;
+    background:#f9fafb;
+}
+
 /* === INGRESO MANUAL === */
 .form-manual,
 .form-codigo,

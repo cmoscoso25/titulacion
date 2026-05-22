@@ -26,11 +26,13 @@ ALLOWED_HOSTS = [
     "localhost",
     "cmoscoso.pythonanywhere.com",
     "controldocente.pythonanywhere.com",
+    "titulacion2026.pythonanywhere.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://cmoscoso.pythonanywhere.com",
     "https://controldocente.pythonanywhere.com",
+    "https://titulacion2026.pythonanywhere.com",
 ]
 
 

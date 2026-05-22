@@ -423,7 +423,9 @@
 
     function mostrarResultado(datos) {
         resultado.classList.remove("permitido", "rechazado", "error", "atrasado");
-        estadoVisual.classList.remove("estado-ok", "estado-no", "estado-alerta", "estado-tarde");
+        estadoVisual.classList.remove(
+            "estado-ok", "estado-no", "estado-alerta", "estado-tarde", "estado-duplicado"
+        );
 
         resultado.classList.add("visible");
 
@@ -443,6 +445,27 @@
             resultado.classList.add("atrasado");
             estadoVisual.classList.add("estado-tarde");
             estadoVisual.innerText = "INGRESO ATRASADO";
+            return;
+        }
+
+        if (datos.tipo === "DUPLICADO") {
+            resultado.classList.add("rechazado");
+            estadoVisual.classList.add("estado-duplicado");
+            estadoVisual.innerText = "YA REGISTRADO";
+            return;
+        }
+
+        if (datos.tipo === "OTRA_CEREMONIA") {
+            resultado.classList.add("rechazado");
+            estadoVisual.classList.add("estado-no");
+            estadoVisual.innerText = "OTRA CEREMONIA";
+            return;
+        }
+
+        if (datos.tipo === "SIN_CEREMONIA_ACTIVA") {
+            resultado.classList.add("error");
+            estadoVisual.classList.add("estado-alerta");
+            estadoVisual.innerText = "ABRIR CEREMONIA";
             return;
         }
 
@@ -518,8 +541,15 @@
 
     function activarIndicador() {
         indicadorLector.classList.remove("lector-procesando");
-        indicadorLector.classList.add("lector-activo");
-        textoIndicador.innerText = "Listo para escanear";
+        if (document.activeElement === inputQR) {
+            indicadorLector.classList.remove("lector-sin-foco");
+            indicadorLector.classList.add("lector-activo");
+            textoIndicador.innerText = "Listo para escanear";
+        } else {
+            indicadorLector.classList.remove("lector-activo");
+            indicadorLector.classList.add("lector-sin-foco");
+            textoIndicador.innerText = "Haz clic aquí para activar el lector";
+        }
     }
 
     function procesarLecturaQR(codigo) {
@@ -563,10 +593,20 @@
     /* Indicador de foco activo / perdido */
     inputQR.addEventListener("focus", function() {
         indicadorLector.classList.add("lector-enfocado");
+        if (!bloqueoLectura) {
+            indicadorLector.classList.remove("lector-sin-foco");
+            indicadorLector.classList.add("lector-activo");
+            textoIndicador.innerText = "Listo para escanear";
+        }
     });
 
     inputQR.addEventListener("blur", function() {
         indicadorLector.classList.remove("lector-enfocado");
+        if (!bloqueoLectura) {
+            indicadorLector.classList.remove("lector-activo");
+            indicadorLector.classList.add("lector-sin-foco");
+            textoIndicador.innerText = "Haz clic aquí para activar el lector";
+        }
     });
 
     /* === INGRESO MANUAL === */
@@ -581,8 +621,8 @@
             setTimeout(function() { inputQR.focus(); }, 2600);
         });
 
-    /* Inicializar indicador */
-    activarIndicador();
+    /* Inicializar indicador (espera al autofocus del browser) */
+    setTimeout(function() { activarIndicador(); inputQR.focus(); }, 120);
 </script>
 
 </body>
