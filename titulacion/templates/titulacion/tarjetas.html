@@ -264,11 +264,6 @@
                                 </div>
 
                                 <div class="info-item">
-                                    <span>Código</span>
-                                    <strong>{{ tarjeta.codigo }}</strong>
-                                </div>
-
-                                <div class="info-item">
                                     <span>Estado</span>
 
                                     {% if tarjeta.utilizado %}
@@ -291,6 +286,11 @@
                                 {% endif %}
                             </div>
 
+                        </div>
+
+                        <div class="codigo-manual-tarjeta">
+                            <span class="codigo-label">Código para ingreso manual</span>
+                            <span class="codigo-valor">{{ tarjeta.codigo }}</span>
                         </div>
 
                         <div class="tarjeta-preview-footer">
