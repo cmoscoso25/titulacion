@@ -178,6 +178,9 @@
                 </div>
 
             </div>
+
+            <p class="filtros-auto-label">Actualización automática cada 15 segundos</p>
+
         </div>
 
         <section class="resultado-busqueda" id="resultadoBusqueda">
@@ -416,41 +419,87 @@
     }
 
     async function cargarDashboard() {
-        const params = parametrosFiltros();
-        const respuesta = await fetch(urlDatosPanel + "?" + params.toString());
-        const datos = await respuesta.json();
+        resultadoBusqueda.classList.add("rb-cargando");
+        try {
+            const params = parametrosFiltros();
+            const respuesta = await fetch(urlDatosPanel + "?" + params.toString());
+            const datos = await respuesta.json();
 
-        document.getElementById("kpiEstudiantesPresentes").innerText = datos.kpis.estudiantes_presentes;
-        document.getElementById("kpiEstudiantesPendientes").innerText = datos.kpis.estudiantes_pendientes;
-        document.getElementById("kpiInvitadosPresentes").innerText = datos.kpis.invitados_presentes;
-        document.getElementById("kpiTotalAsistentes").innerText = datos.kpis.total_asistentes;
-        document.getElementById("kpiTotalAtrasados").innerText = datos.kpis.total_atrasados;
-        document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
-        document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
-        document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
+            document.getElementById("kpiEstudiantesPresentes").innerText = datos.kpis.estudiantes_presentes;
+            document.getElementById("kpiEstudiantesPendientes").innerText = datos.kpis.estudiantes_pendientes;
+            document.getElementById("kpiInvitadosPresentes").innerText = datos.kpis.invitados_presentes;
+            document.getElementById("kpiTotalAsistentes").innerText = datos.kpis.total_asistentes;
+            document.getElementById("kpiTotalAtrasados").innerText = datos.kpis.total_atrasados;
+            document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
+            document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
+            document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
 
-        actualizarTextoBusqueda(datos);
-        cargarTablaAvance(datos.avance_por_plan);
-        cargarTablaMovimientos(datos.ultimos_registros);
-        cargarTablaAtrasados(datos.ingresos_atrasados);
-        cargarTablaSeguimiento(datos.seguimiento_estudiantes);
+            actualizarTextoBusqueda(datos);
+            cargarTablaAvance(datos.avance_por_plan);
+            cargarTablaMovimientos(datos.ultimos_registros);
+            cargarTablaAtrasados(datos.ingresos_atrasados);
+            cargarTablaSeguimiento(datos.seguimiento_estudiantes);
 
-        const ahora = new Date();
-        document.getElementById("ultimaActualizacion").innerText = ahora.toLocaleTimeString("es-CL");
+            const ahora = new Date();
+            document.getElementById("ultimaActualizacion").innerText = ahora.toLocaleTimeString("es-CL");
+        } finally {
+            resultadoBusqueda.classList.remove("rb-cargando");
+        }
+    }
+
+    function _esc(str) {
+        return String(str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
     }
 
     function actualizarTextoBusqueda(datos) {
         const texto = filtroBusqueda.value.trim();
-        if (texto) {
-            resultadoBusqueda.innerHTML =
-                'Resultado para búsqueda: <strong>' + texto +
-                '</strong> · Titulados encontrados: <strong>' +
-                datos.kpis.estudiantes_totales + '</strong>';
-            resultadoBusqueda.classList.add("activo");
+        const el = resultadoBusqueda;
+
+        el.className = "resultado-busqueda";
+
+        if (!texto) {
+            el.innerHTML = "Mostrando información general de la ceremonia.";
             return;
         }
-        resultadoBusqueda.innerHTML = "Mostrando información general de la ceremonia.";
-        resultadoBusqueda.classList.remove("activo");
+
+        const total = datos.kpis.estudiantes_totales;
+
+        if (total === 0) {
+            el.classList.add("rb-card", "rb-no-encontrado");
+            el.innerHTML =
+                '<span class="rb-icon">✗</span>' +
+                '<span class="rb-texto">' +
+                    '<strong>Estudiante no registrado</strong>' +
+                    '<span>No se encontró ningún titulado con &ldquo;' + _esc(texto) + '&rdquo;</span>' +
+                '</span>';
+            return;
+        }
+
+        if (total === 1) {
+            const est = datos.seguimiento_estudiantes[0];
+            const icono = est.estado_clase === "presente" ? "✓" : est.estado_clase === "atrasado" ? "⚠" : "○";
+            el.classList.add("rb-card", "rb-" + est.estado_clase);
+            el.innerHTML =
+                '<span class="rb-icon">' + icono + '</span>' +
+                '<span class="rb-texto">' +
+                    '<strong>' + _esc(est.nombre) + '</strong>' +
+                    '<span>' + _esc(est.rut) + ' · ' + _esc(est.bloque) + '</span>' +
+                '</span>' +
+                '<span class="rb-estado-pill">' + _esc(est.estado_texto) + '</span>';
+            return;
+        }
+
+        el.classList.add("rb-card", "rb-multiple");
+        el.innerHTML =
+            '<span class="rb-icon">≡</span>' +
+            '<span class="rb-texto">' +
+                '<strong>' + total + ' titulados encontrados</strong>' +
+                '<span>Búsqueda: &ldquo;' + _esc(texto) + '&rdquo; · Ver tabla de seguimiento</span>' +
+            '</span>';
     }
 
     function cargarTablaAvance(items) {
@@ -570,7 +619,7 @@
         clearTimeout(temporizadorBusqueda);
         temporizadorBusqueda = setTimeout(function() {
             cargarDashboard();
-        }, 450);
+        }, 300);
     });
 
     cargarDashboard();

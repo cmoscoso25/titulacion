@@ -199,12 +199,106 @@
     font-size:.76rem;
     color:var(--texto-suave);
     margin-bottom:9px;
-    padding:0 2px;
+    padding:6px 4px;
+    transition:all .18s ease;
+    min-height:30px;
+    display:flex;
+    align-items:center;
 }
 
-.resultado-busqueda.activo{
-    color:var(--texto);
+/* Estados del resultado */
+.resultado-busqueda.rb-card{
+    gap:10px;
+    padding:9px 14px;
+    border-radius:12px;
+    border:1px solid;
+    margin-bottom:9px;
+}
+
+.resultado-busqueda.rb-no-encontrado{
+    background:#fee2e2;
+    border-color:#fca5a5;
+    color:#991b1b;
+}
+
+.resultado-busqueda.rb-presente{
+    background:#dcfce7;
+    border-color:#86efac;
+    color:#166534;
+}
+
+.resultado-busqueda.rb-pendiente{
+    background:#fef3c7;
+    border-color:#fcd34d;
+    color:#92400e;
+}
+
+.resultado-busqueda.rb-atrasado{
+    background:#fee2e2;
+    border-color:#fca5a5;
+    color:#991b1b;
+}
+
+.resultado-busqueda.rb-multiple{
+    background:#dbeafe;
+    border-color:#93c5fd;
+    color:#1d4ed8;
+}
+
+.resultado-busqueda.rb-cargando{
+    opacity:.5;
+    pointer-events:none;
+}
+
+/* Elementos internos del resultado */
+.rb-icon{
+    font-size:1rem;
+    font-weight:900;
+    flex-shrink:0;
+    line-height:1;
+}
+
+.rb-texto{
+    flex:1;
+    min-width:0;
+}
+
+.rb-texto strong{
+    display:block;
+    font-size:.82rem;
+    font-weight:900;
+}
+
+.rb-texto span{
+    display:block;
+    font-size:.72rem;
     font-weight:700;
+    opacity:.82;
+    margin-top:1px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.rb-estado-pill{
+    font-size:.68rem;
+    font-weight:900;
+    padding:2px 10px;
+    border-radius:999px;
+    background:rgba(255,255,255,.45);
+    border:1px solid rgba(0,0,0,.06);
+    white-space:nowrap;
+    flex-shrink:0;
+}
+
+/* Indicador auto-actualización */
+.filtros-auto-label{
+    font-size:.62rem;
+    font-weight:800;
+    color:var(--texto-muted);
+    text-align:right;
+    padding-top:4px;
+    letter-spacing:.03em;
 }
 
 /* === KPIS === */
