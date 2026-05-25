@@ -20,58 +20,88 @@
 
 .mensajes{
     width:var(--registro-width);
-    margin:-24px auto 14px;
+    margin:12px auto;
 }
 
-.control-ceremonias{
+/* === BARRA CEREMONIAS COMPACTA === */
+.barra-ceremonias{
     width:var(--registro-width);
-    margin:-30px auto 14px;
-    padding:clamp(13px,1.6vw,18px);
-    position:relative;
-    z-index:6;
-}
-
-.mensajes + .contenido-registro .control-ceremonias{
-    margin-top:0;
-}
-
-.control-ceremonias h2{
-    font-size:clamp(1.1rem,1.6vw,1.35rem);
-    margin-bottom:7px;
-    color:var(--texto);
-}
-
-.control-ceremonias p{
-    font-size:.82rem;
-    color:var(--texto-suave);
-    margin-bottom:12px;
-    max-width:860px;
-}
-
-.control-scroll{
-    border-radius:14px;
+    margin:16px auto 0;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    background:var(--blanco);
     border:1px solid var(--borde-suave);
-    overflow-x:auto;
+    border-radius:16px;
+    padding:10px 16px;
+    box-shadow:var(--sombra-suave);
 }
 
-.tabla-ceremonias{
-    min-width:920px;
+.barra-nav{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+    border-right:1px solid var(--borde-suave);
+    padding-right:14px;
 }
 
-.tabla-ceremonias th{
-    font-size:.68rem;
-    padding:10px 11px;
+.barra-titulo{
+    font-size:.92rem;
+    font-weight:800;
+    color:var(--texto);
+    margin:0;
+    white-space:nowrap;
 }
 
-.tabla-ceremonias td{
+.pills-ceremonias{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    flex:1;
+    align-items:center;
+}
+
+.pill-bloque{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    background:#f8fafc;
+    border:1px solid var(--borde-suave);
+    border-radius:999px;
+    padding:4px 10px 4px 12px;
+}
+
+.pill-nombre{
     font-size:.78rem;
-    padding:10px 11px;
+    font-weight:700;
+    color:var(--texto);
+    white-space:nowrap;
+}
+
+.pill-bloque form{
+    display:inline-flex;
+    align-items:center;
+}
+
+.pill-bloque .btn-abrir,
+.pill-bloque .btn-cerrar,
+.pill-bloque .btn-reprogramar{
+    min-height:22px;
+    padding:0 9px;
+    font-size:.66rem;
+}
+
+.barra-sin-ceremonias{
+    font-size:.82rem;
+    color:var(--texto-muted);
 }
 
 .estado-registro{
-    min-height:26px;
-    padding:5px 10px;
-    font-size:.68rem;
+    min-height:22px;
+    padding:3px 8px;
+    font-size:.66rem;
 }
 
 /* === BOTONES DE CONTROL DE BLOQUE === */
@@ -100,7 +130,7 @@
 /* === LAYOUT PRINCIPAL 2 COLUMNAS === */
 .layout-principal{
     width:var(--registro-width);
-    margin:14px auto 0;
+    margin:12px auto 0;
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:14px;
@@ -466,10 +496,9 @@
 /* 320px – 480px */
 @media (max-width:480px){
     :root{ --registro-width:90%; }
-    .mensajes{ margin:-18px auto 12px; }
-    .control-ceremonias{ margin-top:-22px; padding:13px; border-radius:16px; }
-    .control-scroll{ border-radius:12px; }
-    .tabla-ceremonias{ min-width:860px; }
+    .mensajes{ margin:8px auto; }
+    .barra-ceremonias{ flex-direction:column; align-items:flex-start; gap:10px; padding:12px; }
+    .barra-nav{ border-right:none; border-bottom:1px solid var(--borde-suave); padding-right:0; padding-bottom:10px; width:100%; }
     .layout-principal{ grid-template-columns:1fr; }
     .col-der{ position:static; }
     .col-der .tabla-scroll{ max-height:260px; }
@@ -490,7 +519,6 @@
 /* 481px – 767px */
 @media (min-width:481px) and (max-width:767px){
     :root{ --registro-width:90%; }
-    .control-ceremonias{ margin-top:-24px; }
     .layout-principal{ grid-template-columns:1fr; }
     .col-der{ position:static; }
     .col-der .tabla-scroll{ max-height:300px; }
@@ -528,13 +556,10 @@
 
 /* Pantalla baja: notebook con TV via HDMI */
 @media (max-height:800px) and (min-width:900px){
-    .hero-registro-contenido{ padding-top:12px; padding-bottom:40px; }
-    .control-ceremonias{ margin-top:-24px; padding:13px; }
-    .control-ceremonias h2{ font-size:1.1rem; }
-    .control-ceremonias p{ font-size:.78rem; margin-bottom:9px; }
+    .barra-ceremonias{ padding:8px 14px; }
     .indicador-lector{ min-height:64px; }
     .panel-lector,.panel-manual,.panel-resultado,
     .panel-ultimos,.resultado-validacion,
-    .ultimos-registros{ padding:13px; }
-    .col-der .tabla-scroll{ max-height:calc(100vh - 280px); }
+    .ultimos-registros{ padding:12px; }
+    .col-der .tabla-scroll{ max-height:calc(100vh - 220px); }
 }

@@ -51,26 +51,6 @@
         </div>
     </header>
 
-    <section class="hero-registro">
-        <div class="hero-registro-contenido">
-
-            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
-                ← Volver al inicio
-            </a>
-
-            <h1>
-                Registro de Ingreso
-            </h1>
-
-            <p>
-                Escaneo QR para validar el acceso de estudiantes titulados e invitados oficiales.
-                Si el registro está cerrado, los accesos seguirán funcionando, pero quedarán
-                marcados como atrasados.
-            </p>
-
-        </div>
-    </section>
-
     {% if messages %}
         <section class="mensajes">
             {% for message in messages %}
@@ -83,124 +63,52 @@
 
     <main class="contenido-registro">
 
-        <section class="control-ceremonias">
-            <h2>
-                Control de ceremonias activas
-            </h2>
-
-            <p>
-                Solo una ceremonia puede estar ABIERTA al mismo tiempo.
-                Cuando se cierre, los próximos ingresos quedarán marcados como atrasados.
-            </p>
-
-            <div class="control-scroll">
-                <table class="tabla-ceremonias">
-                    <thead>
-                        <tr>
-                            <th>Ceremonia</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Lugar</th>
-                            <th>Estado</th>
-                            <th>Fecha apertura</th>
-                            <th>Fecha cierre</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for bloque in bloques %}
-                            <tr>
-                                <td>{{ bloque.nombre }}</td>
-                                <td>{{ bloque.fecha|date:"d/m/Y" }}</td>
-                                <td>{{ bloque.hora_inicio|time:"H:i" }}</td>
-                                <td>{{ bloque.ceremonia.lugar }}</td>
-
-                                <td>
-                                    {% if bloque.estado_registro == "ABIERTA" %}
-                                        <span class="estado-registro estado-abierto">
-                                            ABIERTA
-                                        </span>
-                                    {% elif bloque.estado_registro == "CERRADA" %}
-                                        <span class="estado-registro estado-cerrado">
-                                            CERRADA
-                                        </span>
-                                    {% else %}
-                                        <span class="estado-registro estado-programado">
-                                            PROGRAMADA
-                                        </span>
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    {% if bloque.fecha_apertura_registro %}
-                                        {{ bloque.fecha_apertura_registro|date:"d/m/Y H:i" }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    {% if bloque.fecha_cierre_registro %}
-                                        {{ bloque.fecha_cierre_registro|date:"d/m/Y H:i" }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    <div class="acciones-ceremonia">
-                                        {% if bloque.estado_registro == "PROGRAMADA" %}
-                                            <form
-                                                method="POST"
-                                                action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}"
-                                                onsubmit="return confirm('¿Deseas abrir esta ceremonia para el ingreso oficial?');"
-                                            >
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn-abrir">
-                                                    Abrir ceremonia
-                                                </button>
-                                            </form>
-
-                                        {% elif bloque.estado_registro == "ABIERTA" %}
-                                            <form
-                                                method="POST"
-                                                action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}"
-                                                onsubmit="return confirm('¿Deseas cerrar esta ceremonia? Los siguientes ingresos quedarán marcados como atrasados.');"
-                                            >
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn-cerrar">
-                                                    Cerrar ceremonia
-                                                </button>
-                                            </form>
-
-                                        {% else %}
-                                            <form
-                                                method="POST"
-                                                action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}"
-                                                onsubmit="return confirm('¿Deseas volver la ceremonia al estado PROGRAMADA?');"
-                                            >
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn-reprogramar">
-                                                    Reprogramar
-                                                </button>
-                                            </form>
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-
-                        {% empty %}
-                            <tr>
-                                <td colspan="8">
-                                    No existen ceremonias cargadas.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="barra-ceremonias">
+            <div class="barra-nav">
+                <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">← Inicio</a>
+                <h1 class="barra-titulo">Registro de Ingreso</h1>
             </div>
-        </section>
+            <div class="pills-ceremonias">
+                {% for bloque in bloques %}
+                    <div class="pill-bloque">
+                        <span class="pill-nombre">{{ bloque.nombre }}</span>
+                        {% if bloque.estado_registro == "ABIERTA" %}
+                            <span class="estado-registro estado-abierto">ABIERTA</span>
+                            <form
+                                method="POST"
+                                action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}"
+                                onsubmit="return confirm('¿Deseas cerrar esta ceremonia? Los siguientes ingresos quedarán marcados como atrasados.');"
+                            >
+                                {% csrf_token %}
+                                <button type="submit" class="btn-cerrar">Cerrar</button>
+                            </form>
+                        {% elif bloque.estado_registro == "CERRADA" %}
+                            <span class="estado-registro estado-cerrado">CERRADA</span>
+                            <form
+                                method="POST"
+                                action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}"
+                                onsubmit="return confirm('¿Deseas volver la ceremonia al estado PROGRAMADA?');"
+                            >
+                                {% csrf_token %}
+                                <button type="submit" class="btn-reprogramar">Reprogramar</button>
+                            </form>
+                        {% else %}
+                            <span class="estado-registro estado-programado">PROGRAMADA</span>
+                            <form
+                                method="POST"
+                                action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}"
+                                onsubmit="return confirm('¿Deseas abrir esta ceremonia para el ingreso oficial?');"
+                            >
+                                {% csrf_token %}
+                                <button type="submit" class="btn-abrir">Abrir</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <span class="barra-sin-ceremonias">Sin ceremonias cargadas.</span>
+                {% endfor %}
+            </div>
+        </div>
 
         <div class="layout-principal">
 
