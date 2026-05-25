@@ -185,6 +185,9 @@
     box-shadow: 0 4px 24px rgba(0,0,0,.11), 0 1px 4px rgba(0,0,0,.06);
     border: 1px solid var(--borde-suave);
     width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ── COLUMNA IZQUIERDA: identidad institucional ── */
@@ -550,7 +553,7 @@
     .form-busqueda{ grid-template-columns: 1fr 240px; }
     .encabezado-estudiante{ grid-template-columns: 1fr auto; }
     .grid-info{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .tarjeta{ grid-template-columns: 200px 1fr 185px; }
+    .tarjeta{ grid-template-columns: 200px 1fr 185px; max-width: 900px; }
 }
 
 /* 1367px – 1920px — DESKTOP */
@@ -559,7 +562,7 @@
     .form-busqueda{ grid-template-columns: 1fr 260px; }
     .encabezado-estudiante{ grid-template-columns: 1fr auto; }
     .grid-info{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .tarjeta{ grid-template-columns: 220px 1fr 200px; }
+    .tarjeta{ grid-template-columns: 210px 1fr 190px; max-width: 900px; }
 }
 
 /* 1921px+ — TV / HDMI */
@@ -568,7 +571,7 @@
     .form-busqueda{ grid-template-columns: 1fr 280px; }
     .encabezado-estudiante{ grid-template-columns: 1fr auto; }
     .grid-info{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .tarjeta{ grid-template-columns: 240px 1fr 220px; }
+    .tarjeta{ grid-template-columns: 210px 1fr 190px; max-width: 900px; }
 }
 
 /* Pantalla baja: notebook con TV via HDMI */
