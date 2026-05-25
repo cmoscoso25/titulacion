@@ -440,54 +440,120 @@
     }
 
     async function descargarTarjetaComoImagen(elemento) {
-        const nombreArchivoBase = elemento.dataset.nombreArchivo || "invitacion.png";
-        const nombreArchivo = limpiarNombreArchivo(nombreArchivoBase);
+
+        const nombreArchivoBase =
+            elemento.dataset.nombreArchivo || "invitacion.png";
+
+        const nombreArchivo =
+            limpiarNombreArchivo(nombreArchivoBase);
 
         await esperarImagenesDentro(elemento);
 
-        const rect = elemento.getBoundingClientRect();
+        /* ======================================================
+           CLON LIMPIO PARA EVITAR DESCUADRES HTML2CANVAS
+        ====================================================== */
 
-        const canvasTarjeta = await html2canvas(elemento, {
+        const clon = elemento.cloneNode(true);
+
+        clon.style.width = "1280px";
+        clon.style.maxWidth = "1280px";
+        clon.style.minWidth = "1280px";
+
+        clon.style.height = "auto";
+        clon.style.minHeight = "270px";
+
+        clon.style.margin = "0";
+        clon.style.transform = "none";
+        clon.style.position = "relative";
+
+        clon.style.boxShadow =
+            "0 18px 45px rgba(2,9,23,.16), 0 2px 8px rgba(2,9,23,.08)";
+
+        clon.style.opacity = "1";
+        clon.style.filter = "none";
+
+        const contenedorTemporal = document.createElement("div");
+
+        contenedorTemporal.style.position = "fixed";
+        contenedorTemporal.style.left = "-99999px";
+        contenedorTemporal.style.top = "0";
+
+        contenedorTemporal.style.width = "1280px";
+        contenedorTemporal.style.padding = "0";
+        contenedorTemporal.style.margin = "0";
+
+        contenedorTemporal.style.background = "#fffaf0";
+
+        contenedorTemporal.style.zIndex = "-1";
+
+        contenedorTemporal.appendChild(clon);
+
+        document.body.appendChild(contenedorTemporal);
+
+        await esperarImagenesDentro(clon);
+
+        /* ======================================================
+           CAPTURA PERFECTA
+        ====================================================== */
+
+        const canvasTarjeta = await html2canvas(clon, {
             scale: 3,
-            backgroundColor: null,
+
+            backgroundColor: "#fffaf0",
+
             useCORS: true,
             allowTaint: true,
+
             logging: false,
             removeContainer: true,
+
             imageTimeout: 15000,
 
-            width: rect.width,
-            height: rect.height,
+            width: 1280,
 
-            windowWidth: window.innerWidth,
-            windowHeight: window.innerHeight,
+            windowWidth: 1280,
+            windowHeight: clon.scrollHeight,
 
-            scrollX: window.scrollX,
-            scrollY: window.scrollY
+            scrollX: 0,
+            scrollY: 0
         });
 
+        document.body.removeChild(contenedorTemporal);
+
         const enlace = document.createElement("a");
+
         enlace.href = canvasTarjeta.toDataURL("image/png");
+
         enlace.download = nombreArchivo;
+
         document.body.appendChild(enlace);
+
         enlace.click();
+
         document.body.removeChild(enlace);
     }
 
     async function descargarTodasLasInvitaciones() {
+
         const tarjetas = document.querySelectorAll(".tarjeta");
 
         for (const tarjeta of tarjetas) {
+
             await descargarTarjetaComoImagen(tarjeta);
+
             await new Promise(resolve => setTimeout(resolve, 450));
         }
     }
 
     async function descargarGrupoInvitaciones(claseGrupo) {
-        const tarjetas = document.querySelectorAll("." + claseGrupo + " .tarjeta");
+
+        const tarjetas =
+            document.querySelectorAll("." + claseGrupo + " .tarjeta");
 
         for (const tarjeta of tarjetas) {
+
             await descargarTarjetaComoImagen(tarjeta);
+
             await new Promise(resolve => setTimeout(resolve, 450));
         }
     }
