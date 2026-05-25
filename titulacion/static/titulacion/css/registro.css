@@ -162,7 +162,84 @@
     overflow-y:auto;
 }
 
-/* === ZONA PRINCIPAL REGISTRO === */
+/* === PANEL OPERATIVO UNIFICADO === */
+.panel-operativo{
+    background:var(--blanco);
+    border:1px solid var(--borde-suave);
+    border-radius:20px;
+    padding:clamp(14px,1.8vw,22px);
+    box-shadow:var(--sombra-suave);
+}
+
+.bloque-lector h2,
+.bloque-manual h2{
+    font-size:clamp(.95rem,1.3vw,1.1rem);
+    margin-bottom:8px;
+    color:var(--texto);
+}
+
+.bloque-divisor{
+    height:1px;
+    background:var(--borde-suave);
+    margin:14px 0;
+}
+
+/* Resultado dentro del panel — sin card propio */
+.panel-operativo .resultado-validacion{
+    border:none;
+    background:transparent;
+    border-radius:0;
+    box-shadow:none;
+    padding:0;
+    margin:0;
+}
+
+/* Ocultar caja "Estado" y detalles cuando no hay lectura */
+.resultado-validacion:not(.visible) .estado-grande{
+    display:none;
+}
+.resultado-validacion:not(.visible) .detalle-ingreso{
+    display:none;
+}
+.resultado-validacion:not(.visible) p{
+    font-size:.82rem;
+    color:var(--texto-muted);
+    margin:0;
+}
+
+/* Grid 2 columnas para los detalles del resultado */
+.detalle-ingreso{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 12px;
+    margin-top:10px;
+}
+
+.item-detalle strong{
+    display:block;
+    font-size:.68rem;
+    font-weight:700;
+    color:var(--texto-suave);
+    text-transform:uppercase;
+    letter-spacing:.03em;
+}
+
+.item-detalle span{
+    display:block;
+    font-size:.82rem;
+    font-weight:700;
+    color:var(--texto);
+}
+
+/* Pills: truncar nombre largo con ellipsis */
+.pill-nombre{
+    max-width:150px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+/* === ZONA PRINCIPAL REGISTRO (legacy, mantenido para compat) === */
 .grid-registro,
 .zona-registro,
 .registro-grid{

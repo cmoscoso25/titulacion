@@ -351,6 +351,23 @@ def registro_ingreso(request):
     )
 
 
+def ultimos_registros_ajax(request):
+    registros = RegistroIngreso.objects.select_related(
+        "estudiante",
+    ).order_by("-fecha_hora")[:20]
+
+    data = [
+        {
+            "fecha_hora": r.fecha_hora.strftime("%d/%m %H:%M"),
+            "nombre": r.estudiante.nombre_completo if r.estudiante else "-",
+            "tipo": r.tipo,
+            "resultado": r.resultado,
+        }
+        for r in registros
+    ]
+    return JsonResponse({"registros": data})
+
+
 @csrf_exempt
 @require_POST
 def validar_codigo_ingreso(request):

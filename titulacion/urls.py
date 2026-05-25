@@ -80,6 +80,12 @@ urlpatterns = [
     ),
 
     path(
+        "registro-ultimos/",
+        acceso_admision(views.ultimos_registros_ajax),
+        name="ultimos_registros_ajax",
+    ),
+
+    path(
         "bloques/<int:bloque_id>/abrir/",
         acceso_admision(views.abrir_bloque_ceremonia),
         name="abrir_bloque_ceremonia",

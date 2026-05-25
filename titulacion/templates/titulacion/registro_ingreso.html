@@ -70,7 +70,7 @@
             </div>
             <div class="pills-ceremonias">
                 {% for bloque in bloques %}
-                    <div class="pill-bloque">
+                    <div class="pill-bloque" title="{{ bloque.nombre }}">
                         <span class="pill-nombre">{{ bloque.nombre }}</span>
                         {% if bloque.estado_registro == "ABIERTA" %}
                             <span class="estado-registro estado-abierto">ABIERTA</span>
@@ -114,23 +114,15 @@
 
             <div class="col-izq">
 
-                <section class="grid-registro">
+                <div class="panel-operativo">
 
-                    <article class="panel-lector">
-                        <h2>
-                            Lector QR USB
-                        </h2>
-
-                        <p>
-                            Conecta el lector QR USB y apúntalo al código QR de la tarjeta del estudiante o invitado.
-                        </p>
-
+                    <div class="bloque-lector">
+                        <h2>Lector QR USB</h2>
                         <div class="lector-usb">
                             <div class="indicador-lector" id="indicadorLector">
                                 <div class="pulso-qr"></div>
                                 <span id="textoIndicador">Listo para escanear</span>
                             </div>
-
                             <input
                                 id="inputQR"
                                 type="text"
@@ -142,21 +134,15 @@
                                 aria-label="Campo de lectura QR USB"
                             >
                         </div>
-
                         <div class="qr-ayuda">
                             La lectura se valida automáticamente al detectar el código.
                         </div>
-                    </article>
+                    </div>
 
-                    <article class="panel-manual">
-                        <h2>
-                            Ingreso manual
-                        </h2>
+                    <div class="bloque-divisor"></div>
 
-                        <p>
-                            Si el QR no puede escanearse, ingresa el código manualmente.
-                        </p>
-
+                    <div class="bloque-manual">
+                        <h2>Ingreso manual</h2>
                         <form class="form-manual" id="formManual">
                             <input
                                 type="text"
@@ -164,62 +150,45 @@
                                 placeholder="Ejemplo: EST-XXXXXXXX o INV-XXXXXXXX"
                                 autocomplete="off"
                             >
-
-                            <button type="submit">
-                                Validar código
-                            </button>
+                            <button type="submit">Validar código</button>
                         </form>
-                    </article>
-
-                </section>
-
-                <section id="resultado" class="resultado-validacion resultado">
-                    <h2 id="resultadoTitulo">
-                        Resultado
-                    </h2>
-
-                    <p id="resultadoMensaje">
-                        Esperando lectura de QR.
-                    </p>
-
-                    <div id="estadoVisual" class="estado-grande">
-                        Estado
                     </div>
 
-                    <div class="detalle-ingreso">
+                    <div class="bloque-divisor"></div>
 
-                        <div class="item-detalle">
-                            <strong>Nombre</strong>
-                            <span id="detalleNombre">-</span>
+                    <section id="resultado" class="resultado-validacion resultado">
+                        <h2 id="resultadoTitulo">Resultado</h2>
+                        <p id="resultadoMensaje">Esperando lectura de QR.</p>
+                        <div id="estadoVisual" class="estado-grande">Estado</div>
+                        <div class="detalle-ingreso">
+                            <div class="item-detalle">
+                                <strong>Nombre</strong>
+                                <span id="detalleNombre">-</span>
+                            </div>
+                            <div class="item-detalle">
+                                <strong>RUT</strong>
+                                <span id="detalleRut">-</span>
+                            </div>
+                            <div class="item-detalle">
+                                <strong>Área</strong>
+                                <span id="detalleArea">-</span>
+                            </div>
+                            <div class="item-detalle">
+                                <strong>Plan de estudio</strong>
+                                <span id="detallePlan">-</span>
+                            </div>
+                            <div class="item-detalle">
+                                <strong>Tipo</strong>
+                                <span id="detalleTipo">-</span>
+                            </div>
+                            <div class="item-detalle">
+                                <strong>Hora</strong>
+                                <span id="detalleHora">-</span>
+                            </div>
                         </div>
+                    </section>
 
-                        <div class="item-detalle">
-                            <strong>RUT</strong>
-                            <span id="detalleRut">-</span>
-                        </div>
-
-                        <div class="item-detalle">
-                            <strong>Área</strong>
-                            <span id="detalleArea">-</span>
-                        </div>
-
-                        <div class="item-detalle">
-                            <strong>Plan de estudio</strong>
-                            <span id="detallePlan">-</span>
-                        </div>
-
-                        <div class="item-detalle">
-                            <strong>Tipo acceso</strong>
-                            <span id="detalleTipo">-</span>
-                        </div>
-
-                        <div class="item-detalle">
-                            <strong>Hora validación</strong>
-                            <span id="detalleHora">-</span>
-                        </div>
-
-                    </div>
-                </section>
+                </div>
 
             </div>
 
@@ -238,20 +207,17 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Fecha / hora</th>
+                                    <th>Hora</th>
                                     <th>Nombre</th>
-                                    <th>RUT</th>
                                     <th>Tipo</th>
                                     <th>Resultado</th>
-                                    <th>Observación</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="tbodyRegistros">
                                 {% for registro in ultimos_registros %}
                                     <tr>
-                                        <td>{{ registro.fecha_hora|date:"d/m/Y H:i" }}</td>
-
+                                        <td>{{ registro.fecha_hora|date:"d/m H:i" }}</td>
                                         <td>
                                             {% if registro.estudiante %}
                                                 {{ registro.estudiante.nombre_completo }}
@@ -259,45 +225,22 @@
                                                 -
                                             {% endif %}
                                         </td>
-
-                                        <td>
-                                            {% if registro.estudiante %}
-                                                {{ registro.estudiante.rut }}
-                                            {% else %}
-                                                -
-                                            {% endif %}
-                                        </td>
-
                                         <td>{{ registro.tipo }}</td>
-
                                         <td>
                                             {% if registro.resultado == "PERMITIDO" %}
-                                                <span class="estado-registro estado-abierto">
-                                                    PERMITIDO
-                                                </span>
+                                                <span class="estado-registro estado-abierto">PERMITIDO</span>
                                             {% elif registro.resultado == "ATRASADO" %}
-                                                <span class="estado-registro estado-programado">
-                                                    ATRASADO
-                                                </span>
+                                                <span class="estado-registro estado-programado">ATRASADO</span>
                                             {% elif registro.resultado == "DUPLICADO" %}
-                                                <span class="estado-registro estado-cerrado">
-                                                    DUPLICADO
-                                                </span>
+                                                <span class="estado-registro estado-cerrado">DUPLICADO</span>
                                             {% else %}
-                                                <span class="estado-registro estado-cerrado">
-                                                    {{ registro.resultado }}
-                                                </span>
+                                                <span class="estado-registro estado-cerrado">{{ registro.resultado }}</span>
                                             {% endif %}
                                         </td>
-
-                                        <td>{{ registro.observacion|default:"-" }}</td>
                                     </tr>
-
                                 {% empty %}
                                     <tr>
-                                        <td colspan="6">
-                                            Aún no existen registros de ingreso.
-                                        </td>
+                                        <td colspan="4">Aún no existen registros de ingreso.</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -319,6 +262,8 @@
 </div>
 
 <script>
+    const URL_ULTIMOS = "{% url 'titulacion:ultimos_registros_ajax' %}";
+
     let ultimoCodigoLeido = "";
     let bloqueoLectura = false;
 
@@ -490,6 +435,7 @@
                 activarIndicador();
                 inputQR.focus();
             }, 2500);
+            setTimeout(actualizarRegistros, 800);
         });
     }
 
@@ -577,7 +523,40 @@
             validarCodigo(codigo);
             document.getElementById("codigoManual").value = "";
             setTimeout(function() { inputQR.focus(); }, 2600);
+            setTimeout(actualizarRegistros, 800);
         });
+
+    /* === AUTO-REFRESH ÚLTIMOS REGISTROS === */
+
+    function claseResultado(r) {
+        if (r === "PERMITIDO") { return "estado-abierto"; }
+        if (r === "ATRASADO")  { return "estado-programado"; }
+        return "estado-cerrado";
+    }
+
+    function actualizarRegistros() {
+        fetch(URL_ULTIMOS)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                const tbody = document.getElementById("tbodyRegistros");
+                if (!tbody || !data.registros) { return; }
+                if (data.registros.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4">Aún no existen registros.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.registros.map(function(r) {
+                    return '<tr>' +
+                        '<td>' + r.fecha_hora + '</td>' +
+                        '<td>' + r.nombre + '</td>' +
+                        '<td>' + r.tipo + '</td>' +
+                        '<td><span class="estado-registro ' + claseResultado(r.resultado) + '">' + r.resultado + '</span></td>' +
+                    '</tr>';
+                }).join('');
+            })
+            .catch(function() {});
+    }
+
+    setInterval(actualizarRegistros, 5000);
 
     /* Inicializar indicador (espera al autofocus del browser) */
     setTimeout(function() { activarIndicador(); inputQR.focus(); }, 120);
