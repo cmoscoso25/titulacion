@@ -354,7 +354,24 @@ def registro_ingreso(request):
 @csrf_exempt
 @require_POST
 def validar_codigo_ingreso(request):
+
     codigo = request.POST.get("codigo", "").strip().upper()
+
+    # =========================================================
+    # NORMALIZACIÓN PARA LECTORES QR
+    # Algunos lectores reemplazan "-" por "'" o caracteres raros
+    # =========================================================
+    codigo = (
+        codigo
+        .replace("'", "-")
+        .replace("‘", "-")
+        .replace("’", "-")
+        .replace("`", "-")
+        .replace("´", "-")
+        .replace(" ", "")
+        .replace("\n", "")
+        .replace("\r", "")
+    )
 
     if not codigo:
         return JsonResponse({
@@ -375,6 +392,9 @@ def validar_codigo_ingreso(request):
             "mensaje": "Debe abrir una ceremonia antes de registrar ingresos.",
         })
 
+    # =========================================================
+    # VALIDAR ESTUDIANTE
+    # =========================================================
     estudiante = EstudianteTitulado.objects.select_related(
         "bloque_ceremonia",
         "bloque_ceremonia__ceremonia",
@@ -390,6 +410,9 @@ def validar_codigo_ingreso(request):
             bloque_activo=bloque_activo
         )
 
+    # =========================================================
+    # VALIDAR INVITACIÓN
+    # =========================================================
     invitacion = Invitacion.objects.select_related(
         "estudiante",
         "estudiante__bloque_ceremonia",
@@ -406,6 +429,9 @@ def validar_codigo_ingreso(request):
             bloque_activo=bloque_activo
         )
 
+    # =========================================================
+    # REGISTRO DE QR INVÁLIDO
+    # =========================================================
     RegistroIngreso.objects.create(
         estudiante=None,
         invitacion=None,
