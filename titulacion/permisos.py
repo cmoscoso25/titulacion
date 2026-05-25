@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 GRUPO_ADMIN = "ADMIN_TITULACION"
 GRUPO_ADMISION = "ADMISION"
 GRUPO_CURRICULAR = "CURRICULAR"
+GRUPO_ENTREGA = "ENTREGA_INVITACIONES"
 
 
 def usuario_en_grupo(usuario, nombre_grupo):
@@ -81,6 +82,28 @@ def acceso_curricular(view_func):
     def wrapper(request, *args, **kwargs):
 
         if es_curricular(request.user):
+            return view_func(request, *args, **kwargs)
+
+        return redireccion_sin_permiso(request)
+
+    return wrapper
+
+
+def es_entrega(usuario):
+    return usuario.is_authenticated and (
+        es_admin_titulacion(usuario)
+        or usuario_en_grupo(usuario, GRUPO_ADMISION)
+        or usuario_en_grupo(usuario, GRUPO_ENTREGA)
+    )
+
+
+def acceso_entrega(view_func):
+
+    @wraps(view_func)
+    @login_required(login_url="titulacion:login")
+    def wrapper(request, *args, **kwargs):
+
+        if es_entrega(request.user):
             return view_func(request, *args, **kwargs)
 
         return redireccion_sin_permiso(request)

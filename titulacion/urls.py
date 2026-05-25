@@ -6,6 +6,7 @@ from .permisos import (
     acceso_admin,
     acceso_admision,
     acceso_curricular,
+    acceso_entrega,
     acceso_general,
 )
 
@@ -56,13 +57,13 @@ urlpatterns = [
 
     path(
         "entrega-invitaciones/",
-        acceso_admision(views.entrega_invitaciones),
+        acceso_entrega(views.entrega_invitaciones),
         name="entrega_invitaciones",
     ),
 
     path(
         "entrega-invitaciones/<int:estudiante_id>/marcar/",
-        acceso_admision(views.marcar_entrega_invitaciones),
+        acceso_entrega(views.marcar_entrega_invitaciones),
         name="marcar_entrega_invitaciones",
     ),
 

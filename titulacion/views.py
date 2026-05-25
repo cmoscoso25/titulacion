@@ -22,6 +22,7 @@ from .models import (
     generar_codigo_qr_estudiante,
     generar_codigo_qr_invitacion,
 )
+from .permisos import es_admin_titulacion, es_admision, es_curricular, es_entrega
 from .procesador_excel import crear_invitaciones_para_estudiante, procesar_excel_titulados
 
 
@@ -252,6 +253,7 @@ def inicio(request):
         "nombre"
     )
 
+    u = request.user
     return render(
         request,
         "titulacion/inicio.html",
@@ -262,6 +264,10 @@ def inicio(request):
             "total_asistentes": estudiantes_presentes + invitados_presentes,
             "total_atrasados": total_atrasados,
             "bloques": bloques,
+            "perm_admin":     es_admin_titulacion(u),
+            "perm_admision":  es_admision(u),
+            "perm_curricular": es_curricular(u),
+            "perm_entrega":   es_entrega(u),
         }
     )
 
