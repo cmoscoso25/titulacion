@@ -325,7 +325,8 @@
 .bloque-tipo{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    padding-left: 18px;
     gap: 10px;
     flex: 1;
     justify-content: center;
@@ -502,6 +503,7 @@
     position: relative;
     z-index: 3;
     letter-spacing: .01em;
+    margin-top: 8px;
 }
 
 .rut-central{
