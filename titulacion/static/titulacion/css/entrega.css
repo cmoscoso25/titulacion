@@ -1089,3 +1089,14 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
 }
+body.capturando-invitacion .tarjeta,
+body.capturando-invitacion .tarjeta *{
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+}
+
+body.capturando-invitacion .tarjeta{
+    opacity: 1 !important;
+    transform: none !important;
+}
