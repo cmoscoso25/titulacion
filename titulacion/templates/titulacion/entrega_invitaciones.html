@@ -419,7 +419,7 @@
         const imagenes = elemento.querySelectorAll("img");
 
         const promesas = Array.from(imagenes).map(function(imagen) {
-            if (imagen.complete) {
+            if (imagen.complete && imagen.naturalWidth > 0) {
                 return Promise.resolve();
             }
 
@@ -445,18 +445,25 @@
 
         await esperarImagenesDentro(elemento);
 
+        const rect = elemento.getBoundingClientRect();
+
         const canvasTarjeta = await html2canvas(elemento, {
-            scale: 4,
-            backgroundColor: "#ffffff",
+            scale: 3,
+            backgroundColor: null,
             useCORS: true,
             allowTaint: true,
             logging: false,
             removeContainer: true,
             imageTimeout: 15000,
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: elemento.scrollWidth,
-            windowHeight: elemento.scrollHeight
+
+            width: rect.width,
+            height: rect.height,
+
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight,
+
+            scrollX: window.scrollX,
+            scrollY: window.scrollY
         });
 
         const enlace = document.createElement("a");
