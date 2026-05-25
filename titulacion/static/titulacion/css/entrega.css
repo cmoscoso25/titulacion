@@ -325,8 +325,7 @@
 .bloque-tipo{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding-left: 22px;
+    align-items: center;
     gap: 10px;
     flex: 1;
     justify-content: center;
@@ -334,23 +333,25 @@
     z-index: 4;
     width: 100%;
     min-width: 0;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .tipo-invitacion{
     font-family: Georgia, 'Times New Roman', serif;
     font-style: italic;
-    font-size: clamp(1.25rem, 1.6vw, 1.55rem);
+    font-size: clamp(1.15rem, 1.35vw, 1.38rem);
     font-weight: 700;
     color: var(--oro);
-    letter-spacing: .01em;
-    line-height: 1;
+    letter-spacing: 0;
+    line-height: 1.05;
     text-shadow: 0 1px 0 rgba(255,255,255,.8);
     width: 100%;
-    max-width: 170px;
+    max-width: 100%;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     text-align: center;
+    transform: scaleX(.92);
+    transform-origin: center;
 }
 
 .tipo-sub{
@@ -821,8 +822,8 @@
     }
 
     .tipo-invitacion{
-        font-size: 1.55rem;
-        max-width: 190px;
+        font-size: 1.45rem;
+        transform: none;
     }
 
     .tarjeta-center{
@@ -884,8 +885,8 @@
     }
 
     .tipo-invitacion{
-        font-size: 1.6rem;
-        max-width: 200px;
+        font-size: 1.5rem;
+        transform: none;
     }
 
     .tarjeta-center{
@@ -926,8 +927,8 @@
     .logo-card{ width: 145px; }
 
     .tipo-invitacion{
-        font-size: 1.2rem;
-        max-width: 145px;
+        font-size: 1.05rem;
+        transform: scaleX(.9);
     }
 
     .tipo-sub{ font-size: .82rem; }
@@ -988,8 +989,8 @@
     .nombre-central{ font-size: clamp(1.65rem, 2.4vw, 2.3rem); }
 
     .tipo-invitacion{
-        font-size: 1.32rem;
-        max-width: 160px;
+        font-size: 1.12rem;
+        transform: scaleX(.9);
     }
 }
 
@@ -1029,8 +1030,8 @@
     }
 
     .tipo-invitacion{
-        font-size: 1.55rem;
-        max-width: 180px;
+        font-size: 1.3rem;
+        transform: scaleX(.92);
     }
 }
 
@@ -1063,8 +1064,8 @@
     }
 
     .tipo-invitacion{
-        font-size: 1.2rem;
-        max-width: 145px;
+        font-size: 1.05rem;
+        transform: scaleX(.9);
     }
 
     .anio{ font-size: 1.65rem; }
