@@ -52,10 +52,10 @@ def generar_codigo_unico_invitacion(invitacion):
 
 def crear_imagen_qr(codigo):
     qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_M,
-        box_size=10,
-        border=2,
+        version=None,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=20,
+        border=4,
     )
 
     qr.add_data(codigo)
@@ -67,7 +67,7 @@ def crear_imagen_qr(codigo):
     ).convert("RGB")
 
     buffer = BytesIO()
-    imagen.save(buffer, format="PNG")
+    imagen.save(buffer, format="PNG", optimize=True)
     buffer.seek(0)
 
     return buffer
