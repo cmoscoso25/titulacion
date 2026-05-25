@@ -415,10 +415,6 @@
 </div>
 
 <script>
-    const ANCHO_CARTA_HORIZONTAL = 3300;
-    const ALTO_CARTA_HORIZONTAL = 2550;
-    const MARGEN_IMPRESION = 135;
-
     async function esperarImagenesDentro(elemento) {
         const imagenes = elemento.querySelectorAll("img");
 
@@ -443,50 +439,6 @@
             .replace(/-+/g, "-");
     }
 
-    function crearLienzoCarta() {
-        const lienzo = document.createElement("canvas");
-        lienzo.width = ANCHO_CARTA_HORIZONTAL;
-        lienzo.height = ALTO_CARTA_HORIZONTAL;
-
-        const contexto = lienzo.getContext("2d");
-
-        contexto.fillStyle = "#ffffff";
-        contexto.fillRect(0, 0, ANCHO_CARTA_HORIZONTAL, ALTO_CARTA_HORIZONTAL);
-
-        return { lienzo: lienzo, contexto: contexto };
-    }
-
-    function dibujarTarjetaCentradaEnCarta(contexto, imagenTarjeta) {
-        const anchoDisponible = ANCHO_CARTA_HORIZONTAL - (MARGEN_IMPRESION * 2);
-        const altoDisponible = ALTO_CARTA_HORIZONTAL - (MARGEN_IMPRESION * 2);
-
-        const escala = Math.min(
-            anchoDisponible / imagenTarjeta.width,
-            altoDisponible / imagenTarjeta.height
-        );
-
-        const anchoFinal = imagenTarjeta.width * escala;
-        const altoFinal = imagenTarjeta.height * escala;
-
-        const posicionX = (ANCHO_CARTA_HORIZONTAL - anchoFinal) / 2;
-        const posicionY = (ALTO_CARTA_HORIZONTAL - altoFinal) / 2;
-
-        contexto.imageSmoothingEnabled = true;
-        contexto.imageSmoothingQuality = "high";
-
-        contexto.drawImage(imagenTarjeta, posicionX, posicionY, anchoFinal, altoFinal);
-    }
-
-    async function convertirCanvasAImagen(canvas) {
-        const dataUrl = canvas.toDataURL("image/png");
-
-        return new Promise(function(resolve) {
-            const imagen = new Image();
-            imagen.onload = function() { resolve(imagen); };
-            imagen.src = dataUrl;
-        });
-    }
-
     async function descargarTarjetaComoImagen(elemento) {
         const nombreArchivoBase = elemento.dataset.nombreArchivo || "invitacion.png";
         const nombreArchivo = limpiarNombreArchivo(nombreArchivoBase);
@@ -503,17 +455,12 @@
             imageTimeout: 15000,
             scrollX: 0,
             scrollY: 0,
-            windowWidth: document.documentElement.scrollWidth,
-            windowHeight: document.documentElement.scrollHeight
+            windowWidth: elemento.scrollWidth,
+            windowHeight: elemento.scrollHeight
         });
 
-        const imagenTarjeta = await convertirCanvasAImagen(canvasTarjeta);
-        const carta = crearLienzoCarta();
-
-        dibujarTarjetaCentradaEnCarta(carta.contexto, imagenTarjeta);
-
         const enlace = document.createElement("a");
-        enlace.href = carta.lienzo.toDataURL("image/png");
+        enlace.href = canvasTarjeta.toDataURL("image/png");
         enlace.download = nombreArchivo;
         document.body.appendChild(enlace);
         enlace.click();
