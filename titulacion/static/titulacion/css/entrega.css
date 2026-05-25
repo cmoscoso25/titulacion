@@ -267,6 +267,7 @@
     gap: 12px;
     position: relative;
     z-index: 2;
+    overflow: hidden;
 }
 
 .tarjeta-left-marco{
@@ -332,19 +333,23 @@
     z-index: 4;
     width: 100%;
     min-width: 0;
+    overflow: hidden;
 }
 
 .tipo-invitacion{
     font-family: Georgia, 'Times New Roman', serif;
     font-style: italic;
-    font-size: clamp(1.45rem, 2vw, 2rem);
+    font-size: clamp(1.25rem, 1.6vw, 1.55rem);
     font-weight: 700;
     color: var(--oro);
-    letter-spacing: .02em;
+    letter-spacing: .01em;
     line-height: 1;
     text-shadow: 0 1px 0 rgba(255,255,255,.8);
-    max-width: 100%;
+    width: 100%;
+    max-width: 170px;
     white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
 }
 
 .tipo-sub{
@@ -760,15 +765,10 @@
    RESPONSIVE
    ============================================================ */
 
-/* 320px – 480px */
 @media (max-width: 480px){
-    :root{
-        --entrega-width: 94%;
-    }
+    :root{ --entrega-width: 94%; }
 
-    .mensajes{
-        margin: -20px auto 12px;
-    }
+    .mensajes{ margin: -20px auto 12px; }
 
     .contenedor-entrega{
         margin-top: -24px;
@@ -797,9 +797,7 @@
         width: 100%;
     }
 
-    .botones-acciones form button{
-        width: 100%;
-    }
+    .botones-acciones form button{ width: 100%; }
 
     .lista-invitaciones{
         padding: 12px;
@@ -820,6 +818,11 @@
         min-height: 245px;
     }
 
+    .tipo-invitacion{
+        font-size: 1.55rem;
+        max-width: 190px;
+    }
+
     .tarjeta-center{
         border-right: none;
         border-bottom: 1px solid rgba(157,118,32,.25);
@@ -836,9 +839,7 @@
         gap: 10px;
     }
 
-    .info-item{
-        width: 100%;
-    }
+    .info-item{ width: 100%; }
 
     .info-item strong,
     .info-item span{
@@ -851,33 +852,22 @@
         background: linear-gradient(90deg, transparent, rgba(197,154,50,.85), transparent);
     }
 
-    .tarjeta-right{
-        padding: 24px 18px;
-    }
+    .tarjeta-right{ padding: 24px 18px; }
 
     .qr-box img{
         width: 124px;
         height: 124px;
     }
 
-    .codigo-acceso{
-        max-width: 260px;
-    }
+    .codigo-acceso{ max-width: 260px; }
 }
 
-/* 481px – 767px */
 @media (min-width: 481px) and (max-width: 767px){
-    :root{
-        --entrega-width: 92%;
-    }
+    :root{ --entrega-width: 92%; }
 
-    .contenedor-entrega{
-        margin-top: -28px;
-    }
+    .contenedor-entrega{ margin-top: -28px; }
 
-    .acciones-globales{
-        justify-content: flex-start;
-    }
+    .acciones-globales{ justify-content: flex-start; }
 
     .tarjeta{
         grid-template-columns: 1fr;
@@ -891,6 +881,11 @@
         min-height: 250px;
     }
 
+    .tipo-invitacion{
+        font-size: 1.6rem;
+        max-width: 200px;
+    }
+
     .tarjeta-center{
         border-right: none;
         border-bottom: 1px solid rgba(157,118,32,.25);
@@ -902,9 +897,7 @@
         justify-content: center;
     }
 
-    .separador-evento{
-        display: none;
-    }
+    .separador-evento{ display: none; }
 
     .qr-box img{
         width: 124px;
@@ -912,113 +905,70 @@
     }
 }
 
-/* 768px – 1024px */
 @media (min-width: 768px) and (max-width: 1024px){
-    :root{
-        --entrega-width: 92%;
-    }
+    :root{ --entrega-width: 92%; }
 
-    .form-busqueda{
-        grid-template-columns: 1fr 220px;
-    }
+    .form-busqueda{ grid-template-columns: 1fr 220px; }
 
-    .encabezado-estudiante{
-        grid-template-columns: 1fr auto;
-    }
+    .encabezado-estudiante{ grid-template-columns: 1fr auto; }
 
-    .grid-info{
-        grid-template-columns: repeat(2, minmax(0,1fr));
-    }
+    .grid-info{ grid-template-columns: repeat(2, minmax(0,1fr)); }
 
     .tarjeta{
         grid-template-columns: 205px 1fr 185px;
         min-height: 270px;
     }
 
-    .tarjeta-left{
-        padding: 20px 15px;
-    }
+    .tarjeta-left{ padding: 20px 15px; }
 
-    .logo-card{
-        width: 145px;
-    }
+    .logo-card{ width: 145px; }
 
     .tipo-invitacion{
-        font-size: 1.35rem;
+        font-size: 1.2rem;
+        max-width: 145px;
     }
 
-    .tipo-sub{
-        font-size: .82rem;
-    }
+    .tipo-sub{ font-size: .82rem; }
 
-    .anio{
-        font-size: 1.65rem;
-    }
+    .anio{ font-size: 1.65rem; }
 
-    .tarjeta-center{
-        padding: 20px 22px;
-    }
+    .tarjeta-center{ padding: 20px 22px; }
 
-    .texto-logro h3{
-        font-size: 2rem;
-    }
+    .texto-logro h3{ font-size: 2rem; }
 
-    .nombre-central{
-        font-size: clamp(1.45rem, 2.5vw, 2rem);
-    }
+    .nombre-central{ font-size: clamp(1.45rem, 2.5vw, 2rem); }
 
-    .info-evento{
-        gap: 9px;
-    }
+    .info-evento{ gap: 9px; }
 
     .icono-info{
         width: 30px;
         height: 30px;
     }
 
-    .info-item strong{
-        font-size: .78rem;
-    }
+    .info-item strong{ font-size: .78rem; }
 
-    .info-item span{
-        font-size: .62rem;
-    }
+    .info-item span{ font-size: .62rem; }
 
-    .separador-evento{
-        height: 34px;
-    }
+    .separador-evento{ height: 34px; }
 
     .qr-box img{
         width: 98px;
         height: 98px;
     }
 
-    .codigo-acceso{
-        font-size: .62rem;
-    }
+    .codigo-acceso{ font-size: .62rem; }
 
-    .texto-acceso{
-        font-size: .66rem;
-    }
+    .texto-acceso{ font-size: .66rem; }
 }
 
-/* 1025px – 1366px — NOTEBOOK */
 @media (min-width: 1025px) and (max-width: 1366px){
-    :root{
-        --entrega-width: min(1280px, 92%);
-    }
+    :root{ --entrega-width: min(1280px, 92%); }
 
-    .form-busqueda{
-        grid-template-columns: 1fr 240px;
-    }
+    .form-busqueda{ grid-template-columns: 1fr 240px; }
 
-    .encabezado-estudiante{
-        grid-template-columns: 1fr auto;
-    }
+    .encabezado-estudiante{ grid-template-columns: 1fr auto; }
 
-    .grid-info{
-        grid-template-columns: repeat(4, minmax(0,1fr));
-    }
+    .grid-info{ grid-template-columns: repeat(4, minmax(0,1fr)); }
 
     .tarjeta{
         grid-template-columns: 230px 1fr 195px;
@@ -1026,37 +976,29 @@
         min-height: 270px;
     }
 
-    .tarjeta-center{
-        padding: 22px 28px;
-    }
+    .tarjeta-center{ padding: 22px 28px; }
 
     .qr-box img{
         width: 108px;
         height: 108px;
     }
 
-    .nombre-central{
-        font-size: clamp(1.65rem, 2.4vw, 2.3rem);
+    .nombre-central{ font-size: clamp(1.65rem, 2.4vw, 2.3rem); }
+
+    .tipo-invitacion{
+        font-size: 1.32rem;
+        max-width: 160px;
     }
 }
 
-/* 1367px – 1920px — DESKTOP */
 @media (min-width: 1367px) and (max-width: 1920px){
-    :root{
-        --entrega-width: min(1440px, 90%);
-    }
+    :root{ --entrega-width: min(1440px, 90%); }
 
-    .form-busqueda{
-        grid-template-columns: 1fr 260px;
-    }
+    .form-busqueda{ grid-template-columns: 1fr 260px; }
 
-    .encabezado-estudiante{
-        grid-template-columns: 1fr auto;
-    }
+    .encabezado-estudiante{ grid-template-columns: 1fr auto; }
 
-    .grid-info{
-        grid-template-columns: repeat(4, minmax(0,1fr));
-    }
+    .grid-info{ grid-template-columns: repeat(4, minmax(0,1fr)); }
 
     .tarjeta{
         grid-template-columns: 240px 1fr 200px;
@@ -1064,23 +1006,14 @@
     }
 }
 
-/* 1921px+ — TV / HDMI */
 @media (min-width: 1921px){
-    :root{
-        --entrega-width: min(1560px, 82%);
-    }
+    :root{ --entrega-width: min(1560px, 82%); }
 
-    .form-busqueda{
-        grid-template-columns: 1fr 280px;
-    }
+    .form-busqueda{ grid-template-columns: 1fr 280px; }
 
-    .encabezado-estudiante{
-        grid-template-columns: 1fr auto;
-    }
+    .encabezado-estudiante{ grid-template-columns: 1fr auto; }
 
-    .grid-info{
-        grid-template-columns: repeat(4, minmax(0,1fr));
-    }
+    .grid-info{ grid-template-columns: repeat(4, minmax(0,1fr)); }
 
     .tarjeta{
         grid-template-columns: 260px 1fr 220px;
@@ -1092,22 +1025,22 @@
         width: 128px;
         height: 128px;
     }
+
+    .tipo-invitacion{
+        font-size: 1.55rem;
+        max-width: 180px;
+    }
 }
 
-/* Pantalla baja: notebook con TV vía HDMI */
 @media (max-height: 800px) and (min-width: 900px){
     .hero-inner{
         padding-top: 12px;
         padding-bottom: 40px;
     }
 
-    .contenedor-entrega{
-        margin-top: -28px;
-    }
+    .contenedor-entrega{ margin-top: -28px; }
 
-    .buscador-box{
-        padding: 13px;
-    }
+    .buscador-box{ padding: 13px; }
 
     .input-busqueda,
     .btn-buscar{
@@ -1115,9 +1048,7 @@
         font-size: .86rem;
     }
 
-    .tarjeta{
-        min-height: 255px;
-    }
+    .tarjeta{ min-height: 255px; }
 
     .tarjeta-left{
         padding-top: 20px;
@@ -1130,29 +1061,22 @@
     }
 
     .tipo-invitacion{
-        font-size: 1.35rem;
+        font-size: 1.2rem;
+        max-width: 145px;
     }
 
-    .anio{
-        font-size: 1.65rem;
-    }
+    .anio{ font-size: 1.65rem; }
 
-    .texto-logro h3{
-        font-size: 2rem;
-    }
+    .texto-logro h3{ font-size: 2rem; }
 
-    .nombre-central{
-        font-size: clamp(1.4rem, 2.2vw, 2rem);
-    }
+    .nombre-central{ font-size: clamp(1.4rem, 2.2vw, 2rem); }
 
     .qr-box img{
         width: 98px;
         height: 98px;
     }
 
-    .codigo-acceso{
-        font-size: .62rem;
-    }
+    .codigo-acceso{ font-size: .62rem; }
 }
 
 /* === AJUSTES PARA CAPTURA HTML2CANVAS === */
