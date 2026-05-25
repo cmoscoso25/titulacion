@@ -160,6 +160,30 @@
     max-height:calc(100vh - 340px);
     min-height:200px;
     overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/* Tabla sin scroll horizontal: layout fijo con anchos de columna */
+.col-der .tabla-scroll table{
+    width:100%;
+    table-layout:fixed;
+    min-width:unset;
+}
+
+.col-der .tabla-scroll th:nth-child(1),
+.col-der .tabla-scroll td:nth-child(1){ width:84px; }
+
+.col-der .tabla-scroll th:nth-child(3),
+.col-der .tabla-scroll td:nth-child(3){ width:78px; }
+
+.col-der .tabla-scroll th:nth-child(4),
+.col-der .tabla-scroll td:nth-child(4){ width:92px; }
+
+/* Nombre: truncar con ellipsis */
+.col-der .tabla-scroll td:nth-child(2){
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 /* === PANEL OPERATIVO UNIFICADO === */
