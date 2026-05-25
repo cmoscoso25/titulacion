@@ -445,27 +445,57 @@
 
         await esperarImagenesDentro(elemento);
 
-        document.body.classList.add("capturando-invitacion");
+        const clon = elemento.cloneNode(true);
 
-        await new Promise(resolve => setTimeout(resolve, 250));
+        clon.style.width = "1280px";
+        clon.style.maxWidth = "1280px";
+        clon.style.minWidth = "1280px";
+        clon.style.height = "auto";
+        clon.style.minHeight = "270px";
+        clon.style.margin = "0";
+        clon.style.transform = "none";
+        clon.style.position = "relative";
+        clon.style.left = "auto";
+        clon.style.top = "auto";
+        clon.style.opacity = "1";
+        clon.style.overflow = "hidden";
 
-        const rect = elemento.getBoundingClientRect();
+        const contenedor = document.createElement("div");
 
-        const dataUrl = await htmlToImage.toPng(elemento, {
+        contenedor.style.position = "fixed";
+        contenedor.style.left = "0";
+        contenedor.style.top = "-10000px";
+        contenedor.style.width = "1280px";
+        contenedor.style.height = "auto";
+        contenedor.style.background = "#fffaf0";
+        contenedor.style.overflow = "visible";
+        contenedor.style.zIndex = "999999";
+        contenedor.style.padding = "0";
+        contenedor.style.margin = "0";
+
+        contenedor.appendChild(clon);
+        document.body.appendChild(contenedor);
+
+        await esperarImagenesDentro(clon);
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        const dataUrl = await htmlToImage.toPng(clon, {
             cacheBust: true,
             pixelRatio: 3,
             backgroundColor: "#fffaf0",
-            width: rect.width,
-            height: rect.height,
+            width: 1280,
+            height: clon.scrollHeight,
             style: {
-                width: rect.width + "px",
-                height: rect.height + "px",
+                width: "1280px",
+                maxWidth: "1280px",
+                minWidth: "1280px",
                 transform: "none",
-                opacity: "1"
+                opacity: "1",
+                overflow: "hidden"
             }
         });
 
-        document.body.classList.remove("capturando-invitacion");
+        document.body.removeChild(contenedor);
 
         const enlace = document.createElement("a");
         enlace.href = dataUrl;
