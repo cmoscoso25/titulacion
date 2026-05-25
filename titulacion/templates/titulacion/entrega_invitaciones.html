@@ -7,8 +7,8 @@
     <title>Entrega de Invitaciones | INACAP Sede Arica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}?v=4">
-    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}?v=11">
+    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}?v=11">
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -20,29 +20,18 @@
     <header class="barra">
         <div class="marca">
             <div class="logo-contenedor">
-                <img
-                    src="{% static 'titulacion/img/logo.png' %}"
-                    alt="INACAP"
-                    class="logo-inacap"
-                >
+                <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP" class="logo-inacap">
             </div>
-
-            <div class="sede">
-                Sede Arica
-            </div>
+            <div class="sede">Sede Arica</div>
         </div>
 
         <div class="zona-derecha">
-            <div class="titulo-barra">
-                Ceremonia de Titulación 2026
-            </div>
+            <div class="titulo-barra">Ceremonia de Titulación 2026</div>
 
             {% if request.user.is_authenticated %}
                 <form method="POST" action="{% url 'titulacion:logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn-cerrar-sesion">
-                        Cerrar sesión
-                    </button>
+                    <button type="submit" class="btn-cerrar-sesion">Cerrar sesión</button>
                 </form>
             {% endif %}
 
@@ -54,13 +43,9 @@
 
     <section class="hero-entrega">
         <div class="hero-inner">
-            <a href="{% url 'titulacion:inicio' %}" class="volver-link">
-                ← Volver al inicio
-            </a>
+            <a href="{% url 'titulacion:inicio' %}" class="volver-link">← Volver al inicio</a>
 
-            <h1>
-                Entrega de Invitaciones
-            </h1>
+            <h1>Entrega de Invitaciones</h1>
 
             <p>
                 Búsqueda por RUT o nombre. Si un estudiante participa en más de una ceremonia,
@@ -145,7 +130,7 @@
                                         <span>•</span>
                                         <strong>Hora:</strong> {{ item.hora_es }}
                                         <span>•</span>
-                                        <strong>Lugar:</strong> Avenida Chile 1108
+                                        <strong>Lugar:</strong> Avda. General Velásquez 1108
                                     </p>
                                 </div>
                             </div>
@@ -168,10 +153,7 @@
                                 Descargar esta ceremonia
                             </button>
 
-                            <form
-                                method="POST"
-                                action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}"
-                            >
+                            <form method="POST" action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn-accion btn-entregado">
                                     Marcar gestionadas
@@ -191,10 +173,7 @@
                                     <div class="tarjeta-left-marco"></div>
 
                                     <div class="logo-card">
-                                        <img
-                                            src="{% static 'titulacion/img/logo.png' %}"
-                                            alt="INACAP"
-                                        >
+                                        <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP">
                                     </div>
 
                                     <div class="bloque-tipo">
@@ -204,12 +183,8 @@
                                         <div class="adorno-linea"></div>
                                     </div>
 
-                                    <div class="texto-mini">
-                                        Ceremonia de Titulación
-                                    </div>
-
+                                    <div class="texto-mini">Ceremonia de Titulación</div>
                                     <div class="anio">2026</div>
-
                                     <div class="linea-deco"></div>
                                 </div>
 
@@ -255,7 +230,7 @@
                                         <div class="info-item">
                                             <div class="icono-info">●</div>
                                             <div>
-                                                <strong>Av. Chile 1108</strong>
+                                                <strong>Avda. General Velásquez 1108</strong>
                                                 <span>ARICA</span>
                                             </div>
                                         </div>
@@ -311,10 +286,7 @@
                                         <div class="tarjeta-left-marco"></div>
 
                                         <div class="logo-card">
-                                            <img
-                                                src="{% static 'titulacion/img/logo.png' %}"
-                                                alt="INACAP"
-                                            >
+                                            <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP">
                                         </div>
 
                                         <div class="bloque-tipo">
@@ -324,12 +296,8 @@
                                             <div class="adorno-linea"></div>
                                         </div>
 
-                                        <div class="texto-mini">
-                                            Ceremonia de Titulación
-                                        </div>
-
+                                        <div class="texto-mini">Ceremonia de Titulación</div>
                                         <div class="anio">2026</div>
-
                                         <div class="linea-deco"></div>
                                     </div>
 
@@ -375,7 +343,7 @@
                                             <div class="info-item">
                                                 <div class="icono-info">●</div>
                                                 <div>
-                                                    <strong>Av. Chile 1108</strong>
+                                                    <strong>Avda. General Velásquez 1108</strong>
                                                     <span>ARICA</span>
                                                 </div>
                                             </div>
