@@ -7,8 +7,8 @@
     <title>Entrega de Invitaciones | INACAP Sede Arica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}?v=3">
-    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}?v=4">
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -88,7 +88,7 @@
                     name="q"
                     value="{{ busqueda }}"
                     class="input-busqueda"
-                    placeholder="Buscar por RUT o nombre completo"
+                    placeholder="Buscar por RUT o nombre completo del estudiante"
                     autofocus
                 >
 
@@ -105,20 +105,22 @@
         {% if resultados %}
 
             <section class="resumen-resultados">
-                <strong>{{ total_resultados }}</strong>
-                ceremonia{% if total_resultados != 1 %}s{% endif %} encontrada{% if total_resultados != 1 %}s{% endif %}
-                para la búsqueda realizada.
-            </section>
+                <div class="resumen-texto">
+                    <strong>{{ total_resultados }}</strong>
+                    ceremonia{% if total_resultados != 1 %}s{% endif %} encontrada{% if total_resultados != 1 %}s{% endif %}
+                    para la búsqueda realizada.
+                </div>
 
-            <div class="acciones-globales">
-                <button
-                    type="button"
-                    class="btn-accion btn-imprimir"
-                    onclick="descargarTodasLasInvitaciones()"
-                >
-                    Descargar todas
-                </button>
-            </div>
+                <div class="acciones-globales">
+                    <button
+                        type="button"
+                        class="btn-accion btn-imprimir"
+                        onclick="descargarTodasLasInvitaciones()"
+                    >
+                        Descargar todas
+                    </button>
+                </div>
+            </section>
 
             {% for item in resultados %}
 
@@ -186,17 +188,24 @@
                             >
 
                                 <div class="tarjeta-left">
+                                    <div class="tarjeta-left-marco"></div>
+
                                     <div class="logo-card">
-                                        <span>I</span>nacap
+                                        <img
+                                            src="{% static 'titulacion/img/logo.png' %}"
+                                            alt="INACAP"
+                                        >
                                     </div>
 
                                     <div class="bloque-tipo">
+                                        <div class="adorno-linea"></div>
                                         <div class="tipo-invitacion">INVITACIÓN</div>
                                         <div class="tipo-sub">TITULADO</div>
+                                        <div class="adorno-linea"></div>
                                     </div>
 
                                     <div class="texto-mini">
-                                        Ceremonia de Titulación 2026
+                                        Ceremonia de Titulación
                                     </div>
 
                                     <div class="anio">2026</div>
@@ -205,6 +214,9 @@
                                 </div>
 
                                 <div class="tarjeta-center">
+                                    <div class="marca-agua marca-agua-izq"></div>
+                                    <div class="marca-agua marca-agua-der"></div>
+
                                     <div class="texto-logro">
                                         <small>TE INVITAMOS A CELEBRAR</small>
                                         <h3>tu logro</h3>
@@ -221,31 +233,33 @@
 
                                     <div class="info-evento">
                                         <div class="info-item">
-                                            <div class="icono-info">•</div>
+                                            <div class="icono-info">▣</div>
                                             <div>
                                                 <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
                                                 <span>2026</span>
                                             </div>
                                         </div>
 
+                                        <div class="separador-evento"></div>
+
                                         <div class="info-item">
-                                            <div class="icono-info">•</div>
+                                            <div class="icono-info">◷</div>
                                             <div>
                                                 <strong>{{ item.hora_es }}</strong>
                                                 <span>HORAS</span>
                                             </div>
                                         </div>
 
+                                        <div class="separador-evento"></div>
+
                                         <div class="info-item">
-                                            <div class="icono-info">•</div>
+                                            <div class="icono-info">●</div>
                                             <div>
                                                 <strong>Av. Chile 1108</strong>
-                                                <span>Arica</span>
+                                                <span>ARICA</span>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="sede-central">Sede Arica</div>
 
                                     <div class="carrera-box">
                                         <p>
@@ -261,6 +275,8 @@
                                 </div>
 
                                 <div class="tarjeta-right tarjeta-right-titulado">
+                                    <div class="tarjeta-right-marco"></div>
+
                                     <div class="badge-acceso badge-titulado">
                                         ACCESO TITULADO
                                     </div>
@@ -292,17 +308,24 @@
                                 >
 
                                     <div class="tarjeta-left">
+                                        <div class="tarjeta-left-marco"></div>
+
                                         <div class="logo-card">
-                                            <span>I</span>nacap
+                                            <img
+                                                src="{% static 'titulacion/img/logo.png' %}"
+                                                alt="INACAP"
+                                            >
                                         </div>
 
                                         <div class="bloque-tipo">
+                                            <div class="adorno-linea"></div>
                                             <div class="tipo-invitacion">INVITACIÓN</div>
                                             <div class="tipo-sub">INVITADO {{ invitacion.numero_invitacion }}</div>
+                                            <div class="adorno-linea"></div>
                                         </div>
 
                                         <div class="texto-mini">
-                                            Ceremonia de Titulación 2026
+                                            Ceremonia de Titulación
                                         </div>
 
                                         <div class="anio">2026</div>
@@ -311,6 +334,9 @@
                                     </div>
 
                                     <div class="tarjeta-center">
+                                        <div class="marca-agua marca-agua-izq"></div>
+                                        <div class="marca-agua marca-agua-der"></div>
+
                                         <div class="texto-logro">
                                             <small>TE INVITAMOS A CELEBRAR</small>
                                             <h3>tu logro</h3>
@@ -327,31 +353,33 @@
 
                                         <div class="info-evento">
                                             <div class="info-item">
-                                                <div class="icono-info">•</div>
+                                                <div class="icono-info">▣</div>
                                                 <div>
                                                     <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
                                                     <span>2026</span>
                                                 </div>
                                             </div>
 
+                                            <div class="separador-evento"></div>
+
                                             <div class="info-item">
-                                                <div class="icono-info">•</div>
+                                                <div class="icono-info">◷</div>
                                                 <div>
                                                     <strong>{{ item.hora_es }}</strong>
                                                     <span>HORAS</span>
                                                 </div>
                                             </div>
 
+                                            <div class="separador-evento"></div>
+
                                             <div class="info-item">
-                                                <div class="icono-info">•</div>
+                                                <div class="icono-info">●</div>
                                                 <div>
                                                     <strong>Av. Chile 1108</strong>
-                                                    <span>Arica</span>
+                                                    <span>ARICA</span>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="sede-central">Sede Arica</div>
 
                                         <div class="carrera-box">
                                             <p>
@@ -367,6 +395,8 @@
                                     </div>
 
                                     <div class="tarjeta-right tarjeta-right-invitado">
+                                        <div class="tarjeta-right-marco"></div>
+
                                         <div class="badge-acceso badge-invitado">
                                             ACCESO INVITADO
                                         </div>
