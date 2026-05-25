@@ -202,192 +202,204 @@
             </div>
         </section>
 
-        <section class="grid-registro">
+        <div class="layout-principal">
 
-            <article class="panel-lector">
-                <h2>
-                    Lector QR USB
-                </h2>
+            <div class="col-izq">
 
-                <p>
-                    Conecta el lector QR USB y apúntalo al código QR de la tarjeta del estudiante o invitado.
-                </p>
+                <section class="grid-registro">
 
-                <div class="lector-usb">
-                    <div class="indicador-lector" id="indicadorLector">
-                        <div class="pulso-qr"></div>
-                        <span id="textoIndicador">Listo para escanear</span>
+                    <article class="panel-lector">
+                        <h2>
+                            Lector QR USB
+                        </h2>
+
+                        <p>
+                            Conecta el lector QR USB y apúntalo al código QR de la tarjeta del estudiante o invitado.
+                        </p>
+
+                        <div class="lector-usb">
+                            <div class="indicador-lector" id="indicadorLector">
+                                <div class="pulso-qr"></div>
+                                <span id="textoIndicador">Listo para escanear</span>
+                            </div>
+
+                            <input
+                                id="inputQR"
+                                type="text"
+                                class="input-qr-usb"
+                                autofocus
+                                autocomplete="off"
+                                spellcheck="false"
+                                placeholder="Apunta el lector QR aquí..."
+                                aria-label="Campo de lectura QR USB"
+                            >
+                        </div>
+
+                        <div class="qr-ayuda">
+                            La lectura se valida automáticamente al detectar el código.
+                        </div>
+                    </article>
+
+                    <article class="panel-manual">
+                        <h2>
+                            Ingreso manual
+                        </h2>
+
+                        <p>
+                            Si el QR no puede escanearse, ingresa el código manualmente.
+                        </p>
+
+                        <form class="form-manual" id="formManual">
+                            <input
+                                type="text"
+                                id="codigoManual"
+                                placeholder="Ejemplo: EST-XXXXXXXX o INV-XXXXXXXX"
+                                autocomplete="off"
+                            >
+
+                            <button type="submit">
+                                Validar código
+                            </button>
+                        </form>
+                    </article>
+
+                </section>
+
+                <section id="resultado" class="resultado-validacion resultado">
+                    <h2 id="resultadoTitulo">
+                        Resultado
+                    </h2>
+
+                    <p id="resultadoMensaje">
+                        Esperando lectura de QR.
+                    </p>
+
+                    <div id="estadoVisual" class="estado-grande">
+                        Estado
                     </div>
 
-                    <input
-                        id="inputQR"
-                        type="text"
-                        class="input-qr-usb"
-                        autofocus
-                        autocomplete="off"
-                        spellcheck="false"
-                        placeholder="Apunta el lector QR aquí..."
-                        aria-label="Campo de lectura QR USB"
-                    >
-                </div>
+                    <div class="detalle-ingreso">
 
-                <div class="qr-ayuda">
-                    La lectura se valida automáticamente al detectar el código.
-                </div>
-            </article>
+                        <div class="item-detalle">
+                            <strong>Nombre</strong>
+                            <span id="detalleNombre">-</span>
+                        </div>
 
-            <article class="panel-manual">
-                <h2>
-                    Ingreso manual
-                </h2>
+                        <div class="item-detalle">
+                            <strong>RUT</strong>
+                            <span id="detalleRut">-</span>
+                        </div>
 
-                <p>
-                    Si el QR no puede escanearse, ingresa el código manualmente.
-                </p>
+                        <div class="item-detalle">
+                            <strong>Área</strong>
+                            <span id="detalleArea">-</span>
+                        </div>
 
-                <form class="form-manual" id="formManual">
-                    <input
-                        type="text"
-                        id="codigoManual"
-                        placeholder="Ejemplo: EST-XXXXXXXX o INV-XXXXXXXX"
-                        autocomplete="off"
-                    >
+                        <div class="item-detalle">
+                            <strong>Plan de estudio</strong>
+                            <span id="detallePlan">-</span>
+                        </div>
 
-                    <button type="submit">
-                        Validar código
-                    </button>
-                </form>
-            </article>
+                        <div class="item-detalle">
+                            <strong>Tipo acceso</strong>
+                            <span id="detalleTipo">-</span>
+                        </div>
 
-        </section>
+                        <div class="item-detalle">
+                            <strong>Hora validación</strong>
+                            <span id="detalleHora">-</span>
+                        </div>
 
-        <section id="resultado" class="resultado-validacion resultado">
-            <h2 id="resultadoTitulo">
-                Resultado
-            </h2>
-
-            <p id="resultadoMensaje">
-                Esperando lectura de QR.
-            </p>
-
-            <div id="estadoVisual" class="estado-grande">
-                Estado
-            </div>
-
-            <div class="detalle-ingreso">
-
-                <div class="item-detalle">
-                    <strong>Nombre</strong>
-                    <span id="detalleNombre">-</span>
-                </div>
-
-                <div class="item-detalle">
-                    <strong>RUT</strong>
-                    <span id="detalleRut">-</span>
-                </div>
-
-                <div class="item-detalle">
-                    <strong>Área</strong>
-                    <span id="detalleArea">-</span>
-                </div>
-
-                <div class="item-detalle">
-                    <strong>Plan de estudio</strong>
-                    <span id="detallePlan">-</span>
-                </div>
-
-                <div class="item-detalle">
-                    <strong>Tipo acceso</strong>
-                    <span id="detalleTipo">-</span>
-                </div>
-
-                <div class="item-detalle">
-                    <strong>Hora validación</strong>
-                    <span id="detalleHora">-</span>
-                </div>
+                    </div>
+                </section>
 
             </div>
-        </section>
 
-        <section class="ultimos-registros">
-            <h2>
-                Últimos registros
-            </h2>
+            <div class="col-der">
 
-            <p>
-                Últimos movimientos registrados por lectura QR o ingreso manual.
-            </p>
+                <section class="ultimos-registros">
+                    <h2>
+                        Últimos registros
+                    </h2>
 
-            <div class="tabla-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha / hora</th>
-                            <th>Nombre</th>
-                            <th>RUT</th>
-                            <th>Tipo</th>
-                            <th>Resultado</th>
-                            <th>Observación</th>
-                        </tr>
-                    </thead>
+                    <p>
+                        Últimos movimientos registrados por lectura QR o ingreso manual.
+                    </p>
 
-                    <tbody>
-                        {% for registro in ultimos_registros %}
-                            <tr>
-                                <td>{{ registro.fecha_hora|date:"d/m/Y H:i" }}</td>
+                    <div class="tabla-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha / hora</th>
+                                    <th>Nombre</th>
+                                    <th>RUT</th>
+                                    <th>Tipo</th>
+                                    <th>Resultado</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
 
-                                <td>
-                                    {% if registro.estudiante %}
-                                        {{ registro.estudiante.nombre_completo }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
+                            <tbody>
+                                {% for registro in ultimos_registros %}
+                                    <tr>
+                                        <td>{{ registro.fecha_hora|date:"d/m/Y H:i" }}</td>
 
-                                <td>
-                                    {% if registro.estudiante %}
-                                        {{ registro.estudiante.rut }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
+                                        <td>
+                                            {% if registro.estudiante %}
+                                                {{ registro.estudiante.nombre_completo }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
 
-                                <td>{{ registro.tipo }}</td>
+                                        <td>
+                                            {% if registro.estudiante %}
+                                                {{ registro.estudiante.rut }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
 
-                                <td>
-                                    {% if registro.resultado == "PERMITIDO" %}
-                                        <span class="estado-registro estado-abierto">
-                                            PERMITIDO
-                                        </span>
-                                    {% elif registro.resultado == "ATRASADO" %}
-                                        <span class="estado-registro estado-programado">
-                                            ATRASADO
-                                        </span>
-                                    {% elif registro.resultado == "DUPLICADO" %}
-                                        <span class="estado-registro estado-cerrado">
-                                            DUPLICADO
-                                        </span>
-                                    {% else %}
-                                        <span class="estado-registro estado-cerrado">
-                                            {{ registro.resultado }}
-                                        </span>
-                                    {% endif %}
-                                </td>
+                                        <td>{{ registro.tipo }}</td>
 
-                                <td>{{ registro.observacion|default:"-" }}</td>
-                            </tr>
+                                        <td>
+                                            {% if registro.resultado == "PERMITIDO" %}
+                                                <span class="estado-registro estado-abierto">
+                                                    PERMITIDO
+                                                </span>
+                                            {% elif registro.resultado == "ATRASADO" %}
+                                                <span class="estado-registro estado-programado">
+                                                    ATRASADO
+                                                </span>
+                                            {% elif registro.resultado == "DUPLICADO" %}
+                                                <span class="estado-registro estado-cerrado">
+                                                    DUPLICADO
+                                                </span>
+                                            {% else %}
+                                                <span class="estado-registro estado-cerrado">
+                                                    {{ registro.resultado }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
 
-                        {% empty %}
-                            <tr>
-                                <td colspan="6">
-                                    Aún no existen registros de ingreso.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                        <td>{{ registro.observacion|default:"-" }}</td>
+                                    </tr>
+
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6">
+                                            Aún no existen registros de ingreso.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
             </div>
-        </section>
+
+        </div>
 
         <footer class="footer">
             © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>

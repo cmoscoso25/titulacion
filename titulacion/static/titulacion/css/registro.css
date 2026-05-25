@@ -97,12 +97,47 @@
 .btn-cerrar{ background:#dc2626; }
 .btn-reprogramar{ background:#f59e0b; color:#111827; }
 
+/* === LAYOUT PRINCIPAL 2 COLUMNAS === */
+.layout-principal{
+    width:var(--registro-width);
+    margin:14px auto 0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    align-items:start;
+}
+
+.col-izq{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-width:0;
+}
+
+.col-der{
+    min-width:0;
+    position:sticky;
+    top:14px;
+}
+
+/* Últimos registros con scroll interno fijo */
+.col-der .ultimos-registros{
+    width:100%;
+    margin:0;
+}
+
+.col-der .tabla-scroll{
+    max-height:calc(100vh - 340px);
+    min-height:200px;
+    overflow-y:auto;
+}
+
 /* === ZONA PRINCIPAL REGISTRO === */
 .grid-registro,
 .zona-registro,
 .registro-grid{
-    width:var(--registro-width);
-    margin:14px auto 0;
+    width:100%;
+    margin:0;
     display:grid;
     grid-template-columns:1fr;
     gap:14px;
@@ -380,8 +415,14 @@
 
 /* === ÚLTIMOS REGISTROS === */
 .ultimos-registros{
-    width:var(--registro-width);
-    margin:14px auto 0;
+    width:100%;
+    margin:0;
+}
+
+/* Resultado dentro de col-izq: sin ancho fijo */
+.col-izq .resultado-validacion{
+    width:100%;
+    margin:0;
 }
 
 .lista-registros{
@@ -429,6 +470,9 @@
     .control-ceremonias{ margin-top:-22px; padding:13px; border-radius:16px; }
     .control-scroll{ border-radius:12px; }
     .tabla-ceremonias{ min-width:860px; }
+    .layout-principal{ grid-template-columns:1fr; }
+    .col-der{ position:static; }
+    .col-der .tabla-scroll{ max-height:260px; }
     .grid-registro,.zona-registro,.registro-grid{ gap:12px; }
     .panel-lector,.panel-manual,.panel-resultado,
     .panel-ultimos,.resultado-validacion,
@@ -447,6 +491,9 @@
 @media (min-width:481px) and (max-width:767px){
     :root{ --registro-width:90%; }
     .control-ceremonias{ margin-top:-24px; }
+    .layout-principal{ grid-template-columns:1fr; }
+    .col-der{ position:static; }
+    .col-der .tabla-scroll{ max-height:300px; }
     .form-manual,.form-codigo,.form-registro-manual{ grid-template-columns:1fr; }
     .form-manual button,
     .form-codigo button,
@@ -454,32 +501,29 @@
     .lector-usb{ gap:10px; }
 }
 
-/* 768px – 1024px */
+/* 768px – 1024px — TABLET */
 @media (min-width:768px) and (max-width:1024px){
     :root{ --registro-width:90%; }
-    .grid-registro,.zona-registro,.registro-grid{ grid-template-columns:1fr 1fr; }
-    .panel-resultado,.resultado-validacion,.ultimos-registros{ grid-column:1 / -1; }
+    .layout-principal{ grid-template-columns:1fr 1fr; }
+    .col-der .tabla-scroll{ max-height:calc(100vh - 320px); }
 }
 
 /* 1025px – 1366px — NOTEBOOK */
 @media (min-width:1025px) and (max-width:1366px){
     :root{ --registro-width:min(1060px,90%); }
-    .grid-registro,.zona-registro,.registro-grid{ grid-template-columns:1fr 1fr; }
-    .panel-resultado,.resultado-validacion{ grid-column:1 / -1; }
+    .layout-principal{ grid-template-columns:1fr 1fr; }
 }
 
 /* 1367px – 1920px — DESKTOP */
 @media (min-width:1367px) and (max-width:1920px){
     :root{ --registro-width:min(1160px,88%); }
-    .grid-registro,.zona-registro,.registro-grid{ grid-template-columns:1.05fr .95fr; }
-    .panel-resultado,.resultado-validacion{ grid-column:1 / -1; }
+    .layout-principal{ grid-template-columns:1fr 1fr; }
 }
 
 /* 1921px+ — TV / HDMI */
 @media (min-width:1921px){
     :root{ --registro-width:min(1260px,80%); }
-    .grid-registro,.zona-registro,.registro-grid{ grid-template-columns:1.05fr .95fr; }
-    .panel-resultado,.resultado-validacion{ grid-column:1 / -1; }
+    .layout-principal{ grid-template-columns:1fr 1fr; }
 }
 
 /* Pantalla baja: notebook con TV via HDMI */
@@ -492,4 +536,5 @@
     .panel-lector,.panel-manual,.panel-resultado,
     .panel-ultimos,.resultado-validacion,
     .ultimos-registros{ padding:13px; }
+    .col-der .tabla-scroll{ max-height:calc(100vh - 280px); }
 }
