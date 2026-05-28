@@ -75,7 +75,7 @@ titulacion_inacap/
 │   │   ├── tarjetas.html             ← impresión tarjetas institucionales
 │   │   ├── entrega_invitaciones.html ← búsqueda y descarga PNG de invitaciones
 │   │   ├── registro_ingreso.html     ← control de acceso con lector QR USB HID
-│   │   └── reportes.html             ← dashboard ejecutivo + 5 tabs + Chart.js + export Excel
+│   │   └── reportes.html             ← dashboard premium: command bar + kpi-strip + 5 tabs (segment control) + Chart.js + export Excel
 │   └── static/titulacion/css/
 │       ├── base.css              ← variables, reset, header, botones, badges globales
 │       ├── login.css             ← layout fullscreen login (usa vars de base.css)
@@ -87,7 +87,7 @@ titulacion_inacap/
 │       ├── tarjetas.css
 │       ├── entrega.css
 │       ├── registro.css          ← barra-ceremonias, layout 2 cols, panel-operativo
-│       └── reportes.css          ← hero-reportes, kpi-rep, tabs, chart-container, print
+│       └── reportes.css          ← sistema enterprise premium: command-bar, kpi-strip, segment-tabs, kpi-rep border-top, variables semánticas --c-ok/err/warn/info/navy/teal
 ├── media/                    ← imágenes QR generadas (no en git)
 ├── staticfiles/              ← salida de collectstatic (no en git)
 ├── manage.py

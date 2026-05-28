@@ -110,6 +110,28 @@ Lo mismo aplica para paneles: las clases `.panel-X` deben agregarse a la lista d
 8. Responsive 481-767px: contenedor hero (línea ~645)
 9. Responsive max-height 800px: contenedor y h1 (línea ~683)
 
+## Arquitectura visual del módulo Reportes (premium)
+
+`reportes.html` NO usa `hero-reportes`. Tiene layout propio:
+- `.rep-header` — command bar gris claro (fondo `#f8fafc`), no rojo
+- `.rep-strip` — franja blanca con 4 KPIs rápidos (IDs: `stripTit`, `stripIng`, `stripPct`, `stripPeak`)
+- `.rep-main` — fondo página `#f4f6f9`
+- `.rep-tabs-seg` — segment control tabs (pill style, no underline)
+- `.kpi-rep` — cards con `border-top` semántico + gradiente sutil de fondo
+- `.panel-rep` — paneles blancos con sombra enterprise
+
+Reglas de color para reportes:
+- NO usar `var(--rojo)` como color primario (solo en badges de denegado/error)
+- Primario: `--c-navy:#06152f` (azul marino)
+- Éxito/presencia: `--c-ok:#16a34a`
+- Alerta: `--c-warn:#d97706`
+- Error: `--c-err:#dc2626`
+
+Sistema de variables en reportes.css:
+`--c-ok`, `--c-err`, `--c-warn`, `--c-info`, `--c-navy`, `--c-teal` + sus variantes `-bg` y `-border`
+
+**REGLA**: Si se crea otro módulo de análisis/dashboard, seguir el patrón `.rep-header` + `.rep-strip` + `.rep-main` en lugar del hero rojo estándar.
+
 ## Clases principales por página
 
 ### tarjetas.html → tarjetas.css
