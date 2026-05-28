@@ -43,7 +43,7 @@
         </div>
     </header>
 
-    <section class="hero-agregar np">
+    <section class="hero-agregar">
         <div class="hero-agregar-contenido">
             <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">← Volver al inicio</a>
             <h1>Agregar Estudiante</h1>
@@ -55,7 +55,7 @@
     </section>
 
     {% if messages %}
-        <section class="mensajes-agregar np">
+        <section class="mensajes-agregar">
             {% for message in messages %}
                 <div class="mensaje {{ message.tags }}">{{ message }}</div>
             {% endfor %}
@@ -64,7 +64,7 @@
 
     <main class="contenido-agregar">
 
-        <section class="panel-formulario np">
+        <section class="panel-formulario">
             <h2>Datos del estudiante</h2>
             <p class="panel-subtitulo">
                 Todos los campos marcados con <strong>*</strong> son obligatorios.
@@ -234,7 +234,7 @@
         </section>
         {% endif %}
 
-        <footer class="footer np">
+        <footer class="footer">
             © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
             Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
         </footer>

@@ -66,15 +66,26 @@ titulacion_inacap/
 │   ├── models.py             ← EstudianteTitulado, Invitacion, Bloque, Ceremonia
 │   ├── generador_qr.py       ← generación imágenes QR con qrcode library
 │   ├── templates/titulacion/
-│   │   ├── inicio.html
-│   │   ├── tarjetas.html           ← vista de tarjetas institucionales
+│   │   ├── login.html
+│   │   ├── inicio.html               ← 6 módulos con iconos institucionales (siglas)
+│   │   ├── cargar_excel.html
+│   │   ├── agregar_estudiante.html
+│   │   ├── panel_control.html        ← dashboard KPIs + filtros + 4 tabs
+│   │   ├── cambio_ceremonia.html
+│   │   ├── tarjetas.html             ← impresión tarjetas institucionales
 │   │   ├── entrega_invitaciones.html ← búsqueda y descarga PNG de invitaciones
-│   │   └── registro_ingreso.html   ← control de acceso con lector QR USB
+│   │   └── registro_ingreso.html     ← control de acceso con lector QR USB HID
 │   └── static/titulacion/css/
-│       ├── base.css          ← variables, reset, header, botones globales
-│       ├── tarjetas.css      ← estilos exclusivos de tarjetas.html
-│       ├── entrega.css       ← estilos exclusivos de entrega_invitaciones.html
-│       └── registro.css      ← estilos exclusivos de registro_ingreso.html
+│       ├── base.css              ← variables, reset, header, botones, badges globales
+│       ├── login.css             ← layout fullscreen login (usa vars de base.css)
+│       ├── inicio.css            ← grid módulos, iconos institucionales con siglas
+│       ├── carga_excel.css
+│       ├── agregar_estudiante.css
+│       ├── dashboard.css         ← KPIs coloreados, filtros, tabs, barra-progreso
+│       ├── cambio_ceremonia.css
+│       ├── tarjetas.css
+│       ├── entrega.css
+│       └── registro.css          ← barra-ceremonias, layout 2 cols, panel-operativo
 ├── media/                    ← imágenes QR generadas (no en git)
 ├── staticfiles/              ← salida de collectstatic (no en git)
 ├── manage.py

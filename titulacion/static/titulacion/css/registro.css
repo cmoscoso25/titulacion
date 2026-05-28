@@ -78,6 +78,9 @@
     font-weight:700;
     color:var(--texto);
     white-space:nowrap;
+    max-width:150px;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .pill-bloque form{
@@ -255,13 +258,6 @@
     color:var(--texto);
 }
 
-/* Pills: truncar nombre largo con ellipsis */
-.pill-nombre{
-    max-width:150px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
 
 /* === ZONA PRINCIPAL REGISTRO (legacy, mantenido para compat) === */
 .grid-registro,

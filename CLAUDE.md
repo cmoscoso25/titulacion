@@ -76,10 +76,17 @@ Cada página tiene su propio CSS. El CSS y el HTML DEBEN usar exactamente las mi
 
 | URL | Vista (views.py) | Template | CSS |
 |-----|-----------------|----------|-----|
-| `/` | `inicio` | `inicio.html` | `base.css` |
+| `/login/` | auth Django | `login.html` | `login.css` (usa vars de base.css) |
+| `/inicio/` | `inicio` | `inicio.html` | `inicio.css` |
+| `/cargar-excel/` | `cargar_excel` | `cargar_excel.html` | `carga_excel.css` |
+| `/agregar-estudiante/` | `agregar_estudiante` | `agregar_estudiante.html` | `agregar_estudiante.css` |
+| `/panel-control/` | `panel_control` | `panel_control.html` | `dashboard.css` |
+| `/cambio-ceremonia/` | `cambio_ceremonia` | `cambio_ceremonia.html` | `cambio_ceremonia.css` |
 | `/tarjetas/` | `tarjetas_invitacion` | `tarjetas.html` | `tarjetas.css` |
 | `/entrega-invitaciones/` | `entrega_invitaciones` | `entrega_invitaciones.html` | `entrega.css` |
-| `/registro-ingreso/` | `registro_ingreso` | `registro_ingreso.html` | `registro.css` |
+| `/registro/` | `registro_ingreso` | `registro_ingreso.html` | `registro.css` |
+| `/registro-ultimos/` | `ultimos_registros_ajax` | — JSON | — |
+| `/validar-codigo/` | `validar_codigo_ingreso` | — JSON | — |
 
 **REGLA CRÍTICA**: Antes de modificar cualquier CSS, leer el HTML correspondiente para verificar las clases reales. Antes de modificar cualquier HTML, leer el CSS correspondiente. Una discrepancia de nombres de clase rompe el diseño silenciosamente.
 

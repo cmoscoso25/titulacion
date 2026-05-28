@@ -473,6 +473,27 @@
     padding-right:2px;
 }
 
+/* === KPI: variantes de color (borde izquierdo) === */
+.kpi-verde{ border-left-color:#16a34a; }
+.kpi-azul{ border-left-color:var(--azul); }
+.kpi-dorado{ border-left-color:#d97706; }
+.kpi-rojo{ border-left-color:var(--rojo); }
+
+/* === BADGES del dashboard (base en base.css, aquí solo tamaño) === */
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:22px;
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:.68rem;
+    font-weight:900;
+    white-space:nowrap;
+    background:#f1f5f9;
+    color:var(--texto-suave);
+}
+
 /* === ESTADOS === */
 .estado-ok,
 .estado-presente{ background:#dcfce7; color:#166534; }
@@ -510,6 +531,14 @@
     .kpis-dashboard,
     .kpi-grid,
     .resumen-kpis{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+
+    /* Seguimiento: ocultar columnas de baja prioridad (Inv 1, Inv 2, Gestión) */
+    #tab-seguimiento th:nth-child(7),
+    #tab-seguimiento td:nth-child(7),
+    #tab-seguimiento th:nth-child(8),
+    #tab-seguimiento td:nth-child(8),
+    #tab-seguimiento th:nth-child(9),
+    #tab-seguimiento td:nth-child(9){ display:none; }
 }
 
 /* 1025px – 1366px — NOTEBOOK */
