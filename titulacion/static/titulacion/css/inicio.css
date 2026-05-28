@@ -116,6 +116,7 @@
 .icono-qr{ background:#1d4ed8; }
 .icono-db{ background:var(--azul); }
 .icono-cc{ background:#7c3aed; }
+.icono-rp{ background:#0f766e; }
 
 .modulo h3{
     font-size:clamp(.9rem,1.1vw,1rem);

@@ -144,4 +144,22 @@ urlpatterns = [
         views.healthcheck,
         name="healthcheck",
     ),
+
+    path(
+        "reportes/",
+        acceso_curricular(views.reportes),
+        name="reportes",
+    ),
+
+    path(
+        "reportes/datos/",
+        acceso_curricular(views.datos_reportes),
+        name="datos_reportes",
+    ),
+
+    path(
+        "reportes/exportar/excel/",
+        acceso_curricular(views.exportar_reportes_excel),
+        name="exportar_reportes_excel",
+    ),
 ]

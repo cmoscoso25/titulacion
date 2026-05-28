@@ -2,7 +2,8 @@ import json
 
 from django.contrib import messages
 from django.db import IntegrityError, transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Max, Min, Q
+from django.db.models.functions import TruncHour
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -1430,6 +1431,324 @@ def agregar_estudiante(request):
             "ultimos": ultimos,
         }
     )
+
+
+def _calcular_reportes(bloque_id=None):
+    est_qs = EstudianteTitulado.objects.select_related(
+        "bloque_ceremonia", "bloque_ceremonia__ceremonia",
+        "plan_estudio", "plan_estudio__area",
+    )
+    reg_qs = RegistroIngreso.objects.select_related(
+        "estudiante", "estudiante__bloque_ceremonia",
+        "invitacion", "invitacion__estudiante",
+    )
+    inv_qs = Invitacion.objects.select_related(
+        "estudiante", "estudiante__bloque_ceremonia"
+    )
+
+    if bloque_id:
+        est_qs = est_qs.filter(bloque_ceremonia_id=bloque_id)
+        reg_qs = reg_qs.filter(estudiante__bloque_ceremonia_id=bloque_id)
+        inv_qs = inv_qs.filter(estudiante__bloque_ceremonia_id=bloque_id)
+
+    total_titulados = est_qs.count()
+    total_ingresados = est_qs.filter(ingreso_confirmado=True).count()
+    total_ausentes = total_titulados - total_ingresados
+    total_inv_usadas = inv_qs.filter(usada=True).count()
+    total_personas = total_ingresados + total_inv_usadas
+    pct_asistencia = round(total_ingresados / total_titulados * 100, 1) if total_titulados > 0 else 0.0
+
+    hora_peak_row = (
+        reg_qs
+        .filter(resultado__in=["PERMITIDO", "ATRASADO"])
+        .annotate(hora=TruncHour("fecha_hora"))
+        .values("hora")
+        .annotate(n=Count("id"))
+        .order_by("-n")
+        .first()
+    )
+    hora_peak = hora_peak_row["hora"].strftime("%H:00") if hora_peak_row and hora_peak_row["hora"] else "-"
+
+    ultimo_reg = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"]).order_by("-fecha_hora").first()
+    ultimo_ingreso_str = ultimo_reg.fecha_hora.strftime("%d/%m %H:%M") if ultimo_reg else "-"
+
+    mejor = (
+        EstudianteTitulado.objects
+        .values("bloque_ceremonia__nombre")
+        .annotate(n=Count("id", filter=Q(ingreso_confirmado=True)))
+        .order_by("-n")
+        .first()
+    )
+    ceremonia_mayor_asistencia = mejor["bloque_ceremonia__nombre"] if mejor else "-"
+
+    peor = (
+        RegistroIngreso.objects
+        .filter(resultado="ATRASADO")
+        .values("estudiante__bloque_ceremonia__nombre")
+        .annotate(n=Count("id"))
+        .order_by("-n")
+        .first()
+    )
+    ceremonia_mayor_atraso = (
+        peor["estudiante__bloque_ceremonia__nombre"]
+        if peor and peor["estudiante__bloque_ceremonia__nombre"]
+        else "-"
+    )
+
+    dashboard = {
+        "total_titulados": total_titulados,
+        "total_ingresados": total_ingresados,
+        "total_ausentes": total_ausentes,
+        "total_inv_usadas": total_inv_usadas,
+        "total_personas": total_personas,
+        "pct_asistencia": pct_asistencia,
+        "ceremonia_mayor_asistencia": ceremonia_mayor_asistencia,
+        "ceremonia_mayor_atraso": ceremonia_mayor_atraso,
+        "ultimo_ingreso": ultimo_ingreso_str,
+        "hora_peak": hora_peak,
+    }
+
+    bloques_qs = BloqueCeremonia.objects.select_related("ceremonia").order_by("fecha", "hora_inicio")
+    if bloque_id:
+        bloques_qs = bloques_qs.filter(id=bloque_id)
+
+    por_bloque = []
+    for bloque in bloques_qs:
+        est_b = EstudianteTitulado.objects.filter(bloque_ceremonia=bloque)
+        esperados = est_b.count()
+        ingresados_b = est_b.filter(ingreso_confirmado=True).count()
+        ausentes_b = esperados - ingresados_b
+        pct_b = round(ingresados_b / esperados * 100, 1) if esperados > 0 else 0.0
+
+        inv_b = Invitacion.objects.filter(estudiante__bloque_ceremonia=bloque)
+        inv_usadas_b = inv_b.filter(usada=True).count()
+        inv_no_usadas_b = inv_b.filter(usada=False).count()
+        total_asistentes_b = ingresados_b + inv_usadas_b
+
+        reg_b = RegistroIngreso.objects.filter(estudiante__bloque_ceremonia=bloque)
+        atrasados_b = reg_b.filter(resultado="ATRASADO").values("estudiante_id").distinct().count()
+
+        tiempos_b = reg_b.filter(resultado__in=["PERMITIDO", "ATRASADO"]).aggregate(
+            primer=Min("fecha_hora"), ultimo=Max("fecha_hora")
+        )
+        primer_b = tiempos_b["primer"].strftime("%H:%M") if tiempos_b["primer"] else "-"
+        ultimo_b = tiempos_b["ultimo"].strftime("%H:%M") if tiempos_b["ultimo"] else "-"
+
+        tiempo_flujo_b = "-"
+        if tiempos_b["primer"] and tiempos_b["ultimo"]:
+            delta = tiempos_b["ultimo"] - tiempos_b["primer"]
+            mins = int(delta.total_seconds() / 60)
+            h, m = divmod(mins, 60)
+            tiempo_flujo_b = f"{h}h {m}min" if h > 0 else f"{m} min"
+
+        hora_peak_b_row = (
+            reg_b
+            .filter(resultado__in=["PERMITIDO", "ATRASADO"])
+            .annotate(hora=TruncHour("fecha_hora"))
+            .values("hora")
+            .annotate(n=Count("id"))
+            .order_by("-n")
+            .first()
+        )
+        hora_peak_b = hora_peak_b_row["hora"].strftime("%H:00") if hora_peak_b_row and hora_peak_b_row["hora"] else "-"
+
+        por_bloque.append({
+            "bloque": bloque.nombre,
+            "fecha": bloque.fecha.strftime("%d/%m/%Y"),
+            "hora_inicio": str(bloque.hora_inicio)[:5],
+            "estado": bloque.estado_registro,
+            "esperados": esperados,
+            "ingresados": ingresados_b,
+            "ausentes": ausentes_b,
+            "pct": pct_b,
+            "inv_usadas": inv_usadas_b,
+            "inv_no_usadas": inv_no_usadas_b,
+            "total_asistentes": total_asistentes_b,
+            "atrasados": atrasados_b,
+            "primer_ingreso": primer_b,
+            "ultimo_ingreso": ultimo_b,
+            "tiempo_flujo": tiempo_flujo_b,
+            "hora_peak": hora_peak_b,
+        })
+
+    total_reg = reg_qs.count()
+    qr_validos = reg_qs.filter(resultado="PERMITIDO").count()
+    qr_invalidos = reg_qs.filter(resultado__in=["DENEGADO", "OTRA_CEREMONIA"]).count()
+    qr_duplicados = reg_qs.filter(resultado="DUPLICADO").count()
+    qr_atrasados = reg_qs.filter(resultado="ATRASADO").count()
+
+    por_operador = list(
+        reg_qs.values("usuario_registro").annotate(n=Count("id")).order_by("-n")
+    )
+
+    operativo = {
+        "total_registros": total_reg,
+        "qr_validos": qr_validos,
+        "qr_invalidos": qr_invalidos,
+        "qr_duplicados": qr_duplicados,
+        "qr_atrasados": qr_atrasados,
+        "intentos_fallidos": qr_invalidos + qr_duplicados,
+        "por_operador": [
+            {"usuario": o["usuario_registro"] or "Sistema", "total": o["n"]}
+            for o in por_operador
+        ],
+    }
+
+    por_hora = list(
+        reg_qs
+        .filter(resultado__in=["PERMITIDO", "ATRASADO"])
+        .annotate(hora=TruncHour("fecha_hora"))
+        .values("hora")
+        .annotate(n=Count("id"))
+        .order_by("hora")
+    )
+    por_hora_fmt = [
+        {"hora": item["hora"].strftime("%H:00") if item["hora"] else "?", "total": item["n"]}
+        for item in por_hora
+    ]
+
+    tiempos_global = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"]).aggregate(
+        primer=Min("fecha_hora"), ultimo=Max("fecha_hora"), total=Count("id")
+    )
+    prom_por_min = "-"
+    if tiempos_global["primer"] and tiempos_global["ultimo"] and tiempos_global["total"]:
+        duracion_min = max(1, int((tiempos_global["ultimo"] - tiempos_global["primer"]).total_seconds() / 60))
+        prom_por_min = round(tiempos_global["total"] / duracion_min, 2)
+
+    tiempos = {
+        "por_hora": por_hora_fmt,
+        "hora_peak": hora_peak,
+        "prom_por_minuto": prom_por_min,
+    }
+
+    return {
+        "dashboard": dashboard,
+        "por_bloque": por_bloque,
+        "operativo": operativo,
+        "tiempos": tiempos,
+    }
+
+
+def reportes(request):
+    bloques = BloqueCeremonia.objects.select_related("ceremonia").order_by("fecha", "hora_inicio", "nombre")
+    return render(request, "titulacion/reportes.html", {"bloques": bloques})
+
+
+def datos_reportes(request):
+    bloque_id = request.GET.get("bloque", "").strip() or None
+    return JsonResponse(_calcular_reportes(bloque_id=bloque_id))
+
+
+def exportar_reportes_excel(request):
+    import openpyxl
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.utils import get_column_letter
+
+    bloque_id = request.GET.get("bloque", "").strip() or None
+    datos = _calcular_reportes(bloque_id=bloque_id)
+
+    wb = openpyxl.Workbook()
+
+    def eh(cell, bg="06152F"):
+        cell.font = Font(bold=True, color="FFFFFF", size=10)
+        cell.fill = PatternFill("solid", fgColor=bg)
+        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    def cw(ws, col, w):
+        ws.column_dimensions[get_column_letter(col)].width = w
+
+    # --- Hoja 1: Dashboard ---
+    ws1 = wb.active
+    ws1.title = "Dashboard"
+    ws1.merge_cells("A1:B1")
+    c = ws1["A1"]
+    c.value = "REPORTE EJECUTIVO — CEREMONIA TITULACIÓN INACAP 2026"
+    c.font = Font(bold=True, color="FFFFFF", size=12)
+    c.fill = PatternFill("solid", fgColor="E30613")
+    c.alignment = Alignment(horizontal="left", vertical="center")
+    ws1.row_dimensions[1].height = 22
+    ws1.append(["Métrica", "Valor"])
+    for i in range(1, 3):
+        eh(ws1.cell(ws1.max_row, i))
+    d = datos["dashboard"]
+    for nombre, valor in [
+        ("Total titulados cargados", d["total_titulados"]),
+        ("Total titulados ingresados", d["total_ingresados"]),
+        ("Total ausentes", d["total_ausentes"]),
+        ("Total invitados registrados", d["total_inv_usadas"]),
+        ("Total personas ingresadas", d["total_personas"]),
+        ("% Asistencia general", f"{d['pct_asistencia']}%"),
+        ("Ceremonia mayor asistencia", d["ceremonia_mayor_asistencia"]),
+        ("Ceremonia mayor atraso", d["ceremonia_mayor_atraso"]),
+        ("Último ingreso registrado", d["ultimo_ingreso"]),
+        ("Hora peak de ingresos", d["hora_peak"]),
+    ]:
+        ws1.append([nombre, valor])
+    cw(ws1, 1, 42)
+    cw(ws1, 2, 28)
+
+    # --- Hoja 2: Por Ceremonia ---
+    ws2 = wb.create_sheet("Por Ceremonia")
+    cols2 = ["Bloque", "Fecha", "Hora", "Estado", "Esperados", "Ingresados",
+             "Ausentes", "% Asist.", "Inv. Usadas", "Inv. No usadas",
+             "Total asistentes", "Atrasados", "Primer ingreso", "Último ingreso",
+             "Tiempo flujo", "Hora peak"]
+    ws2.append(cols2)
+    for i in range(1, len(cols2) + 1):
+        eh(ws2.cell(1, i))
+    for b in datos["por_bloque"]:
+        ws2.append([
+            b["bloque"], b["fecha"], b["hora_inicio"], b["estado"],
+            b["esperados"], b["ingresados"], b["ausentes"], f"{b['pct']}%",
+            b["inv_usadas"], b["inv_no_usadas"], b["total_asistentes"],
+            b["atrasados"], b["primer_ingreso"], b["ultimo_ingreso"],
+            b["tiempo_flujo"], b["hora_peak"],
+        ])
+    for i, w in enumerate([30, 12, 8, 12, 10, 10, 10, 10, 11, 13, 14, 10, 13, 13, 12, 10], start=1):
+        cw(ws2, i, w)
+
+    # --- Hoja 3: Operativo ---
+    ws3 = wb.create_sheet("Operativo")
+    ws3.append(["Métrica QR", "Total"])
+    for i in range(1, 3):
+        eh(ws3.cell(1, i))
+    op = datos["operativo"]
+    for nombre, valor in [
+        ("QR válidos (PERMITIDO)", op["qr_validos"]),
+        ("QR inválidos (DENEGADO + OTRA_CEREMONIA)", op["qr_invalidos"]),
+        ("QR duplicados", op["qr_duplicados"]),
+        ("Ingresos atrasados", op["qr_atrasados"]),
+        ("Intentos fallidos", op["intentos_fallidos"]),
+        ("Total registros", op["total_registros"]),
+    ]:
+        ws3.append([nombre, valor])
+    ws3.append([])
+    ws3.append(["Operador", "Registros"])
+    for i in range(1, 3):
+        eh(ws3.cell(ws3.max_row, i))
+    for o in op["por_operador"]:
+        ws3.append([o["usuario"], o["total"]])
+    cw(ws3, 1, 40)
+    cw(ws3, 2, 14)
+
+    # --- Hoja 4: Tiempos ---
+    ws4 = wb.create_sheet("Tiempos")
+    ws4.append(["Hora", "Ingresos"])
+    for i in range(1, 3):
+        eh(ws4.cell(1, i))
+    for item in datos["tiempos"]["por_hora"]:
+        ws4.append([item["hora"], item["total"]])
+    ws4.append([])
+    ws4.append(["Promedio registros/min", datos["tiempos"]["prom_por_minuto"]])
+    cw(ws4, 1, 14)
+    cw(ws4, 2, 14)
+
+    resp = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    resp["Content-Disposition"] = 'attachment; filename="reporte_titulacion_2026.xlsx"'
+    wb.save(resp)
+    return resp
 
 
 def healthcheck(request):

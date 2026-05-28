@@ -1,0 +1,540 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reportes | INACAP Sede Arica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/reportes.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+<div class="marco">
+
+    <header class="barra">
+        <div class="marca">
+            <div class="logo-contenedor">
+                <img
+                    src="{% static 'titulacion/img/logo.png' %}"
+                    alt="INACAP"
+                    class="logo-inacap"
+                >
+            </div>
+            <div class="sede">Sede Arica</div>
+        </div>
+
+        <div class="zona-derecha">
+            <div class="titulo-barra">Ceremonia de Titulación 2026</div>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cerrar-sesion">Cerrar sesión</button>
+                </form>
+            {% endif %}
+
+            <div class="avatar" title="{{ request.user.username }}">
+                {{ request.user.username|slice:":2"|upper }}
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-reportes">
+        <div class="hero-reportes-contenido">
+
+            <div>
+                <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">← Volver al inicio</a>
+                <h1>Reportes</h1>
+                <p>Análisis ejecutivo de ceremonias, asistencia, operación QR y tiempos de ingreso.</p>
+            </div>
+
+            <div class="hero-acciones">
+                <select id="filtroBloque" title="Filtrar por bloque de ceremonia">
+                    <option value="">Todas las ceremonias</option>
+                    {% for bloque in bloques %}
+                        <option value="{{ bloque.id }}">{{ bloque.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+                <a
+                    id="btnExcel"
+                    href="{% url 'titulacion:exportar_reportes_excel' %}"
+                    class="btn-exportar-excel"
+                    title="Descargar reporte en Excel"
+                >
+                    ↓ Excel
+                </a>
+
+                <button
+                    type="button"
+                    class="btn-exportar-pdf"
+                    onclick="window.print()"
+                    title="Imprimir reporte como PDF"
+                >
+                    ⎙ Imprimir
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    {% if messages %}
+        <section class="mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main class="contenido-reportes">
+
+        <!-- TABS -->
+        <div class="tabs-reportes">
+            <div class="tab-reporte activo" onclick="cambiarTab('dashboard', this)">Dashboard</div>
+            <div class="tab-reporte" onclick="cambiarTab('ceremonia', this)">Por Ceremonia</div>
+            <div class="tab-reporte" onclick="cambiarTab('operativo', this)">Operativo</div>
+            <div class="tab-reporte" onclick="cambiarTab('tiempos', this)">Tiempos</div>
+            <div class="tab-reporte" onclick="cambiarTab('comparativo', this)">Comparativo</div>
+        </div>
+
+        <!-- TAB 1: Dashboard ejecutivo -->
+        <div id="tab-dashboard" class="panel-tab-rep activo" data-titulo="Dashboard Ejecutivo">
+
+            <div class="kpis-reportes">
+
+                <div class="kpi-rep kpi-azul">
+                    <span class="kpi-rep-label">Total titulados</span>
+                    <span class="kpi-rep-valor" id="kpiTotalTitulados">—</span>
+                    <span class="kpi-rep-sub">Cargados en el sistema</span>
+                </div>
+
+                <div class="kpi-rep kpi-verde">
+                    <span class="kpi-rep-label">Titulados ingresados</span>
+                    <span class="kpi-rep-valor" id="kpiTotalIngresados">—</span>
+                    <span class="kpi-rep-sub">Confirmados en acceso</span>
+                </div>
+
+                <div class="kpi-rep kpi-rojo">
+                    <span class="kpi-rep-label">Ausentes</span>
+                    <span class="kpi-rep-valor" id="kpiTotalAusentes">—</span>
+                    <span class="kpi-rep-sub">No se presentaron</span>
+                </div>
+
+                <div class="kpi-rep kpi-dorado">
+                    <span class="kpi-rep-label">Invitados registrados</span>
+                    <span class="kpi-rep-valor" id="kpiTotalInvitados">—</span>
+                    <span class="kpi-rep-sub">Invitaciones usadas</span>
+                </div>
+
+                <div class="kpi-rep kpi-teal">
+                    <span class="kpi-rep-label">Total personas</span>
+                    <span class="kpi-rep-valor" id="kpiTotalPersonas">—</span>
+                    <span class="kpi-rep-sub">Titulados + invitados</span>
+                </div>
+
+                <div class="kpi-rep kpi-verde">
+                    <span class="kpi-rep-label">% Asistencia general</span>
+                    <span class="kpi-rep-valor" id="kpiPctAsistencia">—</span>
+                    <span class="kpi-rep-sub">Titulados presentes</span>
+                </div>
+
+                <div class="kpi-rep kpi-azul">
+                    <span class="kpi-rep-label">Mayor asistencia</span>
+                    <span class="kpi-rep-valor" id="kpiMayorAsistencia" style="font-size:clamp(.72rem,.9vw,.8rem);line-height:1.2">—</span>
+                    <span class="kpi-rep-sub">Ceremonia más concurrida</span>
+                </div>
+
+                <div class="kpi-rep kpi-rojo">
+                    <span class="kpi-rep-label">Mayor atraso</span>
+                    <span class="kpi-rep-valor" id="kpiMayorAtraso" style="font-size:clamp(.72rem,.9vw,.8rem);line-height:1.2">—</span>
+                    <span class="kpi-rep-sub">Ceremonia con más tardíos</span>
+                </div>
+
+                <div class="kpi-rep kpi-dorado">
+                    <span class="kpi-rep-label">Hora peak</span>
+                    <span class="kpi-rep-valor" id="kpiHoraPeak">—</span>
+                    <span class="kpi-rep-sub">Mayor flujo de ingreso</span>
+                </div>
+
+                <div class="kpi-rep">
+                    <span class="kpi-rep-label">Último ingreso</span>
+                    <span class="kpi-rep-valor" id="kpiUltimoIngreso" style="font-size:clamp(.86rem,1.1vw,.95rem);line-height:1.2">—</span>
+                    <span class="kpi-rep-sub">Registro más reciente</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TAB 2: Por Ceremonia -->
+        <div id="tab-ceremonia" class="panel-tab-rep" data-titulo="Reporte por Ceremonia">
+
+            <div class="panel-rep">
+                <div class="panel-rep-titulo">
+                    Detalle por bloque de ceremonia
+                    <small>Métricas de asistencia e invitaciones por bloque</small>
+                </div>
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bloque</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Estado</th>
+                                <th>Esperados</th>
+                                <th>Ingresados</th>
+                                <th>Ausentes</th>
+                                <th>% Asist.</th>
+                                <th>Inv. usadas</th>
+                                <th>Inv. libres</th>
+                                <th>Total asist.</th>
+                                <th>Atrasados</th>
+                                <th>Primer ing.</th>
+                                <th>Último ing.</th>
+                                <th>Tiempo flujo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCeremonia">
+                            <tr><td colspan="15">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 3: Operativo -->
+        <div id="tab-operativo" class="panel-tab-rep" data-titulo="Reporte Operativo QR">
+
+            <div class="kpis-op">
+                <div class="kpi-rep kpi-verde">
+                    <span class="kpi-rep-label">QR válidos</span>
+                    <span class="kpi-rep-valor" id="opQrValidos">—</span>
+                    <span class="kpi-rep-sub">Resultado: PERMITIDO</span>
+                </div>
+                <div class="kpi-rep kpi-rojo">
+                    <span class="kpi-rep-label">QR inválidos</span>
+                    <span class="kpi-rep-valor" id="opQrInvalidos">—</span>
+                    <span class="kpi-rep-sub">DENEGADO + OTRA_CEREM.</span>
+                </div>
+                <div class="kpi-rep kpi-dorado">
+                    <span class="kpi-rep-label">QR duplicados</span>
+                    <span class="kpi-rep-valor" id="opQrDuplicados">—</span>
+                    <span class="kpi-rep-sub">Ya habían ingresado</span>
+                </div>
+                <div class="kpi-rep kpi-dorado">
+                    <span class="kpi-rep-label">Ingresos atrasados</span>
+                    <span class="kpi-rep-valor" id="opQrAtrasados">—</span>
+                    <span class="kpi-rep-sub">Después del cierre</span>
+                </div>
+                <div class="kpi-rep kpi-rojo">
+                    <span class="kpi-rep-label">Intentos fallidos</span>
+                    <span class="kpi-rep-valor" id="opIntentosF">—</span>
+                    <span class="kpi-rep-sub">Inválidos + duplicados</span>
+                </div>
+                <div class="kpi-rep kpi-azul">
+                    <span class="kpi-rep-label">Total registros</span>
+                    <span class="kpi-rep-valor" id="opTotalReg">—</span>
+                    <span class="kpi-rep-sub">Todos los intentos</span>
+                </div>
+            </div>
+
+            <div class="panel-rep">
+                <div class="panel-rep-titulo">Registros por operador</div>
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operador / usuario</th>
+                                <th>Registros realizados</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaOperador">
+                            <tr><td colspan="2">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 4: Tiempos -->
+        <div id="tab-tiempos" class="panel-tab-rep" data-titulo="Reporte de Tiempos">
+
+            <div class="kpis-op" style="grid-template-columns:repeat(2,1fr);margin-bottom:10px">
+                <div class="kpi-rep kpi-dorado">
+                    <span class="kpi-rep-label">Hora peak</span>
+                    <span class="kpi-rep-valor" id="tiempoHoraPeak">—</span>
+                    <span class="kpi-rep-sub">Mayor concentración de ingresos</span>
+                </div>
+                <div class="kpi-rep kpi-azul">
+                    <span class="kpi-rep-label">Promedio ingresos/min</span>
+                    <span class="kpi-rep-valor" id="tiempoPromMin">—</span>
+                    <span class="kpi-rep-sub">Durante el período de registro</span>
+                </div>
+            </div>
+
+            <div class="panel-rep">
+                <div class="panel-rep-titulo">Curva de ingresos por hora</div>
+                <div class="chart-container">
+                    <canvas id="chartTiempos"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 5: Comparativo -->
+        <div id="tab-comparativo" class="panel-tab-rep" data-titulo="Comparativo entre Ceremonias">
+
+            <div class="panel-rep">
+                <div class="panel-rep-titulo">
+                    Comparativo general entre bloques
+                    <small>Todas las ceremonias en una vista</small>
+                </div>
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ceremonia / bloque</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Titulados</th>
+                                <th>Ingresados</th>
+                                <th>% Asist.</th>
+                                <th>Invitados</th>
+                                <th>Total asist.</th>
+                                <th>Atrasados</th>
+                                <th>Hora peak</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaComparativo">
+                            <tr><td colspan="10">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="rep-actualizacion">
+            Última actualización: <span id="repUltimaActualizacion">—</span>
+        </div>
+
+        <footer class="footer">
+            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
+            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    const URL_DATOS   = "{% url 'titulacion:datos_reportes' %}";
+    const URL_EXCEL   = "{% url 'titulacion:exportar_reportes_excel' %}";
+    const filtroBloque = document.getElementById("filtroBloque");
+    const btnExcel     = document.getElementById("btnExcel");
+
+    let graficoTiempos = null;
+
+    /* === TABS === */
+    function cambiarTab(nombre, el) {
+        document.querySelectorAll(".panel-tab-rep").forEach(function(p) { p.classList.remove("activo"); });
+        document.querySelectorAll(".tab-reporte").forEach(function(t) { t.classList.remove("activo"); });
+        document.getElementById("tab-" + nombre).classList.add("activo");
+        el.classList.add("activo");
+    }
+
+    /* === HELPERS === */
+    function set(id, val) {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = val; }
+    }
+
+    function badgeEstado(estado) {
+        const map = {
+            "ABIERTA": '<span class="badge badge-si">ABIERTA</span>',
+            "CERRADA": '<span class="badge badge-no">CERRADA</span>',
+            "PROGRAMADA": '<span class="badge badge-atrasado">PROGRAMADA</span>',
+        };
+        return map[estado] || estado;
+    }
+
+    function _esc(v) {
+        return String(v || "-")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    /* === RENDER DASHBOARD === */
+    function renderDashboard(d) {
+        set("kpiTotalTitulados", d.total_titulados);
+        set("kpiTotalIngresados", d.total_ingresados);
+        set("kpiTotalAusentes", d.total_ausentes);
+        set("kpiTotalInvitados", d.total_inv_usadas);
+        set("kpiTotalPersonas", d.total_personas);
+        set("kpiPctAsistencia", d.pct_asistencia + "%");
+        set("kpiMayorAsistencia", d.ceremonia_mayor_asistencia);
+        set("kpiMayorAtraso", d.ceremonia_mayor_atraso);
+        set("kpiHoraPeak", d.hora_peak);
+        set("kpiUltimoIngreso", d.ultimo_ingreso);
+    }
+
+    /* === RENDER POR CEREMONIA === */
+    function renderCeremonia(bloques) {
+        const tbody = document.getElementById("tablaCeremonia");
+        if (!bloques.length) {
+            tbody.innerHTML = '<tr><td colspan="15">Sin datos para el filtro seleccionado.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = bloques.map(function(b) {
+            return '<tr>' +
+                '<td>' + _esc(b.bloque) + '</td>' +
+                '<td>' + _esc(b.fecha) + '</td>' +
+                '<td>' + _esc(b.hora_inicio) + '</td>' +
+                '<td>' + badgeEstado(b.estado) + '</td>' +
+                '<td>' + b.esperados + '</td>' +
+                '<td>' + b.ingresados + '</td>' +
+                '<td>' + b.ausentes + '</td>' +
+                '<td><strong>' + b.pct + '%</strong></td>' +
+                '<td>' + b.inv_usadas + '</td>' +
+                '<td>' + b.inv_no_usadas + '</td>' +
+                '<td><strong>' + b.total_asistentes + '</strong></td>' +
+                '<td>' + b.atrasados + '</td>' +
+                '<td>' + _esc(b.primer_ingreso) + '</td>' +
+                '<td>' + _esc(b.ultimo_ingreso) + '</td>' +
+                '<td>' + _esc(b.tiempo_flujo) + '</td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    /* === RENDER OPERATIVO === */
+    function renderOperativo(op) {
+        set("opQrValidos", op.qr_validos);
+        set("opQrInvalidos", op.qr_invalidos);
+        set("opQrDuplicados", op.qr_duplicados);
+        set("opQrAtrasados", op.qr_atrasados);
+        set("opIntentosF", op.intentos_fallidos);
+        set("opTotalReg", op.total_registros);
+
+        const tbody = document.getElementById("tablaOperador");
+        if (!op.por_operador.length) {
+            tbody.innerHTML = '<tr><td colspan="2">Sin registros de operadores.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = op.por_operador.map(function(o) {
+            return '<tr><td>' + _esc(o.usuario) + '</td><td>' + o.total + '</td></tr>';
+        }).join('');
+    }
+
+    /* === RENDER TIEMPOS === */
+    function renderTiempos(t) {
+        set("tiempoHoraPeak", t.hora_peak);
+        set("tiempoPromMin", t.prom_por_minuto === "-" ? "-" : t.prom_por_minuto + " reg/min");
+
+        const ctx = document.getElementById("chartTiempos").getContext("2d");
+        const labels = t.por_hora.map(function(h) { return h.hora; });
+        const data   = t.por_hora.map(function(h) { return h.total; });
+
+        if (graficoTiempos) {
+            graficoTiempos.data.labels = labels;
+            graficoTiempos.data.datasets[0].data = data;
+            graficoTiempos.update();
+            return;
+        }
+
+        graficoTiempos = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Ingresos",
+                    data: data,
+                    backgroundColor: "rgba(6,21,47,.75)",
+                    borderColor: "#06152f",
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, font: { size: 11 } },
+                        grid: { color: "#edf1f7" }
+                    },
+                    x: {
+                        ticks: { font: { size: 11 } },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    /* === RENDER COMPARATIVO === */
+    function renderComparativo(bloques) {
+        const tbody = document.getElementById("tablaComparativo");
+        if (!bloques.length) {
+            tbody.innerHTML = '<tr><td colspan="10">Sin datos para el filtro seleccionado.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = bloques.map(function(b) {
+            return '<tr>' +
+                '<td><strong>' + _esc(b.bloque) + '</strong></td>' +
+                '<td>' + _esc(b.fecha) + '</td>' +
+                '<td>' + badgeEstado(b.estado) + '</td>' +
+                '<td>' + b.esperados + '</td>' +
+                '<td>' + b.ingresados + '</td>' +
+                '<td><strong>' + b.pct + '%</strong></td>' +
+                '<td>' + b.inv_usadas + '</td>' +
+                '<td><strong>' + b.total_asistentes + '</strong></td>' +
+                '<td>' + b.atrasados + '</td>' +
+                '<td>' + _esc(b.hora_peak) + '</td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    /* === CARGA PRINCIPAL === */
+    async function cargarReportes() {
+        const bloque = filtroBloque.value;
+        const params = bloque ? "?bloque=" + bloque : "";
+
+        btnExcel.href = URL_EXCEL + params;
+
+        try {
+            const resp = await fetch(URL_DATOS + params);
+            if (!resp.ok) { throw new Error("Error " + resp.status); }
+            const datos = await resp.json();
+
+            renderDashboard(datos.dashboard);
+            renderCeremonia(datos.por_bloque);
+            renderOperativo(datos.operativo);
+            renderTiempos(datos.tiempos);
+            renderComparativo(datos.por_bloque);
+
+            const ahora = new Date();
+            document.getElementById("repUltimaActualizacion").textContent =
+                ahora.toLocaleTimeString("es-CL");
+
+        } catch (err) {
+            console.error("Error cargando reportes:", err);
+        }
+    }
+
+    filtroBloque.addEventListener("change", cargarReportes);
+
+    cargarReportes();
+</script>
+
+</body>
+</html>

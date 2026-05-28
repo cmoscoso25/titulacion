@@ -85,6 +85,9 @@ Cada página tiene su propio CSS. El CSS y el HTML DEBEN usar exactamente las mi
 | `/tarjetas/` | `tarjetas_invitacion` | `tarjetas.html` | `tarjetas.css` |
 | `/entrega-invitaciones/` | `entrega_invitaciones` | `entrega_invitaciones.html` | `entrega.css` |
 | `/registro/` | `registro_ingreso` | `registro_ingreso.html` | `registro.css` |
+| `/reportes/` | `reportes` | `reportes.html` | `reportes.css` |
+| `/reportes/datos/` | `datos_reportes` | — JSON | — |
+| `/reportes/exportar/excel/` | `exportar_reportes_excel` | — Excel | — |
 | `/registro-ultimos/` | `ultimos_registros_ajax` | — JSON | — |
 | `/validar-codigo/` | `validar_codigo_ingreso` | — JSON | — |
 
