@@ -65,6 +65,7 @@ body {
     height: 28px;
     flex-shrink: 0;
     display: block;
+    mix-blend-mode: lighten; /* funde el fondo oscuro del PNG con el sidebar */
 }
 
 .ops-brand-label {
@@ -195,9 +196,8 @@ body {
 }
 
 .ops-topbar-logo-cap {
-    background: var(--negro-ops);
-    border-radius: 5px;
-    padding: 3px 10px;
+    background: transparent;
+    padding: 0 4px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -206,6 +206,8 @@ body {
 .ops-topbar-logo-img {
     height: 22px;
     display: block;
+    /* invert: fondo oscuro→blanco, texto blanco→negro; hue-rotate: restaura rojo institucional */
+    filter: invert(1) hue-rotate(180deg);
 }
 
 .ops-topbar-sep {
