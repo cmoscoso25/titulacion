@@ -55,8 +55,8 @@ body {
 .ops-sidebar-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 13px 16px;
+    justify-content: center;
+    padding: 14px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
 }
