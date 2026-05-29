@@ -1,370 +1,252 @@
 /* ============================================================
-   REGISTRO DE INGRESO — layout institucional ops-*
+   REGISTRO DE INGRESO — Centro de Control Operativo
    ============================================================ */
 
 /* ============================================================
-   CABECERA DEL MÓDULO
+   LAYOUT PRINCIPAL
    ============================================================ */
-.reg-mod-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.reg-mod-titulo {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    line-height: 1.3;
-}
-
-.reg-mod-titulo svg {
-    width: 17px;
-    height: 17px;
-    max-width: 17px;
-    max-height: 17px;
-    min-width: 17px;
-    min-height: 17px;
-    color: #e2001a;
-    flex-shrink: 0;
-    display: block;
-}
-
-.reg-mod-desc {
-    font-size: 0.76rem;
-    color: #6b7280;
-    margin: 0;
-    max-width: 600px;
-    line-height: 1.4;
-}
-
-.reg-volver {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.74rem;
-    font-weight: 500;
-    color: #6b7280;
-    text-decoration: none;
-    padding: 5px 10px;
-    border: 1px solid #dbe3ea;
-    border-radius: 6px;
-    background: #fff;
-    white-space: nowrap;
-    transition: border-color 0.13s, color 0.13s;
-    flex-shrink: 0;
-}
-
-.reg-volver svg {
-    width: 13px;
-    height: 13px;
-}
-
-.reg-volver:hover {
-    border-color: #e2001a;
-    color: #e2001a;
-    text-decoration: none;
-}
-
-/* ============================================================
-   BARRA DE CEREMONIAS
-   ============================================================ */
-.barra-ceremonias {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    background: #ffffff;
-    border: 1px solid #dbe3ea;
-    border-radius: 8px;
-    padding: 10px 14px;
-}
-
-.barra-leyenda {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.pills-ceremonias {
-    display: flex;
-    gap: 7px;
-    flex-wrap: wrap;
-    flex: 1;
-    align-items: center;
-}
-
-.pill-bloque {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #f8fafc;
-    border: 1px solid #dbe3ea;
-    border-radius: 999px;
-    padding: 4px 10px 4px 12px;
-}
-
-.pill-nombre {
-    font-size: 0.76rem;
-    font-weight: 700;
-    color: #1f2937;
-    white-space: nowrap;
-    max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.pill-bloque form {
-    display: inline-flex;
-    align-items: center;
-}
-
-.estado-registro {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-}
-
-.estado-abierto  { background: #dcfce7; color: #15803d; }
-.estado-cerrado  { background: #fee2e2; color: #dc2626; }
-.estado-programado { background: #fef3c7; color: #d97706; }
-
-.barra-sin-ceremonias {
-    font-size: 0.8rem;
-    color: #6b7280;
-}
-
-/* ============================================================
-   BOTONES DE CONTROL DE BLOQUE
-   ============================================================ */
-.btn-abrir,
-.btn-cerrar,
-.btn-reprogramar {
-    min-height: 22px;
-    padding: 0 9px;
-    border-radius: 999px;
-    font-size: 0.66rem;
-    font-weight: 700;
-    white-space: nowrap;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-abrir       { background: #16a34a; }
-.btn-cerrar      { background: #dc2626; }
-.btn-reprogramar { background: #f59e0b; color: #111827; }
-
-/* ============================================================
-   LAYOUT PRINCIPAL 2 COLUMNAS
-   ============================================================ */
-.layout-principal {
+.reg-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 12px;
     align-items: start;
 }
 
-.col-izq {
+/* ============================================================
+   CABECERA DE PANEL (título interno de card)
+   ============================================================ */
+.reg-panel-titulo {
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    min-width: 0;
-}
-
-.col-der {
-    min-width: 0;
-    position: sticky;
-    top: 14px;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6b7280;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f3f4f6;
 }
 
 /* ============================================================
-   PANEL OPERATIVO (QR + manual + resultado)
+   PANEL ESTACIÓN DE ESCANEO
    ============================================================ */
-.panel-operativo {
+.reg-panel-escaner {
     background: #ffffff;
     border: 1px solid #dbe3ea;
     border-radius: 10px;
-    padding: clamp(14px, 1.8vw, 20px);
-}
-
-.bloque-lector h2,
-.bloque-manual h2 {
-    font-size: 0.86rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #1f2937;
-}
-
-.bloque-divisor {
-    height: 1px;
-    background: #f3f4f6;
-    margin: 14px 0;
-}
-
-/* Resultado dentro del panel — sin card propio */
-.panel-operativo .resultado-validacion {
-    border: none;
-    background: transparent;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Ocultar caja "Estado" y detalles cuando no hay lectura */
-.resultado-validacion:not(.visible) .estado-grande { display: none; }
-.resultado-validacion:not(.visible) .detalle-ingreso { display: none; }
-.resultado-validacion:not(.visible) p {
-    font-size: 0.8rem;
-    color: #6b7280;
-    margin: 0;
-}
-
-/* Títulos del resultado */
-.resultado-validacion h2 {
-    font-size: 0.86rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: #1f2937;
-}
-
-/* ============================================================
-   LECTOR QR USB HID
-   ============================================================ */
-.lector-usb {
-    width: 100%;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+}
+
+/* ─── LECTOR QR ─── */
+.lector-usb {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .indicador-lector {
     width: 100%;
-    min-height: 76px;
+    min-height: 120px;
     border-radius: 10px;
     border: 2px solid #dbe3ea;
     background: #f0fdf4;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    font-size: 0.86rem;
+    gap: 12px;
+    font-size: 0.92rem;
     font-weight: 700;
     color: #166534;
-    transition: background 0.25s, border-color 0.25s, color 0.25s;
+    transition: background 0.22s, border-color 0.22s, color 0.22s;
+    cursor: pointer;
 }
 
-.indicador-lector.lector-enfocado { border-color: #16a34a; background: #dcfce7; }
-.indicador-lector.lector-procesando { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
-.indicador-lector.lector-capturando { background: #dbeafe; border-color: #3b82f6; color: #1d4ed8; }
-.indicador-lector.lector-sin-foco   { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+.indicador-lector.lector-enfocado    { border-color: #16a34a; background: #dcfce7; }
+.indicador-lector.lector-procesando  { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+.indicador-lector.lector-capturando  { background: #dbeafe; border-color: #3b82f6; color: #1d4ed8; }
+.indicador-lector.lector-sin-foco    { background: #fef9c3; border-color: #eab308; color: #713f12; }
 
 .pulso-qr {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: #16a34a;
+    flex-shrink: 0;
     animation: pulso 1.4s ease-in-out infinite;
 }
 
 .lector-procesando .pulso-qr { background: #f59e0b; animation: none; }
-.lector-capturando .pulso-qr { background: #3b82f6; animation: pulso 0.5s ease-in-out infinite; }
-.lector-sin-foco   .pulso-qr { background: #f59e0b; animation: none; }
+.lector-capturando .pulso-qr { background: #3b82f6; animation: pulso 0.45s ease-in-out infinite; }
+.lector-sin-foco   .pulso-qr { background: #eab308; animation: none; }
 
 @keyframes pulso {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.45; transform: scale(0.75); }
+    50%       { opacity: 0.4; transform: scale(0.72); }
 }
 
 .input-qr-usb {
     width: 100%;
-    min-height: 44px;
-    padding: 0 14px;
-    border-radius: 8px;
-    border: 1px solid #dbe3ea;
-    background: #fff;
-    font-size: 0.88rem;
-    font-weight: 700;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    font-size: 0.78rem;
+    font-weight: 600;
     letter-spacing: 0.04em;
-    color: #1f2937;
+    color: #374151;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.18s;
     font-family: inherit;
     box-sizing: border-box;
 }
 
-.input-qr-usb:focus {
-    border-color: #16a34a;
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
-}
+.input-qr-usb:focus { border-color: #16a34a; background: #fff; }
 
 .input-qr-usb::placeholder {
     color: #9ca3af;
-    font-weight: 500;
+    font-weight: 400;
     letter-spacing: 0;
-}
-
-.qr-ayuda,
-.lector-ayuda {
-    margin-top: 8px;
-    text-align: center;
     font-size: 0.72rem;
-    color: #6b7280;
-    font-weight: 500;
 }
 
-/* ============================================================
-   INGRESO MANUAL
-   ============================================================ */
+/* ─── RESULTADO DE VALIDACIÓN ─── */
+.resultado-validacion {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.resultado-validacion.permitido { border-color: #86efac; background: #f0fdf4; }
+.resultado-validacion.atrasado  { border-color: #fcd34d; background: #fffbeb; }
+.resultado-validacion.rechazado { border-color: #fca5a5; background: #fff1f1; }
+.resultado-validacion.error     { border-color: #d1d5db; background: #f9fafb; }
+
+.estado-grande {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-align: center;
+    padding: 12px 16px;
+    background: #f1f5f9;
+    color: #9ca3af;
+    transition: background 0.2s, color 0.2s;
+}
+
+.estado-grande.estado-ok        { background: #dcfce7; color: #166534; }
+.estado-grande.estado-tarde      { background: #fef3c7; color: #92400e; }
+.estado-grande.estado-no         { background: #fee2e2; color: #991b1b; }
+.estado-grande.estado-alerta     { background: #fef3c7; color: #92400e; }
+.estado-grande.estado-duplicado  { background: #fef3c7; color: #92400e; }
+
+.resultado-detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 10px 14px;
+}
+
+.rd-item {
+    padding: 5px 6px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.rd-item:nth-child(odd)  { border-right: 1px solid #f3f4f6; }
+.rd-item:last-child      { border-bottom: none; }
+.rd-item:nth-last-child(2) { border-bottom: none; }
+
+.rd-item--wide {
+    grid-column: 1 / -1;
+    border-right: none;
+}
+
+.rd-item strong {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    margin-bottom: 1px;
+}
+
+.rd-item span {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ocultar detalles cuando no hay lectura */
+.resultado-validacion:not(.visible) .resultado-detalle-grid { display: none; }
+
+/* ─── INGRESO MANUAL ─── */
+.reg-manual {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.reg-manual-label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 .form-manual {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 10px;
-    align-items: end;
+    gap: 7px;
+    flex: 1;
+    min-width: 200px;
 }
 
 .form-manual input {
-    min-height: 40px;
-    padding: 0 12px;
+    height: 34px;
+    padding: 0 10px;
     border: 1px solid #dbe3ea;
     border-radius: 6px;
-    font-size: 0.84rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
     color: #1f2937;
     outline: none;
     transition: border-color 0.13s;
-    font-family: inherit;
-    width: 100%;
+    font-family: 'Courier New', monospace;
+    background: #fff;
     box-sizing: border-box;
 }
 
 .form-manual input:focus { border-color: #e2001a; }
 
 .form-manual button {
-    min-height: 40px;
-    padding: 0 16px;
+    height: 34px;
+    padding: 0 14px;
     background: #e2001a;
     color: #fff;
     border: none;
     border-radius: 6px;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
@@ -375,185 +257,301 @@
 .form-manual button:hover { background: #c0001a; }
 
 /* ============================================================
-   ESTADO VISUAL GRANDE (resultado)
+   MONITOR EN TIEMPO REAL
    ============================================================ */
-.estado-grande {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60px;
-    border-radius: 10px;
-    font-size: clamp(0.95rem, 1.5vw, 1.25rem);
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    margin: 10px 0;
-    background: #f1f5f9;
-    color: #6b7280;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-    border: 2px solid transparent;
-    text-align: center;
-    padding: 8px 14px;
-}
-
-.estado-grande.estado-ok    { background: #dcfce7; border-color: #86efac; color: #166534; }
-.estado-grande.estado-tarde { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
-.estado-grande.estado-no    { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
-.estado-grande.estado-alerta    { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
-.estado-grande.estado-duplicado { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
-
-/* Estados del panel de resultado */
-.resultado-validacion.permitido { border-color: #86efac; background: #f0fdf4; }
-.resultado-validacion.atrasado  { border-color: #fcd34d; background: #fffbeb; }
-.resultado-validacion.rechazado { border-color: #fca5a5; background: #fff1f1; }
-.resultado-validacion.error     { border-color: #d1d5db; background: #f9fafb; }
-
-/* Grid de detalles del resultado */
-.detalle-ingreso {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 12px;
-    margin-top: 10px;
-}
-
-.item-detalle strong {
-    display: block;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.item-detalle span {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #1f2937;
-}
-
-/* ============================================================
-   HISTORIAL — ÚLTIMOS REGISTROS
-   ============================================================ */
-.ultimos-registros {
+.reg-monitor {
     background: #ffffff;
     border: 1px solid #dbe3ea;
     border-radius: 10px;
-    padding: clamp(13px, 1.6vw, 18px);
-    width: 100%;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 12px;
 }
 
-.ultimos-registros h2 {
-    font-size: 0.86rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #1f2937;
+.reg-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #16a34a;
+    margin-left: auto;
+    animation: pulso 2s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
-.ultimos-registros p {
-    font-size: 0.72rem;
-    color: #6b7280;
-    margin-bottom: 10px;
-}
-
-.tabla-scroll {
-    max-height: calc(100vh - 220px);
-    min-height: 180px;
+.reg-timeline {
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
-    overflow-x: hidden;
+    max-height: calc(100vh - 320px);
+    min-height: 120px;
 }
 
-/* Tabla con anchos fijos — sin scroll horizontal */
-.tabla-scroll table {
-    width: 100%;
-    table-layout: fixed;
-    min-width: unset;
-    border-collapse: collapse;
+.reg-evento {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid #f9fafb;
+}
+
+.reg-evento:last-child { border-bottom: none; }
+
+.reg-evento-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #9ca3af;
+}
+
+.reg-evento--permitido .reg-evento-dot { background: #16a34a; }
+.reg-evento--duplicado .reg-evento-dot { background: #d97706; }
+.reg-evento--atrasado  .reg-evento-dot { background: #7c3aed; }
+.reg-evento--rechazado .reg-evento-dot { background: #dc2626; }
+
+.reg-evento-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.reg-evento-nombre {
     font-size: 0.76rem;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
-.tabla-scroll th {
-    padding: 6px 8px;
-    text-align: left;
+.reg-evento-tipo {
+    font-size: 0.62rem;
+    color: #9ca3af;
+    display: block;
+}
+
+.reg-evento-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.reg-evento-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    background: #f3f4f6;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.reg-evento--permitido .reg-evento-badge { background: #dcfce7; color: #15803d; }
+.reg-evento--duplicado .reg-evento-badge { background: #fef3c7; color: #d97706; }
+.reg-evento--atrasado  .reg-evento-badge { background: #ede9fe; color: #7c3aed; }
+.reg-evento--rechazado .reg-evento-badge { background: #fee2e2; color: #dc2626; }
+
+.reg-evento-hora {
+    font-size: 0.62rem;
+    color: #9ca3af;
+    font-variant-numeric: tabular-nums;
+}
+
+.reg-tl-empty {
+    font-size: 0.76rem;
+    color: #9ca3af;
+    text-align: center;
+    padding: 16px 0;
+    margin: 0;
+}
+
+/* ============================================================
+   CEREMONIAS
+   ============================================================ */
+.reg-ceremonias-wrap {
+    background: #ffffff;
+    border: 1px solid #dbe3ea;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.reg-ceremonias-titulo {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.07em;
     color: #6b7280;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
     border-bottom: 1px solid #f3f4f6;
+}
+
+.reg-ceremonias {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.reg-ceremonia-card {
     background: #f9fafb;
+    border: 1px solid #dbe3ea;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 240px;
+    transition: border-color 0.13s;
 }
 
-.tabla-scroll td {
-    padding: 7px 8px;
-    border-bottom: 1px solid #f9fafb;
-    color: #374151;
-    vertical-align: middle;
+.reg-ceremonia-card:has(.reg-cer-estado--abierta) {
+    border-color: #86efac;
+    background: #f0fdf4;
 }
 
-.tabla-scroll tr:last-child td { border-bottom: none; }
+.reg-cer-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
 
-.tabla-scroll th:nth-child(1),
-.tabla-scroll td:nth-child(1) { width: 80px; }
-.tabla-scroll th:nth-child(3),
-.tabla-scroll td:nth-child(3) { width: 80px; }
-.tabla-scroll th:nth-child(4),
-.tabla-scroll td:nth-child(4) { width: 90px; }
-
-/* Nombre: truncar con ellipsis */
-.tabla-scroll td:nth-child(2) {
+.reg-cer-nombre {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1f2937;
+    display: block;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.reg-cer-meta {
+    font-size: 0.65rem;
+    color: #6b7280;
+    display: block;
+}
+
+.reg-cer-kpi {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+}
+
+.reg-cer-num {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1f2937;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.reg-cer-sub {
+    font-size: 0.6rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.reg-cer-acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.reg-cer-estado {
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     white-space: nowrap;
 }
+
+.reg-cer-estado--abierta   { color: #16a34a; }
+.reg-cer-estado--cerrada   { color: #dc2626; }
+.reg-cer-estado--programada { color: #d97706; }
+
+.reg-cer-btn {
+    height: 26px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: opacity 0.13s;
+}
+
+.reg-cer-btn:hover { opacity: 0.85; }
+.reg-cer-btn--abrir       { background: #16a34a; color: #fff; }
+.reg-cer-btn--cerrar      { background: #dc2626; color: #fff; }
+.reg-cer-btn--reprogramar { background: #f59e0b; color: #111827; }
+
+/* Estado-registro global (para pills legacy si quedan) */
+.estado-registro {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+}
+.estado-abierto   { background: #dcfce7; color: #15803d; }
+.estado-cerrado   { background: #fee2e2; color: #dc2626; }
+.estado-programado { background: #fef3c7; color: #d97706; }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 
-/* Mobile ≤480px */
-@media (max-width: 480px) {
-    .barra-ceremonias { flex-direction: column; align-items: flex-start; padding: 10px 12px; }
-    .layout-principal { grid-template-columns: 1fr; }
-    .col-der { position: static; }
-    .tabla-scroll { max-height: 240px; }
+/* Mobile ≤640px */
+@media (max-width: 640px) {
+    .reg-grid { grid-template-columns: 1fr; }
+    .reg-monitor { position: static; }
+    .reg-timeline { max-height: 240px; }
+    .reg-ceremonias { flex-direction: column; }
+    .reg-ceremonia-card { min-width: 0; }
     .form-manual { grid-template-columns: 1fr; }
     .form-manual button { width: 100%; }
-    .indicador-lector { min-height: 64px; font-size: 0.8rem; }
-    .detalle-ingreso { grid-template-columns: 1fr; }
+    .reg-manual { flex-direction: column; align-items: flex-start; }
 }
 
-/* Tablet 481–767px */
-@media (min-width: 481px) and (max-width: 767px) {
-    .layout-principal { grid-template-columns: 1fr; }
-    .col-der { position: static; }
-    .tabla-scroll { max-height: 280px; }
-    .form-manual { grid-template-columns: 1fr; }
-    .form-manual button { width: 100%; }
+/* Tablet 641–1024px */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .reg-grid { grid-template-columns: 1fr; }
+    .reg-monitor { position: static; }
+    .reg-timeline { max-height: 280px; }
 }
 
-/* Tablet 768–1024px */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .layout-principal { grid-template-columns: 1fr 1fr; }
-    .tabla-scroll { max-height: calc(100vh - 260px); }
-}
-
-/* Desktop 1025–1366px */
-@media (min-width: 1025px) and (max-width: 1366px) {
-    .layout-principal { grid-template-columns: 1fr 1fr; }
-    .tabla-scroll { max-height: calc(100vh - 220px); }
-}
-
-/* Desktop 1367–1920px */
-@media (min-width: 1367px) {
-    .layout-principal { grid-template-columns: 1fr 1fr; }
-    .tabla-scroll { max-height: calc(100vh - 210px); }
+/* Desktop 1025px+ */
+@media (min-width: 1025px) {
+    .reg-timeline { max-height: calc(100vh - 300px); }
 }
 
 /* Pantalla baja: notebook + TV HDMI */
 @media (max-height: 700px) and (min-width: 900px) {
-    .barra-ceremonias { padding: 7px 12px; }
-    .indicador-lector { min-height: 60px; }
-    .panel-operativo { padding: 12px; }
-    .ultimos-registros { padding: 10px 12px; }
-    .tabla-scroll { max-height: calc(100vh - 180px); }
+    .indicador-lector { min-height: 90px; }
+    .estado-grande    { min-height: 64px; font-size: 1rem; }
+    .reg-timeline     { max-height: calc(100vh - 240px); }
+    .reg-panel-escaner,
+    .reg-monitor,
+    .reg-ceremonias-wrap { padding: 10px 12px; }
 }

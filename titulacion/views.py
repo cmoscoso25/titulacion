@@ -333,13 +333,30 @@ def cargar_excel(request):
 
 
 def registro_ingreso(request):
-    bloques = BloqueCeremonia.objects.select_related(
+    from django.db.models import Count
+
+    bloques_qs = BloqueCeremonia.objects.select_related(
         "ceremonia"
-    ).order_by(
-        "fecha",
-        "hora_inicio",
-        "nombre"
+    ).order_by("fecha", "hora_inicio", "nombre")
+
+    # Conteo de ingresos (permitidos + atrasados) por bloque
+    ingresados_raw = (
+        RegistroIngreso.objects
+        .filter(
+            estudiante__isnull=False,
+            resultado__in=["PERMITIDO", "ATRASADO"],
+        )
+        .values("estudiante__bloque_ceremonia_id")
+        .annotate(total=Count("id"))
     )
+    ingresados_dict = {
+        r["estudiante__bloque_ceremonia_id"]: r["total"]
+        for r in ingresados_raw
+    }
+
+    bloques = list(bloques_qs)
+    for b in bloques:
+        b.ingresos = ingresados_dict.get(b.id, 0)
 
     ultimos_registros = RegistroIngreso.objects.select_related(
         "estudiante",
@@ -356,6 +373,11 @@ def registro_ingreso(request):
             "bloques": bloques,
             "ultimos_registros": ultimos_registros,
             "bloque_activo": obtener_ceremonia_activa(),
+            "kpi_permitidos": RegistroIngreso.objects.filter(resultado="PERMITIDO").count(),
+            "kpi_titulados":  RegistroIngreso.objects.filter(resultado="PERMITIDO", tipo="ESTUDIANTE").count(),
+            "kpi_invitados":  RegistroIngreso.objects.filter(resultado="PERMITIDO", tipo="INVITADO").count(),
+            "kpi_duplicados": RegistroIngreso.objects.filter(resultado="DUPLICADO").count(),
+            "kpi_rechazados": RegistroIngreso.objects.filter(resultado__in=["DENEGADO", "OTRA_CEREMONIA"]).count(),
         }
     )
 

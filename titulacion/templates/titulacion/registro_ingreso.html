@@ -25,48 +25,40 @@
         <nav class="ops-nav" aria-label="Navegación principal">
 
             <span class="ops-nav-label">Principal</span>
-
             <a href="{% url 'titulacion:inicio' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                 Panel Principal
             </a>
 
             <span class="ops-nav-label">Gestión</span>
-
             <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
                 Gestión de Ceremonias
             </a>
-
             <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 Nómina de Estudiantes
             </a>
-
             <a href="{% url 'titulacion:cargar_excel' %}" class="ops-nav-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Carga Masiva Excel
             </a>
 
             <span class="ops-nav-label">Operación</span>
-
             <a href="{% url 'titulacion:entrega_invitaciones' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
                 Entrega de Invitaciones
             </a>
-
             <a href="{% url 'titulacion:registro_ingreso' %}" class="ops-nav-item active" aria-current="page">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
                 Registro de Ingreso
             </a>
 
             <span class="ops-nav-label">Control</span>
-
             <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                 Panel de Control
             </a>
-
             <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                 Reportes
@@ -82,7 +74,6 @@
         </nav>
 
         <div class="ops-sidebar-footer">Sede Arica · 2026</div>
-
     </aside>
 
     <!-- ═══════════════════════════════════════════
@@ -90,7 +81,6 @@
     ══════════════════════════════════════════════ -->
     <div class="ops-main">
 
-        <!-- TOPBAR -->
         <header class="ops-topbar">
             <div class="ops-topbar-left">
                 <button class="ops-hamburger" id="ops-hamburger" aria-label="Menú" aria-expanded="false">
@@ -116,10 +106,8 @@
             </div>
         </header>
 
-        <!-- OVERLAY MOBILE -->
         <div class="ops-overlay" id="ops-overlay"></div>
 
-        <!-- MENSAJES -->
         {% if messages %}
         <div class="ops-mensajes">
             {% for message in messages %}
@@ -128,198 +116,196 @@
         </div>
         {% endif %}
 
-        <!-- ZONA DE SCROLL -->
+        <!-- ═══ ZONA DE SCROLL ═══ -->
         <div class="ops-scroll">
 
-            <!-- ─── CABECERA DEL MÓDULO ─── -->
-            <div class="reg-mod-header">
-                <div>
-                    <h1 class="reg-mod-titulo">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
-                        Registro de Ingreso
-                    </h1>
-                    <p class="reg-mod-desc">Escaneo QR USB y validación de acceso a ceremonia. Haz clic en el campo de lectura para activar el lector.</p>
+            <!-- ─── KPIs DE ACCESO ─── -->
+            <section class="ops-kpis" aria-label="Indicadores de acceso">
+                <div class="kpi-card">
+                    <span class="kpi-label">Total ingresos</span>
+                    <span class="kpi-num kpi-num-accent">{{ kpi_permitidos }}</span>
+                    <span class="kpi-sub">Accesos autorizados</span>
                 </div>
-                <a href="{% url 'titulacion:inicio' %}" class="reg-volver">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 5-7 7 7 7"/></svg>
-                    Volver al inicio
-                </a>
-            </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Titulados</span>
+                    <span class="kpi-num">{{ kpi_titulados }}</span>
+                    <span class="kpi-sub">Ingresados</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Invitados</span>
+                    <span class="kpi-num">{{ kpi_invitados }}</span>
+                    <span class="kpi-sub">Ingresados</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Duplicados</span>
+                    <span class="kpi-num">{{ kpi_duplicados }}</span>
+                    <span class="kpi-sub">Detectados</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Rechazados</span>
+                    <span class="kpi-num">{{ kpi_rechazados }}</span>
+                    <span class="kpi-sub">Denegados / Otra ceremonia</span>
+                </div>
+            </section>
 
-            <!-- ─── BARRA DE CEREMONIAS ─── -->
-            <div class="barra-ceremonias">
-                <span class="barra-leyenda">Ceremonias:</span>
-                <div class="pills-ceremonias">
+            <!-- ─── GRID PRINCIPAL: ESCANEO + MONITOR ─── -->
+            <div class="reg-grid">
+
+                <!-- Estación de escaneo -->
+                <div class="reg-panel-escaner">
+
+                    <div class="reg-panel-titulo">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/></svg>
+                        Estación de Escaneo
+                    </div>
+
+                    <!-- Indicador lector QR (foco principal) -->
+                    <div class="lector-usb">
+                        <div class="indicador-lector" id="indicadorLector">
+                            <div class="pulso-qr"></div>
+                            <span id="textoIndicador">Listo para escanear</span>
+                        </div>
+                        <input
+                            id="inputQR"
+                            type="text"
+                            class="input-qr-usb"
+                            autofocus
+                            autocomplete="off"
+                            spellcheck="false"
+                            placeholder="Campo de captura QR (mantener activo)"
+                            aria-label="Campo de lectura QR USB"
+                        >
+                    </div>
+
+                    <!-- Resultado de validación (prominente) -->
+                    <section id="resultado" class="resultado-validacion resultado">
+                        <div id="estadoVisual" class="estado-grande">
+                            <span id="estadoTexto">En espera</span>
+                        </div>
+                        <div class="resultado-detalle-grid" id="resultadoDetalleGrid">
+                            <div class="rd-item">
+                                <strong>Nombre</strong>
+                                <span id="detalleNombre">—</span>
+                            </div>
+                            <div class="rd-item">
+                                <strong>RUT</strong>
+                                <span id="detalleRut">—</span>
+                            </div>
+                            <div class="rd-item">
+                                <strong>Tipo</strong>
+                                <span id="detalleTipo">—</span>
+                            </div>
+                            <div class="rd-item">
+                                <strong>Hora</strong>
+                                <span id="detalleHora">—</span>
+                            </div>
+                            <div class="rd-item rd-item--wide">
+                                <strong>Plan</strong>
+                                <span id="detallePlan">—</span>
+                            </div>
+                            <div class="rd-item rd-item--wide">
+                                <strong>Mensaje</strong>
+                                <span id="resultadoMensaje">Esperando lectura de QR.</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Ingreso manual (compacto, secundario) -->
+                    <div class="reg-manual">
+                        <span class="reg-manual-label">Ingreso manual</span>
+                        <form class="form-manual" id="formManual">
+                            <input
+                                type="text"
+                                id="codigoManual"
+                                placeholder="EST-XXXXXXXX o INV-XXXXXXXX"
+                                autocomplete="off"
+                            >
+                            <button type="submit">Validar</button>
+                        </form>
+                    </div>
+
+                </div><!-- reg-panel-escaner -->
+
+                <!-- Monitor en tiempo real -->
+                <div class="reg-monitor">
+                    <div class="reg-panel-titulo">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Actividad en Tiempo Real
+                        <span class="reg-live-dot" title="Actualización automática"></span>
+                    </div>
+
+                    <div id="registros-timeline" class="reg-timeline">
+                        {% for r in ultimos_registros %}
+                        <div class="reg-evento reg-evento--{% if r.resultado == 'PERMITIDO' %}permitido{% elif r.resultado == 'DUPLICADO' %}duplicado{% elif r.resultado == 'ATRASADO' %}atrasado{% else %}rechazado{% endif %}">
+                            <span class="reg-evento-dot"></span>
+                            <div class="reg-evento-body">
+                                <span class="reg-evento-nombre">{% if r.estudiante %}{{ r.estudiante.nombre_completo }}{% else %}—{% endif %}</span>
+                                <span class="reg-evento-tipo">{% if r.tipo == 'ESTUDIANTE' %}Titulado{% elif r.tipo == 'INVITADO' %}Invitado{% else %}{{ r.tipo }}{% endif %}</span>
+                            </div>
+                            <div class="reg-evento-meta">
+                                <span class="reg-evento-badge">{% if r.resultado == 'PERMITIDO' %}AUTORIZADO{% elif r.resultado == 'DUPLICADO' %}DUPLICADO{% elif r.resultado == 'ATRASADO' %}ATRASADO{% elif r.resultado == 'OTRA_CEREMONIA' %}OTRA CER.{% else %}{{ r.resultado }}{% endif %}</span>
+                                <span class="reg-evento-hora">{{ r.fecha_hora|time:"H:i" }}</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="reg-tl-empty">Sin registros aún.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div><!-- reg-grid -->
+
+            <!-- ─── ESTADO DE CEREMONIAS ─── -->
+            <div class="reg-ceremonias-wrap">
+                <div class="reg-ceremonias-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                    Estado de Ceremonias
+                </div>
+                <div class="reg-ceremonias">
                     {% for bloque in bloques %}
-                        <div class="pill-bloque" title="{{ bloque.nombre }}">
-                            <span class="pill-nombre">{{ bloque.nombre }}</span>
+                    <div class="reg-ceremonia-card">
+                        <div class="reg-cer-info">
+                            <span class="reg-cer-nombre">{{ bloque.nombre }}</span>
+                            <span class="reg-cer-meta">{{ bloque.ceremonia }} · {{ bloque.fecha|date:"d/m" }} {{ bloque.hora_inicio|time:"H:i" }}</span>
+                        </div>
+                        <div class="reg-cer-kpi">
+                            <span class="reg-cer-num">{{ bloque.ingresos }}</span>
+                            <span class="reg-cer-sub">ingresos</span>
+                        </div>
+                        <div class="reg-cer-acciones">
                             {% if bloque.estado_registro == "ABIERTA" %}
-                                <span class="estado-registro estado-abierto">ABIERTA</span>
-                                <form method="POST" action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas cerrar esta ceremonia? Los siguientes ingresos quedarán marcados como atrasados.');">
+                                <span class="reg-cer-estado reg-cer-estado--abierta">● ABIERTA</span>
+                                <form method="POST" action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas cerrar esta ceremonia?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-cerrar">Cerrar</button>
+                                    <button type="submit" class="reg-cer-btn reg-cer-btn--cerrar">Cerrar</button>
                                 </form>
                             {% elif bloque.estado_registro == "CERRADA" %}
-                                <span class="estado-registro estado-cerrado">CERRADA</span>
-                                <form method="POST" action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas volver la ceremonia al estado PROGRAMADA?');">
+                                <span class="reg-cer-estado reg-cer-estado--cerrada">✕ CERRADA</span>
+                                <form method="POST" action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas reprogramar esta ceremonia?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-reprogramar">Reprogramar</button>
+                                    <button type="submit" class="reg-cer-btn reg-cer-btn--reprogramar">Reprogramar</button>
                                 </form>
                             {% else %}
-                                <span class="estado-registro estado-programado">PROGRAMADA</span>
-                                <form method="POST" action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas abrir esta ceremonia para el ingreso oficial?');">
+                                <span class="reg-cer-estado reg-cer-estado--programada">○ PROGRAMADA</span>
+                                <form method="POST" action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas abrir esta ceremonia?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-abrir">Abrir</button>
+                                    <button type="submit" class="reg-cer-btn reg-cer-btn--abrir">Abrir</button>
                                 </form>
                             {% endif %}
                         </div>
+                    </div>
                     {% empty %}
-                        <span class="barra-sin-ceremonias">Sin ceremonias cargadas.</span>
+                    <p class="reg-tl-empty">Sin ceremonias cargadas.</p>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- ─── LAYOUT PRINCIPAL: QR + HISTORIAL ─── -->
-            <div class="layout-principal">
-
-                <!-- Columna izquierda: operativa -->
-                <div class="col-izq">
-                    <div class="panel-operativo">
-
-                        <div class="bloque-lector">
-                            <h2>Lector QR USB</h2>
-                            <div class="lector-usb">
-                                <div class="indicador-lector" id="indicadorLector">
-                                    <div class="pulso-qr"></div>
-                                    <span id="textoIndicador">Listo para escanear</span>
-                                </div>
-                                <input
-                                    id="inputQR"
-                                    type="text"
-                                    class="input-qr-usb"
-                                    autofocus
-                                    autocomplete="off"
-                                    spellcheck="false"
-                                    placeholder="Apunta el lector QR aquí..."
-                                    aria-label="Campo de lectura QR USB"
-                                >
-                            </div>
-                            <div class="qr-ayuda">La lectura se valida automáticamente al detectar el código.</div>
-                        </div>
-
-                        <div class="bloque-divisor"></div>
-
-                        <div class="bloque-manual">
-                            <h2>Ingreso manual</h2>
-                            <form class="form-manual" id="formManual">
-                                <input
-                                    type="text"
-                                    id="codigoManual"
-                                    placeholder="Ejemplo: EST-XXXXXXXX o INV-XXXXXXXX"
-                                    autocomplete="off"
-                                >
-                                <button type="submit">Validar código</button>
-                            </form>
-                        </div>
-
-                        <div class="bloque-divisor"></div>
-
-                        <section id="resultado" class="resultado-validacion resultado">
-                            <h2 id="resultadoTitulo">Resultado</h2>
-                            <p id="resultadoMensaje">Esperando lectura de QR.</p>
-                            <div id="estadoVisual" class="estado-grande">Estado</div>
-                            <div class="detalle-ingreso">
-                                <div class="item-detalle">
-                                    <strong>Nombre</strong>
-                                    <span id="detalleNombre">-</span>
-                                </div>
-                                <div class="item-detalle">
-                                    <strong>RUT</strong>
-                                    <span id="detalleRut">-</span>
-                                </div>
-                                <div class="item-detalle">
-                                    <strong>Área</strong>
-                                    <span id="detalleArea">-</span>
-                                </div>
-                                <div class="item-detalle">
-                                    <strong>Plan de estudio</strong>
-                                    <span id="detallePlan">-</span>
-                                </div>
-                                <div class="item-detalle">
-                                    <strong>Tipo</strong>
-                                    <span id="detalleTipo">-</span>
-                                </div>
-                                <div class="item-detalle">
-                                    <strong>Hora</strong>
-                                    <span id="detalleHora">-</span>
-                                </div>
-                            </div>
-                        </section>
-
-                    </div>
-                </div>
-
-                <!-- Columna derecha: historial -->
-                <div class="col-der">
-                    <section class="ultimos-registros">
-                        <h2>Últimos registros</h2>
-                        <p>Últimos movimientos registrados por lectura QR o ingreso manual.</p>
-                        <div class="tabla-scroll">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Hora</th>
-                                        <th>Nombre</th>
-                                        <th>Tipo</th>
-                                        <th>Resultado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbodyRegistros">
-                                    {% for registro in ultimos_registros %}
-                                        <tr>
-                                            <td>{{ registro.fecha_hora|date:"d/m H:i" }}</td>
-                                            <td>
-                                                {% if registro.estudiante %}
-                                                    {{ registro.estudiante.nombre_completo }}
-                                                {% else %}
-                                                    -
-                                                {% endif %}
-                                            </td>
-                                            <td>{{ registro.tipo }}</td>
-                                            <td>
-                                                {% if registro.resultado == "PERMITIDO" %}
-                                                    <span class="estado-registro estado-abierto">PERMITIDO</span>
-                                                {% elif registro.resultado == "ATRASADO" %}
-                                                    <span class="estado-registro estado-programado">ATRASADO</span>
-                                                {% elif registro.resultado == "DUPLICADO" %}
-                                                    <span class="estado-registro estado-cerrado">DUPLICADO</span>
-                                                {% else %}
-                                                    <span class="estado-registro estado-cerrado">{{ registro.resultado }}</span>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="4">Aún no existen registros de ingreso.</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
-
-            </div><!-- layout-principal -->
-
-            <!-- FOOTER -->
             <footer class="ops-page-footer">
                 © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
             </footer>
 
         </div><!-- ops-scroll -->
-
     </div><!-- ops-main -->
-
 </div><!-- ops-layout -->
 
 <script>
@@ -328,145 +314,104 @@
     let ultimoCodigoLeido = "";
     let bloqueoLectura = false;
 
-    const resultado = document.getElementById("resultado");
-    const resultadoTitulo = document.getElementById("resultadoTitulo");
+    const resultado       = document.getElementById("resultado");
+    const estadoVisual    = document.getElementById("estadoVisual");
+    const estadoTexto     = document.getElementById("estadoTexto");
     const resultadoMensaje = document.getElementById("resultadoMensaje");
-    const estadoVisual = document.getElementById("estadoVisual");
-    const detalleNombre = document.getElementById("detalleNombre");
-    const detalleRut = document.getElementById("detalleRut");
-    const detalleArea = document.getElementById("detalleArea");
-    const detallePlan = document.getElementById("detallePlan");
-    const detalleTipo = document.getElementById("detalleTipo");
-    const detalleHora = document.getElementById("detalleHora");
-    const inputQR = document.getElementById("inputQR");
+    const detalleNombre   = document.getElementById("detalleNombre");
+    const detalleRut      = document.getElementById("detalleRut");
+    const detallePlan     = document.getElementById("detallePlan");
+    const detalleTipo     = document.getElementById("detalleTipo");
+    const detalleHora     = document.getElementById("detalleHora");
+    const inputQR         = document.getElementById("inputQR");
     const indicadorLector = document.getElementById("indicadorLector");
-    const textoIndicador = document.getElementById("textoIndicador");
+    const textoIndicador  = document.getElementById("textoIndicador");
 
-    function limpiarTexto(valor) {
-        if (!valor) { return "-"; }
-        return valor;
-    }
+    function limpiarTexto(v) { return v || "—"; }
 
     function mostrarResultado(datos) {
         resultado.classList.remove("permitido", "rechazado", "error", "atrasado");
-        estadoVisual.classList.remove(
-            "estado-ok", "estado-no", "estado-alerta", "estado-tarde", "estado-duplicado"
-        );
-
+        estadoVisual.classList.remove("estado-ok","estado-no","estado-alerta","estado-tarde","estado-duplicado");
         resultado.classList.add("visible");
 
-        resultadoTitulo.innerText = datos.titulo || "Resultado";
         resultadoMensaje.innerText = datos.mensaje || "";
-
         detalleNombre.innerText = limpiarTexto(datos.nombre);
-        detalleRut.innerText = limpiarTexto(datos.rut);
-        detalleArea.innerText = limpiarTexto(datos.area);
-        detallePlan.innerText = limpiarTexto(datos.plan);
-        detalleTipo.innerText = limpiarTexto(datos.tipo);
-
-        const ahora = new Date();
-        detalleHora.innerText = ahora.toLocaleTimeString("es-CL");
+        detalleRut.innerText    = limpiarTexto(datos.rut);
+        detallePlan.innerText   = limpiarTexto(datos.plan);
+        detalleTipo.innerText   = limpiarTexto(datos.tipo);
+        detalleHora.innerText   = new Date().toLocaleTimeString("es-CL");
 
         if (datos.atrasado === true) {
             resultado.classList.add("atrasado");
             estadoVisual.classList.add("estado-tarde");
-            estadoVisual.innerText = "INGRESO ATRASADO";
+            estadoTexto.innerText = "INGRESO ATRASADO";
             return;
         }
-
         if (datos.tipo === "DUPLICADO") {
             resultado.classList.add("rechazado");
             estadoVisual.classList.add("estado-duplicado");
-            estadoVisual.innerText = "YA REGISTRADO";
+            estadoTexto.innerText = "YA REGISTRADO";
             return;
         }
-
         if (datos.tipo === "OTRA_CEREMONIA") {
             resultado.classList.add("rechazado");
             estadoVisual.classList.add("estado-no");
-            estadoVisual.innerText = "OTRA CEREMONIA";
+            estadoTexto.innerText = "OTRA CEREMONIA";
             return;
         }
-
         if (datos.tipo === "SIN_CEREMONIA_ACTIVA") {
             resultado.classList.add("error");
             estadoVisual.classList.add("estado-alerta");
-            estadoVisual.innerText = "ABRIR CEREMONIA";
+            estadoTexto.innerText = "ABRIR CEREMONIA";
             return;
         }
-
         if (datos.estado === "permitido") {
             resultado.classList.add("permitido");
             estadoVisual.classList.add("estado-ok");
-            estadoVisual.innerText = "ACCESO AUTORIZADO";
+            estadoTexto.innerText = "ACCESO AUTORIZADO";
         } else if (datos.estado === "rechazado") {
             resultado.classList.add("rechazado");
             estadoVisual.classList.add("estado-no");
-            estadoVisual.innerText = "ACCESO RECHAZADO";
+            estadoTexto.innerText = "ACCESO RECHAZADO";
         } else {
             resultado.classList.add("error");
             estadoVisual.classList.add("estado-alerta");
-            estadoVisual.innerText = "REVISAR CÓDIGO";
+            estadoTexto.innerText = "REVISAR CÓDIGO";
         }
     }
 
     function getCsrfToken() {
-        const cookie = document.cookie.split(";").find(function(c) {
-            return c.trim().startsWith("csrftoken=");
-        });
-        return cookie ? decodeURIComponent(cookie.trim().split("=")[1]) : "";
+        const c = document.cookie.split(";").find(x => x.trim().startsWith("csrftoken="));
+        return c ? decodeURIComponent(c.trim().split("=")[1]) : "";
     }
 
     async function validarCodigo(codigo) {
         const codigoLimpio = codigo.trim();
-
         if (!codigoLimpio) {
-            mostrarResultado({
-                estado: "error",
-                titulo: "Código vacío",
-                mensaje: "Debes ingresar o escanear un código válido."
-            });
+            mostrarResultado({ estado:"error", titulo:"Código vacío", mensaje:"Debes ingresar o escanear un código válido." });
             return;
         }
-
-        const formulario = new FormData();
-        formulario.append("codigo", codigoLimpio);
-
+        const fd = new FormData();
+        fd.append("codigo", codigoLimpio);
         try {
-            const respuesta = await fetch(
-                "{% url 'titulacion:validar_codigo_ingreso' %}",
-                {
-                    method: "POST",
-                    headers: { "X-CSRFToken": getCsrfToken() },
-                    body: formulario
-                }
-            );
-
-            if (!respuesta.ok) {
-                mostrarResultado({
-                    estado: "error",
-                    titulo: "Error del servidor (" + respuesta.status + ")",
-                    mensaje: "No se pudo procesar el código. Intenta nuevamente."
-                });
+            const resp = await fetch("{% url 'titulacion:validar_codigo_ingreso' %}", {
+                method: "POST",
+                headers: { "X-CSRFToken": getCsrfToken() },
+                body: fd
+            });
+            if (!resp.ok) {
+                mostrarResultado({ estado:"error", titulo:"Error "+resp.status, mensaje:"No se pudo procesar. Intenta nuevamente." });
                 return;
             }
-
-            const datos = await respuesta.json();
-            mostrarResultado(datos);
-
+            mostrarResultado(await resp.json());
         } catch (err) {
-            mostrarResultado({
-                estado: "error",
-                titulo: "Error de conexión",
-                mensaje: "No se pudo conectar con el servidor. Verifica la red."
-            });
+            mostrarResultado({ estado:"error", titulo:"Error de conexión", mensaje:"Verifica la red." });
         }
     }
 
     /* === LECTOR QR USB HID === */
-
     function activarIndicador() {
-        indicadorLector.classList.remove("lector-procesando", "lector-capturando");
+        indicadorLector.classList.remove("lector-procesando","lector-capturando");
         if (document.activeElement === inputQR) {
             indicadorLector.classList.remove("lector-sin-foco");
             indicadorLector.classList.add("lector-activo");
@@ -479,162 +424,110 @@
     }
 
     function procesarLecturaQR(codigo) {
-        if (bloqueoLectura) { return; }
-        if (codigo === ultimoCodigoLeido) { return; }
-
+        if (bloqueoLectura) return;
+        if (codigo === ultimoCodigoLeido) return;
         bloqueoLectura = true;
         ultimoCodigoLeido = codigo;
-
-        indicadorLector.classList.remove("lector-activo", "lector-capturando", "lector-sin-foco");
+        indicadorLector.classList.remove("lector-activo","lector-capturando","lector-sin-foco");
         indicadorLector.classList.add("lector-procesando");
         textoIndicador.innerText = "Procesando...";
-
-        validarCodigo(codigo).finally(function() {
-            setTimeout(function() {
-                bloqueoLectura = false;
-                ultimoCodigoLeido = "";
-                activarIndicador();
-                inputQR.focus();
-            }, 2500);
+        validarCodigo(codigo).finally(() => {
+            setTimeout(() => { bloqueoLectura = false; ultimoCodigoLeido = ""; activarIndicador(); inputQR.focus(); }, 2500);
             setTimeout(actualizarRegistros, 800);
         });
     }
 
-    /* === CAPTURA GLOBAL QR (HID teclado) — funciona sin importar el foco === */
-    /* Los lectores HID USB envían caracteres muy rápido (~5-20ms entre teclas).  */
-    /* 80ms de silencio = no es un lector → descartamos el buffer.               */
-    let bufferQR = "";
-    let timerQR = null;
-    const MAX_MS_ENTRE_CHARS = 80;
-    const MIN_CHARS_QR = 4;
+    let bufferQR = "", timerQR = null;
+    const MAX_MS = 80, MIN_CHARS = 4;
 
-    document.addEventListener("keydown", function(e) {
-        /* No interceptar el campo de ingreso manual */
-        if (e.target === document.getElementById("codigoManual")) { return; }
-        /* Ignorar combos de teclado (Ctrl, Alt, Meta) */
-        if (e.ctrlKey || e.altKey || e.metaKey) { return; }
-        /* Ignorar teclas de control especiales (F1, Escape, Tab, etc.) */
-        if (e.key.length > 1 && e.key !== "Enter") { return; }
-
+    document.addEventListener("keydown", e => {
+        if (e.target === document.getElementById("codigoManual")) return;
+        if (e.ctrlKey || e.altKey || e.metaKey) return;
+        if (e.key.length > 1 && e.key !== "Enter") return;
         if (e.key === "Enter") {
-            const codigo = bufferQR.trim();
-            bufferQR = "";
-            clearTimeout(timerQR);
-            inputQR.value = "";
-            if (codigo.length >= MIN_CHARS_QR && !bloqueoLectura) {
-                e.preventDefault();
-                procesarLecturaQR(codigo);
-            }
+            const c = bufferQR.trim(); bufferQR = ""; clearTimeout(timerQR); inputQR.value = "";
+            if (c.length >= MIN_CHARS && !bloqueoLectura) { e.preventDefault(); procesarLecturaQR(c); }
         } else {
-            bufferQR += e.key;
-            inputQR.value = bufferQR;
-
-            /* Mostrar actividad del lector en tiempo real (azul = capturando) */
+            bufferQR += e.key; inputQR.value = bufferQR;
             if (!bloqueoLectura) {
-                indicadorLector.classList.remove("lector-activo", "lector-sin-foco", "lector-procesando");
+                indicadorLector.classList.remove("lector-activo","lector-sin-foco","lector-procesando");
                 indicadorLector.classList.add("lector-capturando");
                 textoIndicador.innerText = "Capturando código...";
             }
-
-            /* Si pasan más de 80ms sin nueva tecla, no es un lector QR → limpiar */
             clearTimeout(timerQR);
-            timerQR = setTimeout(function() {
-                bufferQR = "";
-                if (!bloqueoLectura) {
-                    inputQR.value = "";
-                    activarIndicador();
-                }
-            }, MAX_MS_ENTRE_CHARS);
+            timerQR = setTimeout(() => { bufferQR = ""; if (!bloqueoLectura) { inputQR.value = ""; activarIndicador(); } }, MAX_MS);
         }
     });
 
-    /* Refocus automático si el operador hace clic fuera del formulario manual */
-    document.addEventListener("click", function(e) {
-        if (!e.target.closest("#formManual")) {
-            inputQR.focus();
-        }
+    document.addEventListener("click", e => { if (!e.target.closest("#formManual")) inputQR.focus(); });
+    inputQR.addEventListener("focus", () => { indicadorLector.classList.add("lector-enfocado"); if (!bloqueoLectura) { indicadorLector.classList.remove("lector-sin-foco"); indicadorLector.classList.add("lector-activo"); textoIndicador.innerText = "Listo para escanear"; } });
+    inputQR.addEventListener("blur",  () => { indicadorLector.classList.remove("lector-enfocado"); if (!bloqueoLectura) { indicadorLector.classList.remove("lector-activo"); indicadorLector.classList.add("lector-sin-foco"); textoIndicador.innerText = "Haz clic aquí para activar el lector"; } });
+
+    document.getElementById("formManual").addEventListener("submit", e => {
+        e.preventDefault();
+        const c = document.getElementById("codigoManual").value;
+        validarCodigo(c);
+        document.getElementById("codigoManual").value = "";
+        setTimeout(() => inputQR.focus(), 2600);
+        setTimeout(actualizarRegistros, 800);
     });
 
-    /* Indicador de foco activo / perdido */
-    inputQR.addEventListener("focus", function() {
-        indicadorLector.classList.add("lector-enfocado");
-        if (!bloqueoLectura) {
-            indicadorLector.classList.remove("lector-sin-foco");
-            indicadorLector.classList.add("lector-activo");
-            textoIndicador.innerText = "Listo para escanear";
-        }
-    });
-
-    inputQR.addEventListener("blur", function() {
-        indicadorLector.classList.remove("lector-enfocado");
-        if (!bloqueoLectura) {
-            indicadorLector.classList.remove("lector-activo");
-            indicadorLector.classList.add("lector-sin-foco");
-            textoIndicador.innerText = "Haz clic aquí para activar el lector";
-        }
-    });
-
-    /* === INGRESO MANUAL === */
-
-    document
-        .getElementById("formManual")
-        .addEventListener("submit", function(evento) {
-            evento.preventDefault();
-            const codigo = document.getElementById("codigoManual").value;
-            validarCodigo(codigo);
-            document.getElementById("codigoManual").value = "";
-            setTimeout(function() { inputQR.focus(); }, 2600);
-            setTimeout(actualizarRegistros, 800);
-        });
-
-    /* === AUTO-REFRESH ÚLTIMOS REGISTROS === */
-
-    function claseResultado(r) {
-        if (r === "PERMITIDO") { return "estado-abierto"; }
-        if (r === "ATRASADO")  { return "estado-programado"; }
-        return "estado-cerrado";
+    /* === MONITOR EN TIEMPO REAL === */
+    function claseEvento(r) {
+        if (r === "PERMITIDO") return "permitido";
+        if (r === "DUPLICADO") return "duplicado";
+        if (r === "ATRASADO")  return "atrasado";
+        return "rechazado";
+    }
+    function badgeEvento(r) {
+        if (r === "PERMITIDO")      return "AUTORIZADO";
+        if (r === "DUPLICADO")      return "DUPLICADO";
+        if (r === "ATRASADO")       return "ATRASADO";
+        if (r === "OTRA_CEREMONIA") return "OTRA CER.";
+        return r;
     }
 
     function actualizarRegistros() {
         fetch(URL_ULTIMOS)
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                const tbody = document.getElementById("tbodyRegistros");
-                if (!tbody || !data.registros) { return; }
+            .then(r => r.json())
+            .then(data => {
+                const tl = document.getElementById("registros-timeline");
+                if (!tl || !data.registros) return;
                 if (data.registros.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4">Aún no existen registros.</td></tr>';
+                    tl.innerHTML = '<p class="reg-tl-empty">Sin registros aún.</p>';
                     return;
                 }
-                tbody.innerHTML = data.registros.map(function(r) {
-                    return '<tr>' +
-                        '<td>' + r.fecha_hora + '</td>' +
-                        '<td>' + r.nombre + '</td>' +
-                        '<td>' + r.tipo + '</td>' +
-                        '<td><span class="estado-registro ' + claseResultado(r.resultado) + '">' + r.resultado + '</span></td>' +
-                    '</tr>';
-                }).join('');
+                tl.innerHTML = data.registros.map(r => {
+                    const cls = claseEvento(r.resultado);
+                    const tipo = r.tipo === "ESTUDIANTE" ? "Titulado" : r.tipo === "INVITADO" ? "Invitado" : r.tipo;
+                    return `<div class="reg-evento reg-evento--${cls}">
+                        <span class="reg-evento-dot"></span>
+                        <div class="reg-evento-body">
+                            <span class="reg-evento-nombre">${r.nombre}</span>
+                            <span class="reg-evento-tipo">${tipo}</span>
+                        </div>
+                        <div class="reg-evento-meta">
+                            <span class="reg-evento-badge">${badgeEvento(r.resultado)}</span>
+                            <span class="reg-evento-hora">${r.fecha_hora}</span>
+                        </div>
+                    </div>`;
+                }).join("");
             })
-            .catch(function() {});
+            .catch(() => {});
     }
 
     setInterval(actualizarRegistros, 5000);
-
-    /* Inicializar indicador (espera al autofocus del browser) */
-    setTimeout(function() { activarIndicador(); inputQR.focus(); }, 120);
+    setTimeout(() => { activarIndicador(); inputQR.focus(); }, 120);
 </script>
 
 <script>
 (function () {
-    var btn = document.getElementById('ops-hamburger');
-    var sidebar = document.getElementById('ops-sidebar');
-    var overlay = document.getElementById('ops-overlay');
-    function toggle(open) {
-        sidebar.classList.toggle('open', open);
-        overlay.classList.toggle('active', open);
-        if (btn) btn.setAttribute('aria-expanded', String(open));
-    }
-    if (btn) btn.addEventListener('click', function () { toggle(!sidebar.classList.contains('open')); });
-    if (overlay) overlay.addEventListener('click', function () { toggle(false); });
+    var btn = document.getElementById("ops-hamburger");
+    var sidebar = document.getElementById("ops-sidebar");
+    var overlay = document.getElementById("ops-overlay");
+    function toggle(open) { sidebar.classList.toggle("open", open); overlay.classList.toggle("active", open); if (btn) btn.setAttribute("aria-expanded", String(open)); }
+    if (btn) btn.addEventListener("click", () => toggle(!sidebar.classList.contains("open")));
+    if (overlay) overlay.addEventListener("click", () => toggle(false));
 }());
 </script>
 
