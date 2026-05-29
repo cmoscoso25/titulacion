@@ -313,6 +313,11 @@ body {
     background: var(--bg-page);
 }
 
+/* Evita que flex achate los hijos y recorte contenido con overflow:hidden */
+.ops-scroll > * {
+    flex: 0 0 auto;
+}
+
 /* ============================================================
    KPIs EJECUTIVOS
    ============================================================ */
