@@ -179,11 +179,27 @@ Formulario manual con selección de ceremonia/bloque y filtrado dinámico de pla
 - `.tabla-recientes` — tabla con últimos 10 estudiantes agregados
 
 ### registro_ingreso.html → registro.css
-Lector QR USB HID (modo teclado HID, no cámara):
-- `.lector-usb` — contenedor del lector
-- `.indicador-lector` — indicador visual de estado
-- `.input-qr-usb` — campo con `autofocus`, captura código por Enter
-- `.pulso-qr` — animación de pulso verde
+Centro de control operativo. Lector QR USB HID (modo teclado HID, no cámara).
+Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
+
+**Estructura visual (patrón similar a reportes.html):**
+- `.reg-view` — clase adicional sobre `ops-scroll`; zeroes padding, activa flex-column. Define variables `--ok`, `--wrn`, `--err`, `--nvy`, `--bd`, `--bg`
+- `.reg-cmd-bar` — command bar 52px: título + ícono navy + info ceremonia activa + badge ABIERTA/CERRADA
+- `.reg-kpi-strip` — franja 5 KPIs compactos (colores semánticos via `::after` top-border)
+- `.reg-body` — grid 2×1fr, `flex:1`, `overflow:hidden`
+- `.reg-col-scanner` — panel izquierdo: lector QR + resultado escaneo + ingreso manual
+- `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
+- `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
+
+**Clases JS-referenced (NO renombrar):**
+- `.lector-usb`, `.indicador-lector`, `.input-qr-usb`, `.pulso-qr`
+- `.lector-activo`, `.lector-procesando`, `.lector-capturando`, `.lector-sin-foco`, `.lector-enfocado`
+- `.resultado-validacion` + `.visible`, `.permitido`, `.rechazado`, `.atrasado`, `.error`
+- `.estado-grande` + `.estado-ok`, `.estado-no`, `.estado-alerta`, `.estado-tarde`, `.estado-duplicado`
+- `.resultado-detalle-grid`, `.rd-item`, `.rd-item--wide`
+- `.reg-evento--{permitido|duplicado|atrasado|rechazado}`, `.reg-evento-dot`, `.reg-evento-body`, `.reg-evento-nombre`, `.reg-evento-tipo`, `.reg-evento-meta`, `.reg-evento-badge`, `.reg-evento-hora`, `.reg-tl-empty`
+
+**REGLA**: NO usar `ops-kpis` ni `kpi-card` en este módulo. Usar clases `reg-*` propias.
 
 ---
 

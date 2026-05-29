@@ -116,52 +116,75 @@
         </div>
         {% endif %}
 
-        <!-- ═══ ZONA DE SCROLL ═══ -->
-        <div class="ops-scroll">
+        <!-- ═══ CONTENIDO PRINCIPAL (sin scroll vertical en uso normal) ═══ -->
+        <div class="ops-scroll reg-view">
 
-            <!-- ─── KPIs DE ACCESO ─── -->
-            <section class="ops-kpis" aria-label="Indicadores de acceso">
-                <div class="kpi-card">
-                    <span class="kpi-label">Total ingresos</span>
-                    <span class="kpi-num kpi-num-accent">{{ kpi_permitidos }}</span>
-                    <span class="kpi-sub">Accesos autorizados</span>
+            <!-- ─── COMMAND BAR ─── -->
+            <div class="reg-cmd-bar">
+                <div class="reg-cmd-left">
+                    <div class="reg-cmd-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
+                    </div>
+                    <div>
+                        <div class="reg-cmd-title">Registro de Ingreso</div>
+                        <div class="reg-cmd-subtitle">Control de acceso por código QR · USB HID</div>
+                    </div>
                 </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Titulados</span>
-                    <span class="kpi-num">{{ kpi_titulados }}</span>
-                    <span class="kpi-sub">Ingresados</span>
+                <div class="reg-cmd-right">
+                    {% for bloque in bloques %}{% if bloque.estado_registro == "ABIERTA" %}
+                    <div class="reg-cmd-cer-info">
+                        <span class="reg-cmd-cer-name">{{ bloque.nombre }}</span>
+                        <span class="reg-cmd-cer-meta">{{ bloque.fecha|date:"d \d\e F \d\e Y" }} &nbsp;·&nbsp; {{ bloque.hora_inicio|time:"H:i" }} hrs.</span>
+                    </div>
+                    <span class="reg-cmd-badge reg-cmd-badge--abierta">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+                        ABIERTA
+                    </span>
+                    {% endif %}{% endfor %}
+                    {% if not bloques %}
+                    <span class="reg-cmd-badge reg-cmd-badge--sin">Sin ceremonia activa</span>
+                    {% endif %}
                 </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Invitados</span>
-                    <span class="kpi-num">{{ kpi_invitados }}</span>
-                    <span class="kpi-sub">Ingresados</span>
-                </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Duplicados</span>
-                    <span class="kpi-num">{{ kpi_duplicados }}</span>
-                    <span class="kpi-sub">Detectados</span>
-                </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Rechazados</span>
-                    <span class="kpi-num">{{ kpi_rechazados }}</span>
-                    <span class="kpi-sub">Denegados / Otra ceremonia</span>
-                </div>
-            </section>
+            </div>
 
-            <!-- ─── GRID PRINCIPAL: ESCANEO + MONITOR ─── -->
-            <div class="reg-grid">
+            <!-- ─── KPI STRIP ─── -->
+            <div class="reg-kpi-strip" aria-label="Indicadores de acceso">
+                <div class="reg-kpi reg-kpi--total">
+                    <span class="reg-kpi-num">{{ kpi_permitidos }}</span>
+                    <span class="reg-kpi-lbl">Ingresados</span>
+                </div>
+                <div class="reg-kpi">
+                    <span class="reg-kpi-num">{{ kpi_titulados }}</span>
+                    <span class="reg-kpi-lbl">Titulados</span>
+                </div>
+                <div class="reg-kpi">
+                    <span class="reg-kpi-num">{{ kpi_invitados }}</span>
+                    <span class="reg-kpi-lbl">Invitados</span>
+                </div>
+                <div class="reg-kpi reg-kpi--wrn">
+                    <span class="reg-kpi-num">{{ kpi_duplicados }}</span>
+                    <span class="reg-kpi-lbl">Duplicados</span>
+                </div>
+                <div class="reg-kpi reg-kpi--err">
+                    <span class="reg-kpi-num">{{ kpi_rechazados }}</span>
+                    <span class="reg-kpi-lbl">Denegados</span>
+                </div>
+            </div>
 
-                <!-- Estación de escaneo -->
-                <div class="reg-panel-escaner">
+            <!-- ─── CUERPO PRINCIPAL: 2 columnas ─── -->
+            <div class="reg-body">
 
-                    <div class="reg-panel-titulo">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/></svg>
-                        Estación de Escaneo
+                <!-- ── Columna izquierda: Escaneo ── -->
+                <div class="reg-col-scanner">
+
+                    <div class="reg-section-hdr">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/></svg>
+                        Lector QR USB
                     </div>
 
-                    <!-- Indicador lector QR (foco principal) -->
+                    <!-- Indicador de estado del lector -->
                     <div class="lector-usb">
-                        <div class="indicador-lector" id="indicadorLector">
+                        <div class="indicador-lector lector-activo" id="indicadorLector">
                             <div class="pulso-qr"></div>
                             <span id="textoIndicador">Listo para escanear</span>
                         </div>
@@ -177,8 +200,8 @@
                         >
                     </div>
 
-                    <!-- Resultado de validación (prominente) -->
-                    <section id="resultado" class="resultado-validacion resultado">
+                    <!-- Resultado del último escaneo -->
+                    <section id="resultado" class="resultado-validacion resultado" aria-live="polite">
                         <div id="estadoVisual" class="estado-grande">
                             <span id="estadoTexto">En espera</span>
                         </div>
@@ -210,9 +233,9 @@
                         </div>
                     </section>
 
-                    <!-- Ingreso manual (compacto, secundario) -->
+                    <!-- Ingreso manual (secundario) -->
                     <div class="reg-manual">
-                        <span class="reg-manual-label">Ingreso manual</span>
+                        <span class="reg-manual-label">Manual</span>
                         <form class="form-manual" id="formManual">
                             <input
                                 type="text"
@@ -224,14 +247,15 @@
                         </form>
                     </div>
 
-                </div><!-- reg-panel-escaner -->
+                </div><!-- reg-col-scanner -->
 
-                <!-- Monitor en tiempo real -->
-                <div class="reg-monitor">
-                    <div class="reg-panel-titulo">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <!-- ── Columna derecha: Monitor en tiempo real ── -->
+                <div class="reg-col-monitor">
+
+                    <div class="reg-section-hdr">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                         Actividad en Tiempo Real
-                        <span class="reg-live-dot" title="Actualización automática"></span>
+                        <span class="reg-live-dot" title="Actualización automática cada 5 s"></span>
                     </div>
 
                     <div id="registros-timeline" class="reg-timeline">
@@ -251,51 +275,47 @@
                         <p class="reg-tl-empty">Sin registros aún.</p>
                         {% endfor %}
                     </div>
-                </div>
 
-            </div><!-- reg-grid -->
+                </div><!-- reg-col-monitor -->
 
-            <!-- ─── ESTADO DE CEREMONIAS ─── -->
-            <div class="reg-ceremonias-wrap">
-                <div class="reg-ceremonias-titulo">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
-                    Estado de Ceremonias
-                </div>
-                <div class="reg-ceremonias">
+            </div><!-- reg-body -->
+
+            <!-- ─── BARRA DE CEREMONIAS (bottom strip) ─── -->
+            <div class="reg-cer-strip">
+                <span class="reg-cer-strip-lbl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                    Ceremonias
+                </span>
+                <div class="reg-cer-list">
                     {% for bloque in bloques %}
-                    <div class="reg-ceremonia-card">
-                        <div class="reg-cer-info">
-                            <span class="reg-cer-nombre">{{ bloque.nombre }}</span>
-                            <span class="reg-cer-meta">{{ bloque.ceremonia }} · {{ bloque.fecha|date:"d/m" }} {{ bloque.hora_inicio|time:"H:i" }}</span>
+                    <div class="reg-cer-chip reg-cer-chip--{% if bloque.estado_registro == 'ABIERTA' %}abierta{% elif bloque.estado_registro == 'CERRADA' %}cerrada{% else %}programada{% endif %}">
+                        <div class="reg-cer-chip-info">
+                            <span class="reg-cer-chip-name">{{ bloque.nombre }}</span>
+                            <span class="reg-cer-chip-meta">{{ bloque.fecha|date:"d/m" }} · {{ bloque.hora_inicio|time:"H:i" }}</span>
                         </div>
-                        <div class="reg-cer-kpi">
-                            <span class="reg-cer-num">{{ bloque.ingresos }}</span>
-                            <span class="reg-cer-sub">ingresos</span>
-                        </div>
-                        <div class="reg-cer-acciones">
-                            {% if bloque.estado_registro == "ABIERTA" %}
-                                <span class="reg-cer-estado reg-cer-estado--abierta">● ABIERTA</span>
-                                <form method="POST" action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas cerrar esta ceremonia?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="reg-cer-btn reg-cer-btn--cerrar">Cerrar</button>
-                                </form>
-                            {% elif bloque.estado_registro == "CERRADA" %}
-                                <span class="reg-cer-estado reg-cer-estado--cerrada">✕ CERRADA</span>
-                                <form method="POST" action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas reprogramar esta ceremonia?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="reg-cer-btn reg-cer-btn--reprogramar">Reprogramar</button>
-                                </form>
-                            {% else %}
-                                <span class="reg-cer-estado reg-cer-estado--programada">○ PROGRAMADA</span>
-                                <form method="POST" action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas abrir esta ceremonia?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="reg-cer-btn reg-cer-btn--abrir">Abrir</button>
-                                </form>
-                            {% endif %}
-                        </div>
+                        <span class="reg-cer-chip-count" title="Ingresos registrados">{{ bloque.ingresos }}</span>
+                        {% if bloque.estado_registro == "ABIERTA" %}
+                            <span class="reg-cer-chip-badge reg-cer-badge--abierta">ABIERTA</span>
+                            <form method="POST" action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas cerrar esta ceremonia?');" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="reg-cer-chip-btn reg-cer-btn--cerrar">Cerrar</button>
+                            </form>
+                        {% elif bloque.estado_registro == "CERRADA" %}
+                            <span class="reg-cer-chip-badge reg-cer-badge--cerrada">CERRADA</span>
+                            <form method="POST" action="{% url 'titulacion:reprogramar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas reprogramar esta ceremonia?');" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="reg-cer-chip-btn reg-cer-btn--reprogramar">Reprogramar</button>
+                            </form>
+                        {% else %}
+                            <span class="reg-cer-chip-badge reg-cer-badge--prog">PROGRAMADA</span>
+                            <form method="POST" action="{% url 'titulacion:abrir_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas abrir esta ceremonia?');" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="reg-cer-chip-btn reg-cer-btn--abrir">Abrir</button>
+                            </form>
+                        {% endif %}
                     </div>
                     {% empty %}
-                    <p class="reg-tl-empty">Sin ceremonias cargadas.</p>
+                    <p class="reg-cer-empty">Sin ceremonias cargadas.</p>
                     {% endfor %}
                 </div>
             </div>
@@ -304,7 +324,7 @@
                 © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
             </footer>
 
-        </div><!-- ops-scroll -->
+        </div><!-- ops-scroll reg-view -->
     </div><!-- ops-main -->
 </div><!-- ops-layout -->
 
@@ -314,18 +334,18 @@
     let ultimoCodigoLeido = "";
     let bloqueoLectura = false;
 
-    const resultado       = document.getElementById("resultado");
-    const estadoVisual    = document.getElementById("estadoVisual");
-    const estadoTexto     = document.getElementById("estadoTexto");
+    const resultado        = document.getElementById("resultado");
+    const estadoVisual     = document.getElementById("estadoVisual");
+    const estadoTexto      = document.getElementById("estadoTexto");
     const resultadoMensaje = document.getElementById("resultadoMensaje");
-    const detalleNombre   = document.getElementById("detalleNombre");
-    const detalleRut      = document.getElementById("detalleRut");
-    const detallePlan     = document.getElementById("detallePlan");
-    const detalleTipo     = document.getElementById("detalleTipo");
-    const detalleHora     = document.getElementById("detalleHora");
-    const inputQR         = document.getElementById("inputQR");
-    const indicadorLector = document.getElementById("indicadorLector");
-    const textoIndicador  = document.getElementById("textoIndicador");
+    const detalleNombre    = document.getElementById("detalleNombre");
+    const detalleRut       = document.getElementById("detalleRut");
+    const detallePlan      = document.getElementById("detallePlan");
+    const detalleTipo      = document.getElementById("detalleTipo");
+    const detalleHora      = document.getElementById("detalleHora");
+    const inputQR          = document.getElementById("inputQR");
+    const indicadorLector  = document.getElementById("indicadorLector");
+    const textoIndicador   = document.getElementById("textoIndicador");
 
     function limpiarTexto(v) { return v || "—"; }
 
@@ -522,10 +542,14 @@
 
 <script>
 (function () {
-    var btn = document.getElementById("ops-hamburger");
+    var btn     = document.getElementById("ops-hamburger");
     var sidebar = document.getElementById("ops-sidebar");
     var overlay = document.getElementById("ops-overlay");
-    function toggle(open) { sidebar.classList.toggle("open", open); overlay.classList.toggle("active", open); if (btn) btn.setAttribute("aria-expanded", String(open)); }
+    function toggle(open) {
+        sidebar.classList.toggle("open", open);
+        overlay.classList.toggle("active", open);
+        if (btn) btn.setAttribute("aria-expanded", String(open));
+    }
     if (btn) btn.addEventListener("click", () => toggle(!sidebar.classList.contains("open")));
     if (overlay) overlay.addEventListener("click", () => toggle(false));
 }());

@@ -86,7 +86,7 @@ titulacion_inacap/
 │       ├── cambio_ceremonia.css
 │       ├── tarjetas.css
 │       ├── entrega.css
-│       ├── registro.css          ← barra-ceremonias, layout 2 cols, panel-operativo
+│       ├── registro.css          ← centro control: reg-cmd-bar + reg-kpi-strip + reg-body(2cols) + reg-cer-strip. Sin scroll normal. Variables --ok/--wrn/--err/--nvy
 │       └── reportes.css          ← sistema enterprise premium: command-bar, kpi-strip, segment-tabs, kpi-rep border-top, variables semánticas --c-ok/err/warn/info/navy/teal
 ├── media/                    ← imágenes QR generadas (no en git)
 ├── staticfiles/              ← salida de collectstatic (no en git)
