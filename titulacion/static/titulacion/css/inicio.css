@@ -62,9 +62,9 @@ body {
 }
 
 .ops-logo {
-    height: 26px;
-    filter: brightness(0) invert(1);
+    height: 28px;
     flex-shrink: 0;
+    display: block;
 }
 
 .ops-brand-label {
@@ -192,6 +192,27 @@ body {
     width: 18px;
     height: 18px;
     display: block;
+}
+
+.ops-topbar-logo-cap {
+    background: var(--negro-ops);
+    border-radius: 5px;
+    padding: 3px 10px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.ops-topbar-logo-img {
+    height: 22px;
+    display: block;
+}
+
+.ops-topbar-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border-ops);
+    flex-shrink: 0;
 }
 
 .ops-topbar-title {
