@@ -246,6 +246,12 @@ def inicio(request):
         resultado="ATRASADO"
     ).count()
 
+    total_invitaciones = Invitacion.objects.count()
+
+    ultimos_ingresos = RegistroIngreso.objects.select_related(
+        "estudiante"
+    ).order_by("-fecha_hora")[:6]
+
     bloques = BloqueCeremonia.objects.select_related(
         "ceremonia"
     ).order_by(
@@ -264,6 +270,8 @@ def inicio(request):
             "invitados_presentes": invitados_presentes,
             "total_asistentes": estudiantes_presentes + invitados_presentes,
             "total_atrasados": total_atrasados,
+            "total_invitaciones": total_invitaciones,
+            "ultimos_ingresos": ultimos_ingresos,
             "bloques": bloques,
             "perm_admin":     es_admin_titulacion(u),
             "perm_admision":  es_admision(u),
