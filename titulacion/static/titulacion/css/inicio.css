@@ -65,7 +65,7 @@ body {
     height: 28px;
     flex-shrink: 0;
     display: block;
-    mix-blend-mode: lighten; /* funde el fondo oscuro del PNG con el sidebar */
+    /* SVG transparente: texto blanco visible sobre sidebar oscuro sin filtro */
 }
 
 .ops-brand-label {
