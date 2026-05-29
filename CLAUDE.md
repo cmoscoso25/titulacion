@@ -158,6 +158,15 @@ Diseño horizontal 3 columnas (descargable como PNG via html2canvas):
 - `.texto-logro h3` — "tu logro" en Georgia itálica dorada
 - `.codigo-acceso` — código en Courier New blanco
 
+### inicio.html → inicio.css (rediseño enterprise premium)
+Sistema de tarjetas: toda la tarjeta es `<a class="modulo">` (link completo, sin botón separado).
+Iconografía: SVG inline Lucide (18px en contenedor 36px). NO usar siglas de texto como iconos.
+Color accent: `style="--mc:#HEX"` en cada `.modulo` → `::before` usa `var(--mc)` para la línea deslizante en hover.
+Grid: `repeat(7, 1fr)` desde 1025px (7 módulos en una fila en desktop).
+Hero: compacto, padding-bottom `28-38px` (NO 60-84px como antes).
+Panel: sin `<h2>Panel Principal</h2>` ni subtítulo (eliminados).
+Variables: `--ini-w: min(1440px, 92%)` — más ancho que antes (`1040px`).
+
 ### agregar_estudiante.html → agregar_estudiante.css
 Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes:
 - `.hero-agregar` / `.hero-agregar-contenido` — registrados en `base.css`

@@ -79,7 +79,7 @@ titulacion_inacap/
 │   └── static/titulacion/css/
 │       ├── base.css              ← variables, reset, header, botones, badges globales
 │       ├── login.css             ← layout fullscreen login (usa vars de base.css)
-│       ├── inicio.css            ← grid módulos, iconos institucionales con siglas
+│       ├── inicio.css            ← grid auto-fill 7 cols, módulos enterprise (SVG Lucide, accent-line hover, --ini-w:1440px)
 │       ├── carga_excel.css
 │       ├── agregar_estudiante.css
 │       ├── dashboard.css         ← KPIs coloreados, filtros, tabs, barra-progreso

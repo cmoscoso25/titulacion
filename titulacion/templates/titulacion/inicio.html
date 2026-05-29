@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Ceremonia de Titulación 2026 | INACAP Sede Arica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'titulacion/css/inicio.css' %}">
 </head>
@@ -24,23 +23,16 @@
                     class="logo-inacap"
                 >
             </div>
-
-            <div class="sede">
-                Sede Arica
-            </div>
+            <div class="sede">Sede Arica</div>
         </div>
 
         <div class="zona-derecha">
-            <div class="titulo-barra">
-                Ceremonia de Titulación 2026
-            </div>
+            <div class="titulo-barra">Ceremonia de Titulación 2026</div>
 
             {% if request.user.is_authenticated %}
                 <form method="POST" action="{% url 'titulacion:logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn-cerrar-sesion">
-                        Cerrar sesión
-                    </button>
+                    <button type="submit" class="btn-cerrar-sesion">Cerrar sesión</button>
                 </form>
             {% endif %}
 
@@ -52,26 +44,15 @@
 
     <section class="hero">
         <div class="hero-contenido">
-            <div class="etiqueta">
-                Sistema institucional interno
-            </div>
-
-            <h1>
-                Ceremonia de Titulación 2026
-            </h1>
-
-            <p>
-                Gestión operativa de titulados, invitaciones, validación QR y monitoreo de asistentes.
-            </p>
+            <h1>Titulación 2026</h1>
+            <p>Sistema de gestión operativa · INACAP Sede Arica</p>
         </div>
     </section>
 
     {% if messages %}
         <section class="mensajes">
             {% for message in messages %}
-                <div class="mensaje {{ message.tags }}">
-                    {{ message }}
-                </div>
+                <div class="mensaje {{ message.tags }}">{{ message }}</div>
             {% endfor %}
         </section>
     {% endif %}
@@ -79,94 +60,112 @@
     <main class="contenido">
 
         <section class="panel">
-            <h2>
-                Panel Principal
-            </h2>
 
-            <p class="panel-subtitulo">
-                Selecciona el módulo institucional que deseas utilizar.
-            </p>
+            <nav class="modulos" aria-label="Módulos del sistema">
 
-            <div class="modulos">
+                <!-- Carga Masiva Excel -->
+                <a href="{% url 'titulacion:cargar_excel' %}" class="modulo" style="--mc:#166534">
+                    <span class="mod-icono" style="background:#166534">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Carga Masiva Excel</h3>
+                    <p class="mod-desc">Importar titulados desde archivo oficial curricular.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-xl">XL</div>
-                        <h3>Carga Masiva Excel</h3>
-                        <p>Importación automática desde archivo oficial curricular.</p>
-                    </div>
-                    <a href="{% url 'titulacion:cargar_excel' %}" class="btn">
-                        Cargar Excel
-                    </a>
-                </article>
+                <!-- Agregar Estudiante -->
+                <a href="{% url 'titulacion:agregar_estudiante' %}" class="modulo" style="--mc:#e30613">
+                    <span class="mod-icono" style="background:#e30613">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <line x1="19" y1="8" x2="19" y2="14"/>
+                            <line x1="22" y1="11" x2="16" y2="11"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Agregar Estudiante</h3>
+                    <p class="mod-desc">Registro manual fuera de la carga Excel.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-agregar">+E</div>
-                        <h3>Agregar Estudiante</h3>
-                        <p>Registro manual de titulados para casos especiales fuera de la carga Excel.</p>
-                    </div>
-                    <a href="{% url 'titulacion:agregar_estudiante' %}" class="btn">
-                        Agregar estudiante
-                    </a>
-                </article>
+                <!-- Entrega Invitaciones -->
+                <a href="{% url 'titulacion:entrega_invitaciones' %}" class="modulo" style="--mc:#d97706">
+                    <span class="mod-icono" style="background:#d97706">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="20 12 20 22 4 22 4 12"/>
+                            <rect x="2" y="7" width="20" height="5"/>
+                            <line x1="12" y1="22" x2="12" y2="7"/>
+                            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Entrega Invitaciones</h3>
+                    <p class="mod-desc">Buscar estudiante y entregar tarjeta QR.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-inv">INV</div>
-                        <h3>Entrega Invitaciones</h3>
-                        <p>Búsqueda por RUT o nombre para entregar tarjetas.</p>
-                    </div>
-                    <a href="{% url 'titulacion:entrega_invitaciones' %}" class="btn">
-                        Entregar invitación
-                    </a>
-                </article>
+                <!-- Registro Ingreso -->
+                <a href="{% url 'titulacion:registro_ingreso' %}" class="modulo" style="--mc:#1d4ed8">
+                    <span class="mod-icono" style="background:#1d4ed8">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+                            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+                            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+                            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+                            <rect x="7" y="7" width="4" height="4" rx=".5"/>
+                            <rect x="13" y="7" width="4" height="4" rx=".5"/>
+                            <rect x="7" y="13" width="4" height="4" rx=".5"/>
+                            <path d="M14 14h.01M14 17h.01M17 14h.01"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Registro Ingreso</h3>
+                    <p class="mod-desc">Escanear QR para validar el acceso.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-qr">QR</div>
-                        <h3>Registro Ingreso</h3>
-                        <p>Escaneo QR para validar estudiantes e invitados.</p>
-                    </div>
-                    <a href="{% url 'titulacion:registro_ingreso' %}" class="btn">
-                        Registrar ingreso
-                    </a>
-                </article>
+                <!-- Panel Control -->
+                <a href="{% url 'titulacion:panel_control' %}" class="modulo" style="--mc:#06152f">
+                    <span class="mod-icono" style="background:#06152f">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect width="7" height="9" x="3" y="3" rx="1"/>
+                            <rect width="7" height="5" x="14" y="3" rx="1"/>
+                            <rect width="7" height="9" x="14" y="12" rx="1"/>
+                            <rect width="7" height="5" x="3" y="16" rx="1"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Panel Control</h3>
+                    <p class="mod-desc">KPIs y seguimiento en tiempo real.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-db">DB</div>
-                        <h3>Panel Control</h3>
-                        <p>Seguimiento en vivo de asistentes e ingresos.</p>
-                    </div>
-                    <a href="{% url 'titulacion:panel_control' %}" class="btn">
-                        Ver dashboard
-                    </a>
-                </article>
+                <!-- Cambio Ceremonia -->
+                <a href="{% url 'titulacion:cambio_ceremonia' %}" class="modulo" style="--mc:#7c3aed">
+                    <span class="mod-icono" style="background:#7c3aed">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M8 3 4 7l4 4"/>
+                            <path d="M4 7h16"/>
+                            <path d="m16 21 4-4-4-4"/>
+                            <path d="M20 17H4"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Cambio Ceremonia</h3>
+                    <p class="mod-desc">Cambio de bloque con trazabilidad y QR.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-cc">CC</div>
-                        <h3>Cambio Ceremonia</h3>
-                        <p>Cambio controlado de bloque con trazabilidad y regeneración de QR.</p>
-                    </div>
-                    <a href="{% url 'titulacion:cambio_ceremonia' %}" class="btn">
-                        Cambiar bloque
-                    </a>
-                </article>
+                <!-- Reportes -->
+                <a href="{% url 'titulacion:reportes' %}" class="modulo" style="--mc:#0f766e">
+                    <span class="mod-icono" style="background:#0f766e">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                    </span>
+                    <h3 class="mod-titulo">Reportes</h3>
+                    <p class="mod-desc">Análisis ejecutivo de ceremonias.</p>
+                </a>
 
-                <article class="modulo">
-                    <div>
-                        <div class="icono icono-rp">RP</div>
-                        <h3>Reportes</h3>
-                        <p>Análisis ejecutivo de ceremonias, asistencia y operación QR.</p>
-                    </div>
-                    <a href="{% url 'titulacion:reportes' %}" class="btn">
-                        Ver reportes
-                    </a>
-                </article>
+            </nav>
 
-            </div>
         </section>
 
         <footer class="footer">
