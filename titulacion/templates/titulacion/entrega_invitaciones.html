@@ -1,130 +1,202 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Entrega de Invitaciones | INACAP Sede Arica</title>
+    <title>Entrega de Invitaciones | Titulación 2026 · INACAP Sede Arica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}?v=12">
-    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}?v=12">
-
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/entrega.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
 </head>
 
 <body>
+<div class="ops-layout">
 
-<div class="marco">
+    <!-- ═══════════════════════════════════════════
+         SIDEBAR INSTITUCIONAL
+    ══════════════════════════════════════════════ -->
+    <aside class="ops-sidebar" id="ops-sidebar">
 
-    <header class="barra">
-        <div class="marca">
-            <div class="logo-contenedor">
-                <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP" class="logo-inacap">
-            </div>
-            <div class="sede">Sede Arica</div>
+        <div class="ops-sidebar-brand">
+            <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-logo">
         </div>
 
-        <div class="zona-derecha">
-            <div class="titulo-barra">Ceremonia de Titulación 2026</div>
+        <nav class="ops-nav" aria-label="Navegación principal">
 
-            {% if request.user.is_authenticated %}
-                <form method="POST" action="{% url 'titulacion:logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-cerrar-sesion">Cerrar sesión</button>
-                </form>
+            <span class="ops-nav-label">Principal</span>
+
+            <a href="{% url 'titulacion:inicio' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                Panel Principal
+            </a>
+
+            <span class="ops-nav-label">Gestión</span>
+
+            <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                Gestión de Ceremonias
+            </a>
+
+            <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Nómina de Estudiantes
+            </a>
+
+            <a href="{% url 'titulacion:cargar_excel' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+                Carga Masiva Excel
+            </a>
+
+            <span class="ops-nav-label">Operación</span>
+
+            <a href="{% url 'titulacion:entrega_invitaciones' %}" class="ops-nav-item active" aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                Entrega de Invitaciones
+            </a>
+
+            <a href="{% url 'titulacion:registro_ingreso' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
+                Registro de Ingreso
+            </a>
+
+            <span class="ops-nav-label">Control</span>
+
+            <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                Panel de Control
+            </a>
+
+            <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Reportes
+            </a>
+
+            {% if request.user.is_staff %}
+            <a href="/admin/" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Configuración
+            </a>
             {% endif %}
 
-            <div class="avatar" title="{{ request.user.username }}">
-                {{ request.user.username|slice:":2"|upper }}
-            </div>
-        </div>
-    </header>
+        </nav>
 
-    <section class="hero-entrega">
-        <div class="hero-inner">
-            <a href="{% url 'titulacion:inicio' %}" class="volver-link">← Volver al inicio</a>
+        <div class="ops-sidebar-footer">Sede Arica · 2026</div>
 
-            <h1>Entrega de Invitaciones</h1>
+    </aside>
 
-            <p>
-                Búsqueda por RUT o nombre. Si un estudiante participa en más de una ceremonia,
-                se mostrarán todas sus invitaciones oficiales por separado.
-            </p>
-        </div>
-    </section>
+    <!-- ═══════════════════════════════════════════
+         ÁREA PRINCIPAL
+    ══════════════════════════════════════════════ -->
+    <div class="ops-main">
 
-    {% if messages %}
-        <section class="mensajes">
-            {% for message in messages %}
-                <div class="mensaje {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </section>
-    {% endif %}
-
-    <main class="contenedor-entrega">
-
-        <section class="buscador-box">
-            <form method="GET" class="form-busqueda">
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ busqueda }}"
-                    class="input-busqueda"
-                    placeholder="Buscar por RUT o nombre completo del estudiante"
-                    autofocus
-                >
-
-                <button type="submit" class="btn-buscar">
-                    Buscar invitaciones
+        <!-- TOPBAR -->
+        <header class="ops-topbar">
+            <div class="ops-topbar-left">
+                <button class="ops-hamburger" id="ops-hamburger" aria-label="Menú" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
-            </form>
-
-            <div class="helper">
-                El resultado mostrará todas las ceremonias asociadas al estudiante buscado.
+                <div class="ops-topbar-logo-cap">
+                    <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-topbar-logo-img">
+                </div>
+                <span class="ops-topbar-sep" aria-hidden="true"></span>
+                <span class="ops-topbar-title">Ceremonia de Titulación 2026 - Sede Arica</span>
             </div>
-        </section>
-
-        {% if resultados %}
-
-            <section class="resumen-resultados">
-                <div class="resumen-texto">
-                    <strong>{{ total_resultados }}</strong>
-                    ceremonia{% if total_resultados != 1 %}s{% endif %} encontrada{% if total_resultados != 1 %}s{% endif %}
-                    para la búsqueda realizada.
+            <div class="ops-topbar-right">
+                {% if request.user.is_authenticated %}
+                <div class="ops-user-chip">
+                    <div class="ops-avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":2"|upper }}</div>
+                    <span class="ops-username">{{ request.user.username }}</span>
                 </div>
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ops-btn-logout">Cerrar sesión</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
 
-                <div class="acciones-globales">
-                    <button
-                        type="button"
-                        class="btn-accion btn-imprimir"
-                        onclick="descargarTodasLasInvitaciones()"
+        <!-- OVERLAY MOBILE -->
+        <div class="ops-overlay" id="ops-overlay"></div>
+
+        <!-- MENSAJES -->
+        {% if messages %}
+        <div class="ops-mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- ZONA DE SCROLL -->
+        <div class="ops-scroll">
+
+            <!-- ─── CABECERA DEL MÓDULO ─── -->
+            <div class="entrega-mod-header">
+                <div>
+                    <h1 class="entrega-mod-titulo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                        Entrega de Invitaciones
+                    </h1>
+                    <p class="entrega-mod-desc">
+                        Búsqueda y gestión de tarjetas QR por estudiante. Si un estudiante participa en más de una ceremonia, se mostrarán todas sus invitaciones por separado.
+                    </p>
+                </div>
+                <a href="{% url 'titulacion:inicio' %}" class="entrega-volver">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 5-7 7 7 7"/></svg>
+                    Volver al inicio
+                </a>
+            </div>
+
+            <!-- ─── BUSCADOR ─── -->
+            <section class="buscador-box">
+                <form method="GET" class="form-busqueda">
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ busqueda }}"
+                        class="input-busqueda"
+                        placeholder="Buscar por RUT o nombre completo del estudiante"
+                        autofocus
                     >
-                        Descargar todas
+                    <button type="submit" class="btn-buscar">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                        Buscar
                     </button>
-                </div>
+                </form>
+                <div class="helper">El resultado mostrará todas las ceremonias asociadas al estudiante buscado.</div>
             </section>
 
-            {% for item in resultados %}
+            {% if resultados %}
 
-                {% with estudiante=item.estudiante %}
+                <!-- Resumen de resultados -->
+                <section class="resumen-resultados">
+                    <div class="resumen-texto">
+                        <strong>{{ total_resultados }}</strong>
+                        ceremonia{% if total_resultados != 1 %}s{% endif %} encontrada{% if total_resultados != 1 %}s{% endif %}
+                        para la búsqueda realizada.
+                    </div>
+                    <div class="acciones-globales">
+                        <button type="button" class="btn-accion btn-imprimir" onclick="descargarTodasLasInvitaciones()">
+                            Descargar todas
+                        </button>
+                    </div>
+                </section>
+
+                {% for item in resultados %}
+                    {% with estudiante=item.estudiante %}
 
                     <section class="estudiante-box bloque-resultado">
 
                         <div class="encabezado-estudiante">
                             <div>
-                                <h2 class="nombre-estudiante">
-                                    {{ estudiante.nombre_completo|upper }}
-                                </h2>
-
+                                <h2 class="nombre-estudiante">{{ estudiante.nombre_completo|upper }}</h2>
                                 <div class="grid-info">
                                     <p><strong>RUT:</strong> {{ estudiante.rut }}</p>
                                     <p><strong>Área:</strong> {{ estudiante.plan_estudio.area.nombre }}</p>
                                     <p><strong>Plan:</strong> {{ estudiante.plan_estudio.nombre }}</p>
                                     <p><strong>Ceremonia:</strong> {{ estudiante.bloque_ceremonia.nombre }}</p>
-
                                     <p class="info-larga">
                                         <strong>Fecha:</strong> {{ item.fecha_es }}
                                         <span>•</span>
@@ -134,8 +206,7 @@
                                     </p>
                                 </div>
                             </div>
-
-                            <div class="estado-pill">
+                            <div class="estado-pill {% if estudiante.invitaciones_entregadas %}estado-pill--ok{% else %}estado-pill--pendiente{% endif %}">
                                 {% if estudiante.invitaciones_entregadas %}
                                     Invitaciones gestionadas
                                 {% else %}
@@ -152,37 +223,31 @@
                             >
                                 Descargar esta ceremonia
                             </button>
-
                             <form method="POST" action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-accion btn-entregado">
-                                    Marcar gestionadas
-                                </button>
+                                <button type="submit" class="btn-accion btn-entregado">Marcar gestionadas</button>
                             </form>
                         </div>
 
                         <div class="lista-invitaciones grupo-{{ estudiante.id }}">
 
+                            <!-- Tarjeta titulado -->
                             <article
                                 id="tarjeta-titulado-{{ estudiante.id }}"
                                 class="tarjeta tarjeta-titulado"
                                 data-nombre-archivo="Invitacion_Titulado_{{ estudiante.bloque_ceremonia.nombre|slugify }}_{{ estudiante.rut }}.png"
                             >
-
                                 <div class="tarjeta-left">
                                     <div class="tarjeta-left-marco"></div>
-
                                     <div class="logo-card">
                                         <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP">
                                     </div>
-
                                     <div class="bloque-tipo">
                                         <div class="adorno-linea"></div>
                                         <div class="tipo-invitacion">INVITACIÓN</div>
                                         <div class="tipo-sub">TITULADO</div>
                                         <div class="adorno-linea"></div>
                                     </div>
-
                                     <div class="texto-mini">Ceremonia de Titulación</div>
                                     <div class="anio">2026</div>
                                     <div class="linea-deco"></div>
@@ -191,21 +256,13 @@
                                 <div class="tarjeta-center">
                                     <div class="marca-agua marca-agua-izq"></div>
                                     <div class="marca-agua marca-agua-der"></div>
-
                                     <div class="texto-logro">
                                         <small>TE INVITAMOS A CELEBRAR</small>
                                         <h3>tu logro</h3>
                                         <span>Y EL INICIO DE TU NUEVA HISTORIA</span>
                                     </div>
-
-                                    <div class="nombre-central">
-                                        {{ estudiante.nombre_completo|upper }}
-                                    </div>
-
-                                    <div class="rut-central">
-                                        RUT: {{ estudiante.rut }}
-                                    </div>
-
+                                    <div class="nombre-central">{{ estudiante.nombre_completo|upper }}</div>
+                                    <div class="rut-central">RUT: {{ estudiante.rut }}</div>
                                     <div class="info-evento">
                                         <div class="info-item">
                                             <div class="icono-info">▣</div>
@@ -214,9 +271,7 @@
                                                 <span>2026</span>
                                             </div>
                                         </div>
-
                                         <div class="separador-evento"></div>
-
                                         <div class="info-item">
                                             <div class="icono-info">◷</div>
                                             <div>
@@ -224,9 +279,7 @@
                                                 <span>HORAS</span>
                                             </div>
                                         </div>
-
                                         <div class="separador-evento"></div>
-
                                         <div class="info-item">
                                             <div class="icono-info">●</div>
                                             <div>
@@ -235,7 +288,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="carrera-box">
                                         <p>
                                             <strong>CEREMONIA:</strong> {{ estudiante.bloque_ceremonia.nombre }}<br>
@@ -243,7 +295,6 @@
                                             <strong>PLAN:</strong> {{ estudiante.plan_estudio.nombre }}
                                         </p>
                                     </div>
-
                                     <div class="indicaciones-invitacion">
                                         Tenida formal · No está permitido el ingreso de menores de 10 años.
                                     </div>
@@ -251,184 +302,132 @@
 
                                 <div class="tarjeta-right tarjeta-right-titulado">
                                     <div class="tarjeta-right-marco"></div>
-
-                                    <div class="badge-acceso badge-titulado">
-                                        ACCESO TITULADO
-                                    </div>
-
+                                    <div class="badge-acceso badge-titulado">ACCESO TITULADO</div>
                                     <div class="qr-box">
                                         <img src="{{ estudiante.imagen_qr_estudiante.url }}" alt="QR estudiante">
                                     </div>
-
                                     <div class="codigo-label">CÓDIGO DE ACCESO</div>
+                                    <div class="codigo-acceso">{{ estudiante.codigo_qr_estudiante }}</div>
+                                    <div class="texto-acceso">Acceso exclusivo<br>del estudiante titulado.</div>
+                                </div>
+                            </article>
 
-                                    <div class="codigo-acceso">
-                                        {{ estudiante.codigo_qr_estudiante }}
+                            <!-- Tarjetas invitados -->
+                            {% for invitacion in item.invitaciones %}
+                            <article
+                                id="tarjeta-invitado-{{ estudiante.id }}-{{ invitacion.numero_invitacion }}"
+                                class="tarjeta tarjeta-invitado"
+                                data-nombre-archivo="Invitacion_Invitado_{{ invitacion.numero_invitacion }}_{{ estudiante.bloque_ceremonia.nombre|slugify }}_{{ estudiante.rut }}.png"
+                            >
+                                <div class="tarjeta-left">
+                                    <div class="tarjeta-left-marco"></div>
+                                    <div class="logo-card">
+                                        <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP">
                                     </div>
+                                    <div class="bloque-tipo">
+                                        <div class="adorno-linea"></div>
+                                        <div class="tipo-invitacion">INVITACIÓN</div>
+                                        <div class="tipo-sub">INVITADO {{ invitacion.numero_invitacion }}</div>
+                                        <div class="adorno-linea"></div>
+                                    </div>
+                                    <div class="texto-mini">Ceremonia de Titulación</div>
+                                    <div class="anio">2026</div>
+                                    <div class="linea-deco"></div>
+                                </div>
 
-                                    <div class="texto-acceso">
-                                        Acceso exclusivo<br>
-                                        del estudiante titulado.
+                                <div class="tarjeta-center">
+                                    <div class="marca-agua marca-agua-izq"></div>
+                                    <div class="marca-agua marca-agua-der"></div>
+                                    <div class="texto-logro">
+                                        <small>TE INVITAMOS A CELEBRAR</small>
+                                        <h3>tu logro</h3>
+                                        <span>Y EL INICIO DE TU NUEVA HISTORIA</span>
+                                    </div>
+                                    <div class="nombre-central">{{ estudiante.nombre_completo|upper }}</div>
+                                    <div class="rut-central">RUT: {{ estudiante.rut }}</div>
+                                    <div class="info-evento">
+                                        <div class="info-item">
+                                            <div class="icono-info">▣</div>
+                                            <div>
+                                                <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
+                                                <span>2026</span>
+                                            </div>
+                                        </div>
+                                        <div class="separador-evento"></div>
+                                        <div class="info-item">
+                                            <div class="icono-info">◷</div>
+                                            <div>
+                                                <strong>{{ item.hora_es }}</strong>
+                                                <span>HORAS</span>
+                                            </div>
+                                        </div>
+                                        <div class="separador-evento"></div>
+                                        <div class="info-item">
+                                            <div class="icono-info">●</div>
+                                            <div>
+                                                <strong>Avda. General Velásquez 1108</strong>
+                                                <span>ARICA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carrera-box">
+                                        <p>
+                                            <strong>CEREMONIA:</strong> {{ estudiante.bloque_ceremonia.nombre }}<br>
+                                            <strong>ÁREA:</strong> {{ estudiante.plan_estudio.area.nombre }}<br>
+                                            <strong>PLAN:</strong> {{ estudiante.plan_estudio.nombre }}
+                                        </p>
+                                    </div>
+                                    <div class="indicaciones-invitacion">
+                                        Tenida formal · No está permitido el ingreso de menores de 10 años.
                                     </div>
                                 </div>
 
+                                <div class="tarjeta-right tarjeta-right-invitado">
+                                    <div class="tarjeta-right-marco"></div>
+                                    <div class="badge-acceso badge-invitado">ACCESO INVITADO</div>
+                                    <div class="qr-box">
+                                        <img src="{{ invitacion.imagen_qr.url }}" alt="QR invitación">
+                                    </div>
+                                    <div class="codigo-label">CÓDIGO DE ACCESO</div>
+                                    <div class="codigo-acceso">{{ invitacion.codigo_qr }}</div>
+                                    <div class="texto-acceso">Invitación oficial<br>válida para un ingreso.</div>
+                                </div>
                             </article>
-
-                            {% for invitacion in item.invitaciones %}
-
-                                <article
-                                    id="tarjeta-invitado-{{ estudiante.id }}-{{ invitacion.numero_invitacion }}"
-                                    class="tarjeta tarjeta-invitado"
-                                    data-nombre-archivo="Invitacion_Invitado_{{ invitacion.numero_invitacion }}_{{ estudiante.bloque_ceremonia.nombre|slugify }}_{{ estudiante.rut }}.png"
-                                >
-
-                                    <div class="tarjeta-left">
-                                        <div class="tarjeta-left-marco"></div>
-
-                                        <div class="logo-card">
-                                            <img src="{% static 'titulacion/img/logo.png' %}" alt="INACAP">
-                                        </div>
-
-                                        <div class="bloque-tipo">
-                                            <div class="adorno-linea"></div>
-                                            <div class="tipo-invitacion">INVITACIÓN</div>
-                                            <div class="tipo-sub">INVITADO {{ invitacion.numero_invitacion }}</div>
-                                            <div class="adorno-linea"></div>
-                                        </div>
-
-                                        <div class="texto-mini">Ceremonia de Titulación</div>
-                                        <div class="anio">2026</div>
-                                        <div class="linea-deco"></div>
-                                    </div>
-
-                                    <div class="tarjeta-center">
-                                        <div class="marca-agua marca-agua-izq"></div>
-                                        <div class="marca-agua marca-agua-der"></div>
-
-                                        <div class="texto-logro">
-                                            <small>TE INVITAMOS A CELEBRAR</small>
-                                            <h3>tu logro</h3>
-                                            <span>Y EL INICIO DE TU NUEVA HISTORIA</span>
-                                        </div>
-
-                                        <div class="nombre-central">
-                                            {{ estudiante.nombre_completo|upper }}
-                                        </div>
-
-                                        <div class="rut-central">
-                                            RUT: {{ estudiante.rut }}
-                                        </div>
-
-                                        <div class="info-evento">
-                                            <div class="info-item">
-                                                <div class="icono-info">▣</div>
-                                                <div>
-                                                    <strong>{{ item.numero_dia }} {{ item.mes_es }}</strong>
-                                                    <span>2026</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="separador-evento"></div>
-
-                                            <div class="info-item">
-                                                <div class="icono-info">◷</div>
-                                                <div>
-                                                    <strong>{{ item.hora_es }}</strong>
-                                                    <span>HORAS</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="separador-evento"></div>
-
-                                            <div class="info-item">
-                                                <div class="icono-info">●</div>
-                                                <div>
-                                                    <strong>Avda. General Velásquez 1108</strong>
-                                                    <span>ARICA</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="carrera-box">
-                                            <p>
-                                                <strong>CEREMONIA:</strong> {{ estudiante.bloque_ceremonia.nombre }}<br>
-                                                <strong>ÁREA:</strong> {{ estudiante.plan_estudio.area.nombre }}<br>
-                                                <strong>PLAN:</strong> {{ estudiante.plan_estudio.nombre }}
-                                            </p>
-                                        </div>
-
-                                        <div class="indicaciones-invitacion">
-                                            Tenida formal · No está permitido el ingreso de menores de 10 años.
-                                        </div>
-                                    </div>
-
-                                    <div class="tarjeta-right tarjeta-right-invitado">
-                                        <div class="tarjeta-right-marco"></div>
-
-                                        <div class="badge-acceso badge-invitado">
-                                            ACCESO INVITADO
-                                        </div>
-
-                                        <div class="qr-box">
-                                            <img src="{{ invitacion.imagen_qr.url }}" alt="QR invitación">
-                                        </div>
-
-                                        <div class="codigo-label">CÓDIGO DE ACCESO</div>
-
-                                        <div class="codigo-acceso">
-                                            {{ invitacion.codigo_qr }}
-                                        </div>
-
-                                        <div class="texto-acceso">
-                                            Invitación oficial<br>
-                                            válida para un ingreso.
-                                        </div>
-                                    </div>
-
-                                </article>
-
                             {% endfor %}
 
-                        </div>
+                        </div><!-- lista-invitaciones -->
 
                     </section>
+                    {% endwith %}
+                {% endfor %}
 
-                {% endwith %}
+            {% elif busqueda %}
+                <section class="sin-resultados">
+                    No se encontraron estudiantes para la búsqueda realizada.
+                </section>
+            {% endif %}
 
-            {% endfor %}
+            <!-- FOOTER -->
+            <footer class="ops-page-footer">
+                © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
+            </footer>
 
-        {% elif busqueda %}
+        </div><!-- ops-scroll -->
 
-            <section class="sin-resultados">
-                No se encontraron estudiantes para la búsqueda realizada.
-            </section>
+    </div><!-- ops-main -->
 
-        {% endif %}
-
-        <footer class="footer">
-            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
-            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
-        </footer>
-
-    </main>
-
-</div>
+</div><!-- ops-layout -->
 
 <script>
     async function esperarImagenesDentro(elemento) {
         const imagenes = elemento.querySelectorAll("img");
-
         const promesas = Array.from(imagenes).map(function(imagen) {
-            if (imagen.complete && imagen.naturalWidth > 0) {
-                return Promise.resolve();
-            }
-
+            if (imagen.complete && imagen.naturalWidth > 0) return Promise.resolve();
             return new Promise(function(resolve) {
                 imagen.onload = resolve;
                 imagen.onerror = resolve;
             });
         });
-
         await Promise.all(promesas);
     }
 
@@ -442,11 +441,9 @@
     async function descargarTarjetaComoImagen(elemento) {
         const nombreArchivoBase = elemento.dataset.nombreArchivo || "invitacion.png";
         const nombreArchivo = limpiarNombreArchivo(nombreArchivoBase);
-
         await esperarImagenesDentro(elemento);
 
         const clon = elemento.cloneNode(true);
-
         clon.style.width = "1280px";
         clon.style.maxWidth = "1280px";
         clon.style.minWidth = "1280px";
@@ -461,7 +458,6 @@
         clon.style.overflow = "hidden";
 
         const contenedor = document.createElement("div");
-
         contenedor.style.position = "fixed";
         contenedor.style.left = "0";
         contenedor.style.top = "-10000px";
@@ -507,7 +503,6 @@
 
     async function descargarTodasLasInvitaciones() {
         const tarjetas = document.querySelectorAll(".tarjeta");
-
         for (const tarjeta of tarjetas) {
             await descargarTarjetaComoImagen(tarjeta);
             await new Promise(resolve => setTimeout(resolve, 450));
@@ -516,12 +511,26 @@
 
     async function descargarGrupoInvitaciones(claseGrupo) {
         const tarjetas = document.querySelectorAll("." + claseGrupo + " .tarjeta");
-
         for (const tarjeta of tarjetas) {
             await descargarTarjetaComoImagen(tarjeta);
             await new Promise(resolve => setTimeout(resolve, 450));
         }
     }
+</script>
+
+<script>
+(function () {
+    var btn = document.getElementById('ops-hamburger');
+    var sidebar = document.getElementById('ops-sidebar');
+    var overlay = document.getElementById('ops-overlay');
+    function toggle(open) {
+        sidebar.classList.toggle('open', open);
+        overlay.classList.toggle('active', open);
+        if (btn) btn.setAttribute('aria-expanded', String(open));
+    }
+    if (btn) btn.addEventListener('click', function () { toggle(!sidebar.classList.contains('open')); });
+    if (overlay) overlay.addEventListener('click', function () { toggle(false); });
+}());
 </script>
 
 </body>
