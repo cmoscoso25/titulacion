@@ -250,7 +250,7 @@ def inicio(request):
 
     ultimos_ingresos = RegistroIngreso.objects.select_related(
         "estudiante"
-    ).order_by("-fecha_hora")[:6]
+    ).order_by("-fecha_hora")[:5]
 
     bloques = BloqueCeremonia.objects.select_related(
         "ceremonia"
