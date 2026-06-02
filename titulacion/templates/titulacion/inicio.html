@@ -24,54 +24,69 @@
         <nav class="ops-nav" aria-label="Navegación principal">
 
             <span class="ops-nav-label">Principal</span>
-
             <a href="{% url 'titulacion:inicio' %}" class="ops-nav-item active" aria-current="page">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                 Panel Principal
             </a>
 
-            <span class="ops-nav-label">Gestión</span>
-
-            <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
-                Gestión de Ceremonias
-            </a>
-
-            <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                Nómina de Estudiantes
-            </a>
-
+            {% if perm_admin %}
+            <span class="ops-nav-label">Gestión de Estudiantes</span>
             <a href="{% url 'titulacion:cargar_excel' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
                 Carga Masiva Excel
             </a>
+            <a href="{% url 'titulacion:agregar_estudiante' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Agregar Estudiante
+            </a>
+            {% endif %}
 
-            <span class="ops-nav-label">Operación</span>
-
+            {% if perm_entrega or perm_ingreso %}
+            <span class="ops-nav-label">Operación de Ceremonia</span>
+            {% if perm_entrega %}
             <a href="{% url 'titulacion:entrega_invitaciones' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
                 Entrega de Invitaciones
             </a>
-
+            {% endif %}
+            {% if perm_ingreso %}
             <a href="{% url 'titulacion:registro_ingreso' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
                 Registro de Ingreso
             </a>
+            {% endif %}
+            {% endif %}
 
-            <span class="ops-nav-label">Control</span>
-
+            {% if perm_curricular %}
+            <span class="ops-nav-label">Gestión y Control</span>
             <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                 Panel de Control
             </a>
+            <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                Cambio de Ceremonia
+            </a>
+            {% endif %}
 
+            {% if perm_curricular or perm_admin %}
+            <span class="ops-nav-label">Análisis</span>
+            {% if perm_curricular %}
             <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                 Reportes
             </a>
+            {% endif %}
+            {% if perm_admin %}
+            <a href="{% url 'titulacion:tarjetas' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Tarjetas QR
+            </a>
+            {% endif %}
+            {% endif %}
 
             {% if perm_admin %}
+            <span class="ops-nav-label">Sistema</span>
             <a href="/admin/" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                 Configuración
@@ -168,7 +183,8 @@
             <!-- ─── CENTRO DE OPERACIONES ─── -->
             <div class="ops-grupos">
 
-                <!-- Gestión de Estudiantes -->
+                {% if perm_admin %}
+                <!-- Gestión de Estudiantes (solo admin) -->
                 <section class="ops-grupo">
                     <h2 class="ops-grupo-titulo">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -195,7 +211,9 @@
                         </a>
                     </div>
                 </section>
+            {% endif %}
 
+            {% if perm_entrega or perm_ingreso %}
                 <!-- Operación de Ceremonia -->
                 <section class="ops-grupo">
                     <h2 class="ops-grupo-titulo">
@@ -203,6 +221,7 @@
                         Operación de Ceremonia
                     </h2>
                     <div class="ops-mods">
+                        {% if perm_entrega %}
                         <a href="{% url 'titulacion:entrega_invitaciones' %}" class="modulo" style="--mc:#d97706">
                             <span class="mod-icono" style="background:#d97706">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
@@ -212,6 +231,8 @@
                                 <span class="mod-desc">Buscar estudiante y entregar tarjeta QR.</span>
                             </span>
                         </a>
+                        {% endif %}
+                        {% if perm_ingreso %}
                         <a href="{% url 'titulacion:registro_ingreso' %}" class="modulo" style="--mc:#1d4ed8">
                             <span class="mod-icono" style="background:#1d4ed8">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
@@ -221,10 +242,13 @@
                                 <span class="mod-desc">Escanear QR para validar acceso a ceremonia.</span>
                             </span>
                         </a>
+                        {% endif %}
                     </div>
                 </section>
+            {% endif %}
 
-                <!-- Gestión y Control -->
+            {% if perm_curricular %}
+                <!-- Gestión y Control (curricular) -->
                 <section class="ops-grupo">
                     <h2 class="ops-grupo-titulo">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -251,7 +275,9 @@
                         </a>
                     </div>
                 </section>
+            {% endif %}
 
+            {% if perm_curricular or perm_admin %}
                 <!-- Análisis -->
                 <section class="ops-grupo">
                     <h2 class="ops-grupo-titulo">
@@ -259,6 +285,7 @@
                         Análisis
                     </h2>
                     <div class="ops-mods">
+                        {% if perm_curricular %}
                         <a href="{% url 'titulacion:reportes' %}" class="modulo" style="--mc:#0f766e">
                             <span class="mod-icono" style="background:#0f766e">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -268,6 +295,8 @@
                                 <span class="mod-desc">Análisis ejecutivo de ceremonias y estadísticas.</span>
                             </span>
                         </a>
+                        {% endif %}
+                        {% if perm_admin %}
                         <a href="{% url 'titulacion:tarjetas' %}" class="modulo" style="--mc:#b45309">
                             <span class="mod-icono" style="background:#b45309">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -277,8 +306,10 @@
                                 <span class="mod-desc">Vista previa e impresión de tarjetas de invitación.</span>
                             </span>
                         </a>
+                        {% endif %}
                     </div>
                 </section>
+            {% endif %}
 
             </div><!-- ops-grupos -->
 

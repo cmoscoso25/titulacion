@@ -6,6 +6,17 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Menú y Inicio por permisos (2026-06-02)
+
+Nuevo `titulacion/context_processors.py` agrega `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso` a todos los templates automáticamente (registrado en `settings.py`).
+
+Sidebars actualizados (nuevas secciones por permisos):
+- PRINCIPAL (todos), GESTIÓN DE ESTUDIANTES (perm_admin), OPERACIÓN DE CEREMONIA (perm_entrega/perm_ingreso), GESTIÓN Y CONTROL (perm_curricular), ANÁLISIS (perm_curricular/perm_admin), SISTEMA (perm_admin)
+- Templates actualizados: `inicio.html`, `panel_control.html`, `registro_ingreso.html`, `entrega_invitaciones.html`
+- Sin sidebar: `cambio_ceremonia`, `reportes`, `cargar_excel`, `agregar_estudiante`, `tarjetas` (usan layout propio `.marco`)
+
+Cards de Inicio también filtradas por permisos (secciones vacías no se renderizan).
+
 ## UX Panel de Control — bloque requerido (2026-06-02)
 
 Nuevo flujo:
