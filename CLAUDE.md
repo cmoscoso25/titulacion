@@ -275,6 +275,8 @@ Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
 - `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
 - `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
 
+**Optimización ORM datos_panel_control (2026-06-02):** Los sets `_estudiantes_atrasados_ids` e `_invitaciones_atrasadas_ids` y el dict `_atrasados_por_plan` deben pre-calcularse ANTES de los loops de `seguimiento_estudiantes` y `avance_por_plan`. Sin ellos se producen N+1 queries (~900 queries para 300 estudiantes). No reinsertar `.exists()` ni `.count()` dentro de esos loops.
+
 **Clases JS-referenced (NO renombrar):**
 - `.lector-usb`, `.indicador-lector`, `.input-qr-usb`, `.pulso-qr`
 - `.lector-activo`, `.lector-procesando`, `.lector-capturando`, `.lector-sin-foco`, `.lector-enfocado`

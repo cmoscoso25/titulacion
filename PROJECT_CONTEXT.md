@@ -6,6 +6,23 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Optimización Panel de Control (2026-06-02)
+
+`datos_panel_control` fue optimizado para eliminar N+1 queries:
+- `_estudiantes_atrasados_ids` (set) → ya existía para KPIs; ahora también se usa en el loop de seguimiento (elimina 1 query por estudiante)
+- `_invitaciones_atrasadas_ids` (set) → nueva query única antes del loop (elimina hasta 2 queries por estudiante)
+- `_atrasados_por_plan` (dict) → nueva query `annotate` antes del loop de planes (elimina 1 query por plan)
+- Resultado: de ~900 queries por llamada a ~12 queries fijas, independiente del volumen
+
+Frontend `panel_control.html` JS:
+- `AbortController` — cancela petición anterior si el usuario cambia filtros rápido
+- Caché 8s por clave de filtros — respuesta instantánea al volver a un filtro reciente
+- Indicador "actualizando..." solo si la respuesta tarda >300ms
+- `setInterval` pasa `esAutoRefresh=true` — no interrumpe fetch manual activo
+- `limpiarFiltros` y cambio de bloque invalidan caché
+
+---
+
 ## Estado del responsive (2026-06-02)
 
 El layout global (`inicio.css`) está **optimizado y estable** para:

@@ -397,6 +397,10 @@
     const resultadoBusqueda = document.getElementById("resultadoBusqueda");
 
     let temporizadorBusqueda = null;
+    let _abortController = null;
+    let _fetchManualActivo = false;
+    const _cache = new Map();
+    const CACHE_TTL_MS = 8000;
 
     function cambiarTab(nombre, elemento) {
         document.querySelectorAll(".panel-tab").forEach(function(p) {
@@ -460,32 +464,71 @@
         });
     }
 
-    async function cargarDashboard() {
-        resultadoBusqueda.classList.add("rb-cargando");
+    function _aplicarDatos(datos) {
+        document.getElementById("kpiEstudiantesPresentes").innerText = datos.kpis.estudiantes_presentes;
+        document.getElementById("kpiEstudiantesPendientes").innerText = datos.kpis.estudiantes_pendientes;
+        document.getElementById("kpiInvitadosPresentes").innerText = datos.kpis.invitados_presentes;
+        document.getElementById("kpiTotalAsistentes").innerText = datos.kpis.total_asistentes;
+        document.getElementById("kpiTotalAtrasados").innerText = datos.kpis.total_atrasados;
+        document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
+        document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
+        document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
+        actualizarTextoBusqueda(datos);
+        cargarTablaAvance(datos.avance_por_plan);
+        cargarTablaMovimientos(datos.ultimos_registros);
+        cargarTablaAtrasados(datos.ingresos_atrasados);
+        cargarTablaSeguimiento(datos.seguimiento_estudiantes);
+        document.getElementById("ultimaActualizacion").innerText = new Date().toLocaleTimeString("es-CL");
+    }
+
+    async function cargarDashboard(esAutoRefresh = false) {
+        // El auto-refresh no interrumpe una petición manual en curso
+        if (esAutoRefresh && _fetchManualActivo) return;
+
+        // Cancelar petición anterior si el usuario cambia filtros rápido
+        if (_abortController) {
+            _abortController.abort();
+        }
+        _abortController = new AbortController();
+
+        const params = parametrosFiltros();
+        const cacheKey = params.toString();
+
+        // Usar caché si los datos son recientes (< 8s) y no es auto-refresh
+        if (!esAutoRefresh) {
+            const entrada = _cache.get(cacheKey);
+            if (entrada && (Date.now() - entrada.ts) < CACHE_TTL_MS) {
+                _aplicarDatos(entrada.datos);
+                return;
+            }
+        }
+
+        // Mostrar indicador "actualizando..." solo si la respuesta tarda > 300ms
+        let timerIndicador = null;
+        if (!esAutoRefresh) {
+            _fetchManualActivo = true;
+            timerIndicador = setTimeout(function() {
+                resultadoBusqueda.classList.add("rb-cargando");
+            }, 300);
+        }
+
         try {
-            const params = parametrosFiltros();
-            const respuesta = await fetch(urlDatosPanel + "?" + params.toString());
+            const respuesta = await fetch(
+                urlDatosPanel + "?" + params.toString(),
+                { signal: _abortController.signal }
+            );
             const datos = await respuesta.json();
 
-            document.getElementById("kpiEstudiantesPresentes").innerText = datos.kpis.estudiantes_presentes;
-            document.getElementById("kpiEstudiantesPendientes").innerText = datos.kpis.estudiantes_pendientes;
-            document.getElementById("kpiInvitadosPresentes").innerText = datos.kpis.invitados_presentes;
-            document.getElementById("kpiTotalAsistentes").innerText = datos.kpis.total_asistentes;
-            document.getElementById("kpiTotalAtrasados").innerText = datos.kpis.total_atrasados;
-            document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
-            document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
-            document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
+            // Guardar en caché (auto-refresh también actualiza el caché)
+            _cache.set(cacheKey, { datos: datos, ts: Date.now() });
 
-            actualizarTextoBusqueda(datos);
-            cargarTablaAvance(datos.avance_por_plan);
-            cargarTablaMovimientos(datos.ultimos_registros);
-            cargarTablaAtrasados(datos.ingresos_atrasados);
-            cargarTablaSeguimiento(datos.seguimiento_estudiantes);
-
-            const ahora = new Date();
-            document.getElementById("ultimaActualizacion").innerText = ahora.toLocaleTimeString("es-CL");
+            _aplicarDatos(datos);
+        } catch (err) {
+            if (err.name === "AbortError") return; // petición cancelada intencionalmente
         } finally {
+            clearTimeout(timerIndicador);
             resultadoBusqueda.classList.remove("rb-cargando");
+            if (!esAutoRefresh) _fetchManualActivo = false;
         }
     }
 
@@ -641,6 +684,7 @@
         filtroEstado.value = "";
         filtroTipoAcceso.value = "";
         filtroResultado.value = "";
+        _cache.clear();
         cargarPlanesPorArea();
         cargarDashboard();
     }
@@ -650,7 +694,7 @@
         await cargarDashboard();
     });
 
-    filtroBloque.addEventListener("change", cargarDashboard);
+    filtroBloque.addEventListener("change", function() { _cache.clear(); cargarDashboard(); });
     filtroPlan.addEventListener("change", cargarDashboard);
     filtroEstado.addEventListener("change", cargarDashboard);
     filtroTipoAcceso.addEventListener("change", cargarDashboard);
@@ -664,7 +708,7 @@
     });
 
     cargarDashboard();
-    setInterval(cargarDashboard, 15000);
+    setInterval(function() { cargarDashboard(true); }, 15000);
 </script>
 
 <script>

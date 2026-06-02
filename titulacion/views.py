@@ -745,11 +745,23 @@ def datos_panel_control(request):
     estudiantes_presentes = estudiantes_filtrados.filter(ingreso_confirmado=True).count()
     estudiantes_pendientes = estudiantes_filtrados.filter(ingreso_confirmado=False).count()
 
-    estudiantes_atrasados = RegistroIngreso.objects.filter(
-        estudiante__in=estudiantes_filtrados,
-        tipo="ESTUDIANTE",
-        resultado="ATRASADO",
-    ).values("estudiante_id").distinct().count()
+    # 1 query: IDs de estudiantes con ingreso atrasado
+    _estudiantes_atrasados_ids = set(
+        RegistroIngreso.objects.filter(
+            estudiante__in=estudiantes_filtrados,
+            tipo="ESTUDIANTE",
+            resultado="ATRASADO",
+        ).values_list("estudiante_id", flat=True).distinct()
+    )
+    estudiantes_atrasados = len(_estudiantes_atrasados_ids)
+
+    # 1 query: IDs de invitaciones con ingreso atrasado (evita N+1 en el loop de seguimiento)
+    _invitaciones_atrasadas_ids = set(
+        RegistroIngreso.objects.filter(
+            invitacion__estudiante__in=estudiantes_filtrados,
+            resultado="ATRASADO",
+        ).values_list("invitacion_id", flat=True).distinct()
+    )
 
     invitaciones_filtradas = Invitacion.objects.select_related(
         "estudiante",
@@ -789,6 +801,14 @@ def datos_panel_control(request):
 
     avance_por_plan = []
 
+    # 1 query: atrasados agrupados por plan (evita N+1 en el loop de planes)
+    _atrasados_por_plan = {}
+    for row in RegistroIngreso.objects.filter(
+        estudiante__in=estudiantes_filtrados,
+        resultado="ATRASADO",
+    ).values("estudiante__plan_estudio__nombre").annotate(n=Count("id")):
+        _atrasados_por_plan[row["estudiante__plan_estudio__nombre"]] = row["n"]
+
     planes = estudiantes_filtrados.values(
         "plan_estudio__nombre"
     ).annotate(
@@ -804,12 +824,7 @@ def datos_panel_control(request):
         if total > 0:
             porcentaje = round((presentes / total) * 100, 1)
 
-        atrasados_plan = RegistroIngreso.objects.filter(
-            estudiante__in=estudiantes_filtrados.filter(
-                plan_estudio__nombre=item["plan_estudio__nombre"]
-            ),
-            resultado="ATRASADO",
-        ).count()
+        atrasados_plan = _atrasados_por_plan.get(item["plan_estudio__nombre"], 0)
 
         avance_por_plan.append({
             "plan": item["plan_estudio__nombre"] or "Sin plan informado",
@@ -834,26 +849,10 @@ def datos_panel_control(request):
         invitacion_1 = invitaciones[0] if len(invitaciones) >= 1 else None
         invitacion_2 = invitaciones[1] if len(invitaciones) >= 2 else None
 
-        estudiante_atrasado = RegistroIngreso.objects.filter(
-            estudiante=estudiante,
-            tipo="ESTUDIANTE",
-            resultado="ATRASADO",
-        ).exists()
-
-        invitacion_1_atrasada = False
-        invitacion_2_atrasada = False
-
-        if invitacion_1:
-            invitacion_1_atrasada = RegistroIngreso.objects.filter(
-                invitacion=invitacion_1,
-                resultado="ATRASADO",
-            ).exists()
-
-        if invitacion_2:
-            invitacion_2_atrasada = RegistroIngreso.objects.filter(
-                invitacion=invitacion_2,
-                resultado="ATRASADO",
-            ).exists()
+        # Sin queries: usar los sets precalculados antes del loop
+        estudiante_atrasado = estudiante.id in _estudiantes_atrasados_ids
+        invitacion_1_atrasada = (invitacion_1.id in _invitaciones_atrasadas_ids) if invitacion_1 else False
+        invitacion_2_atrasada = (invitacion_2.id in _invitaciones_atrasadas_ids) if invitacion_2 else False
 
         if estudiante.ingreso_confirmado:
             estado_texto = "Presente"
