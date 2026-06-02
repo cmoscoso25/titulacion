@@ -6,6 +6,16 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Estado del responsive (2026-06-02)
+
+El layout global (`inicio.css`) está **optimizado y estable** para:
+- Notebook 15" a 1366×768 — sin scroll, todo visible, sidebar compacto 172px
+- Monitor 22" a 1920×1080 — diseño estándar, sidebar 220px
+- TV/HDMI — sidebar 240px, tipografía y padding grandes (1921px+)
+- Tablet/móvil — sidebar en drawer con hamburger (≤768px)
+
+No modificar `inicio.css` sin probar en ambas resoluciones (1366×768 y 1920×1080).
+
 ---
 
 # Objetivos principales

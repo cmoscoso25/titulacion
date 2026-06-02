@@ -204,7 +204,8 @@ Diseño horizontal 3 columnas (descargable como PNG via html2canvas):
 - `.texto-logro h3` — "tu logro" en Georgia itálica dorada
 - `.codigo-acceso` — código en Courier New blanco
 
-### inicio.html → inicio.css (layout global ops-layout, responsive mobile-first)
+### inicio.html → inicio.css (layout global ops-layout, responsive mobile-first) ✓ ESTABLE
+> **Versión estable** — optimizado y validado para notebook 15" (1366×768), monitor 22" (1920×1080) y TV/HDMI. No modificar breakpoints sin prueba visual en ambas resoluciones.
 Sistema de tarjetas: toda la tarjeta es `<a class="modulo">` (link completo, sin botón separado).
 Iconografía: SVG inline Lucide (15px en contenedor 30px). NO usar siglas de texto como iconos.
 Color accent: `style="--mc:#HEX"` en cada `.modulo` → `::before` usa `var(--mc)` para la línea deslizante en hover.
