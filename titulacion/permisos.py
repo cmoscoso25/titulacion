@@ -9,6 +9,8 @@ GRUPO_ADMIN = "ADMIN_TITULACION"
 GRUPO_ADMISION = "ADMISION"
 GRUPO_CURRICULAR = "CURRICULAR"
 GRUPO_ENTREGA = "ENTREGA_INVITACIONES"
+GRUPO_INGRESO = "INGRESO"         # Control de acceso QR (DAE)
+GRUPO_DACOM = "DACOM"             # Entrega de invitaciones (DACOM)
 
 
 def usuario_en_grupo(usuario, nombre_grupo):
@@ -94,6 +96,7 @@ def es_entrega(usuario):
         es_admin_titulacion(usuario)
         or usuario_en_grupo(usuario, GRUPO_ADMISION)
         or usuario_en_grupo(usuario, GRUPO_ENTREGA)
+        or usuario_en_grupo(usuario, GRUPO_DACOM)
     )
 
 
@@ -104,6 +107,29 @@ def acceso_entrega(view_func):
     def wrapper(request, *args, **kwargs):
 
         if es_entrega(request.user):
+            return view_func(request, *args, **kwargs)
+
+        return redireccion_sin_permiso(request)
+
+    return wrapper
+
+
+def es_ingreso(usuario):
+    """Acceso a Registro de Ingreso: ADMIN, ADMISION e INGRESO (DAE)."""
+    return usuario.is_authenticated and (
+        es_admin_titulacion(usuario)
+        or usuario_en_grupo(usuario, GRUPO_ADMISION)
+        or usuario_en_grupo(usuario, GRUPO_INGRESO)
+    )
+
+
+def acceso_ingreso(view_func):
+
+    @wraps(view_func)
+    @login_required(login_url="titulacion:login")
+    def wrapper(request, *args, **kwargs):
+
+        if es_ingreso(request.user):
             return view_func(request, *args, **kwargs)
 
         return redireccion_sin_permiso(request)

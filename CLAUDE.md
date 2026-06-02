@@ -65,8 +65,46 @@ Antes de modificar revisar:
 - titulacion/views.py
 - titulacion/urls.py
 - titulacion/models.py
+- titulacion/permisos.py  ← sistema de grupos/roles
 - templates principales
 - CSS institucional
+
+---
+
+# Sistema de permisos (permisos.py)
+
+**IMPORTANTE**: El sistema valida por **nombre de grupo Django**, NO por permisos de modelo Django. Los permisos asignados en Django Admin a un grupo no tienen efecto; lo que importa es el nombre del grupo.
+
+## Grupos definidos en `permisos.py`
+
+| Constante | Nombre grupo Django | Acceso |
+|-----------|--------------------|----|
+| `GRUPO_ADMIN` | `ADMIN_TITULACION` | Todo el sistema |
+| `GRUPO_ADMISION` | `ADMISION` | Registro de ingreso + Entrega |
+| `GRUPO_CURRICULAR` | `CURRICULAR` | Panel control, reportes, cambio ceremonia |
+| `GRUPO_ENTREGA` | `ENTREGA_INVITACIONES` | Solo entrega de invitaciones |
+| `GRUPO_INGRESO` | `INGRESO` | Solo registro de ingreso QR (DAE) |
+| `GRUPO_DACOM` | `DACOM` | Solo entrega de invitaciones (DACOM) |
+
+## Funciones de chequeo
+
+- `es_admin_titulacion(u)` → is_superuser o ADMIN_TITULACION
+- `es_admision(u)` → ADMIN o ADMISION
+- `es_curricular(u)` → ADMIN o CURRICULAR
+- `es_entrega(u)` → ADMIN, ADMISION, ENTREGA_INVITACIONES o DACOM
+- `es_ingreso(u)` → ADMIN, ADMISION o INGRESO
+
+## Decorators y rutas protegidas
+
+- `acceso_admin` → cargar-excel, agregar-estudiante, tarjetas, reprogramar bloque
+- `acceso_curricular` → panel-control, cambio-ceremonia, reportes
+- `acceso_entrega` → entrega-invitaciones
+- `acceso_ingreso` → registro/, validar-codigo/, registro-ultimos/, bloques abrir/cerrar
+- `acceso_general` → inicio/ (solo requiere login)
+
+## Regla al crear nuevo usuario
+
+Al crear un usuario en Django Admin, asignarle el grupo correcto según su rol. **No asignar permisos individuales de modelo** — solo el grupo.
 
 ---
 

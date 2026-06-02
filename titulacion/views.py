@@ -23,7 +23,7 @@ from .models import (
     generar_codigo_qr_estudiante,
     generar_codigo_qr_invitacion,
 )
-from .permisos import es_admin_titulacion, es_admision, es_curricular, es_entrega
+from .permisos import es_admin_titulacion, es_admision, es_curricular, es_entrega, es_ingreso
 from .procesador_excel import crear_invitaciones_para_estudiante, procesar_excel_titulados
 
 
@@ -277,6 +277,7 @@ def inicio(request):
             "perm_admision":  es_admision(u),
             "perm_curricular": es_curricular(u),
             "perm_entrega":   es_entrega(u),
+            "perm_ingreso":   es_ingreso(u),
         }
     )
 

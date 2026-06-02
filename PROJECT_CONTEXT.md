@@ -138,6 +138,23 @@ Definidos en `base.css` como variables CSS:
 
 ---
 
+# Sistema de permisos
+
+El sistema usa **grupos Django** por nombre, NO permisos de modelo. Ver `titulacion/permisos.py`.
+
+| Grupo Django | Acceso |
+|---|---|
+| `ADMIN_TITULACION` | Todo el sistema |
+| `ADMISION` | Registro de ingreso + Entrega de invitaciones |
+| `CURRICULAR` | Panel control, reportes, cambio de ceremonia |
+| `ENTREGA_INVITACIONES` | Solo entrega de invitaciones |
+| `INGRESO` | Solo registro de ingreso QR (usuario DAE) |
+| `DACOM` | Solo entrega de invitaciones (DACOM) |
+
+**IMPORTANTE**: Al crear usuarios en Django Admin, asignar el grupo correspondiente. No asignar permisos individuales de modelo.
+
+---
+
 # Lector QR
 
 - **Tipo:** USB HID en modo teclado (no requiere cámara).

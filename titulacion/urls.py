@@ -4,10 +4,10 @@ from django.urls import path
 from . import views
 from .permisos import (
     acceso_admin,
-    acceso_admision,
     acceso_curricular,
     acceso_entrega,
     acceso_general,
+    acceso_ingreso,
 )
 
 app_name = "titulacion"
@@ -69,31 +69,31 @@ urlpatterns = [
 
     path(
         "registro/",
-        acceso_admision(views.registro_ingreso),
+        acceso_ingreso(views.registro_ingreso),
         name="registro_ingreso",
     ),
 
     path(
         "validar-codigo/",
-        acceso_admision(views.validar_codigo_ingreso),
+        acceso_ingreso(views.validar_codigo_ingreso),
         name="validar_codigo_ingreso",
     ),
 
     path(
         "registro-ultimos/",
-        acceso_admision(views.ultimos_registros_ajax),
+        acceso_ingreso(views.ultimos_registros_ajax),
         name="ultimos_registros_ajax",
     ),
 
     path(
         "bloques/<int:bloque_id>/abrir/",
-        acceso_admision(views.abrir_bloque_ceremonia),
+        acceso_ingreso(views.abrir_bloque_ceremonia),
         name="abrir_bloque_ceremonia",
     ),
 
     path(
         "bloques/<int:bloque_id>/cerrar/",
-        acceso_admision(views.cerrar_bloque_ceremonia),
+        acceso_ingreso(views.cerrar_bloque_ceremonia),
         name="cerrar_bloque_ceremonia",
     ),
 
