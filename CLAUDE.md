@@ -196,14 +196,29 @@ Diseño horizontal 3 columnas (descargable como PNG via html2canvas):
 - `.texto-logro h3` — "tu logro" en Georgia itálica dorada
 - `.codigo-acceso` — código en Courier New blanco
 
-### inicio.html → inicio.css (rediseño enterprise premium)
+### inicio.html → inicio.css (layout global ops-layout, responsive mobile-first)
 Sistema de tarjetas: toda la tarjeta es `<a class="modulo">` (link completo, sin botón separado).
-Iconografía: SVG inline Lucide (18px en contenedor 36px). NO usar siglas de texto como iconos.
+Iconografía: SVG inline Lucide (15px en contenedor 30px). NO usar siglas de texto como iconos.
 Color accent: `style="--mc:#HEX"` en cada `.modulo` → `::before` usa `var(--mc)` para la línea deslizante en hover.
-Grid: `repeat(7, 1fr)` desde 1025px (7 módulos en una fila en desktop).
-Hero: compacto, padding-bottom `28-38px` (NO 60-84px como antes).
-Panel: sin `<h2>Panel Principal</h2>` ni subtítulo (eliminados).
-Variables: `--ini-w: min(1440px, 92%)` — más ancho que antes (`1040px`).
+Variables globales: `--sb-w` (ancho sidebar), `--topbar-h` (altura topbar), `--rojo-ops`, `--negro-ops`.
+
+**Grids con auto-fit** (se adaptan solos sin breakpoints explícitos):
+- `ops-kpis`: `repeat(auto-fit, minmax(130px, 1fr))` — 5 cols en wide, menos en estrecho
+- `ops-grupos`: `repeat(auto-fit, minmax(280px, 1fr))` — 2 cols en wide, 1 en estrecho
+- `ops-mods`: `repeat(auto-fit, minmax(160px, 1fr))` — 2 cols normalmente
+- `ops-footer-row`: `1fr clamp(200px, 22vw, 280px)` — columna derecha flexible
+
+**Breakpoints responsivos explícitos en inicio.css:**
+| Rango | `--sb-w` | Comportamiento |
+|---|---|---|
+| ≤480px | sidebar oculto | KPIs 2 cols, módulos 1 col |
+| 481–767px | sidebar oculto | KPIs 2 cols, módulos 2 cols |
+| ≤768px | oculto (hamburger) | sidebar en drawer overlay |
+| 768–1024px | 196px | KPIs auto-fit, grupos 1 col |
+| 1025–1366px | 200px | KPIs auto-fit, padding reducido |
+| 1367–1920px | 220px (default) | sin overrides |
+| 1921px+ | 240px | tipografías y padding más grandes |
+| height≤700 + wide | sin cambio | spacing ultra-compacto (HDMI) |
 
 ### agregar_estudiante.html → agregar_estudiante.css
 Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes:
