@@ -6,6 +6,17 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Reportes CSS responsive corregido (2026-06-02)
+
+`reportes.css` — grids KPI y gráfico ajustados para ops-layout (viewport - sidebar):
+- `.kpis-reportes` y `.kpis-op`: de `repeat(N, 1fr)` forzado a `repeat(auto-fit, minmax(..., 1fr))` en todos los breakpoints — cards siempre ≥175px/150px, sin textos cortados
+- `.rep-kpis-2col` (tab Tiempos): eliminado `max-width:560px`, ahora ocupa 100% del contenedor
+- `kpi-rep-valor`: `clamp(1.3rem, 1.5vw, 1.75rem)` — evita overflow en cards pequeñas
+- `kpi-rep-texto`: añadido `word-break:break-word` — nombres de ceremonia ya no se cortan
+- `chart-container`: `clamp(200px, 28vh, 300px)` — gráfico respeta alto disponible por resolución
+- Breakpoint notebook 1025-1366px: padding compacto `11px 13px` + font reducido
+- Breakpoint HDMI (max-height:800px): todos los elementos compactados ~15%
+
 ## Reportes integrado a ops-layout (2026-06-02)
 
 `reportes.html` migrado de layout propio (`.marco` + `<header class="barra">`) a `ops-layout` global:

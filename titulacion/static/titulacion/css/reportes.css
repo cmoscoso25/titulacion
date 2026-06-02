@@ -324,7 +324,7 @@
    ============================================================ */
 .kpis-reportes{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
     gap:10px;
     margin-bottom:14px;
 }
@@ -403,7 +403,7 @@
 
 .kpi-rep-valor{
     display:block;
-    font-size:clamp(1.55rem,2.2vw,1.95rem);
+    font-size:clamp(1.3rem,1.5vw,1.75rem);
     font-weight:800;
     line-height:1;
     color:var(--texto);
@@ -412,9 +412,10 @@
 }
 
 .kpi-rep-texto{
-    font-size:clamp(.72rem,.9vw,.82rem);
-    line-height:1.25;
+    font-size:clamp(.76rem,.9vw,.86rem);
+    line-height:1.35;
     letter-spacing:0;
+    word-break:break-word;
 }
 
 .kpi-rep-sub{
@@ -519,14 +520,14 @@
    ============================================================ */
 .kpis-op{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
     gap:10px;
     margin-bottom:14px;
 }
 
 .rep-kpis-2col{
-    grid-template-columns:1fr 1fr;
-    max-width:560px;
+    grid-template-columns:repeat(2,1fr);
+    max-width:100%;
 }
 
 /* ============================================================
@@ -534,7 +535,7 @@
    ============================================================ */
 .chart-container{
     position:relative;
-    height:240px;
+    height:clamp(200px,28vh,300px);
     width:100%;
 }
 
@@ -622,11 +623,10 @@
     .rep-strip-item{ min-width:40%; }
     .rep-strip-sep{ display:none; }
     .rep-main{ padding:14px 0 24px; }
-    .kpis-reportes{ grid-template-columns:1fr 1fr; gap:8px; }
-    .kpis-op{ grid-template-columns:1fr 1fr; }
-    .rep-kpis-2col{ max-width:100%; }
+    .kpis-reportes{ grid-template-columns:repeat(2,1fr); gap:8px; }
+    .kpis-op{ grid-template-columns:repeat(2,1fr); }
     .kpi-rep{ padding:11px 13px 10px; }
-    .kpi-rep-valor{ font-size:clamp(1.25rem,6vw,1.55rem); }
+    .kpi-rep-valor{ font-size:clamp(1.2rem,5vw,1.45rem); }
     .rep-tabs-seg{ width:100%; }
     .tab-reporte{ padding:6px 11px; font-size:.72rem; }
 }
@@ -636,39 +636,46 @@
     :root{ --rep-w:90%; }
     .rep-header-inner{ flex-wrap:wrap; gap:10px; }
     .rep-main{ padding:16px 0 28px; }
-    .kpis-reportes{ grid-template-columns:repeat(3,1fr); }
-    .kpis-op{ grid-template-columns:repeat(3,1fr); }
-    .rep-kpis-2col{ max-width:100%; }
+    .kpis-reportes{ grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); }
+    .kpis-op{ grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
 }
 
 /* 768px – 1024px */
 @media (min-width:768px) and (max-width:1024px){
     :root{ --rep-w:90%; }
-    .kpis-reportes{ grid-template-columns:repeat(5,1fr); }
-    .kpis-op{ grid-template-columns:repeat(3,1fr); }
+    .kpis-reportes{ grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); }
+    .kpis-op{ grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
+    .kpi-rep{ padding:12px 14px 11px; }
 }
 
-/* 1025px – 1366px */
+/* 1025px – 1366px (notebook 15") */
 @media (min-width:1025px) and (max-width:1366px){
-    :root{ --rep-w:min(1240px,92%); }
-    .kpis-reportes{ grid-template-columns:repeat(5,1fr); }
-    .kpis-op{ grid-template-columns:repeat(6,1fr); }
+    :root{ --rep-w:min(1240px,94%); }
+    .kpis-reportes{ grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+    .kpis-op{ grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); }
+    .kpi-rep{ padding:11px 13px 10px; }
+    .kpi-rep-valor{ font-size:clamp(1.2rem,1.4vw,1.6rem); }
+    .rep-main{ padding:14px 0 28px; }
+    .chart-container{ height:clamp(190px,25vh,280px); }
 }
 
 /* 1367px+ */
 @media (min-width:1367px){
-    .kpis-reportes{ grid-template-columns:repeat(5,1fr); }
-    .kpis-op{ grid-template-columns:repeat(6,1fr); }
+    .kpis-reportes{ grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); }
+    .kpis-op{ grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); }
 }
 
 /* Pantalla baja / HDMI */
 @media (max-height:800px) and (min-width:900px){
-    .rep-header{ min-height:46px; }
-    .rep-strip-item{ padding:10px 12px; }
-    .rep-strip-val{ font-size:1.2rem; }
-    .rep-main{ padding:14px 0 24px; }
-    .kpi-rep{ padding:11px 13px 10px; }
-    .kpi-rep-valor{ font-size:clamp(1.25rem,1.6vw,1.6rem); }
-    .panel-rep{ padding:12px 14px; }
-    .chart-container{ height:190px; }
+    .rep-header{ min-height:44px; }
+    .rep-strip-item{ padding:9px 10px; }
+    .rep-strip-val{ font-size:1.15rem; }
+    .rep-main{ padding:12px 0 20px; }
+    .kpi-rep{ padding:10px 12px 9px; }
+    .kpi-rep-valor{ font-size:clamp(1.1rem,1.4vw,1.45rem); }
+    .kpi-rep-sub{ font-size:.58rem; }
+    .panel-rep{ padding:10px 13px; }
+    .chart-container{ height:clamp(160px,22vh,220px); }
+    .rep-tabs-seg{ padding:2px; }
+    .tab-reporte{ padding:5px 13px; font-size:.72rem; }
 }
