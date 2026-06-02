@@ -181,19 +181,24 @@ Sistema de variables en reportes.css:
 ## Clases principales por página
 
 ### panel_control.html → inicio.css + dashboard.css
-Usa el layout global `ops-layout` (sidebar + topbar) igual que inicio.html y registro_ingreso.html.
-Carga: `base.css` → `inicio.css` → `dashboard.css`.
-El `dashboard.css` solo contiene estilos del contenido interno: buscador, filtros, KPIs, tabs, tablas.
-NO contiene estilos de layout, hero ni marco — eso lo maneja `inicio.css`.
+Dashboard operativo ejecutivo. Carga: `base.css` → `inicio.css` → `dashboard.css`.
+Usa `ops-layout` con clase adicional `pc-view` en `ops-scroll` que zeroes padding (layout full-width).
 
-Clases funcionales (NO renombrar — referenciadas por JS):
-- `#filtroCeremonia`, `#filtroBloque`, `#filtroBusqueda`, `#filtroArea`, `#filtroPlan`, `#filtroEstado`, `#filtroTipoAcceso`, `#filtroResultado`
-- `#resultadoBusqueda`, `#kpiEstudiantesPresentes`, `#kpiEstudiantesPendientes`, `#kpiInvitadosPresentes`, `#kpiTotalAsistentes`, `#kpiTotalAtrasados`, `#kpiAlertasQr`, `#kpiPctEstudiantes`, `#kpiPctInvitados`
-- `#tablaAvancePlanes`, `#tablaUltimosMovimientos`, `#tablaAtrasados`, `#tablaSeguimiento`, `#ultimaActualizacion`
-- `.tab-dashboard`, `.panel-tab`, `.activo`
-- `cargarDashboard()` — se llama cada 15 segundos vía `setInterval`
-- `urlDatosPanel` → `{% url 'titulacion:datos_panel_control' %}`
-- `urlPlanesPorArea` → `{% url 'titulacion:obtener_planes_por_area' %}`
+**Estructura visual (patrón similar a registro_ingreso.html):**
+- `.pc-cmd-bar` — command bar 52px: ícono navy + título + subtítulo + badge estado ceremonia
+- `.pc-kpi-strip` — franja 6 KPIs con border-top semántico (ok/nvy/info/wrn/err)
+- `.pc-filter-bar` — card filtros compacta (margen 12px 16px): busqueda + grid auto-fit 6 filtros + Aplicar/Limpiar
+- `.pc-filter-footer` — resultado búsqueda inline + auto-actualización discreta
+- `.pc-content` — panel blanco (margen 8px 16px): tabs + tablas
+- `.pc-footer` — footer con márgenes propios
+
+**Clases/IDs NO renombrar (referenciados por JS):**
+- IDs filtros: `#filtroCeremonia`, `#filtroBloque`, `#filtroBusqueda`, `#filtroArea`, `#filtroPlan`, `#filtroEstado`, `#filtroTipoAcceso`, `#filtroResultado`
+- IDs KPIs: `#kpiEstudiantesPresentes`, `#kpiEstudiantesPendientes`, `#kpiInvitadosPresentes`, `#kpiTotalAsistentes`, `#kpiTotalAtrasados`, `#kpiAlertasQr`, `#kpiPctEstudiantes`, `#kpiPctInvitados`
+- IDs tablas: `#tablaAvancePlanes`, `#tablaUltimosMovimientos`, `#tablaAtrasados`, `#tablaSeguimiento`
+- IDs UI: `#resultadoBusqueda`, `#ultimaActualizacion`
+- Clases JS: `.tab-dashboard`, `.panel-tab`, `.activo`, `.resultado-busqueda` + `.rb-*`, `.badge` + `.badge-si/no/atrasado`, `.fila-estado-*`, `.barra-progreso`
+- Funciones: `cargarDashboard()` (setInterval 15s), `cambiarTab()`, `limpiarFiltros()`, `cargarPlanesPorArea()`
 
 ### tarjetas.html → tarjetas.css
 Diseño horizontal 3 columnas (ticket institucional):
