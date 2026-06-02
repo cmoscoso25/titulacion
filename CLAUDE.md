@@ -275,6 +275,8 @@ Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
 - `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
 - `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
 
+**Agregar Estudiante ops-layout (2026-06-02):** `agregar_estudiante.html` usa `ops-layout` + `ops-scroll ag-view`. `.ag-view` en `agregar_estudiante.css` zeroes padding. Los `negative margins` en `.panel-formulario` (`margin: -30px auto 18px`) son intencionales — superponen el panel sobre el `.hero-agregar` rojo. NO eliminar esos márgenes negativos. Messages van en `ops-mensajes` ANTES del `ops-scroll` (fuera del hero).
+
 **Reportes breakpoints notebook (2026-06-02):** Para notebook 1366×768, AMBOS breakpoints `1025-1366px` (width) y `max-height:800px` (height) aplican simultáneamente. El HDMI/height viene ÚLTIMO en el CSS y gana sobre el width breakpoint. `rep-tabs-wrapper margin-bottom` y `rep-actualizacion margin` DEBEN estar en AMBOS breakpoints — son los más olvidados. El `kpi-rep-top margin-bottom` también se olvida frecuentemente y suma espacios verticales.
 
 **Reportes grids CSS (2026-06-02):** `.kpis-reportes` y `.kpis-op` usan `repeat(auto-fit, minmax(175px/150px, 1fr))` en todos los breakpoints — NUNCA `repeat(N, 1fr)` forzado, causa cards rotas dentro de ops-layout con sidebar. `.rep-kpis-2col` sin `max-width`. `kpi-rep-texto` tiene `word-break:break-word`. `chart-container` usa `clamp` para altura responsiva.

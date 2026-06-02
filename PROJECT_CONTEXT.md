@@ -6,6 +6,19 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Agregar Estudiante migrado a ops-layout (2026-06-02)
+
+`agregar_estudiante.html` + `agregar_estudiante.css` migrados al estándar global:
+- Reemplaza `.marco` + `<header class="barra">` por `ops-layout` con sidebar + `ops-topbar`
+- Agrega `inicio.css` al head (load order: base → inicio → agregar_estudiante)
+- `ops-scroll ag-view` — `.ag-view` en CSS zeroes padding del scroll
+- Sidebar con permisos idéntico al resto, "Agregar Estudiante" activo (bajo perm_admin)
+- Mensajes migrados a `ops-mensajes` antes del `ops-scroll`
+- JS `actualizarPlanes()` / `actualizarInstitucion()` sin modificaciones
+- Negative margins (-30px) del hero preservados — paneles siguen superponiéndose al hero rojo
+- Notebook 1025-1366px: inputs 36px, botones 38px, secciones 16px, padding panel reducido
+- HDMI max-height:800px: compactación adicional de todos los elementos verticales
+
 ## Reportes compactación notebook (2026-06-02)
 
 Segunda ronda de ajuste fino para 1366×768: breakpoints `1025-1366px` y `max-height:800px` reemplazados con valores más agresivos. Cambios clave: `rep-header` 44→42px, `rep-strip-item` padding 8→7px, `kpi-rep` padding 9→8px, `kpi-rep-top margin-bottom` 5→4px, `panel-rep` padding 10→9px, `rep-tabs-wrapper margin-bottom` ahora explícito en ambos breakpoints (7px/5px), `rep-actualizacion margin` reducido. Para 1366×768, ambos breakpoints son activos simultáneamente (width + height) y el HDMI gana por orden CSS.

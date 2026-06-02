@@ -230,6 +230,15 @@
 }
 
 /* ============================================================
+   OPS-SCROLL OVERRIDE (zeroes ops-scroll padding, como pc-view)
+   ============================================================ */
+.ag-view {
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow-y: auto;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
@@ -259,9 +268,19 @@
 
 /* 1025px – 1366px — NOTEBOOK */
 @media (min-width: 1025px) and (max-width: 1366px){
-    :root{ --agregar-width: min(1020px, 90%); }
-    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    :root{ --agregar-width: min(1000px, 92%); }
+    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     .campo-ancho{ grid-column: span 2; }
+    .campo-form input,
+    .campo-form select,
+    .campo-readonly{ min-height: 36px; font-size: .82rem; }
+    .btn-guardar{ min-height: 38px; padding: 0 22px; font-size: .84rem; }
+    .btn-cancelar{ min-height: 38px; padding: 0 18px; font-size: .82rem; }
+    .seccion-form{ margin-bottom: 16px; padding-bottom: 16px; }
+    .form-acciones{ margin-top: 16px; }
+    .panel-subtitulo{ margin-bottom: 14px; font-size: .78rem; }
+    .panel-formulario,
+    .panel-recientes{ padding: 16px 20px; }
 }
 
 /* 1367px – 1920px — DESKTOP */
@@ -280,6 +299,14 @@
 
 /* Pantalla baja: notebook con TV via HDMI */
 @media (max-height: 800px) and (min-width: 900px){
-    .hero-agregar-contenido{ padding-top: 12px; padding-bottom: 40px; }
-    .panel-formulario{ margin-top: -24px; padding: 16px; }
+    .hero-agregar-contenido{ padding-top: 10px; padding-bottom: 36px; }
+    .panel-formulario{ margin-top: -22px; padding: 14px 18px; }
+    .seccion-form{ margin-bottom: 14px; padding-bottom: 14px; }
+    .campo-form input,
+    .campo-form select,
+    .campo-readonly{ min-height: 34px; }
+    .btn-guardar,
+    .btn-cancelar{ min-height: 36px; }
+    .form-acciones{ margin-top: 14px; gap: 10px; }
+    .grid-campos{ gap: 8px; }
 }
