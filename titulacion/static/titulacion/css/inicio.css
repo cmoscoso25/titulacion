@@ -92,6 +92,7 @@ body {
     padding: 14px 16px 4px;
 }
 
+/* Truncar texto largo para evitar que nav items rompan en 2 líneas */
 .ops-nav-item {
     display: flex;
     align-items: center;
@@ -104,6 +105,9 @@ body {
     border-left: 2px solid transparent;
     transition: background 0.13s, color 0.13s, border-color 0.13s;
     line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ops-nav-item:hover {
@@ -124,6 +128,7 @@ body {
     flex-shrink: 0;
     opacity: 0.55;
     transition: opacity 0.13s;
+    min-width: 14px; /* evita que se comprima */
 }
 
 .ops-nav-item.active svg,
@@ -188,9 +193,7 @@ body {
     min-height: unset;
 }
 
-.ops-hamburger:hover {
-    background: #f3f4f6;
-}
+.ops-hamburger:hover { background: #f3f4f6; }
 
 .ops-hamburger svg {
     width: 18px;
@@ -279,7 +282,7 @@ body {
     font-family: inherit;
     min-height: unset !important;
     white-space: nowrap;
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
 }
 
@@ -332,7 +335,6 @@ body {
 
 /* ============================================================
    KPIs EJECUTIVOS
-   auto-fit: se reorganizan solos en cualquier ancho
    ============================================================ */
 .ops-kpis {
     display: grid;
@@ -354,9 +356,7 @@ body {
     min-width: 0;
 }
 
-.kpi-card:hover {
-    border-top-color: var(--rojo-ops);
-}
+.kpi-card:hover { border-top-color: var(--rojo-ops); }
 
 .kpi-label {
     font-size: 0.62rem;
@@ -375,9 +375,7 @@ body {
     letter-spacing: -1px;
 }
 
-.kpi-num-accent {
-    color: var(--rojo-ops);
-}
+.kpi-num-accent { color: var(--rojo-ops); }
 
 .kpi-sub {
     font-size: 0.62rem;
@@ -386,8 +384,7 @@ body {
 }
 
 /* ============================================================
-   GRUPOS DE MÓDULOS
-   2 cols por defecto; auto-fit para módulos internos
+   GRUPOS DE MÓDULOS — 2 cols por defecto
    ============================================================ */
 .ops-grupos {
     display: grid;
@@ -453,9 +450,7 @@ body {
 .modulo::before {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    left: 0; top: 0; bottom: 0;
     width: 3px;
     background: var(--mc, var(--rojo-ops));
     transform: scaleY(0);
@@ -472,9 +467,7 @@ body {
     color: inherit;
 }
 
-.modulo:hover::before {
-    transform: scaleY(1);
-}
+.modulo:hover::before { transform: scaleY(1); }
 
 .mod-icono {
     width: 30px;
@@ -571,9 +564,7 @@ body {
     border-bottom: 1px solid #f3f4f6;
 }
 
-.ops-tl-item:last-child {
-    border-bottom: none;
-}
+.ops-tl-item:last-child { border-bottom: none; }
 
 .ops-tl-dot {
     width: 7px;
@@ -658,9 +649,7 @@ body {
     border-bottom: 1px solid #f3f4f6;
 }
 
-.bloque-item:last-child {
-    border-bottom: none;
-}
+.bloque-item:last-child { border-bottom: none; }
 
 .bloque-dot {
     width: 6px;
@@ -734,12 +723,12 @@ body {
 }
 
 /* ============================================================
-   RESPONSIVE — Mobile-first con 6 breakpoints
+   RESPONSIVE — Mobile-first · 6 breakpoints
    ============================================================ */
 
 /* ── 320px – 480px: móvil ── */
 @media (max-width: 480px) {
-    .ops-scroll         { padding: 10px 10px 14px; gap: 8px; }
+    .ops-scroll         { padding: 10px 10px 12px; gap: 8px; }
     .ops-topbar         { padding: 0 10px; }
     .ops-topbar-title   { font-size: 0.68rem; }
     .ops-username       { display: none; }
@@ -756,7 +745,7 @@ body {
 
 /* ── 481px – 767px: móvil grande ── */
 @media (min-width: 481px) and (max-width: 767px) {
-    .ops-scroll         { padding: 12px 14px 16px; gap: 9px; }
+    .ops-scroll         { padding: 12px 14px 14px; gap: 9px; }
     .ops-topbar         { padding: 0 14px; }
     .ops-topbar-title   { font-size: 0.72rem; }
     .ops-username       { display: none; }
@@ -771,8 +760,7 @@ body {
 @media (max-width: 768px) {
     .ops-sidebar {
         position: fixed;
-        top: 0;
-        left: 0;
+        top: 0; left: 0;
         height: 100%;
         transform: translateX(-100%);
         box-shadow: none;
@@ -789,35 +777,90 @@ body {
 
 /* ── 768px – 1024px: tablet / notebook pequeño ── */
 @media (min-width: 768px) and (max-width: 1024px) {
-    :root               { --sb-w: 196px; }
-    .ops-scroll         { padding: 12px 16px 16px; gap: 10px; }
+    :root               { --sb-w: 192px; }
+    .ops-scroll         { padding: 12px 16px 14px; gap: 10px; }
     .ops-topbar         { padding: 0 16px; }
     .ops-topbar-title   { font-size: 0.75rem; }
-    .ops-kpis           { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-    .kpi-num            { font-size: 1.45rem; }
-    .ops-grupos         { grid-template-columns: 1fr; }
+    .ops-nav-item       { font-size: 0.74rem; padding: 6px 14px; gap: 8px; }
+    .ops-nav-item svg   { width: 13px; height: 13px; min-width: 13px; }
+    .ops-nav-label      { font-size: 0.55rem; padding: 12px 14px 3px; }
+    .ops-kpis           { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+    .kpi-num            { font-size: 1.4rem; }
+    .kpi-card           { padding: 9px 11px; }
+    .ops-grupos         { grid-template-columns: 1fr; gap: 8px; }
     .ops-mods           { grid-template-columns: repeat(2, 1fr); }
     .ops-footer-row     { grid-template-columns: 1fr; }
     .ops-grupo          { padding: 10px 12px; }
-    .kpi-card           { padding: 9px 12px; }
     .modulo             { padding: 8px 9px; }
     .mod-icono          { width: 26px; height: 26px; }
     .mod-icono svg      { width: 13px; height: 13px; }
 }
 
-/* ── 1025px – 1366px: notebook 15" ── */
+/* ── 1025px – 1366px: notebook 15" — COMPACTO ── */
 @media (min-width: 1025px) and (max-width: 1366px) {
-    :root               { --sb-w: 200px; }
-    .ops-scroll         { padding: 12px 16px 14px; gap: 10px; }
-    .ops-topbar         { padding: 0 16px; }
-    .ops-topbar-title   { font-size: 0.77rem; }
-    .kpi-num            { font-size: clamp(1.35rem, 1.8vw, 1.6rem); }
-    .kpi-card           { padding: 9px 12px 8px; }
-    .ops-grupo          { padding: 10px 12px; }
-    .modulo             { padding: 8px 9px; }
-    .mod-icono          { width: 27px; height: 27px; }
-    .mod-icono svg      { width: 14px; height: 14px; }
-    .ops-footer-row     { grid-template-columns: 1fr clamp(200px, 20vw, 260px); }
+    :root               { --sb-w: 172px; --topbar-h: 44px; }
+
+    /* Sidebar compacto */
+    .ops-sidebar-brand  { padding: 10px 12px; }
+    .ops-logo           { height: 24px; }
+    .ops-nav-label      { font-size: 0.54rem; padding: 10px 12px 3px; letter-spacing: 0.07em; }
+    .ops-nav-item       { font-size: 0.72rem; padding: 5px 12px; gap: 7px; }
+    .ops-nav-item svg   { width: 13px; height: 13px; min-width: 13px; }
+    .ops-sidebar-footer { font-size: 0.55rem; padding: 6px 12px; }
+
+    /* Topbar compacto */
+    .ops-topbar         { padding: 0 14px; }
+    .ops-topbar-title   { font-size: 0.74rem; }
+    .ops-topbar-logo-img { height: 19px; }
+    .ops-username       { font-size: 0.7rem; max-width: 90px; }
+
+    /* Scroll + layout */
+    .ops-scroll         { padding: 10px 14px 12px; gap: 8px; }
+
+    /* KPIs compactos */
+    .ops-kpis           { grid-template-columns: repeat(5, 1fr); gap: 7px; }
+    .kpi-card           { padding: 6px 10px 5px; gap: 2px; border-top-width: 2px; }
+    .kpi-num            { font-size: clamp(1.1rem, 1.6vw, 1.35rem); letter-spacing: -0.5px; }
+    .kpi-label          { font-size: 0.58rem; }
+    .kpi-sub            { font-size: 0.56rem; }
+
+    /* Grupos de módulos */
+    .ops-grupos         { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+    .ops-grupo          { padding: 8px 10px; border-radius: 7px; }
+    .ops-grupo-titulo   { font-size: 0.58rem; margin: 0 0 7px; padding-bottom: 6px; }
+    .ops-grupo-titulo svg { width: 10px; height: 10px; }
+    .ops-mods           { grid-template-columns: repeat(2, 1fr); gap: 5px; }
+
+    /* Cards de módulo */
+    .modulo             { padding: 6px 8px; gap: 7px; border-radius: 5px; }
+    .mod-icono          { width: 24px; height: 24px; border-radius: 5px; }
+    .mod-icono svg      { width: 12px; height: 12px; }
+    .mod-titulo         { font-size: 0.72rem; }
+    .mod-desc           { font-size: 0.59rem; line-height: 1.25; }
+
+    /* Footer row */
+    .ops-footer-row     { grid-template-columns: 1fr clamp(180px, 17vw, 220px); gap: 7px; }
+    .ops-section-titulo { font-size: 0.58rem; margin: 0 0 7px; padding-bottom: 5px; }
+    .ops-section-titulo svg { width: 10px; height: 10px; }
+
+    /* Actividad + ceremonias */
+    .ops-actividad,
+    .ops-ceremonias     { padding: 8px 10px; border-radius: 7px; }
+    .ops-tl-item        { padding: 4px 0; gap: 8px; }
+    .ops-tl-dot         { width: 6px; height: 6px; }
+    .ops-tl-content     { font-size: 0.68rem; }
+    .ops-tl-badge       { font-size: 0.58rem; padding: 1px 4px; }
+    .ops-tl-time        { font-size: 0.59rem; }
+    .bloque-item        { padding: 4px 0; gap: 6px; }
+    .bloque-dot         { width: 5px; height: 5px; margin-top: 4px; }
+    .bloque-nombre      { font-size: 0.7rem; }
+    .bloque-ceremonia   { font-size: 0.59rem; }
+    .bloque-fecha       { font-size: 0.59rem; }
+    .bloque-hora        { font-size: 0.64rem; }
+
+    /* Footer */
+    .ops-page-footer    { font-size: 0.58rem; padding: 2px 0 1px; }
+    .ops-mensajes       { padding: 6px 14px 0; }
 }
 
 /* ── 1367px – 1920px: monitor estándar (valores por defecto activos) ── */
@@ -832,7 +875,7 @@ body {
     .kpi-label          { font-size: 0.68rem; }
     .kpi-sub            { font-size: 0.68rem; }
     .kpi-card           { padding: 14px 18px 12px; }
-    .ops-grupos         { grid-template-columns: repeat(4, 1fr); }
+    .ops-grupos         { grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .ops-grupo          { padding: 14px 16px; }
     .modulo             { padding: 12px 13px; gap: 11px; }
     .mod-icono          { width: 34px; height: 34px; border-radius: 8px; }
@@ -841,25 +884,27 @@ body {
     .mod-desc           { font-size: 0.7rem; }
     .ops-nav-item       { font-size: 0.84rem; padding: 8px 18px; }
     .ops-nav-label      { padding: 16px 18px 5px; }
-    .ops-footer-row     { grid-template-columns: 1fr clamp(260px, 18vw, 320px); }
+    .ops-footer-row     { grid-template-columns: 1fr clamp(260px, 18vw, 320px); gap: 12px; }
+    .ops-section-titulo { margin: 0 0 12px; }
     .ops-tl-content     { font-size: 0.78rem; }
     .bloque-nombre      { font-size: 0.8rem; }
     .ops-page-footer    { font-size: 0.66rem; padding: 6px 0 4px; }
 }
 
-/* ── Pantalla baja: notebook conectado a TV via HDMI ── */
+/* ── Pantalla baja: notebook conectado a TV via HDMI (height≤700) ── */
 @media (max-height: 700px) and (min-width: 900px) {
-    .ops-scroll     { padding: 8px 16px 10px; gap: 7px; }
-    .kpi-card       { padding: 7px 11px; }
-    .kpi-num        { font-size: 1.35rem; }
-    .ops-grupo      { padding: 7px 11px; }
-    .ops-grupos     { gap: 7px; }
-    .modulo         { padding: 6px 8px; }
-    .mod-icono      { width: 24px; height: 24px; border-radius: 5px; }
-    .mod-icono svg  { width: 12px; height: 12px; }
+    .ops-scroll         { padding: 8px 14px 8px; gap: 6px; }
+    .kpi-card           { padding: 6px 10px 5px; }
+    .kpi-num            { font-size: 1.3rem; }
+    .ops-grupo          { padding: 6px 10px; }
+    .ops-grupos         { gap: 6px; }
+    .modulo             { padding: 5px 8px; }
+    .mod-icono          { width: 22px; height: 22px; border-radius: 4px; }
+    .mod-icono svg      { width: 11px; height: 11px; }
     .ops-actividad,
-    .ops-ceremonias { padding: 7px 11px; }
-    .ops-footer-row { gap: 7px; }
-    .ops-tl-item    { padding: 4px 0; }
-    .bloque-item    { padding: 4px 0; }
+    .ops-ceremonias     { padding: 6px 10px; }
+    .ops-footer-row     { gap: 6px; }
+    .ops-tl-item        { padding: 3px 0; }
+    .bloque-item        { padding: 3px 0; }
+    .ops-page-footer    { padding: 2px 0 1px; }
 }

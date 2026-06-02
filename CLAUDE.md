@@ -210,23 +210,25 @@ Iconografía: SVG inline Lucide (15px en contenedor 30px). NO usar siglas de tex
 Color accent: `style="--mc:#HEX"` en cada `.modulo` → `::before` usa `var(--mc)` para la línea deslizante en hover.
 Variables globales: `--sb-w` (ancho sidebar), `--topbar-h` (altura topbar), `--rojo-ops`, `--negro-ops`.
 
-**Grids con auto-fit** (se adaptan solos sin breakpoints explícitos):
-- `ops-kpis`: `repeat(auto-fit, minmax(130px, 1fr))` — 5 cols en wide, menos en estrecho
-- `ops-grupos`: `repeat(auto-fit, minmax(280px, 1fr))` — 2 cols en wide, 1 en estrecho
-- `ops-mods`: `repeat(auto-fit, minmax(160px, 1fr))` — 2 cols normalmente
-- `ops-footer-row`: `1fr clamp(200px, 22vw, 280px)` — columna derecha flexible
+**Grids:**
+- `ops-kpis`: `repeat(auto-fit, minmax(130px, 1fr))` base; `repeat(5, 1fr)` forzado en 1025-1366px
+- `ops-grupos`: `repeat(2, 1fr)` en 769-1920px; `repeat(4, 1fr)` en 1921px+; `1fr` en ≤1024px
+- `ops-mods`: `repeat(2, 1fr)` fijo en notebook; `auto-fit minmax(160px)` en base
+- `ops-footer-row`: `1fr clamp(200px, 22vw, 280px)` base; `1fr clamp(180px,17vw,220px)` en notebook
 
-**Breakpoints responsivos explícitos en inicio.css:**
-| Rango | `--sb-w` | Comportamiento |
-|---|---|---|
-| ≤480px | sidebar oculto | KPIs 2 cols, módulos 1 col |
-| 481–767px | sidebar oculto | KPIs 2 cols, módulos 2 cols |
-| ≤768px | oculto (hamburger) | sidebar en drawer overlay |
-| 768–1024px | 196px | KPIs auto-fit, grupos 1 col |
-| 1025–1366px | 200px | KPIs auto-fit, padding reducido |
-| 1367–1920px | 220px (default) | sin overrides |
-| 1921px+ | 240px | tipografías y padding más grandes |
-| height≤700 + wide | sin cambio | spacing ultra-compacto (HDMI) |
+**`.ops-nav-item`**: `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` en base para evitar que textos largos rompan en 2 líneas. El icono tiene `min-width` para no comprimirse.
+
+**Breakpoints responsivos en inicio.css:**
+| Rango | `--sb-w` | `--topbar-h` | Comportamiento destacado |
+|---|---|---|---|
+| ≤480px | sidebar oculto | 48px | KPIs 2 cols, módulos 1 col |
+| 481–767px | sidebar oculto | 48px | KPIs 2 cols, módulos 2 cols |
+| ≤768px | oculto (hamburger) | 48px | sidebar en drawer overlay |
+| 768–1024px | 192px | 48px | grupos 1 col, módulos 2 cols |
+| **1025–1366px** | **172px** | **44px** | todo compacto: KPIs 5 cols forzadas, font nav 0.72rem, cards min, footer-row estrecho |
+| 1367–1920px | 220px | 48px | valores por defecto (monitor estándar) |
+| 1921px+ | 240px | 54px | grupos 4 cols, tipografía y padding grandes (TV) |
+| height≤700 + wide | — | — | ultra-compacto para notebook vía HDMI |
 
 ### agregar_estudiante.html → agregar_estudiante.css
 Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes:
