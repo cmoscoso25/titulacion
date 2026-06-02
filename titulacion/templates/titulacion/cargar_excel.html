@@ -6,217 +6,286 @@
     <meta charset="UTF-8">
     <title>Carga Masiva Excel | INACAP Sede Arica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/inicio.css' %}">
     <link rel="stylesheet" href="{% static 'titulacion/css/carga_excel.css' %}">
 </head>
 
 <body>
+<div class="ops-layout">
 
-<div class="marco">
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="ops-sidebar" id="ops-sidebar">
 
-    <header class="barra">
-        <div class="marca">
-            <div class="logo-contenedor">
-                <img
-                    src="{% static 'titulacion/img/logo.png' %}"
-                    alt="INACAP"
-                    class="logo-inacap"
-                >
-            </div>
-
-            <div class="sede">
-                Sede Arica
-            </div>
+        <div class="ops-sidebar-brand">
+            <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-logo">
         </div>
 
-        <div class="zona-derecha">
-            <div class="titulo-barra">
-                Ceremonia de Titulación 2026
-            </div>
+        <nav class="ops-nav" aria-label="Navegación principal">
 
-            {% if request.user.is_authenticated %}
-                <form method="POST" action="{% url 'titulacion:logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-cerrar-sesion">
-                        Cerrar sesión
-                    </button>
-                </form>
-            {% endif %}
-
-            <div class="avatar" title="{{ request.user.username }}">
-                {{ request.user.username|slice:":2"|upper }}
-            </div>
-        </div>
-    </header>
-
-    <section class="hero-carga">
-        <div class="hero-carga-contenido">
-
-            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
-                ← Volver al inicio
+            <span class="ops-nav-label">Principal</span>
+            <a href="{% url 'titulacion:inicio' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                Panel Principal
             </a>
 
-            <h1>
+            {% if perm_admin %}
+            <span class="ops-nav-label">Gestión de Estudiantes</span>
+            <a href="{% url 'titulacion:cargar_excel' %}" class="ops-nav-item active" aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
                 Carga Masiva Excel
-            </h1>
+            </a>
+            <a href="{% url 'titulacion:agregar_estudiante' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Agregar Estudiante
+            </a>
+            {% endif %}
 
-            <p>
-                Importación institucional de titulados y ceremonias desde archivo oficial
-                entregado por Curricular. El sistema genera registros, invitaciones y códigos QR.
-            </p>
+            {% if perm_entrega or perm_ingreso %}
+            <span class="ops-nav-label">Operación de Ceremonia</span>
+            {% if perm_entrega %}
+            <a href="{% url 'titulacion:entrega_invitaciones' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                Entrega de Invitaciones
+            </a>
+            {% endif %}
+            {% if perm_ingreso %}
+            <a href="{% url 'titulacion:registro_ingreso' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
+                Registro de Ingreso
+            </a>
+            {% endif %}
+            {% endif %}
 
-        </div>
-    </section>
+            {% if perm_curricular %}
+            <span class="ops-nav-label">Gestión y Control</span>
+            <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                Panel de Control
+            </a>
+            <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                Cambio de Ceremonia
+            </a>
+            {% endif %}
 
-    {% if messages %}
-        <section class="mensajes">
-            {% for message in messages %}
-                <div class="mensaje {{ message.tags }}">
-                    {{ message }}
+            {% if perm_curricular or perm_admin %}
+            <span class="ops-nav-label">Análisis</span>
+            {% if perm_curricular %}
+            <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Reportes
+            </a>
+            {% endif %}
+            {% if perm_admin %}
+            <a href="{% url 'titulacion:tarjetas' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Tarjetas QR
+            </a>
+            {% endif %}
+            {% endif %}
+
+            {% if perm_admin %}
+            <span class="ops-nav-label">Sistema</span>
+            <a href="/admin/" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Configuración
+            </a>
+            {% endif %}
+
+        </nav>
+
+        <div class="ops-sidebar-footer">Sede Arica · 2026</div>
+    </aside>
+
+    <!-- ═══ ÁREA PRINCIPAL ═══ -->
+    <div class="ops-main">
+
+        <header class="ops-topbar">
+            <div class="ops-topbar-left">
+                <button class="ops-hamburger" id="ops-hamburger" aria-label="Menú" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="ops-topbar-logo-cap">
+                    <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-topbar-logo-img">
                 </div>
+                <span class="ops-topbar-sep" aria-hidden="true"></span>
+                <span class="ops-topbar-title">Ceremonia de Titulación 2026 - Sede Arica</span>
+            </div>
+            <div class="ops-topbar-right">
+                {% if request.user.is_authenticated %}
+                <div class="ops-user-chip">
+                    <div class="ops-avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":2"|upper }}</div>
+                    <span class="ops-username">{{ request.user.username }}</span>
+                </div>
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ops-btn-logout">Cerrar sesión</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="ops-overlay" id="ops-overlay"></div>
+
+        {% if messages %}
+        <div class="ops-mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">{{ message }}</div>
             {% endfor %}
-        </section>
-    {% endif %}
+        </div>
+        {% endif %}
 
-    <main class="contenido-carga">
+        <div class="ops-scroll ce-view">
 
-        <section class="panel-carga">
-
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="zona-upload">
-
-                    <div class="icono-upload">
-                        📊
+            <!-- ─── COMMAND BAR ─── -->
+            <div class="ce-cmd-bar">
+                <div class="ce-cmd-left">
+                    <div class="ce-cmd-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
                     </div>
+                    <div>
+                        <div class="ce-cmd-title">Carga Masiva Excel</div>
+                        <div class="ce-cmd-sub">Importación institucional de titulados · el sistema genera registros, invitaciones y códigos QR</div>
+                    </div>
+                </div>
+            </div>
 
-                    <h2>
-                        Seleccionar archivo Excel
-                    </h2>
+            <!-- ─── KPI STRIP ─── -->
+            <div class="ce-kpi-strip">
+                <div class="ce-kpi ce-kpi--ok">
+                    <div class="ce-kpi-num">{{ total_estudiantes|default:"0" }}</div>
+                    <div class="ce-kpi-lbl">Estudiantes</div>
+                </div>
+                <div class="ce-kpi ce-kpi--nvy">
+                    <div class="ce-kpi-num">{{ total_ceremonias|default:"0" }}</div>
+                    <div class="ce-kpi-lbl">Ceremonias</div>
+                </div>
+                <div class="ce-kpi ce-kpi--info">
+                    <div class="ce-kpi-num">{{ total_invitaciones|default:"0" }}</div>
+                    <div class="ce-kpi-lbl">Invitaciones</div>
+                </div>
+                <div class="ce-kpi ce-kpi--warn">
+                    <div class="ce-kpi-num">{{ total_alertas|default:"0" }}</div>
+                    <div class="ce-kpi-lbl">Alertas</div>
+                </div>
+            </div>
 
-                    <p>
+            <main class="contenido-carga">
+
+                <!-- ─── UPLOAD ─── -->
+                <section class="panel-carga">
+                    <h2 class="panel-carga-titulo">Seleccionar archivo Excel</h2>
+                    <p class="panel-carga-sub">
                         El sistema detectará automáticamente ceremonias, titulados,
                         áreas, planes de estudio e invitaciones.
                     </p>
 
-                    <label class="btn-upload">
-                        Seleccionar archivo
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                        <input
-                            type="file"
-                            name="archivo_excel"
-                            id="archivo_excel"
-                            class="input-file"
-                            accept=".xlsx,.xls"
-                            required
-                        >
-                    </label>
+                        <div class="zona-upload">
+                            <div class="icono-upload" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+                            </div>
 
-                    <div class="nombre-archivo" id="nombreArchivo">
-                        Ningún archivo seleccionado
+                            <label class="ce-btn-upload" for="archivo_excel">
+                                Seleccionar archivo
+                                <input
+                                    type="file"
+                                    name="archivo_excel"
+                                    id="archivo_excel"
+                                    class="input-file"
+                                    accept=".xlsx,.xls"
+                                    required
+                                >
+                            </label>
+
+                            <div class="nombre-archivo" id="nombreArchivo">
+                                Ningún archivo seleccionado
+                            </div>
+
+                            <div class="acciones">
+                                <button type="submit" class="ce-btn-procesar">
+                                    Procesar carga masiva
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </section>
+
+                <!-- ─── RESUMEN CARGA (si hubo procesamiento) ─── -->
+                {% if resumen %}
+                <section class="panel-resumen-carga">
+                    <h2 class="panel-carga-titulo">Resultado del procesamiento</h2>
+                    <div class="resumen-grid">
+                        <div class="resumen-item resumen-ok">
+                            <span class="resumen-val">{{ resumen.estudiantes_creados|default:"0" }}</span>
+                            <span class="resumen-lbl">Estudiantes creados</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span class="resumen-val">{{ resumen.estudiantes_actualizados|default:"0" }}</span>
+                            <span class="resumen-lbl">Actualizados</span>
+                        </div>
+                        <div class="resumen-item resumen-ok">
+                            <span class="resumen-val">{{ resumen.invitaciones_creadas|default:"0" }}</span>
+                            <span class="resumen-lbl">Invitaciones</span>
+                        </div>
+                        <div class="resumen-item resumen-warn">
+                            <span class="resumen-val">{{ resumen.filas_omitidas|default:"0" }}</span>
+                            <span class="resumen-lbl">Filas omitidas</span>
+                        </div>
                     </div>
+                </section>
+                {% endif %}
 
-                    <div class="acciones">
+                <!-- ─── PREVIEW TABLE ─── -->
+                <section class="panel-preview">
+                    <h2 class="panel-carga-titulo">Vista previa de registros procesados</h2>
 
-                        <button type="submit" class="btn-upload">
-                            Procesar carga masiva
-                        </button>
-
-
-                    </div>
-
-                </div>
-
-            </form>
-
-        </section>
-
-        <section class="resumen">
-
-            <article class="card-resumen verde">
-                <div class="titulo">Estudiantes cargados</div>
-                <div class="valor">{{ total_estudiantes|default:"0" }}</div>
-                <div class="detalle">Registros procesados correctamente</div>
-            </article>
-
-            <article class="card-resumen">
-                <div class="titulo">Ceremonias detectadas</div>
-                <div class="valor">{{ total_ceremonias|default:"0" }}</div>
-                <div class="detalle">Jornadas institucionales creadas</div>
-            </article>
-
-            <article class="card-resumen dorado">
-                <div class="titulo">Invitaciones generadas</div>
-                <div class="valor">{{ total_invitaciones|default:"0" }}</div>
-                <div class="detalle">Tarjetas QR creadas automáticamente</div>
-            </article>
-
-            <article class="card-resumen rojo">
-                <div class="titulo">Registros con alerta</div>
-                <div class="valor">{{ total_alertas|default:"0" }}</div>
-                <div class="detalle">Filas incompletas o con revisión manual</div>
-            </article>
-
-        </section>
-
-        <section class="tabla-preview panel-preview">
-
-            <div class="titulo-preview">
-                Vista previa de registros procesados
-            </div>
-
-            <div class="cuerpo-preview">
-                <div class="scroll-preview tabla-scroll">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>RUT</th>
-                                <th>Área</th>
-                                <th>Plan</th>
-                                <th>Ceremonia</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {% for estudiante in estudiantes_preview %}
+                    <div class="tabla-scroll">
+                        <table class="tabla-carga">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>RUT</th>
+                                    <th>Área</th>
+                                    <th>Plan</th>
+                                    <th>Ceremonia</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for estudiante in estudiantes_preview %}
                                 <tr>
                                     <td>{{ estudiante.nombre_completo }}</td>
                                     <td>{{ estudiante.rut }}</td>
                                     <td>{{ estudiante.plan_estudio.area.nombre }}</td>
                                     <td>{{ estudiante.plan_estudio.nombre }}</td>
                                     <td>{{ estudiante.bloque_ceremonia.nombre }}</td>
-                                    <td>
-                                        <span class="estado-carga estado-ok">
-                                            Procesado
-                                        </span>
-                                    </td>
+                                    <td><span class="estado-carga estado-ok">Procesado</span></td>
                                 </tr>
-                            {% empty %}
+                                {% empty %}
                                 <tr>
-                                    <td colspan="6">
-                                        Aún no existen registros cargados.
-                                    </td>
+                                    <td colspan="6" class="tabla-vacia">Aún no existen registros cargados.</td>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
 
-        </section>
+                <footer class="ops-page-footer">
+                    © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
+                </footer>
 
-        <footer class="footer">
-            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
-            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
-        </footer>
+            </main>
 
-    </main>
+        </div><!-- ops-scroll ce-view -->
 
-</div>
+    </div><!-- ops-main -->
+</div><!-- ops-layout -->
 
 <script>
     const inputArchivo = document.getElementById("archivo_excel");
@@ -229,6 +298,21 @@
             nombreArchivo.innerText = "Ningún archivo seleccionado";
         }
     });
+</script>
+
+<script>
+(function () {
+    var btn     = document.getElementById("ops-hamburger");
+    var sidebar = document.getElementById("ops-sidebar");
+    var overlay = document.getElementById("ops-overlay");
+    function toggle(open) {
+        sidebar.classList.toggle("open", open);
+        overlay.classList.toggle("active", open);
+        if (btn) btn.setAttribute("aria-expanded", String(open));
+    }
+    if (btn) btn.addEventListener("click", function() { toggle(!sidebar.classList.contains("open")); });
+    if (overlay) overlay.addEventListener("click", function() { toggle(false); });
+}());
 </script>
 
 </body>

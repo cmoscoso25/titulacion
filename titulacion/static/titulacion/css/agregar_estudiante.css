@@ -7,26 +7,19 @@
     --agregar-width: min(1060px, 90%);
 }
 
-/* === MENSAJES === */
-.mensajes-agregar{
-    width: var(--agregar-width);
-    margin: -28px auto 14px;
-}
-
 /* === LAYOUT === */
 .contenido-agregar{
-    position: relative;
+    background: #f4f6f9;
     padding-bottom: clamp(18px, 2vw, 28px);
+    padding-top: 4px;
 }
 
 /* === PANELES === */
 .panel-formulario,
 .panel-recientes{
     width: var(--agregar-width);
-    margin: -30px auto 18px;
+    margin: 16px auto 18px;
     padding: clamp(16px, 2vw, 28px);
-    position: relative;
-    z-index: 5;
 }
 
 .panel-recientes{
@@ -230,12 +223,56 @@
 }
 
 /* ============================================================
-   OPS-SCROLL OVERRIDE (zeroes ops-scroll padding, como pc-view)
+   OPS-SCROLL OVERRIDE + COMMAND BAR
    ============================================================ */
 .ag-view {
     padding: 0 !important;
     gap: 0 !important;
     overflow-y: auto;
+}
+
+.ag-cmd-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    height: 52px;
+    background: #fff;
+    border-bottom: 1px solid #dbe3ea;
+    flex-shrink: 0;
+}
+
+.ag-cmd-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ag-cmd-icon {
+    width: 30px;
+    height: 30px;
+    background: #06152f;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+}
+
+.ag-cmd-title {
+    font-size: .92rem;
+    font-weight: 700;
+    color: #06152f;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+}
+
+.ag-cmd-sub {
+    font-size: .68rem;
+    color: #6b7280;
+    line-height: 1.2;
+    margin-top: 1px;
 }
 
 /* ============================================================
@@ -245,8 +282,7 @@
 /* 320px – 480px */
 @media (max-width: 480px){
     :root{ --agregar-width: 90%; }
-    .panel-formulario{ margin-top: -22px; padding: 14px; border-radius: 16px; }
-    .mensajes-agregar{ margin: -18px auto 12px; }
+    .panel-formulario{ padding: 14px; border-radius: 16px; }
     .form-acciones{ flex-direction: column; }
     .btn-guardar, .btn-cancelar{ width: 100%; justify-content: center; }
 }
@@ -254,7 +290,6 @@
 /* 481px – 767px */
 @media (min-width: 481px) and (max-width: 767px){
     :root{ --agregar-width: 90%; }
-    .panel-formulario{ margin-top: -24px; }
     .grid-campos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .campo-ancho{ grid-column: 1 / -1; }
 }
@@ -299,14 +334,13 @@
 
 /* Pantalla baja: notebook con TV via HDMI */
 @media (max-height: 800px) and (min-width: 900px){
-    .hero-agregar-contenido{ padding-top: 10px; padding-bottom: 36px; }
-    .panel-formulario{ margin-top: -22px; padding: 14px 18px; }
-    .seccion-form{ margin-bottom: 14px; padding-bottom: 14px; }
+    .panel-formulario{ padding: 12px 16px; }
+    .seccion-form{ margin-bottom: 12px; padding-bottom: 12px; }
     .campo-form input,
     .campo-form select,
     .campo-readonly{ min-height: 34px; }
     .btn-guardar,
     .btn-cancelar{ min-height: 36px; }
-    .form-acciones{ margin-top: 14px; gap: 10px; }
+    .form-acciones{ margin-top: 12px; gap: 10px; }
     .grid-campos{ gap: 8px; }
 }

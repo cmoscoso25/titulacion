@@ -6,18 +6,33 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
-## Agregar Estudiante migrado a ops-layout (2026-06-02)
+## Agregar Estudiante — ops-layout estándar (2026-06-02)
 
-`agregar_estudiante.html` + `agregar_estudiante.css` migrados al estándar global:
-- Reemplaza `.marco` + `<header class="barra">` por `ops-layout` con sidebar + `ops-topbar`
-- Agrega `inicio.css` al head (load order: base → inicio → agregar_estudiante)
-- `ops-scroll ag-view` — `.ag-view` en CSS zeroes padding del scroll
-- Sidebar con permisos idéntico al resto, "Agregar Estudiante" activo (bajo perm_admin)
-- Mensajes migrados a `ops-mensajes` antes del `ops-scroll`
+`agregar_estudiante.html` + `agregar_estudiante.css` en estándar global sin hero rojo:
+- Usa `ops-layout` con sidebar + `ops-topbar` (igual que Inicio, Reportes, Panel Control, Registro)
+- Load order: base → inicio → agregar_estudiante
+- `ops-scroll ag-view` — `.ag-view` zeroes padding del scroll
+- `ag-cmd-bar` (command bar 52px: ícono navy + título + subtítulo) reemplaza el hero rojo
+- `contenido-agregar` → fondo `#f4f6f9`, paneles normales (sin márgenes negativos de hero)
+- Sidebar permisos: "Agregar Estudiante" activo bajo perm_admin
+- Mensajes en `ops-mensajes` antes del `ops-scroll`
 - JS `actualizarPlanes()` / `actualizarInstitucion()` sin modificaciones
-- Negative margins (-30px) del hero preservados — paneles siguen superponiéndose al hero rojo
-- Notebook 1025-1366px: inputs 36px, botones 38px, secciones 16px, padding panel reducido
-- HDMI max-height:800px: compactación adicional de todos los elementos verticales
+- Notebook 1025-1366px: inputs 36px, botones 38px, secciones 16px, padding reducido
+- HDMI max-height:800px: compactación adicional de elementos verticales
+
+## Carga Masiva Excel — ops-layout estándar (2026-06-02)
+
+`cargar_excel.html` + `carga_excel.css` migrados al estándar global:
+- Reemplaza `.marco` + `.barra` + `.hero-carga` por `ops-layout` con sidebar + `ops-topbar`
+- Load order: base → inicio → carga_excel
+- `ops-scroll ce-view` — `.ce-view` zeroes padding del scroll; variables semánticas `--ce-ok/warn/err/nvy/info`
+- `ce-cmd-bar` (command bar 52px: ícono Excel navy + título + subtítulo) reemplaza el hero rojo
+- `ce-kpi-strip` (4 KPIs: Estudiantes/ok, Ceremonias/nvy, Invitaciones/info, Alertas/warn) reemplaza `.resumen` con cards
+- Upload form en `.panel-carga` + `.zona-upload` (sin márgenes negativos)
+- `{% if resumen %}` muestra resultado post-procesamiento con claves reales del dict: `estudiantes_creados`, `estudiantes_actualizados`, `invitaciones_creadas`, `filas_omitidas`
+- Tabla preview en `.panel-preview` + `.tabla-carga`
+- Sidebar permisos: "Carga Masiva Excel" activo bajo perm_admin; JS hamburger idéntico
+- Responsive: 480px / 767px / 1024px / 1366px (notebook) / 1920px (desktop) / 1921px+ (TV) / max-height:800px (HDMI)
 
 ## Reportes compactación notebook (2026-06-02)
 
@@ -51,7 +66,8 @@ Nuevo `titulacion/context_processors.py` agrega `perm_admin`, `perm_admision`, `
 Sidebars actualizados (nuevas secciones por permisos):
 - PRINCIPAL (todos), GESTIÓN DE ESTUDIANTES (perm_admin), OPERACIÓN DE CEREMONIA (perm_entrega/perm_ingreso), GESTIÓN Y CONTROL (perm_curricular), ANÁLISIS (perm_curricular/perm_admin), SISTEMA (perm_admin)
 - Templates actualizados: `inicio.html`, `panel_control.html`, `registro_ingreso.html`, `entrega_invitaciones.html`
-- Sin sidebar: `cambio_ceremonia`, `reportes`, `cargar_excel`, `agregar_estudiante`, `tarjetas` (usan layout propio `.marco`)
+- Sin sidebar (usan layout propio `.marco`): `cambio_ceremonia`, `tarjetas`
+- Con ops-layout + sidebar: `inicio`, `panel_control`, `registro_ingreso`, `entrega_invitaciones`, `reportes`, `agregar_estudiante`, `cargar_excel`
 
 Cards de Inicio también filtradas por permisos (secciones vacías no se renderizan).
 

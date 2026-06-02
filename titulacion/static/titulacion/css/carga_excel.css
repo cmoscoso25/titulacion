@@ -1,189 +1,383 @@
-/* === RESET === */
-/* Reset, variables globales, header, hero, botones, formularios,
-   tablas, mensajes y responsive base viven en base.css. */
+/* ============================================================
+   CARGA MASIVA EXCEL — ops-layout estándar institucional
+   Optimizado: 1366×768 · 1920×1080 · móvil
+   ============================================================ */
 
-/* === VARIABLES === */
-:root{
-    --carga-width:min(1100px,90%);
+/* ── Override: elimina padding externo de ops-scroll ── */
+.ce-view {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #f4f6f9;
+    --ce-ok:   #16a34a; --ce-ok-bg:   #f0fdf4;
+    --ce-warn: #d97706; --ce-warn-bg: #fffbeb;
+    --ce-err:  #dc2626; --ce-err-bg:  #fff1f2;
+    --ce-nvy:  #06152f; --ce-info:    #0369a1; --ce-info-bg: #eff6ff;
+    --ce-bd:   #dbe3ea;
 }
 
-/* === LAYOUT === */
-.hero-carga-contenido{
-    width:var(--carga-width);
-    padding:clamp(14px,2vw,20px) 0 clamp(48px,5vw,68px);
+/* ============================================================
+   COMMAND BAR
+   ============================================================ */
+.ce-cmd-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    height: 52px;
+    background: #fff;
+    border-bottom: 1px solid var(--ce-bd);
+    flex-shrink: 0;
 }
 
-.contenido-carga{
-    position:relative;
-    padding-bottom:clamp(18px,2vw,28px);
+.ce-cmd-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.panel-carga{
-    width:var(--carga-width);
-    margin:-30px auto 16px;
-    padding:clamp(14px,1.8vw,20px);
-    position:relative;
-    z-index:5;
+.ce-cmd-icon {
+    width: 30px;
+    height: 30px;
+    background: var(--ce-nvy);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
 }
 
-/* === ZONA UPLOAD === */
-.zona-upload{
-    border:2px dashed var(--borde);
-    border-radius:20px;
-    padding:clamp(20px,3vw,32px) clamp(14px,2vw,22px);
-    text-align:center;
-    background:linear-gradient(180deg,#f8fafc 0%,#ffffff 100%);
+.ce-cmd-title {
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--ce-nvy);
+    line-height: 1.2;
+    letter-spacing: -.01em;
 }
 
-.icono-upload{
-    font-size:clamp(2.2rem,3.5vw,3rem);
-    margin-bottom:10px;
-    line-height:1;
+.ce-cmd-sub {
+    font-size: .68rem;
+    color: #6b7280;
+    line-height: 1.2;
+    margin-top: 1px;
 }
 
-.zona-upload h2{
-    font-size:clamp(1.2rem,2vw,1.55rem);
-    margin-bottom:8px;
-    color:var(--texto);
+/* ============================================================
+   KPI STRIP
+   ============================================================ */
+.ce-kpi-strip {
+    display: flex;
+    align-items: stretch;
+    background: #fff;
+    border-bottom: 1px solid var(--ce-bd);
+    flex-shrink: 0;
 }
 
-.zona-upload p{
-    font-size:clamp(.82rem,1.1vw,.9rem);
-    color:var(--texto-suave);
-    line-height:1.5;
-    max-width:680px;
-    margin:0 auto 16px;
+.ce-kpi {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    gap: 1px;
+    border-right: 1px solid #f3f4f6;
+    position: relative;
+    min-width: 0;
 }
 
-.input-file{
-    display:none;
+.ce-kpi:last-child { border-right: none; }
+
+.ce-kpi::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: transparent;
 }
 
-.nombre-archivo{
-    margin-top:12px;
-    font-size:.8rem;
-    color:var(--texto-suave);
-    font-weight:800;
-    word-break:break-word;
+.ce-kpi--ok::after   { background: var(--ce-ok); }
+.ce-kpi--nvy::after  { background: var(--ce-nvy); }
+.ce-kpi--info::after { background: var(--ce-info); }
+.ce-kpi--warn::after { background: var(--ce-warn); }
+
+.ce-kpi-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1f2937;
+    line-height: 1;
+    letter-spacing: -.03em;
+    font-variant-numeric: tabular-nums;
 }
 
-.acciones{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-    margin-top:16px;
-    flex-wrap:wrap;
+.ce-kpi-lbl {
+    font-size: .62rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    text-align: center;
+    white-space: nowrap;
 }
 
-/* === RESUMEN === */
-.resumen{
-    width:var(--carga-width);
-    margin:14px auto;
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
+/* ============================================================
+   CONTENIDO PRINCIPAL
+   ============================================================ */
+.contenido-carga {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
 }
 
-.resumen-card,
-.card-resumen{
-    background:var(--blanco);
-    border:1px solid var(--borde-suave);
-    border-radius:18px;
-    padding:clamp(13px,1.6vw,18px);
-    box-shadow:var(--sombra-suave);
+/* ============================================================
+   PANEL UPLOAD
+   ============================================================ */
+.panel-carga {
+    background: #fff;
+    border: 1px solid var(--ce-bd);
+    border-radius: 14px;
+    padding: clamp(16px, 2vw, 24px);
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
 }
 
-.resumen-card h3,
-.card-resumen h3{
-    font-size:clamp(.95rem,1.2vw,1.1rem);
-    margin-bottom:8px;
-    color:var(--texto);
+.panel-carga-titulo {
+    font-size: .88rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 4px;
 }
 
-.resumen-card p,
-.card-resumen p{
-    color:var(--texto-suave);
-    font-size:.84rem;
+.panel-carga-sub {
+    font-size: .75rem;
+    color: #6b7280;
+    margin-bottom: 14px;
+    max-width: 680px;
 }
 
-/* === KPIS === */
-.kpis-carga,
-.estadisticas-carga{
-    width:var(--carga-width);
-    margin:14px auto;
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
+.zona-upload {
+    border: 2px dashed var(--ce-bd);
+    border-radius: 12px;
+    padding: clamp(18px, 2.5vw, 28px) clamp(14px, 2vw, 22px);
+    text-align: center;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-.kpi,
-.kpi-carga,
-.estadistica{
-    background:var(--blanco);
-    border:1px solid var(--borde-suave);
-    border-radius:16px;
-    padding:clamp(12px,1.4vw,16px);
-    box-shadow:var(--sombra-suave);
-    border-left:4px solid var(--rojo);
+.icono-upload {
+    color: var(--ce-nvy);
+    opacity: .6;
+    line-height: 1;
 }
 
-.kpi span,
-.kpi-carga span,
-.estadistica span{
-    display:block;
-    font-size:.68rem;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    color:var(--texto-muted);
-    margin-bottom:5px;
+.input-file {
+    display: none;
 }
 
-.kpi strong,
-.kpi-carga strong,
-.estadistica strong{
-    display:block;
-    font-size:clamp(1.4rem,2.2vw,1.8rem);
-    line-height:1;
-    color:var(--texto);
+.ce-btn-upload {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 22px;
+    background: #fff;
+    border: 1.5px solid var(--ce-bd);
+    border-radius: 999px;
+    font-size: .84rem;
+    font-weight: 700;
+    color: #374151;
+    cursor: pointer;
+    transition: border-color .18s, color .18s;
 }
 
-/* === PREVIEW === */
-.preview,
-.preview-carga,
-.panel-preview{
-    width:var(--carga-width);
-    margin:14px auto 0;
-    background:var(--blanco);
-    border:1px solid var(--borde-suave);
-    border-radius:20px;
-    padding:clamp(13px,1.6vw,20px);
-    box-shadow:var(--sombra-suave);
+.ce-btn-upload:hover {
+    border-color: var(--ce-nvy);
+    color: var(--ce-nvy);
 }
 
-.preview h2,
-.preview-carga h2,
-.panel-preview h2{
-    font-size:clamp(1.1rem,1.6vw,1.35rem);
-    margin-bottom:7px;
-    color:var(--texto);
+.nombre-archivo {
+    font-size: .75rem;
+    color: #6b7280;
+    font-weight: 600;
+    word-break: break-word;
+    max-width: 400px;
 }
 
-.preview p,
-.preview-carga p,
-.panel-preview p{
-    color:var(--texto-suave);
-    font-size:.84rem;
-    margin-bottom:12px;
+.acciones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.preview .tabla-scroll,
-.preview-carga .tabla-scroll,
-.panel-preview .tabla-scroll{
-    border-radius:14px;
-    border:1px solid var(--borde-suave);
-    overflow:auto;
+.ce-btn-procesar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 26px;
+    background: var(--ce-nvy);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: .86rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity .18s, transform .12s;
+    letter-spacing: .02em;
+}
+
+.ce-btn-procesar:hover {
+    opacity: .9;
+    transform: translateY(-1px);
+}
+
+.ce-btn-procesar:active {
+    transform: translateY(0);
+}
+
+/* ============================================================
+   PANEL RESUMEN CARGA (resultado post-procesamiento)
+   ============================================================ */
+.panel-resumen-carga {
+    background: #fff;
+    border: 1px solid var(--ce-bd);
+    border-radius: 14px;
+    padding: clamp(14px, 1.8vw, 20px);
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.resumen-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 12px 10px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    position: relative;
+    overflow: hidden;
+}
+
+.resumen-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #cbd5e1;
+}
+
+.resumen-item.resumen-ok::before  { background: var(--ce-ok); }
+.resumen-item.resumen-warn::before { background: var(--ce-warn); }
+
+.resumen-val {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1f2937;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.resumen-lbl {
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* ============================================================
+   PANEL PREVIEW
+   ============================================================ */
+.panel-preview {
+    background: #fff;
+    border: 1px solid var(--ce-bd);
+    border-radius: 14px;
+    padding: clamp(14px, 1.8vw, 20px);
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.tabla-scroll {
+    border-radius: 10px;
+    border: 1px solid var(--ce-bd);
+    overflow-x: auto;
+    margin-top: 12px;
+}
+
+.tabla-carga {
+    min-width: 680px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-carga th {
+    font-size: .65rem;
+    padding: 9px 12px;
+    background: #f8fafc;
+    color: #6b7280;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    text-align: left;
+    border-bottom: 1px solid var(--ce-bd);
+    white-space: nowrap;
+}
+
+.tabla-carga td {
+    font-size: .78rem;
+    padding: 9px 12px;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+.tabla-carga tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-carga tbody tr:hover td {
+    background: #f8fafc;
+}
+
+.tabla-vacia {
+    text-align: center;
+    color: #9ca3af;
+    font-style: italic;
+    padding: 24px !important;
+}
+
+/* === ESTADO CARGA === */
+.estado-carga {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+}
+
+.estado-ok {
+    background: var(--ce-ok-bg);
+    color: var(--ce-ok);
+    border: 1px solid #86efac;
 }
 
 /* ============================================================
@@ -191,61 +385,64 @@
    ============================================================ */
 
 /* 320px – 480px */
-@media (max-width:480px){
-    :root{ --carga-width:90%; }
-    .panel-carga{ margin-top:-22px; padding:13px; border-radius:16px; }
-    .zona-upload{ padding:20px 13px; border-radius:16px; }
-    .acciones{ flex-direction:column; align-items:stretch; }
-    .acciones .btn-upload,
-    .acciones .btn-secundario,
-    .acciones button{ width:100%; }
-    .kpis-carga,.estadisticas-carga,.resumen{ grid-template-columns:1fr; }
-    .preview,.preview-carga,.panel-preview{ padding:13px; border-radius:16px; }
+@media (max-width: 480px) {
+    .ce-kpi-num { font-size: 1.2rem; }
+    .ce-kpi-lbl { font-size: .58rem; }
+    .contenido-carga { padding: 10px; gap: 10px; }
+    .zona-upload { padding: 16px 12px; }
+    .acciones { flex-direction: column; align-items: stretch; }
+    .ce-btn-procesar { width: 100%; }
+    .resumen-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* 481px – 767px */
-@media (min-width:481px) and (max-width:767px){
-    :root{ --carga-width:90%; }
-    .panel-carga{ margin-top:-24px; }
-    .acciones{ justify-content:flex-start; }
-    .acciones .btn-upload,
-    .acciones .btn-secundario{ flex:1 1 200px; }
+@media (min-width: 481px) and (max-width: 767px) {
+    .contenido-carga { padding: 12px; }
+    .resumen-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* 768px – 1024px */
-@media (min-width:768px) and (max-width:1024px){
-    :root{ --carga-width:90%; }
-    .kpis-carga,.estadisticas-carga,.resumen{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media (min-width: 768px) and (max-width: 1024px) {
+    .contenido-carga { padding: 14px; }
+    .resumen-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* 1025px – 1366px — NOTEBOOK */
-@media (min-width:1025px) and (max-width:1366px){
-    :root{ --carga-width:min(1080px,90%); }
-    .kpis-carga,.estadisticas-carga{ grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .resumen{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media (min-width: 1025px) and (max-width: 1366px) {
+    .ce-cmd-bar  { height: 46px; }
+    .ce-kpi      { padding: 5px 10px; }
+    .ce-kpi-num  { font-size: 1.3rem; }
+    .contenido-carga { padding: 12px 14px; gap: 10px; }
+    .panel-carga,
+    .panel-preview,
+    .panel-resumen-carga { padding: 14px 16px; }
+    .zona-upload { padding: 16px 14px; }
+    .ce-btn-procesar { min-height: 36px; font-size: .82rem; padding: 0 20px; }
+    .resumen-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* 1367px – 1920px — DESKTOP */
-@media (min-width:1367px) and (max-width:1920px){
-    :root{ --carga-width:min(1160px,88%); }
-    .kpis-carga,.estadisticas-carga{ grid-template-columns:repeat(4,minmax(0,1fr)); }
-    .resumen{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media (min-width: 1367px) and (max-width: 1920px) {
+    .resumen-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* 1921px+ — TV / HDMI */
-@media (min-width:1921px){
-    :root{ --carga-width:min(1260px,80%); }
-    .kpis-carga,.estadisticas-carga{ grid-template-columns:repeat(4,minmax(0,1fr)); }
-    .resumen{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-    .kpi strong,.kpi-carga strong,.estadistica strong{ font-size:clamp(1.4rem,1.8vw,1.7rem); }
+@media (min-width: 1921px) {
+    .ce-kpi-num { font-size: 1.7rem; }
+    .resumen-grid { grid-template-columns: repeat(4, 1fr); }
+    .panel-carga,
+    .panel-preview,
+    .panel-resumen-carga { padding: 22px 28px; }
 }
 
 /* Pantalla baja: notebook con TV via HDMI */
-@media (max-height:800px) and (min-width:900px){
-    .hero-carga-contenido{ padding-top:12px; padding-bottom:40px; }
-    .panel-carga{ margin-top:-24px; padding:13px; }
-    .zona-upload{ padding:18px 14px; }
-    .icono-upload{ font-size:2.2rem; }
-    .zona-upload h2{ font-size:1.2rem; }
-    .zona-upload p{ font-size:.78rem; margin-bottom:12px; }
+@media (max-height: 800px) and (min-width: 900px) {
+    .ce-cmd-bar  { height: 44px; }
+    .ce-kpi      { padding: 4px 10px; }
+    .ce-kpi-num  { font-size: 1.2rem; }
+    .contenido-carga { padding: 10px 14px; gap: 8px; }
+    .zona-upload { padding: 14px 12px; gap: 8px; }
+    .panel-carga,
+    .panel-preview,
+    .panel-resumen-carga { padding: 12px 14px; }
 }

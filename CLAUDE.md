@@ -252,15 +252,30 @@ Variables globales: `--sb-w` (ancho sidebar), `--topbar-h` (altura topbar), `--r
 | height≤700 + wide | — | — | ultra-compacto para notebook vía HDMI |
 
 ### agregar_estudiante.html → agregar_estudiante.css
-Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes:
-- `.hero-agregar` / `.hero-agregar-contenido` — registrados en `base.css`
-- `.panel-formulario` / `.panel-recientes` — registrados en `base.css`
+Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes. Usa ops-layout estándar — SIN hero rojo.
+- `ops-scroll ag-view` — `.ag-view` zeroes padding del scroll
+- `ag-cmd-bar` — command bar 52px: ícono navy + título "Agregar Estudiante" + subtítulo
+- `.contenido-agregar` — fondo `#f4f6f9`, padding normal (sin márgenes negativos)
+- `.panel-formulario` / `.panel-recientes` — cards blancas con borde, margen `16px auto`
 - `.seccion-form` — sección con separador horizontal dentro del formulario
 - `.grid-campos` — grid responsivo de campos (1→2→3 columnas)
 - `.campo-ancho` — campo que ocupa 2 columnas en layouts anchos
 - `.campo-readonly` — display de institución (no editable)
 - `.btn-guardar` / `.btn-cancelar` — acciones del formulario
 - `.tabla-recientes` — tabla con últimos 10 estudiantes agregados
+
+### cargar_excel.html → carga_excel.css
+Carga masiva desde archivo Excel. Usa ops-layout estándar — SIN hero rojo.
+- `ops-scroll ce-view` — zeroes padding, define variables `--ce-ok/warn/err/nvy/info`
+- `ce-cmd-bar` — command bar 52px: ícono Excel navy + título + subtítulo
+- `ce-kpi-strip` — 4 KPIs: Estudiantes (ok/verde), Ceremonias (nvy), Invitaciones (info/azul), Alertas (warn/ámbar)
+- `.contenido-carga` — flex column con gap, fondo `#f4f6f9`
+- `.panel-carga` — card blanca: título, descripción, `.zona-upload` con dashed border
+- `.ce-btn-upload` — label del input file (borde gris, hover navy)
+- `.ce-btn-procesar` — submit button (fondo navy, border-radius 999px)
+- `{% if resumen %}` `.panel-resumen-carga` — muestra resultado post-carga (claves: `estudiantes_creados`, `estudiantes_actualizados`, `invitaciones_creadas`, `filas_omitidas`)
+- `.panel-preview` + `.tabla-carga` — tabla de vista previa 30 últimos registros
+- `.estado-carga.estado-ok` — badge verde "Procesado"
 
 ### registro_ingreso.html → registro.css
 Centro de control operativo. Lector QR USB HID (modo teclado HID, no cámara).
@@ -275,7 +290,7 @@ Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
 - `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
 - `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
 
-**Agregar Estudiante ops-layout (2026-06-02):** `agregar_estudiante.html` usa `ops-layout` + `ops-scroll ag-view`. `.ag-view` en `agregar_estudiante.css` zeroes padding. Los `negative margins` en `.panel-formulario` (`margin: -30px auto 18px`) son intencionales — superponen el panel sobre el `.hero-agregar` rojo. NO eliminar esos márgenes negativos. Messages van en `ops-mensajes` ANTES del `ops-scroll` (fuera del hero).
+**Agregar Estudiante ops-layout (2026-06-02, actualizado homologación):** `agregar_estudiante.html` usa `ops-layout` + `ops-scroll ag-view`. `.ag-view` en `agregar_estudiante.css` zeroes padding. El hero rojo fue eliminado — `ag-cmd-bar` lo reemplaza. El `.panel-formulario` usa `margin: 16px auto 18px` (positivo, sin superposición de hero). NO hay márgenes negativos. Messages van en `ops-mensajes` ANTES del `ops-scroll`.
 
 **Reportes breakpoints notebook (2026-06-02):** Para notebook 1366×768, AMBOS breakpoints `1025-1366px` (width) y `max-height:800px` (height) aplican simultáneamente. El HDMI/height viene ÚLTIMO en el CSS y gana sobre el width breakpoint. `rep-tabs-wrapper margin-bottom` y `rep-actualizacion margin` DEBEN estar en AMBOS breakpoints — son los más olvidados. El `kpi-rep-top margin-bottom` también se olvida frecuentemente y suma espacios verticales.
 
