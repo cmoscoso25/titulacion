@@ -106,6 +106,14 @@ Antes de modificar revisar:
 
 Al crear un usuario en Django Admin, asignarle el grupo correcto según su rol. **No asignar permisos individuales de modelo** — solo el grupo.
 
+## Logout
+
+El logout usa una vista custom (`logout_view` en `views.py`) en lugar de `auth_views.LogoutView`. Acepta GET y POST, siempre cierra sesión y redirige a `titulacion:login`. Compatible con Django 5.x/6.x donde `LogoutView` nativo requiere `registration/logged_out.html` para peticiones GET.
+
+## Nota base.css vs inicio.css
+
+`base.css` tiene reglas de alta especificidad (`button[type="submit"]`) que aplican a todos los botones. Las clases de `inicio.css` deben usar mayor especificidad (`.ops-topbar .ops-btn-logout`) o `!important` donde sea necesario para anular `base.css`. Verificar siempre el orden de carga: `base.css` → `inicio.css` (inicio.css carga después y puede anular).
+
 ---
 
 # Mapeo CSS ↔ Template ↔ Vista

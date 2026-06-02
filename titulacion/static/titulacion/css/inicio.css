@@ -175,6 +175,8 @@ body {
 
 .ops-hamburger {
     display: none;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     cursor: pointer;
@@ -184,8 +186,6 @@ body {
     border-radius: 4px;
     transition: background 0.13s;
     min-height: unset;
-    min-width: unset;
-    border-radius: 4px;
 }
 
 .ops-hamburger:hover {
@@ -265,23 +265,31 @@ body {
     white-space: nowrap;
 }
 
+/* Especificidad alta para anular base.css button[type=submit] */
+.ops-topbar .ops-btn-logout,
 .ops-btn-logout {
-    font-size: 0.71rem;
-    padding: 4px 10px;
-    border: 1px solid var(--border-ops);
-    border-radius: 5px;
-    background: #fff;
-    color: var(--muted-ops);
+    font-size: 0.71rem !important;
+    padding: 4px 10px !important;
+    border: 1px solid var(--border-ops) !important;
+    border-radius: 5px !important;
+    background: #fff !important;
+    color: var(--muted-ops) !important;
     cursor: pointer;
     transition: border-color 0.13s, color 0.13s;
     font-family: inherit;
-    min-height: unset;
+    min-height: unset !important;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
 }
 
+.ops-topbar .ops-btn-logout:hover,
 .ops-btn-logout:hover {
-    border-color: var(--rojo-ops);
-    color: var(--rojo-ops);
+    border-color: var(--rojo-ops) !important;
+    color: var(--rojo-ops) !important;
+    background: #fff !important;
+    filter: none !important;
+    transform: none !important;
 }
 
 /* ============================================================
@@ -324,7 +332,7 @@ body {
 
 /* ============================================================
    KPIs EJECUTIVOS
-   Auto-fit: se reorganizan solos en cualquier ancho
+   auto-fit: se reorganizan solos en cualquier ancho
    ============================================================ */
 .ops-kpis {
     display: grid;
@@ -379,10 +387,11 @@ body {
 
 /* ============================================================
    GRUPOS DE MÓDULOS
+   2 cols por defecto; auto-fit para módulos internos
    ============================================================ */
 .ops-grupos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
 
@@ -509,7 +518,6 @@ body {
 
 /* ============================================================
    FILA INFERIOR (actividad + bloques)
-   clamp: columna derecha flexible entre 200px y 280px
    ============================================================ */
 .ops-footer-row {
     display: grid;
@@ -726,7 +734,7 @@ body {
 }
 
 /* ============================================================
-   RESPONSIVE — Mobile-first con breakpoints explícitos
+   RESPONSIVE — Mobile-first con 6 breakpoints
    ============================================================ */
 
 /* ── 320px – 480px: móvil ── */
@@ -812,8 +820,7 @@ body {
     .ops-footer-row     { grid-template-columns: 1fr clamp(200px, 20vw, 260px); }
 }
 
-/* ── 1367px – 1920px: monitor estándar (estado por defecto) ── */
-/* Todos los valores por defecto aplican aquí — no se requieren overrides */
+/* ── 1367px – 1920px: monitor estándar (valores por defecto activos) ── */
 
 /* ── 1921px+: TV o pantalla grande ── */
 @media (min-width: 1921px) {
@@ -825,6 +832,7 @@ body {
     .kpi-label          { font-size: 0.68rem; }
     .kpi-sub            { font-size: 0.68rem; }
     .kpi-card           { padding: 14px 18px 12px; }
+    .ops-grupos         { grid-template-columns: repeat(4, 1fr); }
     .ops-grupo          { padding: 14px 16px; }
     .modulo             { padding: 12px 13px; gap: 11px; }
     .mod-icono          { width: 34px; height: 34px; border-radius: 8px; }

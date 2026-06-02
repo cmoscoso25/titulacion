@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Max, Min, Q
 from django.db.models.functions import TruncHour
@@ -229,6 +230,11 @@ def aplicar_filtros_registros(queryset, request):
         queryset = queryset.filter(resultado=resultado)
 
     return queryset
+
+
+def logout_view(request):
+    auth_logout(request)
+    return redirect("titulacion:login")
 
 
 def inicio(request):
