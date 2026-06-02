@@ -151,79 +151,78 @@
                 </div>
             </div>
 
-            <main class="contenido-agregar">
+            <!-- ─── WORKSPACE ─── -->
+            <div class="ag-workspace">
 
-                <section class="panel-formulario">
-                    <h2>Datos del estudiante</h2>
-                    <p class="panel-subtitulo">
-                        Todos los campos marcados con <strong>*</strong> son obligatorios.
-                        El RUT debe ingresarse tal como aparece en el sistema (ej: 12345678-9).
-                    </p>
-
-                    <form method="POST" class="form-agregar" novalidate>
+                <!-- ── COLUMNA PRINCIPAL: Formulario ── -->
+                <div class="ag-col-main">
+                    <form method="POST" novalidate>
                         {% csrf_token %}
 
-                        <div class="seccion-form">
-                            <h3 class="seccion-titulo">Ceremonia</h3>
-
-                            <div class="campo-form">
-                                <label for="bloque_id">Bloque de Ceremonia <span class="requerido">*</span></label>
-                                <select name="bloque_id" id="bloque_id" required>
-                                    <option value="">— Seleccionar bloque —</option>
-                                    {% regroup bloques by ceremonia as bloques_por_ceremonia %}
-                                    {% for grupo in bloques_por_ceremonia %}
-                                        <optgroup label="{{ grupo.grouper.nombre }}">
-                                            {% for bloque in grupo.list %}
-                                                <option value="{{ bloque.id }}">
-                                                    {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }}
-                                                </option>
-                                            {% endfor %}
-                                        </optgroup>
-                                    {% endfor %}
-                                </select>
+                        <!-- Card: Ceremonia -->
+                        <div class="ag-card">
+                            <div class="ag-card-title">Ceremonia</div>
+                            <div class="ag-fields">
+                                <div class="ag-field">
+                                    <label for="bloque_id">Bloque de Ceremonia <span class="ag-req">*</span></label>
+                                    <select name="bloque_id" id="bloque_id" required>
+                                        <option value="">— Seleccionar bloque —</option>
+                                        {% regroup bloques by ceremonia as bloques_por_ceremonia %}
+                                        {% for grupo in bloques_por_ceremonia %}
+                                            <optgroup label="{{ grupo.grouper.nombre }}">
+                                                {% for bloque in grupo.list %}
+                                                    <option value="{{ bloque.id }}">
+                                                        {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }}
+                                                    </option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="seccion-form">
-                            <h3 class="seccion-titulo">Identificación</h3>
+                        <!-- Card: Identificación -->
+                        <div class="ag-card">
+                            <div class="ag-card-title">Identificación</div>
+                            <div class="ag-fields ag-fields-3">
 
-                            <div class="grid-campos">
-                                <div class="campo-form">
-                                    <label for="rut">RUT <span class="requerido">*</span></label>
+                                <div class="ag-field">
+                                    <label for="rut">RUT <span class="ag-req">*</span></label>
                                     <input
                                         type="text"
                                         name="rut"
                                         id="rut"
-                                        placeholder="Ej: 12345678-9"
+                                        placeholder="12345678-9"
                                         autocomplete="off"
                                         required
                                     >
                                 </div>
 
-                                <div class="campo-form campo-ancho">
-                                    <label for="nombre_completo">Nombre completo <span class="requerido">*</span></label>
+                                <div class="ag-field ag-span-2">
+                                    <label for="nombre_completo">Nombre completo <span class="ag-req">*</span></label>
                                     <input
                                         type="text"
                                         name="nombre_completo"
                                         id="nombre_completo"
-                                        placeholder="Ej: APELLIDO APELLIDO NOMBRE"
+                                        placeholder="APELLIDO APELLIDO NOMBRE"
                                         autocomplete="off"
                                         required
                                     >
                                 </div>
 
-                                <div class="campo-form">
+                                <div class="ag-field">
                                     <label for="jornada">Jornada</label>
                                     <input
                                         type="text"
                                         name="jornada"
                                         id="jornada"
-                                        placeholder="Ej: Diurna, Vespertina"
+                                        placeholder="Diurna, Vespertina"
                                         autocomplete="off"
                                     >
                                 </div>
 
-                                <div class="campo-form">
+                                <div class="ag-field">
                                     <label for="correo">Correo electrónico</label>
                                     <input
                                         type="email"
@@ -234,25 +233,27 @@
                                     >
                                 </div>
 
-                                <div class="campo-form">
+                                <div class="ag-field">
                                     <label for="telefono">Teléfono</label>
                                     <input
                                         type="text"
                                         name="telefono"
                                         id="telefono"
-                                        placeholder="Ej: +56912345678"
+                                        placeholder="+56912345678"
                                         autocomplete="off"
                                     >
                                 </div>
+
                             </div>
                         </div>
 
-                        <div class="seccion-form">
-                            <h3 class="seccion-titulo">Plan académico</h3>
+                        <!-- Card: Plan Académico -->
+                        <div class="ag-card">
+                            <div class="ag-card-title">Plan Académico</div>
+                            <div class="ag-fields ag-fields-3">
 
-                            <div class="grid-campos">
-                                <div class="campo-form">
-                                    <label for="area_sel">Área académica <span class="requerido">*</span></label>
+                                <div class="ag-field">
+                                    <label for="area_sel">Área académica <span class="ag-req">*</span></label>
                                     <select name="area_sel" id="area_sel">
                                         <option value="">— Seleccionar área —</option>
                                         {% for area in areas %}
@@ -261,73 +262,68 @@
                                     </select>
                                 </div>
 
-                                <div class="campo-form">
-                                    <label for="plan_id">Plan de estudio <span class="requerido">*</span></label>
+                                <div class="ag-field">
+                                    <label for="plan_id">Plan de estudio <span class="ag-req">*</span></label>
                                     <select name="plan_id" id="plan_id" required disabled>
-                                        <option value="">— Primero seleccione área —</option>
+                                        <option value="">— Seleccionar área primero —</option>
                                     </select>
                                 </div>
 
-                                <div class="campo-form">
+                                <div class="ag-field">
                                     <label>Institución</label>
-                                    <div class="campo-readonly" id="institucion_display">
-                                        Seleccione un plan para ver la institución
-                                    </div>
+                                    <div class="ag-readonly" id="institucion_display">Seleccione un plan</div>
                                 </div>
+
                             </div>
                         </div>
 
-                        <div class="form-acciones">
-                            <button type="submit" class="btn-guardar">
-                                Guardar y generar QR
-                            </button>
-                            <a href="{% url 'titulacion:inicio' %}" class="btn-cancelar">
-                                Cancelar
-                            </a>
+                        <!-- Acciones -->
+                        <div class="ag-actions">
+                            <button type="submit" class="ag-btn-save">Guardar y generar QR</button>
+                            <a href="{% url 'titulacion:inicio' %}" class="ag-btn-cancel">Cancelar</a>
                         </div>
 
                     </form>
-                </section>
+                </div><!-- ag-col-main -->
 
-                {% if ultimos %}
-                <section class="panel-recientes np">
-                    <h2>Últimos registros manuales</h2>
-                    <p class="panel-subtitulo">Los 10 estudiantes ingresados más recientemente al sistema.</p>
-
-                    <div class="tabla-scroll">
-                        <table class="tabla-recientes">
-                            <thead>
-                                <tr>
-                                    <th>RUT</th>
-                                    <th>Nombre</th>
-                                    <th>Bloque</th>
-                                    <th>Plan</th>
-                                    <th>Área</th>
-                                    <th>Creado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for est in ultimos %}
-                                <tr>
-                                    <td>{{ est.rut }}</td>
-                                    <td>{{ est.nombre_completo }}</td>
-                                    <td>{{ est.bloque_ceremonia.nombre }}</td>
-                                    <td>{{ est.plan_estudio.nombre }}</td>
-                                    <td>{{ est.plan_estudio.area.nombre }}</td>
-                                    <td>{{ est.fecha_creacion|date:"d/m/Y H:i" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                <!-- ── COLUMNA LATERAL: Últimos registros ── -->
+                <div class="ag-col-side">
+                    <div class="ag-card">
+                        <div class="ag-card-title">Últimos registros{% if ultimos %} ({{ ultimos|length }}){% endif %}</div>
+                        {% if ultimos %}
+                        <div class="ag-recent-scroll">
+                            <table class="ag-recent-table">
+                                <thead>
+                                    <tr>
+                                        <th>RUT</th>
+                                        <th>Nombre</th>
+                                        <th>Plan</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for est in ultimos %}
+                                    <tr>
+                                        <td title="{{ est.rut }}">{{ est.rut }}</td>
+                                        <td title="{{ est.nombre_completo }}">{{ est.nombre_completo }}</td>
+                                        <td title="{{ est.plan_estudio.nombre }}">{{ est.plan_estudio.nombre }}</td>
+                                        <td>{{ est.fecha_creacion|date:"d/m H:i" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <p class="ag-recent-empty">Aún no hay registros manuales.</p>
+                        {% endif %}
                     </div>
-                </section>
-                {% endif %}
+                </div><!-- ag-col-side -->
 
-                <footer class="ops-page-footer">
-                    © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
-                </footer>
+            </div><!-- ag-workspace -->
 
-            </main>
+            <footer class="ops-page-footer">
+                © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
+            </footer>
 
         </div><!-- ops-scroll ag-view -->
 
@@ -337,28 +333,25 @@
 <script>
     const PLANES = {{ planes_json|safe }};
 
-    const selectArea = document.getElementById("area_sel");
-    const selectPlan = document.getElementById("plan_id");
+    const selectArea        = document.getElementById("area_sel");
+    const selectPlan        = document.getElementById("plan_id");
     const displayInstitucion = document.getElementById("institucion_display");
 
     function actualizarPlanes() {
         const areaSel = selectArea.value;
-
         selectPlan.innerHTML = "";
-        displayInstitucion.textContent = "Seleccione un plan para ver la institución";
+        displayInstitucion.textContent = "Seleccione un plan";
 
         if (!areaSel) {
             selectPlan.disabled = true;
             const opt = document.createElement("option");
             opt.value = "";
-            opt.textContent = "— Primero seleccione área —";
+            opt.textContent = "— Seleccionar área primero —";
             selectPlan.appendChild(opt);
             return;
         }
 
-        const planesFiltrados = PLANES.filter(function(p) {
-            return p.area === areaSel;
-        });
+        const planesFiltrados = PLANES.filter(function(p) { return p.area === areaSel; });
 
         if (planesFiltrados.length === 0) {
             selectPlan.disabled = true;
@@ -370,7 +363,6 @@
         }
 
         selectPlan.disabled = false;
-
         const optDefault = document.createElement("option");
         optDefault.value = "";
         optDefault.textContent = "— Seleccionar plan —";
@@ -390,7 +382,7 @@
         if (optSel && optSel.dataset.institucion) {
             displayInstitucion.textContent = optSel.dataset.institucion || "No especificada";
         } else {
-            displayInstitucion.textContent = "Seleccione un plan para ver la institución";
+            displayInstitucion.textContent = "Seleccione un plan";
         }
     }
 

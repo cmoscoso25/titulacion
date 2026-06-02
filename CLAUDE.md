@@ -251,18 +251,24 @@ Variables globales: `--sb-w` (ancho sidebar), `--topbar-h` (altura topbar), `--r
 | 1921px+ | 240px | 54px | grupos 4 cols, tipografía y padding grandes (TV) |
 | height≤700 + wide | — | — | ultra-compacto para notebook vía HDMI |
 
-### agregar_estudiante.html → agregar_estudiante.css
-Formulario manual con selección de ceremonia/bloque y filtrado dinámico de planes. Usa ops-layout estándar — SIN hero rojo.
-- `ops-scroll ag-view` — `.ag-view` zeroes padding del scroll
-- `ag-cmd-bar` — command bar 52px: ícono navy + título "Agregar Estudiante" + subtítulo
-- `.contenido-agregar` — fondo `#f4f6f9`, padding normal (sin márgenes negativos)
-- `.panel-formulario` / `.panel-recientes` — cards blancas con borde, margen `16px auto`
-- `.seccion-form` — sección con separador horizontal dentro del formulario
-- `.grid-campos` — grid responsivo de campos (1→2→3 columnas)
-- `.campo-ancho` — campo que ocupa 2 columnas en layouts anchos
-- `.campo-readonly` — display de institución (no editable)
-- `.btn-guardar` / `.btn-cancelar` — acciones del formulario
-- `.tabla-recientes` — tabla con últimos 10 estudiantes agregados
+### agregar_estudiante.html → agregar_estudiante.css ✓ WORKSPACE (reconstruido 2026-06-02)
+Workspace operativo de 2 columnas — mismo lenguaje visual que Panel de Control y Registro de Ingreso. SIN hero rojo, SIN card gigante central.
+- `ops-scroll ag-view` — zeroes padding, flex-column, fondo `#f4f6f9`
+- `ag-cmd-bar` — command bar 52px: ícono navy + título + subtítulo
+- `ag-workspace` — `grid: [1fr | 320px]`, gap 12px, padding 12px 16px
+- `ag-col-main` — columna izquierda: 3 cards apiladas + acciones
+  - `ag-card` "CEREMONIA" — select bloque full-width
+  - `ag-card` "IDENTIFICACIÓN" — `ag-fields-3`: [RUT][Nombre×2] / [Jornada][Correo][Teléfono]
+  - `ag-card` "PLAN ACADÉMICO" — `ag-fields-3`: [Área][Plan][Institución readonly]
+  - `ag-actions` — `ag-btn-save` (navy pill) + `ag-btn-cancel` (gray outline)
+- `ag-col-side` — columna derecha 320px: `ag-card` "ÚLTIMOS REGISTROS" siempre visible
+- `ag-card-title` — `0.62rem / gray #9ca3af / uppercase` (NO rojo)
+- Inputs `34px` / labels `0.62rem gray` / foco navy (no rojo)
+- Responsive: `1fr` en ≤1024px; `1fr 290px` en 1025-1366px; `1fr 340px` en 1367+
+
+**Clases JS-referenced (NO renombrar):**
+- IDs: `#bloque_id`, `#rut`, `#nombre_completo`, `#jornada`, `#correo`, `#telefono`, `#area_sel`, `#plan_id`, `#institucion_display`
+- Funciones JS: `actualizarPlanes()`, `actualizarInstitucion()`
 
 ### cargar_excel.html → carga_excel.css
 Carga masiva desde archivo Excel. Usa ops-layout estándar — SIN hero rojo.
@@ -290,7 +296,7 @@ Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
 - `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
 - `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
 
-**Agregar Estudiante ops-layout (2026-06-02, actualizado homologación):** `agregar_estudiante.html` usa `ops-layout` + `ops-scroll ag-view`. `.ag-view` en `agregar_estudiante.css` zeroes padding. El hero rojo fue eliminado — `ag-cmd-bar` lo reemplaza. El `.panel-formulario` usa `margin: 16px auto 18px` (positivo, sin superposición de hero). NO hay márgenes negativos. Messages van en `ops-mensajes` ANTES del `ops-scroll`.
+**Agregar Estudiante workspace (2026-06-02, reconstruido):** `agregar_estudiante.html` usa `ops-layout` + `ops-scroll ag-view`. Workspace de 2 columnas (`ag-workspace`): columna principal con 3 `ag-card` compactas (Ceremonia, Identificación, Plan Académico) + `ag-actions`; columna lateral con `ag-card` de últimos registros. Inputs `34px`, labels `0.62rem` gray. SIN clases `.panel-formulario`, `.grid-campos`, `.contenido-agregar`, `.seccion-form` (eliminadas). Messages van en `ops-mensajes` ANTES del `ops-scroll`.
 
 **Reportes breakpoints notebook (2026-06-02):** Para notebook 1366×768, AMBOS breakpoints `1025-1366px` (width) y `max-height:800px` (height) aplican simultáneamente. El HDMI/height viene ÚLTIMO en el CSS y gana sobre el width breakpoint. `rep-tabs-wrapper margin-bottom` y `rep-actualizacion margin` DEBEN estar en AMBOS breakpoints — son los más olvidados. El `kpi-rep-top margin-bottom` también se olvida frecuentemente y suma espacios verticales.
 

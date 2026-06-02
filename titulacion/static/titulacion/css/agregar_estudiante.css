@@ -1,236 +1,22 @@
-/* === RESET === */
-/* Reset, variables globales, header, hero, botones, formularios,
-   tablas, mensajes y responsive base viven en base.css. */
-
-/* === VARIABLES === */
-:root{
-    --agregar-width: min(1060px, 90%);
-}
-
-/* === LAYOUT === */
-.contenido-agregar{
-    background: #f4f6f9;
-    padding-bottom: clamp(18px, 2vw, 28px);
-    padding-top: 4px;
-}
-
-/* === PANELES === */
-.panel-formulario,
-.panel-recientes{
-    width: var(--agregar-width);
-    margin: 16px auto 18px;
-    padding: clamp(16px, 2vw, 28px);
-}
-
-.panel-recientes{
-    margin-top: 0;
-    z-index: 4;
-}
-
-.panel-formulario h2,
-.panel-recientes h2{
-    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-    color: var(--texto);
-    margin-bottom: 6px;
-}
-
-.panel-subtitulo{
-    font-size: .82rem;
-    color: var(--texto-suave);
-    margin-bottom: 20px;
-    max-width: 760px;
-}
-
-/* === SECCIONES DEL FORMULARIO === */
-.seccion-form{
-    margin-bottom: 22px;
-    padding-bottom: 22px;
-    border-bottom: 1px solid var(--borde-suave);
-}
-
-.seccion-form:last-of-type{
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.seccion-titulo{
-    font-size: .72rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    color: var(--rojo);
-    margin-bottom: 14px;
-}
-
-/* === GRID DE CAMPOS === */
-.grid-campos{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-}
-
-.campo-form{
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.campo-form label{
-    font-size: .68rem;
-    font-weight: 900;
-    color: var(--texto-muted);
-    text-transform: uppercase;
-    letter-spacing: .05em;
-}
-
-.requerido{
-    color: var(--rojo);
-    font-size: .8rem;
-}
-
-.campo-form input,
-.campo-form select{
-    min-height: 42px;
-    border-radius: 12px;
-    font-size: .86rem;
-    font-weight: 700;
-    padding: 0 14px;
-    border: 1.5px solid var(--borde-suave);
-    background: var(--blanco);
-    color: var(--texto);
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-    width: 100%;
-}
-
-.campo-form input:focus,
-.campo-form select:focus{
-    border-color: var(--rojo);
-    box-shadow: 0 0 0 3px rgba(227, 6, 19, .1);
-}
-
-.campo-form select:disabled{
-    background: #f1f5f9;
-    color: var(--texto-muted);
-    cursor: not-allowed;
-    opacity: .7;
-}
-
-.campo-readonly{
-    min-height: 42px;
-    border-radius: 12px;
-    font-size: .86rem;
-    font-weight: 700;
-    padding: 0 14px;
-    border: 1.5px solid var(--borde-suave);
-    background: #f8fafc;
-    color: var(--texto-suave);
-    display: flex;
-    align-items: center;
-    font-style: italic;
-}
-
-/* === ACCIONES === */
-.form-acciones{
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 24px;
-    flex-wrap: wrap;
-}
-
-.btn-guardar{
-    min-height: 44px;
-    padding: 0 28px;
-    background: var(--rojo);
-    color: var(--blanco);
-    border: none;
-    border-radius: 999px;
-    font-size: .88rem;
-    font-weight: 900;
-    cursor: pointer;
-    transition: background .18s, transform .12s;
-    letter-spacing: .02em;
-}
-
-.btn-guardar:hover{
-    background: var(--rojo-oscuro);
-    transform: translateY(-1px);
-}
-
-.btn-guardar:active{
-    transform: translateY(0);
-}
-
-.btn-cancelar{
-    min-height: 44px;
-    padding: 0 22px;
-    border: 2px solid var(--borde-suave);
-    border-radius: 999px;
-    font-size: .86rem;
-    font-weight: 800;
-    color: var(--texto-suave);
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    transition: border-color .18s, color .18s;
-}
-
-.btn-cancelar:hover{
-    border-color: var(--texto-suave);
-    color: var(--texto);
-}
-
-/* === TABLA RECIENTES === */
-.tabla-scroll{
-    border-radius: 14px;
-    border: 1px solid var(--borde-suave);
-    overflow-x: auto;
-}
-
-.tabla-recientes{
-    min-width: 780px;
-    width: 100%;
-}
-
-.tabla-recientes th{
-    font-size: .66rem;
-    padding: 10px 12px;
-    background: #f8fafc;
-    color: var(--texto-muted);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    text-align: left;
-    border-bottom: 1px solid var(--borde-suave);
-}
-
-.tabla-recientes td{
-    font-size: .78rem;
-    padding: 10px 12px;
-    color: var(--texto);
-    border-bottom: 1px solid var(--borde-suave);
-    vertical-align: middle;
-}
-
-.tabla-recientes tbody tr:last-child td{
-    border-bottom: none;
-}
-
-.tabla-recientes tbody tr:hover td{
-    background: #f8fafc;
-}
-
 /* ============================================================
-   OPS-SCROLL OVERRIDE + COMMAND BAR
+   AGREGAR ESTUDIANTE — workspace operativo institucional
+   Patrón: pc-* / reg-* / ce-* del sistema titulación
+   Optimizado: 1366×768 · 1920×1080 · móvil
    ============================================================ */
+
+/* ── Override: elimina padding externo de ops-scroll ── */
 .ag-view {
     padding: 0 !important;
     gap: 0 !important;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
+    background: #f4f6f9;
 }
 
+/* ============================================================
+   COMMAND BAR
+   ============================================================ */
 .ag-cmd-bar {
     display: flex;
     align-items: center;
@@ -276,71 +62,315 @@
 }
 
 /* ============================================================
+   WORKSPACE — layout 2 columnas
+   ============================================================ */
+.ag-workspace {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 12px;
+    padding: 12px 16px 20px;
+    align-items: start;
+    flex: 1;
+}
+
+.ag-col-main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ag-col-side {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.ag-card {
+    background: #fff;
+    border: 1px solid #dbe3ea;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.ag-card-title {
+    font-size: .62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #9ca3af;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* ============================================================
+   CAMPOS DEL FORMULARIO
+   ============================================================ */
+.ag-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.ag-fields-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ag-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.ag-span-2 { grid-column: span 2; }
+
+.ag-field label {
+    font-size: .62rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ag-req {
+    color: #dc2626;
+    font-size: .7rem;
+}
+
+.ag-field input,
+.ag-field select {
+    height: 34px;
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 600;
+    padding: 0 10px;
+    border: 1px solid #dbe3ea;
+    background: #fff;
+    color: #1f2937;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    width: 100%;
+    min-width: 0;
+}
+
+.ag-field input:focus,
+.ag-field select:focus {
+    border-color: #06152f;
+    box-shadow: 0 0 0 2px rgba(6, 21, 47, .1);
+}
+
+.ag-field select:disabled {
+    background: #f8fafc;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: .8;
+}
+
+.ag-readonly {
+    height: 34px;
+    border-radius: 6px;
+    font-size: .78rem;
+    padding: 0 10px;
+    border: 1px solid #f3f4f6;
+    background: #f8fafc;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    font-style: italic;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   ACCIONES
+   ============================================================ */
+.ag-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.ag-btn-save {
+    height: 36px;
+    padding: 0 22px;
+    background: #06152f;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    letter-spacing: .01em;
+    white-space: nowrap;
+}
+
+.ag-btn-save:hover { opacity: .85; transform: translateY(-1px); }
+.ag-btn-save:active { transform: translateY(0); }
+
+.ag-btn-cancel {
+    height: 36px;
+    padding: 0 18px;
+    border: 1px solid #dbe3ea;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 700;
+    color: #6b7280;
+    background: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: border-color .15s, color .15s;
+    white-space: nowrap;
+}
+
+.ag-btn-cancel:hover { border-color: #6b7280; color: #374151; }
+
+/* ============================================================
+   TABLA DE ÚLTIMOS REGISTROS
+   ============================================================ */
+.ag-recent-scroll {
+    overflow-x: auto;
+    border-radius: 6px;
+    border: 1px solid #f3f4f6;
+    margin-top: 2px;
+}
+
+.ag-recent-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 260px;
+}
+
+.ag-recent-table th {
+    font-size: .58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #9ca3af;
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+    background: #f8fafc;
+    white-space: nowrap;
+}
+
+.ag-recent-table td {
+    font-size: .71rem;
+    padding: 6px 8px;
+    color: #374151;
+    border-bottom: 1px solid #f9fafb;
+    vertical-align: middle;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ag-recent-table tbody tr:last-child td { border-bottom: none; }
+.ag-recent-table tbody tr:hover td { background: #f8fafc; }
+
+.ag-recent-empty {
+    text-align: center;
+    color: #9ca3af;
+    font-style: italic;
+    font-size: .74rem;
+    padding: 18px !important;
+    max-width: none !important;
+    overflow: visible !important;
+    white-space: normal !important;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.ag-workspace + .ops-page-footer,
+.ops-page-footer {
+    text-align: center;
+    font-size: .7rem;
+    color: #9ca3af;
+    padding: 16px 20px;
+    border-top: 1px solid #f3f4f6;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
-/* 320px – 480px */
-@media (max-width: 480px){
-    :root{ --agregar-width: 90%; }
-    .panel-formulario{ padding: 14px; border-radius: 16px; }
-    .form-acciones{ flex-direction: column; }
-    .btn-guardar, .btn-cancelar{ width: 100%; justify-content: center; }
+/* ≤ 767px — móvil: columna única */
+@media (max-width: 767px) {
+    .ag-workspace {
+        grid-template-columns: 1fr;
+        padding: 10px 12px 16px;
+        gap: 10px;
+    }
+    .ag-fields-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ag-span-2 { grid-column: span 2; }
+    .ag-actions { flex-direction: column; align-items: stretch; }
+    .ag-btn-save, .ag-btn-cancel { width: 100%; justify-content: center; }
 }
 
-/* 481px – 767px */
-@media (min-width: 481px) and (max-width: 767px){
-    :root{ --agregar-width: 90%; }
-    .grid-campos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .campo-ancho{ grid-column: 1 / -1; }
+/* 768px – 1024px — tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .ag-workspace { grid-template-columns: 1fr; }
+    .ag-fields-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* 768px – 1024px */
-@media (min-width: 768px) and (max-width: 1024px){
-    :root{ --agregar-width: 90%; }
-    .grid-campos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .campo-ancho{ grid-column: 1 / -1; }
+/* 1025px – 1366px — notebook */
+@media (min-width: 1025px) and (max-width: 1366px) {
+    .ag-cmd-bar  { height: 46px; }
+    .ag-workspace { padding: 10px 14px 16px; gap: 10px; }
+    .ag-card     { padding: 12px 14px; }
+    .ag-card-title { margin-bottom: 8px; padding-bottom: 6px; font-size: .6rem; }
+    .ag-workspace { grid-template-columns: 1fr 290px; }
+    .ag-field input,
+    .ag-field select,
+    .ag-readonly { height: 32px; font-size: .8rem; }
+    .ag-btn-save, .ag-btn-cancel { height: 33px; }
+    .ag-fields { gap: 8px; }
+    .ag-recent-table th { font-size: .56rem; padding: 5px 7px; }
+    .ag-recent-table td { font-size: .68rem; padding: 5px 7px; }
 }
 
-/* 1025px – 1366px — NOTEBOOK */
-@media (min-width: 1025px) and (max-width: 1366px){
-    :root{ --agregar-width: min(1000px, 92%); }
-    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-    .campo-ancho{ grid-column: span 2; }
-    .campo-form input,
-    .campo-form select,
-    .campo-readonly{ min-height: 36px; font-size: .82rem; }
-    .btn-guardar{ min-height: 38px; padding: 0 22px; font-size: .84rem; }
-    .btn-cancelar{ min-height: 38px; padding: 0 18px; font-size: .82rem; }
-    .seccion-form{ margin-bottom: 16px; padding-bottom: 16px; }
-    .form-acciones{ margin-top: 16px; }
-    .panel-subtitulo{ margin-bottom: 14px; font-size: .78rem; }
-    .panel-formulario,
-    .panel-recientes{ padding: 16px 20px; }
-}
-
-/* 1367px – 1920px — DESKTOP */
-@media (min-width: 1367px) and (max-width: 1920px){
-    :root{ --agregar-width: min(1060px, 88%); }
-    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .campo-ancho{ grid-column: span 2; }
+/* 1367px – 1920px — desktop */
+@media (min-width: 1367px) and (max-width: 1920px) {
+    .ag-workspace { grid-template-columns: 1fr 340px; }
 }
 
 /* 1921px+ — TV / HDMI */
-@media (min-width: 1921px){
-    :root{ --agregar-width: min(1140px, 80%); }
-    .grid-campos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .campo-ancho{ grid-column: span 2; }
+@media (min-width: 1921px) {
+    .ag-workspace { grid-template-columns: 1fr 400px; padding: 16px 24px 24px; gap: 16px; }
+    .ag-card { padding: 18px 22px; }
+    .ag-field input,
+    .ag-field select { height: 38px; font-size: .88rem; }
+    .ag-btn-save, .ag-btn-cancel { height: 40px; }
 }
 
-/* Pantalla baja: notebook con TV via HDMI */
-@media (max-height: 800px) and (min-width: 900px){
-    .panel-formulario{ padding: 12px 16px; }
-    .seccion-form{ margin-bottom: 12px; padding-bottom: 12px; }
-    .campo-form input,
-    .campo-form select,
-    .campo-readonly{ min-height: 34px; }
-    .btn-guardar,
-    .btn-cancelar{ min-height: 36px; }
-    .form-acciones{ margin-top: 12px; gap: 10px; }
-    .grid-campos{ gap: 8px; }
+/* Pantalla baja: notebook via HDMI */
+@media (max-height: 800px) and (min-width: 900px) {
+    .ag-cmd-bar   { height: 44px; }
+    .ag-workspace { padding: 8px 14px 12px; gap: 8px; }
+    .ag-card      { padding: 10px 14px; }
+    .ag-card-title{ margin-bottom: 7px; padding-bottom: 6px; }
+    .ag-fields    { gap: 7px; }
+    .ag-field input,
+    .ag-field select,
+    .ag-readonly  { height: 31px; }
+    .ag-btn-save, .ag-btn-cancel { height: 32px; }
+    .ag-recent-table td { padding: 4px 7px; }
 }

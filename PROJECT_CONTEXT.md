@@ -6,19 +6,18 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
-## Agregar Estudiante — ops-layout estándar (2026-06-02)
+## Agregar Estudiante — workspace 2 columnas (2026-06-02, reconstruido)
 
-`agregar_estudiante.html` + `agregar_estudiante.css` en estándar global sin hero rojo:
-- Usa `ops-layout` con sidebar + `ops-topbar` (igual que Inicio, Reportes, Panel Control, Registro)
+`agregar_estudiante.html` + `agregar_estudiante.css` reconstruidos como workspace operativo:
+- Mismo lenguaje visual que Panel de Control, Registro de Ingreso, Reportes
 - Load order: base → inicio → agregar_estudiante
-- `ops-scroll ag-view` — `.ag-view` zeroes padding del scroll
-- `ag-cmd-bar` (command bar 52px: ícono navy + título + subtítulo) reemplaza el hero rojo
-- `contenido-agregar` → fondo `#f4f6f9`, paneles normales (sin márgenes negativos de hero)
-- Sidebar permisos: "Agregar Estudiante" activo bajo perm_admin
-- Mensajes en `ops-mensajes` antes del `ops-scroll`
+- `ops-scroll ag-view` → `ag-workspace` (grid `1fr 320px`)
+- Columna principal: 3 `ag-card` compactas (Ceremonia / Identificación / Plan Académico) + `ag-actions`
+- Columna lateral (320px): tabla "Últimos registros" siempre visible
+- `ag-card-title` gray 0.62rem uppercase — sin rojo, sin landing-page
+- Inputs `34px` / foco navy / botón "Guardar y generar QR" navy pill
+- Responsive: 1 columna ≤1024px / 2 columnas notebook (1fr 290px) / desktop (1fr 340px)
 - JS `actualizarPlanes()` / `actualizarInstitucion()` sin modificaciones
-- Notebook 1025-1366px: inputs 36px, botones 38px, secciones 16px, padding reducido
-- HDMI max-height:800px: compactación adicional de elementos verticales
 
 ## Carga Masiva Excel — ops-layout estándar (2026-06-02)
 
