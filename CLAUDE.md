@@ -127,7 +127,7 @@ Cada página tiene su propio CSS. El CSS y el HTML DEBEN usar exactamente las mi
 | `/cargar-excel/` | `cargar_excel` | `cargar_excel.html` | `carga_excel.css` |
 | `/agregar-estudiante/` | `agregar_estudiante` | `agregar_estudiante.html` | `agregar_estudiante.css` |
 | `/panel-control/` | `panel_control` | `panel_control.html` | `dashboard.css` |
-| `/cambio-ceremonia/` | `cambio_ceremonia` | `cambio_ceremonia.html` | `cambio_ceremonia.css` |
+| `/cambio-ceremonia/` | `cambio_ceremonia` | `cambio_ceremonia.html` | `cambio_ceremonia.css` (cc-* workspace) |
 | `/tarjetas/` | `tarjetas_invitacion` | `tarjetas.html` | `tarjetas.css` |
 | `/entrega-invitaciones/` | `entrega_invitaciones` | `entrega_invitaciones.html` | `entrega.css` |
 | `/registro/` | `registro_ingreso` | `registro_ingreso.html` | `registro.css` |
@@ -269,6 +269,24 @@ Workspace operativo de 2 columnas — mismo lenguaje visual que Panel de Control
 **Clases JS-referenced (NO renombrar):**
 - IDs: `#bloque_id`, `#rut`, `#nombre_completo`, `#jornada`, `#correo`, `#telefono`, `#area_sel`, `#plan_id`, `#institucion_display`
 - Funciones JS: `actualizarPlanes()`, `actualizarInstitucion()`
+
+### cambio_ceremonia.html → cambio_ceremonia.css ✓ WORKSPACE (reconstruido 2026-06-02)
+Workspace operativo 2 columnas — mismo lenguaje que Agregar Estudiante. SIN hero rojo, SIN .marco.
+- `ops-scroll cc-view` — zeroes padding, flex-column, fondo `#f4f6f9`
+- `cc-cmd-bar` — 52px: ícono flechas navy + "Cambio de Ceremonia" + subtítulo
+- `cc-workspace` — `grid: [1fr | 340px]`, gap 12px
+- `cc-col-main` — apilado vertical:
+  - `cc-card` "BUSCAR ESTUDIANTE" — `cc-search-row`: input flex + btn-search navy
+  - `cc-card` "RESULTADOS (N)" — `cc-table` + `cc-btn-select` navy [si `estudiantes`]
+  - `cc-card` "ESTUDIANTE SELECCIONADO" [si `estudiante_seleccionado`]:
+    - `cc-student-grid` (3 cols, datos readonly) — sin borde rojo
+    - `cc-field` select bloque_destino + textarea motivo + `cc-alerta` azul + btn confirmar navy
+- `cc-col-side` (340px): `cc-card` "HISTORIAL" — tabla 4 cols (Fecha, Estudiante, De, A) con truncación
+- `cc-table-hist` para historial estrecho (min-width 290px)
+- Sidebar: "Cambio de Ceremonia" activo bajo `perm_curricular`
+
+**IDs/names de formulario (NO renombrar):**
+- `name="bloque_destino"`, `id="bloque_destino"`, `name="motivo"`, `id="motivo"`, `name="estudiante_id"`, `name="q"`
 
 ### cargar_excel.html → carga_excel.css
 Carga masiva desde archivo Excel. Usa ops-layout estándar — SIN hero rojo.

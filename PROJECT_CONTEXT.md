@@ -19,6 +19,18 @@ Permite administrar ceremonias de titulación, invitados, accesos QR y control d
 - Responsive: 1 columna ≤1024px / 2 columnas notebook (1fr 290px) / desktop (1fr 340px)
 - JS `actualizarPlanes()` / `actualizarInstitucion()` sin modificaciones
 
+## Cambio de Ceremonia — workspace 2 columnas (2026-06-02, reconstruido)
+
+`cambio_ceremonia.html` + `cambio_ceremonia.css` reconstruidos como workspace operativo:
+- Mismo lenguaje que Agregar Estudiante (cc-* prefix, ag-* pattern)
+- Load order: base → inicio → cambio_ceremonia
+- `ops-scroll cc-view` → `cc-workspace` (grid `1fr 340px`)
+- Columna principal: search card + results card (condicional) + student+form card (condicional)
+- Columna lateral (340px): historial de cambios siempre visible, 4 cols compactas
+- `cc-student-grid` (3 cols, datos readonly, sin borde rojo) para estudiante seleccionado
+- Formulario: select bloque_destino + textarea motivo + alerta azul + btn confirmar navy
+- Lógica backend, trazabilidad y regeneración QR: intactas
+
 ## Carga Masiva Excel — ops-layout estándar (2026-06-02)
 
 `cargar_excel.html` + `carga_excel.css` migrados al estándar global:
@@ -65,8 +77,8 @@ Nuevo `titulacion/context_processors.py` agrega `perm_admin`, `perm_admision`, `
 Sidebars actualizados (nuevas secciones por permisos):
 - PRINCIPAL (todos), GESTIÓN DE ESTUDIANTES (perm_admin), OPERACIÓN DE CEREMONIA (perm_entrega/perm_ingreso), GESTIÓN Y CONTROL (perm_curricular), ANÁLISIS (perm_curricular/perm_admin), SISTEMA (perm_admin)
 - Templates actualizados: `inicio.html`, `panel_control.html`, `registro_ingreso.html`, `entrega_invitaciones.html`
-- Sin sidebar (usan layout propio `.marco`): `cambio_ceremonia`, `tarjetas`
-- Con ops-layout + sidebar: `inicio`, `panel_control`, `registro_ingreso`, `entrega_invitaciones`, `reportes`, `agregar_estudiante`, `cargar_excel`
+- Sin sidebar (usan layout propio `.marco`): `tarjetas`
+- Con ops-layout + sidebar: `inicio`, `panel_control`, `registro_ingreso`, `entrega_invitaciones`, `reportes`, `agregar_estudiante`, `cargar_excel`, `cambio_ceremonia`
 
 Cards de Inicio también filtradas por permisos (secciones vacías no se renderizan).
 

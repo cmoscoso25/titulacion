@@ -6,354 +6,381 @@
     <meta charset="UTF-8">
     <title>Cambio de Ceremonia | INACAP Sede Arica</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/inicio.css' %}">
     <link rel="stylesheet" href="{% static 'titulacion/css/cambio_ceremonia.css' %}">
 </head>
 
 <body>
+<div class="ops-layout">
 
-<div class="marco">
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="ops-sidebar" id="ops-sidebar">
 
-    <header class="barra">
-        <div class="marca">
-            <div class="logo-contenedor">
-                <img
-                    src="{% static 'titulacion/img/logo.png' %}"
-                    alt="INACAP"
-                    class="logo-inacap"
-                >
-            </div>
-
-            <div class="sede">
-                Sede Arica
-            </div>
+        <div class="ops-sidebar-brand">
+            <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-logo">
         </div>
 
-        <div class="zona-derecha">
-            <div class="titulo-barra">
-                Ceremonia de Titulación 2026
-            </div>
+        <nav class="ops-nav" aria-label="Navegación principal">
 
-            {% if request.user.is_authenticated %}
-                <form method="POST" action="{% url 'titulacion:logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-cerrar-sesion">
-                        Cerrar sesión
-                    </button>
-                </form>
-            {% endif %}
-
-            <div class="avatar" title="{{ request.user.username }}">
-                {{ request.user.username|slice:":2"|upper }}
-            </div>
-        </div>
-    </header>
-
-    <section class="hero-cambio">
-        <div class="hero-cambio-contenido">
-            <a href="{% url 'titulacion:inicio' %}" class="volver-inicio">
-                ← Volver al inicio
+            <span class="ops-nav-label">Principal</span>
+            <a href="{% url 'titulacion:inicio' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                Panel Principal
             </a>
 
-            <h1>
+            {% if perm_admin %}
+            <span class="ops-nav-label">Gestión de Estudiantes</span>
+            <a href="{% url 'titulacion:cargar_excel' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+                Carga Masiva Excel
+            </a>
+            <a href="{% url 'titulacion:agregar_estudiante' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Agregar Estudiante
+            </a>
+            {% endif %}
+
+            {% if perm_entrega or perm_ingreso %}
+            <span class="ops-nav-label">Operación de Ceremonia</span>
+            {% if perm_entrega %}
+            <a href="{% url 'titulacion:entrega_invitaciones' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                Entrega de Invitaciones
+            </a>
+            {% endif %}
+            {% if perm_ingreso %}
+            <a href="{% url 'titulacion:registro_ingreso' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/><path d="M14 14h.01M14 17h.01M17 14h.01"/></svg>
+                Registro de Ingreso
+            </a>
+            {% endif %}
+            {% endif %}
+
+            {% if perm_curricular %}
+            <span class="ops-nav-label">Gestión y Control</span>
+            <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                Panel de Control
+            </a>
+            <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item active" aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
                 Cambio de Ceremonia
-            </h1>
+            </a>
+            {% endif %}
 
-            <p>
-                Módulo institucional para cambiar a un estudiante de bloque de ceremonia,
-                dejando trazabilidad del motivo, usuario responsable y regeneración de códigos QR.
-            </p>
-        </div>
-    </section>
+            {% if perm_curricular or perm_admin %}
+            <span class="ops-nav-label">Análisis</span>
+            {% if perm_curricular %}
+            <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Reportes
+            </a>
+            {% endif %}
+            {% if perm_admin %}
+            <a href="{% url 'titulacion:tarjetas' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Tarjetas QR
+            </a>
+            {% endif %}
+            {% endif %}
 
-    {% if messages %}
-        <section class="mensajes">
-            {% for message in messages %}
-                <div class="mensaje {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </section>
-    {% endif %}
+            {% if perm_admin %}
+            <span class="ops-nav-label">Sistema</span>
+            <a href="/admin/" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Configuración
+            </a>
+            {% endif %}
 
-    <main class="contenido-cambio">
+        </nav>
 
-        <section class="panel-busqueda">
-            <h2>
-                Buscar estudiante
-            </h2>
+        <div class="ops-sidebar-footer">Sede Arica · 2026</div>
+    </aside>
 
-            <form method="GET" class="form-busqueda">
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ busqueda }}"
-                    placeholder="Buscar por RUT, nombre o plan de estudio"
-                    autocomplete="off"
-                    autofocus
-                >
+    <!-- ═══ ÁREA PRINCIPAL ═══ -->
+    <div class="ops-main">
 
-                <button type="submit">
-                    Buscar
+        <header class="ops-topbar">
+            <div class="ops-topbar-left">
+                <button class="ops-hamburger" id="ops-hamburger" aria-label="Menú" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
-            </form>
-
-            <p>
-                Selecciona el registro exacto del estudiante, considerando que un mismo RUT
-                puede existir en más de una ceremonia.
-            </p>
-        </section>
-
-        {% if estudiantes %}
-            <section class="panel-resultados">
-                <h2>
-                    Resultados encontrados
-                </h2>
-
-                <div class="tabla-scroll">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>RUT</th>
-                                <th>Área</th>
-                                <th>Plan</th>
-                                <th>Bloque actual</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {% for estudiante in estudiantes %}
-                                <tr>
-                                    <td>{{ estudiante.nombre_completo }}</td>
-                                    <td>{{ estudiante.rut }}</td>
-                                    <td>{{ estudiante.plan_estudio.area.nombre }}</td>
-                                    <td>{{ estudiante.plan_estudio.nombre }}</td>
-                                    <td>
-                                        {{ estudiante.bloque_ceremonia.nombre }}
-                                        <br>
-                                        <small>
-                                            {{ estudiante.bloque_ceremonia.fecha|date:"d/m/Y" }}
-                                            ·
-                                            {{ estudiante.bloque_ceremonia.hora_inicio|time:"H:i" }}
-                                        </small>
-                                    </td>
-                                    <td>
-                                        {% if estudiante.ingreso_confirmado %}
-                                            <span class="badge badge-no">
-                                                Con ingreso
-                                            </span>
-                                        {% else %}
-                                            <span class="badge badge-si">
-                                                Sin ingreso
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a
-                                            href="{% url 'titulacion:cambio_ceremonia' %}?q={{ busqueda }}&estudiante={{ estudiante.id }}"
-                                            class="btn-seleccionar"
-                                        >
-                                            Seleccionar
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="ops-topbar-logo-cap">
+                    <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-topbar-logo-img">
                 </div>
-            </section>
-
-        {% elif busqueda %}
-            <section class="sin-resultados">
-                No se encontraron estudiantes para la búsqueda realizada.
-            </section>
-        {% endif %}
-
-        {% if estudiante_seleccionado %}
-            <section class="panel-cambio">
-
-                <div class="bloque-datos">
-                    <h2>
-                        Estudiante seleccionado
-                    </h2>
-
-                    <div class="resumen-estudiante grid-datos">
-
-                        <div>
-                            <span>Nombre</span>
-                            <strong>{{ estudiante_seleccionado.nombre_completo }}</strong>
-                        </div>
-
-                        <div>
-                            <span>RUT</span>
-                            <strong>{{ estudiante_seleccionado.rut }}</strong>
-                        </div>
-
-                        <div>
-                            <span>Área</span>
-                            <strong>{{ estudiante_seleccionado.plan_estudio.area.nombre }}</strong>
-                        </div>
-
-                        <div>
-                            <span>Plan</span>
-                            <strong>{{ estudiante_seleccionado.plan_estudio.nombre }}</strong>
-                        </div>
-
-                        <div>
-                            <span>Bloque actual</span>
-                            <strong>{{ estudiante_seleccionado.bloque_ceremonia.nombre }}</strong>
-                        </div>
-
-                        <div>
-                            <span>Fecha / hora</span>
-                            <strong>
-                                {{ estudiante_seleccionado.bloque_ceremonia.fecha|date:"d/m/Y" }}
-                                ·
-                                {{ estudiante_seleccionado.bloque_ceremonia.hora_inicio|time:"H:i" }}
-                            </strong>
-                        </div>
-
-                        <div>
-                            <span>Ingreso estudiante</span>
-                            {% if estudiante_seleccionado.ingreso_confirmado %}
-                                <strong class="texto-rojo">Registrado</strong>
-                            {% else %}
-                                <strong class="texto-verde">Sin registro</strong>
-                            {% endif %}
-                        </div>
-
-                        <div>
-                            <span>Invitaciones generadas</span>
-                            <strong>
-                                {{ estudiante_seleccionado.invitaciones.all|dictsort:"id"|length }}
-                                invitaciones
-                            </strong>
-                        </div>
-
-                    </div>
-                </div>
-
-                <form method="POST" class="form-cambio">
-                    {% csrf_token %}
-
-                    <input
-                        type="hidden"
-                        name="estudiante_id"
-                        value="{{ estudiante_seleccionado.id }}"
-                    >
-
-                    <div class="campo">
-                        <label for="bloque_destino">
-                            Nueva ceremonia / bloque
-                        </label>
-
-                        <select name="bloque_destino" id="bloque_destino" required>
-                            <option value="">
-                                Selecciona bloque destino
-                            </option>
-
-                            {% for bloque in bloques_destino %}
-                                {% if bloque.id != estudiante_seleccionado.bloque_ceremonia.id %}
-                                    <option value="{{ bloque.id }}">
-                                        {{ bloque.nombre }}
-                                        ·
-                                        {{ bloque.fecha|date:"d/m/Y" }}
-                                        ·
-                                        {{ bloque.hora_inicio|time:"H:i" }}
-                                        ·
-                                        {{ bloque.estado_registro }}
-                                    </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="campo campo-completo">
-                        <label for="motivo">
-                            Motivo institucional del cambio
-                        </label>
-
-                        <textarea
-                            name="motivo"
-                            id="motivo"
-                            rows="5"
-                            placeholder="Ejemplo: solicitud autorizada por coordinación, cruce de horario, situación familiar, corrección de asignación, etc."
-                            required
-                        ></textarea>
-                    </div>
-
-                    <div class="alerta-cambio campo-completo">
-                        Al confirmar el cambio, el sistema actualizará el bloque del estudiante,
-                        regenerará el QR del titulado y regenerará las invitaciones asociadas.
-                        Las invitaciones anteriores quedarán reemplazadas.
-                    </div>
-
-                    <div class="acciones-cambio campo-completo">
-                        <button
-                            type="submit"
-                            class="btn-confirmar"
-                            onclick="return confirm('¿Confirmas el cambio de ceremonia? Se regenerarán los QR del estudiante y sus invitaciones.');"
-                        >
-                            Confirmar cambio de ceremonia
-                        </button>
-                    </div>
-                </form>
-
-            </section>
-        {% endif %}
-
-        <section class="panel-historial">
-            <h2>
-                Últimos cambios registrados
-            </h2>
-
-            <div class="tabla-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Estudiante</th>
-                            <th>RUT</th>
-                            <th>Origen</th>
-                            <th>Destino</th>
-                            <th>Usuario</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for cambio in historial %}
-                            <tr>
-                                <td>{{ cambio.fecha_cambio|date:"d/m/Y H:i" }}</td>
-                                <td>{{ cambio.estudiante.nombre_completo }}</td>
-                                <td>{{ cambio.estudiante.rut }}</td>
-                                <td>{{ cambio.bloque_origen.nombre }}</td>
-                                <td>{{ cambio.bloque_destino.nombre }}</td>
-                                <td>{{ cambio.usuario_responsable|default:"-" }}</td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="6">
-                                    Aún no existen cambios registrados.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <span class="ops-topbar-sep" aria-hidden="true"></span>
+                <span class="ops-topbar-title">Ceremonia de Titulación 2026 - Sede Arica</span>
             </div>
-        </section>
+            <div class="ops-topbar-right">
+                {% if request.user.is_authenticated %}
+                <div class="ops-user-chip">
+                    <div class="ops-avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":2"|upper }}</div>
+                    <span class="ops-username">{{ request.user.username }}</span>
+                </div>
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ops-btn-logout">Cerrar sesión</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
 
-        <footer class="footer">
-            © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026<br>
-            Todos los derechos reservados · Desarrollado por Dirección Informática, Ciberseguridad y Telecomunicaciones
-        </footer>
+        <div class="ops-overlay" id="ops-overlay"></div>
 
-    </main>
+        {% if messages %}
+        <div class="ops-mensajes">
+            {% for message in messages %}
+                <div class="mensaje {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-</div>
+        <div class="ops-scroll cc-view">
+
+            <!-- ─── COMMAND BAR ─── -->
+            <div class="cc-cmd-bar">
+                <div class="cc-cmd-left">
+                    <div class="cc-cmd-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                    </div>
+                    <div>
+                        <div class="cc-cmd-title">Cambio de Ceremonia</div>
+                        <div class="cc-cmd-sub">Reasignación de bloque con trazabilidad · regenera QR e invitaciones automáticamente</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── WORKSPACE ─── -->
+            <div class="cc-workspace">
+
+                <!-- ── COLUMNA PRINCIPAL ── -->
+                <div class="cc-col-main">
+
+                    <!-- Card: Búsqueda -->
+                    <div class="cc-card">
+                        <div class="cc-card-title">Buscar Estudiante</div>
+                        <form method="GET">
+                            <div class="cc-search-row">
+                                <input
+                                    type="text"
+                                    name="q"
+                                    value="{{ busqueda }}"
+                                    placeholder="Buscar por RUT, nombre o plan de estudio"
+                                    autocomplete="off"
+                                    autofocus
+                                >
+                                <button type="submit" class="cc-btn-search">Buscar</button>
+                            </div>
+                        </form>
+                        <p class="cc-search-hint">Un mismo RUT puede existir en más de una ceremonia — selecciona el registro exacto.</p>
+                    </div>
+
+                    <!-- Card: Resultados [condicional] -->
+                    {% if estudiantes %}
+                    <div class="cc-card">
+                        <div class="cc-card-title">Resultados encontrados ({{ estudiantes|length }})</div>
+                        <div class="cc-table-scroll">
+                            <table class="cc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>RUT</th>
+                                        <th>Área</th>
+                                        <th>Plan</th>
+                                        <th>Bloque actual</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for estudiante in estudiantes %}
+                                    <tr>
+                                        <td title="{{ estudiante.nombre_completo }}">{{ estudiante.nombre_completo }}</td>
+                                        <td>{{ estudiante.rut }}</td>
+                                        <td title="{{ estudiante.plan_estudio.area.nombre }}">{{ estudiante.plan_estudio.area.nombre }}</td>
+                                        <td title="{{ estudiante.plan_estudio.nombre }}">{{ estudiante.plan_estudio.nombre }}</td>
+                                        <td>
+                                            {{ estudiante.bloque_ceremonia.nombre }}
+                                            <small>{{ estudiante.bloque_ceremonia.fecha|date:"d/m/Y" }} · {{ estudiante.bloque_ceremonia.hora_inicio|time:"H:i" }}</small>
+                                        </td>
+                                        <td>
+                                            {% if estudiante.ingreso_confirmado %}
+                                                <span class="cc-badge cc-badge-err">Con ingreso</span>
+                                            {% else %}
+                                                <span class="cc-badge cc-badge-ok">Sin ingreso</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'titulacion:cambio_ceremonia' %}?q={{ busqueda }}&estudiante={{ estudiante.id }}" class="cc-btn-select">Seleccionar</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% elif busqueda %}
+                    <div class="cc-card">
+                        <div class="cc-card-title">Resultados</div>
+                        <p style="font-size:.8rem;color:#9ca3af;font-style:italic;margin:0">No se encontraron estudiantes para "{{ busqueda }}".</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Card: Estudiante seleccionado + formulario [condicional] -->
+                    {% if estudiante_seleccionado %}
+                    <div class="cc-card">
+                        <div class="cc-card-title">Estudiante Seleccionado</div>
+
+                        <!-- Datos del estudiante -->
+                        <div class="cc-student-grid">
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Nombre</span>
+                                <span class="cc-info-val" title="{{ estudiante_seleccionado.nombre_completo }}">{{ estudiante_seleccionado.nombre_completo }}</span>
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">RUT</span>
+                                <span class="cc-info-val">{{ estudiante_seleccionado.rut }}</span>
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Área</span>
+                                <span class="cc-info-val" title="{{ estudiante_seleccionado.plan_estudio.area.nombre }}">{{ estudiante_seleccionado.plan_estudio.area.nombre }}</span>
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Plan</span>
+                                <span class="cc-info-val" title="{{ estudiante_seleccionado.plan_estudio.nombre }}">{{ estudiante_seleccionado.plan_estudio.nombre }}</span>
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Bloque actual</span>
+                                <span class="cc-info-val" title="{{ estudiante_seleccionado.bloque_ceremonia.nombre }}">{{ estudiante_seleccionado.bloque_ceremonia.nombre }}</span>
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Fecha / Hora</span>
+                                <span class="cc-info-val">{{ estudiante_seleccionado.bloque_ceremonia.fecha|date:"d/m/Y" }} · {{ estudiante_seleccionado.bloque_ceremonia.hora_inicio|time:"H:i" }}</span>
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Ingreso</span>
+                                {% if estudiante_seleccionado.ingreso_confirmado %}
+                                    <span class="cc-info-val err">Registrado</span>
+                                {% else %}
+                                    <span class="cc-info-val ok">Sin registro</span>
+                                {% endif %}
+                            </div>
+                            <div class="cc-info-item">
+                                <span class="cc-info-label">Invitaciones</span>
+                                <span class="cc-info-val">{{ estudiante_seleccionado.invitaciones.all|length }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Formulario de cambio -->
+                        <form method="POST" class="cc-form-fields">
+                            {% csrf_token %}
+                            <input type="hidden" name="estudiante_id" value="{{ estudiante_seleccionado.id }}">
+
+                            <div class="cc-field">
+                                <label for="bloque_destino">Nueva ceremonia / bloque <span class="cc-req">*</span></label>
+                                <select name="bloque_destino" id="bloque_destino" required>
+                                    <option value="">— Seleccionar bloque destino —</option>
+                                    {% for bloque in bloques_destino %}
+                                        {% if bloque.id != estudiante_seleccionado.bloque_ceremonia.id %}
+                                            <option value="{{ bloque.id }}">
+                                                {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} · {{ bloque.estado_registro }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="cc-field">
+                                <label for="motivo">Motivo institucional del cambio <span class="cc-req">*</span></label>
+                                <textarea
+                                    name="motivo"
+                                    id="motivo"
+                                    rows="4"
+                                    placeholder="Ej: solicitud autorizada por coordinación, cruce de horario, situación familiar, corrección de asignación..."
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="cc-alerta">
+                                Al confirmar, el sistema actualizará el bloque, regenerará el QR del titulado y reemplazará las invitaciones asociadas.
+                            </div>
+
+                            <div class="cc-form-actions">
+                                <button
+                                    type="submit"
+                                    class="cc-btn-confirm"
+                                    onclick="return confirm('¿Confirmas el cambio de ceremonia? Se regenerarán los QR del estudiante y sus invitaciones.');"
+                                >
+                                    Confirmar cambio de ceremonia
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                    {% endif %}
+
+                </div><!-- cc-col-main -->
+
+                <!-- ── COLUMNA LATERAL: Historial ── -->
+                <div class="cc-col-side">
+                    <div class="cc-card">
+                        <div class="cc-card-title">Historial de cambios</div>
+                        <div class="cc-table-scroll">
+                            <table class="cc-table cc-table-hist">
+                                <thead>
+                                    <tr>
+                                        <th class="cc-hist-narrow">Fecha</th>
+                                        <th>Estudiante</th>
+                                        <th>De</th>
+                                        <th>A</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cambio in historial %}
+                                    <tr>
+                                        <td class="cc-hist-narrow" title="{{ cambio.fecha_cambio|date:'d/m/Y H:i' }}">{{ cambio.fecha_cambio|date:"d/m H:i" }}</td>
+                                        <td title="{{ cambio.estudiante.nombre_completo }} · {{ cambio.estudiante.rut }}">{{ cambio.estudiante.nombre_completo }}</td>
+                                        <td title="{{ cambio.bloque_origen.nombre }}">{{ cambio.bloque_origen.nombre }}</td>
+                                        <td title="{{ cambio.bloque_destino.nombre }}">{{ cambio.bloque_destino.nombre }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr class="cc-empty-row">
+                                        <td colspan="4">Sin cambios registrados.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!-- cc-col-side -->
+
+            </div><!-- cc-workspace -->
+
+            <footer class="ops-page-footer">
+                © 2026 INACAP Sede Arica · Sistema Ceremonia Titulación 2026 · Dirección Informática, Ciberseguridad y Telecomunicaciones
+            </footer>
+
+        </div><!-- ops-scroll cc-view -->
+
+    </div><!-- ops-main -->
+</div><!-- ops-layout -->
+
+<script>
+(function () {
+    var btn     = document.getElementById("ops-hamburger");
+    var sidebar = document.getElementById("ops-sidebar");
+    var overlay = document.getElementById("ops-overlay");
+    function toggle(open) {
+        sidebar.classList.toggle("open", open);
+        overlay.classList.toggle("active", open);
+        if (btn) btn.setAttribute("aria-expanded", String(open));
+    }
+    if (btn) btn.addEventListener("click", function() { toggle(!sidebar.classList.contains("open")); });
+    if (overlay) overlay.addEventListener("click", function() { toggle(false); });
+}());
+</script>
 
 </body>
 </html>

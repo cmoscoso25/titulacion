@@ -1,364 +1,500 @@
-/* === RESET === */
-/* Reset, variables globales, header, hero, botones, formularios,
-   tablas, mensajes y responsive base viven en base.css. */
+/* ============================================================
+   CAMBIO DE CEREMONIA — workspace operativo institucional
+   Patrón: ag-* / cc-* del sistema titulación
+   Optimizado: 1366×768 · 1920×1080 · móvil
+   ============================================================ */
 
-/* === VARIABLES === */
-:root{
-    --cambio-width:min(1180px,90%);
+/* ── Override: elimina padding externo de ops-scroll ── */
+.cc-view {
+    padding: 0 !important;
+    gap: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #f4f6f9;
 }
 
-/* === LAYOUT === */
-.hero-cambio-contenido{
-    width:var(--cambio-width);
-    padding:clamp(14px,2vw,20px) 0 clamp(48px,5vw,68px);
+/* ============================================================
+   COMMAND BAR
+   ============================================================ */
+.cc-cmd-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    height: 52px;
+    background: #fff;
+    border-bottom: 1px solid #dbe3ea;
+    flex-shrink: 0;
 }
 
-.contenido-cambio{
-    width:var(--cambio-width);
-    margin:-38px auto 48px;
-    position:relative;
-    z-index:5;
+.cc-cmd-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.mensajes{
-    width:var(--cambio-width);
-    margin:-28px auto 14px;
+.cc-cmd-icon {
+    width: 30px;
+    height: 30px;
+    background: #06152f;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
 }
 
-.mensajes + .contenido-cambio{
-    margin-top:0;
+.cc-cmd-title {
+    font-size: .92rem;
+    font-weight: 700;
+    color: #06152f;
+    line-height: 1.2;
+    letter-spacing: -.01em;
 }
 
-/* === PANEL BÚSQUEDA === */
-.panel-busqueda{
-    padding:clamp(13px,1.6vw,20px);
-    margin-bottom:14px;
+.cc-cmd-sub {
+    font-size: .68rem;
+    color: #6b7280;
+    line-height: 1.2;
+    margin-top: 1px;
 }
 
-.panel-busqueda h2{
-    font-size:clamp(1.15rem,1.6vw,1.45rem);
-    color:var(--texto);
-    margin-bottom:7px;
+/* ============================================================
+   WORKSPACE — 2 columnas
+   ============================================================ */
+.cc-workspace {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 12px;
+    padding: 12px 16px 20px;
+    align-items: start;
+    flex: 1;
 }
 
-.panel-busqueda p{
-    color:var(--texto-suave);
-    font-size:.84rem;
-    margin-top:10px;
-    max-width:900px;
+.cc-col-main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
 }
 
-.form-busqueda{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
-    align-items:center;
+.cc-col-side {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
 }
 
-.form-busqueda input{
-    min-height:44px;
-    border-radius:14px;
-    font-weight:800;
-    font-size:.9rem;
+/* ============================================================
+   CARDS
+   ============================================================ */
+.cc-card {
+    background: #fff;
+    border: 1px solid #dbe3ea;
+    border-radius: 10px;
+    padding: 14px 16px;
 }
 
-.form-busqueda button{
-    min-height:44px;
-    border-radius:14px;
-    font-size:.88rem;
+.cc-card-title {
+    font-size: .62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #9ca3af;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f3f4f6;
 }
 
-/* === RESULTADOS === */
-.panel-resultados{
-    padding:clamp(13px,1.6vw,20px);
-    margin-bottom:14px;
+/* ============================================================
+   BÚSQUEDA
+   ============================================================ */
+.cc-search-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
-.panel-resultados h2{
-    font-size:clamp(1.1rem,1.5vw,1.35rem);
-    color:var(--texto);
-    margin-bottom:12px;
+.cc-search-row input[type="text"] {
+    flex: 1;
+    height: 34px;
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 600;
+    padding: 0 10px;
+    border: 1px solid #dbe3ea;
+    background: #fff;
+    color: #1f2937;
+    outline: none;
+    min-width: 0;
+    transition: border-color .15s, box-shadow .15s;
 }
 
-.panel-resultados .tabla-scroll{
-    border:1px solid var(--borde-suave);
-    border-radius:14px;
-    overflow:auto;
+.cc-search-row input[type="text"]:focus {
+    border-color: #06152f;
+    box-shadow: 0 0 0 2px rgba(6, 21, 47, .1);
 }
 
-.panel-resultados table{
-    min-width:980px;
+.cc-btn-search {
+    height: 34px;
+    padding: 0 18px;
+    background: #06152f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: .8rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity .15s;
+    flex-shrink: 0;
 }
 
-.panel-resultados th{
-    font-size:.68rem;
-    padding:10px 11px;
+.cc-btn-search:hover { opacity: .85; }
+
+.cc-search-hint {
+    font-size: .72rem;
+    color: #9ca3af;
+    margin-top: 8px;
 }
 
-.panel-resultados td{
-    font-size:.78rem;
-    padding:10px 11px;
+/* ============================================================
+   TABLAS (resultados e historial)
+   ============================================================ */
+.cc-table-scroll {
+    overflow-x: auto;
+    border-radius: 6px;
+    border: 1px solid #f3f4f6;
 }
 
-.btn-seleccionar,
-.btn-cambiar,
-.btn-confirmar{
-    min-height:32px;
-    padding:0 12px;
-    font-size:.72rem;
-    white-space:nowrap;
+.cc-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
 }
 
-/* === FORMULARIO CAMBIO === */
-.panel-cambio,
-.formulario-cambio,
-.detalle-cambio{
-    background:var(--blanco);
-    border:1px solid var(--borde-suave);
-    border-radius:20px;
-    padding:clamp(13px,1.6vw,20px);
-    box-shadow:var(--sombra-suave);
-    margin-bottom:14px;
+.cc-table th {
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #9ca3af;
+    padding: 7px 10px;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+    background: #f8fafc;
+    white-space: nowrap;
 }
 
-.panel-cambio h2,
-.formulario-cambio h2,
-.detalle-cambio h2{
-    font-size:clamp(1.1rem,1.5vw,1.35rem);
-    color:var(--texto);
-    margin-bottom:7px;
+.cc-table td {
+    font-size: .75rem;
+    padding: 7px 10px;
+    color: #374151;
+    border-bottom: 1px solid #f9fafb;
+    vertical-align: middle;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.panel-cambio p,
-.formulario-cambio p,
-.detalle-cambio p{
-    color:var(--texto-suave);
-    font-size:.84rem;
-    margin-bottom:12px;
+.cc-table td small {
+    display: block;
+    font-size: .65rem;
+    color: #9ca3af;
+    margin-top: 1px;
 }
 
-.resumen-estudiante{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:10px;
-    padding:14px;
-    border-radius:16px;
-    background:#f8fafc;
-    border:1px solid var(--borde-suave);
-    margin-bottom:14px;
+.cc-table tbody tr:last-child td { border-bottom: none; }
+.cc-table tbody tr:hover td { background: #f8fafc; }
+
+.cc-empty-row td {
+    text-align: center;
+    color: #9ca3af;
+    font-style: italic;
+    padding: 18px !important;
+    max-width: none !important;
 }
 
-.resumen-estudiante div{
-    border-left:4px solid var(--rojo);
-    padding-left:11px;
+/* Tabla historial (side column — más estrecha) */
+.cc-table-hist {
+    min-width: 290px;
 }
 
-.resumen-estudiante span{
-    display:block;
-    color:var(--texto-muted);
-    font-size:.68rem;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    margin-bottom:3px;
+.cc-table-hist th,
+.cc-table-hist td {
+    max-width: 80px;
 }
 
-.resumen-estudiante strong{
-    display:block;
-    color:var(--texto);
-    font-size:.88rem;
-    line-height:1.25;
+.cc-table-hist .cc-hist-narrow {
+    max-width: 55px;
 }
 
-.form-cambio,
-.formulario-cambio form{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
+/* ============================================================
+   BOTONES DE TABLA
+   ============================================================ */
+.cc-btn-select {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 12px;
+    background: #06152f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: .72rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: opacity .15s;
 }
 
-.form-cambio textarea,
-.formulario-cambio textarea{
-    min-height:100px;
+.cc-btn-select:hover { opacity: .85; }
+
+/* ============================================================
+   BADGE DE INGRESO
+   ============================================================ */
+.cc-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.acciones-cambio{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
-    margin-top:4px;
+.cc-badge-ok  { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.cc-badge-err { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+/* ============================================================
+   DATOS DEL ESTUDIANTE SELECCIONADO
+   ============================================================ */
+.cc-student-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #f3f4f6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 14px;
 }
 
-/* === ALERTAS / BLOQUEOS === */
-.alerta-bloqueo,
-.alerta-duplicidad,
-.alerta-cambio{
-    border-radius:16px;
-    padding:13px 15px;
-    margin-bottom:14px;
-    font-size:.84rem;
-    font-weight:800;
-    border:1px solid transparent;
+.cc-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
 }
 
-.alerta-bloqueo{ background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
-.alerta-duplicidad{ background:#fef3c7; color:#92400e; border-color:#fcd34d; }
-.alerta-cambio{ background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
-
-/* === HISTORIAL === */
-.panel-historial,
-.historial-cambios{
-    background:var(--blanco);
-    border:1px solid var(--borde-suave);
-    border-radius:20px;
-    padding:clamp(13px,1.6vw,20px);
-    box-shadow:var(--sombra-suave);
-    margin-top:14px;
+.cc-info-label {
+    font-size: .58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #9ca3af;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.panel-historial h2,
-.historial-cambios h2{
-    font-size:clamp(1.1rem,1.5vw,1.35rem);
-    color:var(--texto);
-    margin-bottom:12px;
+.cc-info-val {
+    font-size: .78rem;
+    font-weight: 600;
+    color: #1f2937;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.lista-historial{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:8px;
+.cc-info-val.ok  { color: #15803d; }
+.cc-info-val.err { color: #991b1b; }
+
+/* ============================================================
+   FORMULARIO DE CAMBIO
+   ============================================================ */
+.cc-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.item-historial{
-    padding:12px 13px;
-    border-radius:14px;
-    border:1px solid var(--borde-suave);
-    background:#f8fafc;
+.cc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
 }
 
-.item-historial strong{
-    display:block;
-    color:var(--texto);
-    font-size:.86rem;
+.cc-field label {
+    font-size: .62rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .06em;
 }
 
-.item-historial span{
-    display:block;
-    color:var(--texto-muted);
-    font-size:.74rem;
-    margin-top:3px;
+.cc-req { color: #dc2626; font-size: .7rem; }
+
+.cc-field select,
+.cc-field input[type="text"] {
+    height: 34px;
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 600;
+    padding: 0 10px;
+    border: 1px solid #dbe3ea;
+    background: #fff;
+    color: #1f2937;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    width: 100%;
 }
 
-.item-historial p{
-    margin-top:7px;
-    margin-bottom:0;
-    color:var(--texto-suave);
-    font-size:.8rem;
+.cc-field select:focus,
+.cc-field input[type="text"]:focus {
+    border-color: #06152f;
+    box-shadow: 0 0 0 2px rgba(6, 21, 47, .1);
 }
 
-/* === ESTADO VACÍO === */
-.sin-resultados,
-.estado-vacio{
-    background:var(--blanco);
-    border:1px solid var(--borde-suave);
-    border-radius:20px;
-    padding:clamp(18px,3vw,34px);
-    box-shadow:var(--sombra-suave);
-    text-align:center;
-    color:var(--texto-suave);
-    margin-top:14px;
+.cc-field textarea {
+    border-radius: 6px;
+    font-size: .82rem;
+    font-weight: 500;
+    padding: 8px 10px;
+    border: 1px solid #dbe3ea;
+    background: #fff;
+    color: #1f2937;
+    outline: none;
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+    transition: border-color .15s, box-shadow .15s;
+    font-family: inherit;
 }
 
-.sin-resultados h2,
-.estado-vacio h2{
-    color:var(--texto);
-    font-size:clamp(1.1rem,1.6vw,1.4rem);
-    margin-bottom:7px;
+.cc-field textarea:focus {
+    border-color: #06152f;
+    box-shadow: 0 0 0 2px rgba(6, 21, 47, .1);
+}
+
+.cc-alerta {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-size: .76rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.cc-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.cc-btn-confirm {
+    height: 36px;
+    padding: 0 22px;
+    background: #06152f;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    letter-spacing: .01em;
+    white-space: nowrap;
+}
+
+.cc-btn-confirm:hover { opacity: .85; transform: translateY(-1px); }
+.cc-btn-confirm:active { transform: translateY(0); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.ops-page-footer {
+    text-align: center;
+    font-size: .7rem;
+    color: #9ca3af;
+    padding: 16px 20px;
+    border-top: 1px solid #f3f4f6;
+    background: #fff;
+    flex-shrink: 0;
 }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 
-/* 320px – 480px */
-@media (max-width:480px){
-    :root{ --cambio-width:90%; }
-    .contenido-cambio{ margin-top:-24px; margin-bottom:28px; }
-    .mensajes{ margin:-20px auto 12px; }
-    .panel-busqueda,.panel-resultados,.panel-cambio,
-    .formulario-cambio,.detalle-cambio,
-    .panel-historial,.historial-cambios{ border-radius:16px; padding:13px; }
-    .form-busqueda{ grid-template-columns:1fr; }
-    .acciones-cambio{ flex-direction:column; align-items:stretch; }
-    .acciones-cambio .btn,
-    .acciones-cambio button,
-    .acciones-cambio a{ width:100%; }
-    .panel-resultados table{ min-width:920px; }
+/* ≤ 767px — móvil: columna única */
+@media (max-width: 767px) {
+    .cc-workspace {
+        grid-template-columns: 1fr;
+        padding: 10px 12px 16px;
+        gap: 10px;
+    }
+    .cc-student-grid { grid-template-columns: repeat(2, 1fr); }
+    .cc-form-actions { justify-content: stretch; }
+    .cc-btn-confirm { width: 100%; justify-content: center; }
 }
 
-/* 481px – 767px */
-@media (min-width:481px) and (max-width:767px){
-    :root{ --cambio-width:90%; }
-    .contenido-cambio{ margin-top:-28px; }
-    .acciones-cambio{ justify-content:flex-start; }
+/* 768px – 1024px — tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .cc-workspace { grid-template-columns: 1fr; }
+    .cc-student-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* 768px – 1024px */
-@media (min-width:768px) and (max-width:1024px){
-    :root{ --cambio-width:90%; }
-    .form-busqueda{ grid-template-columns:1fr 160px; }
-    .resumen-estudiante{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-    .form-cambio,
-    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
-    .form-cambio .campo-completo,
-    .formulario-cambio textarea,
-    .acciones-cambio{ grid-column:1 / -1; }
+/* 1025px – 1366px — notebook */
+@media (min-width: 1025px) and (max-width: 1366px) {
+    .cc-cmd-bar  { height: 46px; }
+    .cc-workspace { grid-template-columns: 1fr 300px; padding: 10px 14px 16px; gap: 10px; }
+    .cc-card     { padding: 12px 14px; }
+    .cc-card-title { margin-bottom: 8px; padding-bottom: 6px; font-size: .6rem; }
+    .cc-search-row input[type="text"],
+    .cc-field select,
+    .cc-field input[type="text"] { height: 32px; font-size: .8rem; }
+    .cc-btn-search { height: 32px; font-size: .76rem; }
+    .cc-btn-confirm { height: 33px; }
+    .cc-student-grid { gap: 6px; padding: 10px; }
+    .cc-info-val { font-size: .75rem; }
 }
 
-/* 1025px – 1366px — NOTEBOOK */
-@media (min-width:1025px) and (max-width:1366px){
-    :root{ --cambio-width:min(1120px,90%); }
-    .form-busqueda{ grid-template-columns:1fr 170px; }
-    .resumen-estudiante{ grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .form-cambio,
-    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
-    .form-cambio .campo-completo,
-    .formulario-cambio textarea,
-    .acciones-cambio{ grid-column:1 / -1; }
+/* 1367px – 1920px — desktop */
+@media (min-width: 1367px) and (max-width: 1920px) {
+    .cc-workspace { grid-template-columns: 1fr 360px; }
 }
 
-/* 1367px – 1920px — DESKTOP */
-@media (min-width:1367px) and (max-width:1920px){
-    :root{ --cambio-width:min(1240px,88%); }
-    .form-busqueda{ grid-template-columns:1fr 180px; }
-    .resumen-estudiante{ grid-template-columns:repeat(4,minmax(0,1fr)); }
-    .form-cambio,
-    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
-    .form-cambio .campo-completo,
-    .formulario-cambio textarea,
-    .acciones-cambio{ grid-column:1 / -1; }
+/* 1921px+ — TV */
+@media (min-width: 1921px) {
+    .cc-workspace { grid-template-columns: 1fr 420px; padding: 16px 24px 24px; gap: 16px; }
+    .cc-card { padding: 18px 22px; }
+    .cc-search-row input[type="text"],
+    .cc-field select { height: 38px; font-size: .88rem; }
+    .cc-btn-search, .cc-btn-confirm { height: 40px; }
 }
 
-/* 1921px+ — TV / HDMI */
-@media (min-width:1921px){
-    :root{ --cambio-width:min(1340px,80%); }
-    .form-busqueda{ grid-template-columns:1fr 200px; }
-    .resumen-estudiante{ grid-template-columns:repeat(4,minmax(0,1fr)); }
-    .form-cambio,
-    .formulario-cambio form{ grid-template-columns:1fr 1fr; }
-    .form-cambio .campo-completo,
-    .formulario-cambio textarea,
-    .acciones-cambio{ grid-column:1 / -1; }
-}
-
-/* Pantalla baja: notebook con TV via HDMI */
-@media (max-height:800px) and (min-width:900px){
-    .hero-cambio-contenido{ padding-top:12px; padding-bottom:40px; }
-    .contenido-cambio{ margin-top:-28px; }
-    .panel-busqueda,.panel-resultados,.panel-cambio,
-    .formulario-cambio,.detalle-cambio,
-    .panel-historial,.historial-cambios{ padding:13px; }
-    .form-busqueda input,
-    .form-busqueda button{ min-height:40px; font-size:.84rem; }
+/* Pantalla baja: notebook via HDMI */
+@media (max-height: 800px) and (min-width: 900px) {
+    .cc-cmd-bar   { height: 44px; }
+    .cc-workspace { padding: 8px 14px 12px; gap: 8px; }
+    .cc-card      { padding: 10px 14px; }
+    .cc-card-title{ margin-bottom: 7px; padding-bottom: 6px; }
+    .cc-search-row input[type="text"],
+    .cc-field select { height: 31px; }
+    .cc-btn-search, .cc-btn-confirm { height: 31px; }
+    .cc-student-grid { padding: 8px; gap: 5px; }
+    .cc-field textarea { min-height: 68px; }
 }
