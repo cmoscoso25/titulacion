@@ -6,6 +6,10 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Reportes compactación notebook (2026-06-02)
+
+Segunda ronda de ajuste fino para 1366×768: breakpoints `1025-1366px` y `max-height:800px` reemplazados con valores más agresivos. Cambios clave: `rep-header` 44→42px, `rep-strip-item` padding 8→7px, `kpi-rep` padding 9→8px, `kpi-rep-top margin-bottom` 5→4px, `panel-rep` padding 10→9px, `rep-tabs-wrapper margin-bottom` ahora explícito en ambos breakpoints (7px/5px), `rep-actualizacion margin` reducido. Para 1366×768, ambos breakpoints son activos simultáneamente (width + height) y el HDMI gana por orden CSS.
+
 ## Reportes CSS responsive corregido (2026-06-02)
 
 `reportes.css` — grids KPI y gráfico ajustados para ops-layout (viewport - sidebar):

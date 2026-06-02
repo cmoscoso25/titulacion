@@ -275,6 +275,8 @@ Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
 - `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
 - `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
 
+**Reportes breakpoints notebook (2026-06-02):** Para notebook 1366×768, AMBOS breakpoints `1025-1366px` (width) y `max-height:800px` (height) aplican simultáneamente. El HDMI/height viene ÚLTIMO en el CSS y gana sobre el width breakpoint. `rep-tabs-wrapper margin-bottom` y `rep-actualizacion margin` DEBEN estar en AMBOS breakpoints — son los más olvidados. El `kpi-rep-top margin-bottom` también se olvida frecuentemente y suma espacios verticales.
+
 **Reportes grids CSS (2026-06-02):** `.kpis-reportes` y `.kpis-op` usan `repeat(auto-fit, minmax(175px/150px, 1fr))` en todos los breakpoints — NUNCA `repeat(N, 1fr)` forzado, causa cards rotas dentro de ops-layout con sidebar. `.rep-kpis-2col` sin `max-width`. `kpi-rep-texto` tiene `word-break:break-word`. `chart-container` usa `clamp` para altura responsiva.
 
 **Reportes en ops-layout (2026-06-02):** `reportes.html` usa `ops-layout` + `ops-scroll rep-view`. La clase `.rep-view` en `reportes.css` zeroes el padding de `ops-scroll` para que `.rep-header` y `.rep-strip` vayan de borde a borde. El `@media print` referencia `.ops-layout/.ops-main/.ops-scroll` en vez de `.marco/.barra`. El interior (command bar, strip, tabs, Chart.js) no se modifica. Sidebar idéntico a los demás módulos con "Reportes" activo.
