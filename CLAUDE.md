@@ -275,6 +275,8 @@ Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
 - `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
 - `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
 
+**Flujo bloque-requerido en panel_control (2026-06-02):** El panel inicia en estado vacío — no llama al servidor al cargar. Solo carga datos cuando `filtroBloque.value !== ""`. El auto-refresh (15s) también verifica esto antes de ejecutar. `limpiarFiltros()` llama `_mostrarEstadoInicial()` (no `cargarDashboard()`). Los demás listeners también verifican que haya bloque antes de lanzar fetch. IDs nuevos: `#pc-empty-state`, `#pc-tabs-content`, `#pcAutoupdate`, `#planCount`. Función nueva: `_mostrarEstadoInicial()`, `_mostrarDatos()`.
+
 **Optimización ORM datos_panel_control (2026-06-02):** Los sets `_estudiantes_atrasados_ids` e `_invitaciones_atrasadas_ids` y el dict `_atrasados_por_plan` deben pre-calcularse ANTES de los loops de `seguimiento_estudiantes` y `avance_por_plan`. Sin ellos se producen N+1 queries (~900 queries para 300 estudiantes). No reinsertar `.exists()` ni `.count()` dentro de esos loops.
 
 **Clases JS-referenced (NO renombrar):**

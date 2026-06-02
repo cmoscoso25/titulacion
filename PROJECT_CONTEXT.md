@@ -6,6 +6,18 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## UX Panel de Control — bloque requerido (2026-06-02)
+
+Nuevo flujo:
+- Al abrir `/panel-control/`, selector `#filtroBloque` inicia vacío y aparece estado vacío "Seleccione un bloque" (no carga datos automáticamente).
+- Al seleccionar un bloque, se dispara `cargarDashboard()` automáticamente (sin botón Aplicar).
+- Auto-refresh de 15s solo se ejecuta cuando hay un bloque seleccionado.
+- Limpiar vuelve al estado inicial (vacío).
+- Bloque ABIERTA se marca con "▶ ... (Abierta)" en el selector.
+- Contador de planes visible como badge en el tab "Avance por plan".
+- Botón "Aplicar" eliminado. Solo queda "Buscar" y "Limpiar".
+- Nuevos estilos en `dashboard.css`: `.pc-empty-state`, `.pc-tab-count`.
+
 ## Optimización Panel de Control (2026-06-02)
 
 `datos_panel_control` fue optimizado para eliminar N+1 queries:

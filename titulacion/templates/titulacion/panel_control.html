@@ -146,37 +146,37 @@
             <div class="pc-kpi-strip">
 
                 <div class="pc-kpi pc-kpi--ok">
-                    <span class="pc-kpi-num" id="kpiEstudiantesPresentes">0</span>
+                    <span class="pc-kpi-num" id="kpiEstudiantesPresentes">–</span>
                     <span class="pc-kpi-label">Est. presentes</span>
-                    <span class="pc-kpi-sub" id="kpiPctEstudiantes">0% de titulados</span>
+                    <span class="pc-kpi-sub" id="kpiPctEstudiantes">–</span>
                 </div>
 
                 <div class="pc-kpi pc-kpi--nvy">
-                    <span class="pc-kpi-num" id="kpiEstudiantesPendientes">0</span>
+                    <span class="pc-kpi-num" id="kpiEstudiantesPendientes">–</span>
                     <span class="pc-kpi-label">Est. pendientes</span>
                     <span class="pc-kpi-sub">Aún no registrados</span>
                 </div>
 
                 <div class="pc-kpi pc-kpi--ok">
-                    <span class="pc-kpi-num" id="kpiInvitadosPresentes">0</span>
+                    <span class="pc-kpi-num" id="kpiInvitadosPresentes">–</span>
                     <span class="pc-kpi-label">Invitados presentes</span>
-                    <span class="pc-kpi-sub" id="kpiPctInvitados">0% de invitaciones</span>
+                    <span class="pc-kpi-sub" id="kpiPctInvitados">–</span>
                 </div>
 
                 <div class="pc-kpi pc-kpi--info">
-                    <span class="pc-kpi-num" id="kpiTotalAsistentes">0</span>
+                    <span class="pc-kpi-num" id="kpiTotalAsistentes">–</span>
                     <span class="pc-kpi-label">Total asistentes</span>
                     <span class="pc-kpi-sub">Titulados + invitados</span>
                 </div>
 
                 <div class="pc-kpi pc-kpi--wrn">
-                    <span class="pc-kpi-num" id="kpiTotalAtrasados">0</span>
+                    <span class="pc-kpi-num" id="kpiTotalAtrasados">–</span>
                     <span class="pc-kpi-label">Atrasados</span>
                     <span class="pc-kpi-sub">Después del cierre</span>
                 </div>
 
                 <div class="pc-kpi pc-kpi--err">
-                    <span class="pc-kpi-num" id="kpiAlertasQr">0</span>
+                    <span class="pc-kpi-num" id="kpiAlertasQr">–</span>
                     <span class="pc-kpi-label">Alertas QR</span>
                     <span class="pc-kpi-sub">Den., dup. u otra cer.</span>
                 </div>
@@ -205,10 +205,11 @@
                     <div class="pc-filter-item">
                         <label for="filtroBloque">Bloque</label>
                         <select id="filtroBloque">
-                            <option value="">Todos los bloques</option>
+                            <option value="">— Seleccione un bloque —</option>
                             {% for bloque in bloques %}
-                                <option value="{{ bloque.id }}">
-                                    {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m" }} · {{ bloque.hora_inicio|time:"H:i" }}
+                                <option value="{{ bloque.id }}"
+                                    {% if bloque_abierto and bloque.id == bloque_abierto.id %}data-activo="1"{% endif %}>
+                                    {% if bloque_abierto and bloque.id == bloque_abierto.id %}▶ {% endif %}{{ bloque.nombre }} · {{ bloque.fecha|date:"d/m" }} · {{ bloque.hora_inicio|time:"H:i" }}{% if bloque_abierto and bloque.id == bloque_abierto.id %} (Abierta){% endif %}
                                 </option>
                             {% endfor %}
                         </select>
@@ -261,19 +262,16 @@
                     </div>
                     <div class="pc-filter-actions">
                         <label class="pc-filter-label-ph" aria-hidden="true">&nbsp;</label>
-                        <div class="pc-filter-btns">
-                            <button type="button" class="pc-btn-aplicar" onclick="cargarDashboard()">Aplicar</button>
-                            <button type="button" class="pc-btn-limpiar" onclick="limpiarFiltros()">Limpiar</button>
-                        </div>
+                        <button type="button" class="pc-btn-limpiar" onclick="limpiarFiltros()">Limpiar</button>
                     </div>
                 </div>
 
                 <!-- Resultado + última actualización -->
                 <div class="pc-filter-footer">
                     <section class="resultado-busqueda" id="resultadoBusqueda">
-                        Mostrando información general de la ceremonia.
+                        Seleccione un bloque para ver los datos.
                     </section>
-                    <span class="pc-autoupdate">↺ Auto-actualización · <span id="ultimaActualizacion">-</span></span>
+                    <span class="pc-autoupdate" id="pcAutoupdate" style="display:none">↺ Auto-actualización · <span id="ultimaActualizacion">–</span></span>
                 </div>
 
             </div>
@@ -281,96 +279,110 @@
             <!-- ─── TABS + TABLAS ─── -->
             <div class="pc-content">
 
-                <div class="tabs-dashboard">
-                    <div class="tab-dashboard activo" onclick="cambiarTab('avance', this)">Avance por plan</div>
-                    <div class="tab-dashboard" onclick="cambiarTab('movimientos', this)">Últimos movimientos</div>
-                    <div class="tab-dashboard" onclick="cambiarTab('atrasados', this)">Atrasados</div>
-                    <div class="tab-dashboard" onclick="cambiarTab('seguimiento', this)">Seguimiento</div>
+                <!-- Estado vacío: mostrado hasta que se selecciona un bloque -->
+                <div id="pc-empty-state" class="pc-empty-state">
+                    <svg class="pc-empty-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                    <strong>Seleccione un bloque</strong>
+                    <span>Elija un bloque en el filtro de arriba para ver el avance por plan, últimos movimientos y seguimiento de titulados.</span>
                 </div>
 
-                <div id="tab-avance" class="panel-tab activo">
-                    <div class="tabla-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Plan</th>
-                                    <th>Presentes</th>
-                                    <th>Pendientes</th>
-                                    <th>Atrasados</th>
-                                    <th>Avance</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaAvancePlanes">
-                                <tr><td colspan="5">Cargando información...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <!-- Tabs + tablas: ocultas hasta que se selecciona un bloque -->
+                <div id="pc-tabs-content" style="display:none">
 
-                <div id="tab-movimientos" class="panel-tab">
-                    <div class="tabla-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Hora</th>
-                                    <th>Nombre</th>
-                                    <th>Tipo</th>
-                                    <th>Resultado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaUltimosMovimientos">
-                                <tr><td colspan="4">Cargando información...</td></tr>
-                            </tbody>
-                        </table>
+                    <div class="tabs-dashboard">
+                        <div class="tab-dashboard activo" onclick="cambiarTab('avance', this)">
+                            Avance por plan <span class="pc-tab-count" id="planCount">0</span>
+                        </div>
+                        <div class="tab-dashboard" onclick="cambiarTab('movimientos', this)">Últimos movimientos</div>
+                        <div class="tab-dashboard" onclick="cambiarTab('atrasados', this)">Atrasados</div>
+                        <div class="tab-dashboard" onclick="cambiarTab('seguimiento', this)">Seguimiento</div>
                     </div>
-                </div>
 
-                <div id="tab-atrasados" class="panel-tab">
-                    <div class="tabla-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Hora</th>
-                                    <th>Nombre</th>
-                                    <th>RUT</th>
-                                    <th>Tipo</th>
-                                    <th>Ceremonia</th>
-                                    <th>Plan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaAtrasados">
-                                <tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>
-                            </tbody>
-                        </table>
+                    <div id="tab-avance" class="panel-tab activo">
+                        <div class="tabla-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Plan</th>
+                                        <th>Presentes</th>
+                                        <th>Pendientes</th>
+                                        <th>Atrasados</th>
+                                        <th>Avance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaAvancePlanes">
+                                    <tr><td colspan="5">Seleccione un bloque para ver los planes.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <div id="tab-seguimiento" class="panel-tab">
-                    <div class="pc-seguimiento-header">
-                        <span class="pc-seguimiento-title">Seguimiento por estudiante</span>
-                        <span class="pc-seguimiento-sub">Permite validar rápidamente si un titulado está presente, pendiente o atrasado.</span>
+                    <div id="tab-movimientos" class="panel-tab">
+                        <div class="tabla-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Nombre</th>
+                                        <th>Tipo</th>
+                                        <th>Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaUltimosMovimientos">
+                                    <tr><td colspan="4">Cargando información...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="tabla-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>RUT</th>
-                                    <th>Área</th>
-                                    <th>Plan</th>
-                                    <th>Ceremonia</th>
-                                    <th>Estado</th>
-                                    <th>Inv. 1</th>
-                                    <th>Inv. 2</th>
-                                    <th>Gestión</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaSeguimiento">
-                                <tr><td colspan="9">Cargando información...</td></tr>
-                            </tbody>
-                        </table>
+
+                    <div id="tab-atrasados" class="panel-tab">
+                        <div class="tabla-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Nombre</th>
+                                        <th>RUT</th>
+                                        <th>Tipo</th>
+                                        <th>Ceremonia</th>
+                                        <th>Plan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaAtrasados">
+                                    <tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+
+                    <div id="tab-seguimiento" class="panel-tab">
+                        <div class="pc-seguimiento-header">
+                            <span class="pc-seguimiento-title">Seguimiento por estudiante</span>
+                            <span class="pc-seguimiento-sub">Permite validar rápidamente si un titulado está presente, pendiente o atrasado.</span>
+                        </div>
+                        <div class="tabla-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>RUT</th>
+                                        <th>Área</th>
+                                        <th>Plan</th>
+                                        <th>Ceremonia</th>
+                                        <th>Estado</th>
+                                        <th>Inv. 1</th>
+                                        <th>Inv. 2</th>
+                                        <th>Gestión</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaSeguimiento">
+                                    <tr><td colspan="9">Cargando información...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div><!-- pc-tabs-content -->
 
             </div><!-- pc-content -->
 
@@ -386,21 +398,54 @@
     const urlDatosPanel = "{% url 'titulacion:datos_panel_control' %}";
     const urlPlanesPorArea = "{% url 'titulacion:obtener_planes_por_area' %}";
 
-    const filtroCeremonia = document.getElementById("filtroCeremonia");
-    const filtroBloque = document.getElementById("filtroBloque");
-    const filtroBusqueda = document.getElementById("filtroBusqueda");
-    const filtroArea = document.getElementById("filtroArea");
-    const filtroPlan = document.getElementById("filtroPlan");
-    const filtroEstado = document.getElementById("filtroEstado");
+    const filtroCeremonia  = document.getElementById("filtroCeremonia");
+    const filtroBloque     = document.getElementById("filtroBloque");
+    const filtroBusqueda   = document.getElementById("filtroBusqueda");
+    const filtroArea       = document.getElementById("filtroArea");
+    const filtroPlan       = document.getElementById("filtroPlan");
+    const filtroEstado     = document.getElementById("filtroEstado");
     const filtroTipoAcceso = document.getElementById("filtroTipoAcceso");
-    const filtroResultado = document.getElementById("filtroResultado");
+    const filtroResultado  = document.getElementById("filtroResultado");
     const resultadoBusqueda = document.getElementById("resultadoBusqueda");
+    const elEmptyState     = document.getElementById("pc-empty-state");
+    const elTabsContent    = document.getElementById("pc-tabs-content");
+    const elAutoupdate     = document.getElementById("pcAutoupdate");
 
     let temporizadorBusqueda = null;
     let _abortController = null;
     let _fetchManualActivo = false;
     const _cache = new Map();
     const CACHE_TTL_MS = 8000;
+
+    /* ─── Estado inicial: sin bloque seleccionado ─── */
+    function _mostrarEstadoInicial() {
+        if (_abortController) {
+            _abortController.abort();
+            _abortController = null;
+        }
+        elEmptyState.style.display = "flex";
+        elTabsContent.style.display = "none";
+        elAutoupdate.style.display = "none";
+
+        ["kpiEstudiantesPresentes","kpiEstudiantesPendientes","kpiInvitadosPresentes",
+         "kpiTotalAsistentes","kpiTotalAtrasados","kpiAlertasQr"].forEach(function(id) {
+            document.getElementById(id).innerText = "–";
+        });
+        document.getElementById("kpiPctEstudiantes").innerText = "–";
+        document.getElementById("kpiPctInvitados").innerText = "–";
+        document.getElementById("ultimaActualizacion").innerText = "–";
+        document.getElementById("planCount").innerText = "0";
+
+        resultadoBusqueda.className = "resultado-busqueda";
+        resultadoBusqueda.innerHTML = "Seleccione un bloque para ver los datos.";
+    }
+
+    /* ─── Mostrar área de datos (cuando hay bloque) ─── */
+    function _mostrarDatos() {
+        elEmptyState.style.display = "none";
+        elTabsContent.style.display = "block";
+        elAutoupdate.style.display = "";
+    }
 
     function cambiarTab(nombre, elemento) {
         document.querySelectorAll(".panel-tab").forEach(function(p) {
@@ -413,7 +458,8 @@
         elemento.classList.add("activo");
     }
 
-    function badge(valor, atrasado = false) {
+    function badge(valor, atrasado) {
+        atrasado = atrasado || false;
         if (atrasado) return '<span class="badge badge-atrasado">Atrasado</span>';
         if (valor) return '<span class="badge badge-si">Sí</span>';
         return '<span class="badge badge-no">No</span>';
@@ -433,30 +479,30 @@
     }
 
     function parametrosFiltros() {
-        const params = new URLSearchParams();
-        if (filtroCeremonia.value) params.append("ceremonia", filtroCeremonia.value);
-        if (filtroBloque.value) params.append("bloque", filtroBloque.value);
-        if (filtroBusqueda.value.trim()) params.append("q", filtroBusqueda.value.trim());
-        if (filtroArea.value) params.append("area", filtroArea.value);
-        if (filtroPlan.value) params.append("plan", filtroPlan.value);
-        if (filtroEstado.value) params.append("estado", filtroEstado.value);
+        var params = new URLSearchParams();
+        if (filtroCeremonia.value)  params.append("ceremonia",   filtroCeremonia.value);
+        if (filtroBloque.value)     params.append("bloque",      filtroBloque.value);
+        if (filtroBusqueda.value.trim()) params.append("q",      filtroBusqueda.value.trim());
+        if (filtroArea.value)       params.append("area",        filtroArea.value);
+        if (filtroPlan.value)       params.append("plan",        filtroPlan.value);
+        if (filtroEstado.value)     params.append("estado",      filtroEstado.value);
         if (filtroTipoAcceso.value) params.append("tipo_acceso", filtroTipoAcceso.value);
-        if (filtroResultado.value) params.append("resultado", filtroResultado.value);
+        if (filtroResultado.value)  params.append("resultado",   filtroResultado.value);
         return params;
     }
 
     async function cargarPlanesPorArea() {
-        const areaSeleccionada = filtroArea.value;
-        const planActual = filtroPlan.value;
-        const params = new URLSearchParams();
+        var areaSeleccionada = filtroArea.value;
+        var planActual = filtroPlan.value;
+        var params = new URLSearchParams();
         if (areaSeleccionada) params.append("area", areaSeleccionada);
 
-        const respuesta = await fetch(urlPlanesPorArea + "?" + params.toString());
-        const datos = await respuesta.json();
+        var respuesta = await fetch(urlPlanesPorArea + "?" + params.toString());
+        var datos = await respuesta.json();
 
         filtroPlan.innerHTML = '<option value="">Todos</option>';
         datos.planes.forEach(function(plan) {
-            const option = document.createElement("option");
+            var option = document.createElement("option");
             option.value = plan;
             option.textContent = plan;
             if (plan === planActual) option.selected = true;
@@ -465,6 +511,8 @@
     }
 
     function _aplicarDatos(datos) {
+        _mostrarDatos();
+
         document.getElementById("kpiEstudiantesPresentes").innerText = datos.kpis.estudiantes_presentes;
         document.getElementById("kpiEstudiantesPendientes").innerText = datos.kpis.estudiantes_pendientes;
         document.getElementById("kpiInvitadosPresentes").innerText = datos.kpis.invitados_presentes;
@@ -473,6 +521,7 @@
         document.getElementById("kpiAlertasQr").innerText = datos.kpis.alertas_qr;
         document.getElementById("kpiPctEstudiantes").innerText = datos.kpis.porcentaje_estudiantes + "% de titulados";
         document.getElementById("kpiPctInvitados").innerText = datos.kpis.porcentaje_invitaciones + "% de invitaciones";
+
         actualizarTextoBusqueda(datos);
         cargarTablaAvance(datos.avance_por_plan);
         cargarTablaMovimientos(datos.ultimos_registros);
@@ -481,30 +530,36 @@
         document.getElementById("ultimaActualizacion").innerText = new Date().toLocaleTimeString("es-CL");
     }
 
-    async function cargarDashboard(esAutoRefresh = false) {
+    async function cargarDashboard(esAutoRefresh) {
+        esAutoRefresh = esAutoRefresh || false;
+
+        // Requiere bloque seleccionado
+        if (!filtroBloque.value) {
+            _mostrarEstadoInicial();
+            return;
+        }
+
         // El auto-refresh no interrumpe una petición manual en curso
         if (esAutoRefresh && _fetchManualActivo) return;
 
-        // Cancelar petición anterior si el usuario cambia filtros rápido
-        if (_abortController) {
-            _abortController.abort();
-        }
+        // Cancelar petición anterior
+        if (_abortController) _abortController.abort();
         _abortController = new AbortController();
 
-        const params = parametrosFiltros();
-        const cacheKey = params.toString();
+        var params = parametrosFiltros();
+        var cacheKey = params.toString();
 
         // Usar caché si los datos son recientes (< 8s) y no es auto-refresh
         if (!esAutoRefresh) {
-            const entrada = _cache.get(cacheKey);
+            var entrada = _cache.get(cacheKey);
             if (entrada && (Date.now() - entrada.ts) < CACHE_TTL_MS) {
                 _aplicarDatos(entrada.datos);
                 return;
             }
         }
 
-        // Mostrar indicador "actualizando..." solo si la respuesta tarda > 300ms
-        let timerIndicador = null;
+        // Mostrar "actualizando..." solo si la respuesta tarda > 300ms
+        var timerIndicador = null;
         if (!esAutoRefresh) {
             _fetchManualActivo = true;
             timerIndicador = setTimeout(function() {
@@ -513,18 +568,16 @@
         }
 
         try {
-            const respuesta = await fetch(
+            var respuesta = await fetch(
                 urlDatosPanel + "?" + params.toString(),
                 { signal: _abortController.signal }
             );
-            const datos = await respuesta.json();
+            var datos = await respuesta.json();
 
-            // Guardar en caché (auto-refresh también actualiza el caché)
             _cache.set(cacheKey, { datos: datos, ts: Date.now() });
-
             _aplicarDatos(datos);
         } catch (err) {
-            if (err.name === "AbortError") return; // petición cancelada intencionalmente
+            if (err.name === "AbortError") return;
         } finally {
             clearTimeout(timerIndicador);
             resultadoBusqueda.classList.remove("rb-cargando");
@@ -541,16 +594,16 @@
     }
 
     function actualizarTextoBusqueda(datos) {
-        const texto = filtroBusqueda.value.trim();
-        const el = resultadoBusqueda;
+        var texto = filtroBusqueda.value.trim();
+        var el = resultadoBusqueda;
         el.className = "resultado-busqueda";
 
         if (!texto) {
-            el.innerHTML = "Mostrando información general de la ceremonia.";
+            el.innerHTML = "Mostrando datos del bloque seleccionado.";
             return;
         }
 
-        const total = datos.kpis.estudiantes_totales;
+        var total = datos.kpis.estudiantes_totales;
 
         if (total === 0) {
             el.classList.add("rb-card", "rb-no-encontrado");
@@ -564,8 +617,8 @@
         }
 
         if (total === 1) {
-            const est = datos.seguimiento_estudiantes[0];
-            const icono = est.estado_clase === "presente" ? "✓" : est.estado_clase === "atrasado" ? "⚠" : "○";
+            var est = datos.seguimiento_estudiantes[0];
+            var icono = est.estado_clase === "presente" ? "✓" : est.estado_clase === "atrasado" ? "⚠" : "○";
             el.classList.add("rb-card", "rb-" + est.estado_clase);
             el.innerHTML =
                 '<span class="rb-icon">' + icono + '</span>' +
@@ -587,128 +640,150 @@
     }
 
     function cargarTablaAvance(items) {
-        const tbody = document.getElementById("tablaAvancePlanes");
+        var tbody = document.getElementById("tablaAvancePlanes");
+        document.getElementById("planCount").innerText = items.length;
         tbody.innerHTML = "";
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="5">No hay información para los filtros seleccionados.</td></tr>';
             return;
         }
         items.forEach(function(item) {
-            const fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${item.plan}</td>
-                <td>${item.presentes} / ${item.total}</td>
-                <td>${item.pendientes}</td>
-                <td>${item.atrasados}</td>
-                <td>
-                    <div class="pc-avance-cell">
-                        <strong>${item.porcentaje}%</strong>
-                        <div class="barra-progreso"><div style="width:${item.porcentaje}%"></div></div>
-                    </div>
-                </td>
-            `;
+            var fila = document.createElement("tr");
+            fila.innerHTML =
+                '<td>' + _esc(item.plan) + '</td>' +
+                '<td>' + item.presentes + ' / ' + item.total + '</td>' +
+                '<td>' + item.pendientes + '</td>' +
+                '<td>' + item.atrasados + '</td>' +
+                '<td>' +
+                    '<div class="pc-avance-cell">' +
+                        '<strong>' + item.porcentaje + '%</strong>' +
+                        '<div class="barra-progreso"><div style="width:' + item.porcentaje + '%"></div></div>' +
+                    '</div>' +
+                '</td>';
             tbody.appendChild(fila);
         });
     }
 
     function cargarTablaMovimientos(items) {
-        const tbody = document.getElementById("tablaUltimosMovimientos");
+        var tbody = document.getElementById("tablaUltimosMovimientos");
         tbody.innerHTML = "";
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="4">No hay movimientos registrados.</td></tr>';
             return;
         }
         items.forEach(function(item) {
-            const fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${item.hora}</td>
-                <td>${item.nombre}</td>
-                <td>${item.tipo_acceso}</td>
-                <td>${badgeResultado(item.resultado, item.codigo_resultado, item.ingreso_atrasado)}</td>
-            `;
+            var fila = document.createElement("tr");
+            fila.innerHTML =
+                '<td>' + _esc(item.hora) + '</td>' +
+                '<td>' + _esc(item.nombre) + '</td>' +
+                '<td>' + _esc(item.tipo_acceso) + '</td>' +
+                '<td>' + badgeResultado(item.resultado, item.codigo_resultado, item.ingreso_atrasado) + '</td>';
             tbody.appendChild(fila);
         });
     }
 
     function cargarTablaAtrasados(items) {
-        const tbody = document.getElementById("tablaAtrasados");
+        var tbody = document.getElementById("tablaAtrasados");
         tbody.innerHTML = "";
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>';
             return;
         }
         items.forEach(function(item) {
-            const fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${item.hora}</td>
-                <td>${item.nombre}</td>
-                <td>${item.rut}</td>
-                <td>${item.tipo_acceso}</td>
-                <td>${item.bloque}</td>
-                <td>${item.plan}</td>
-            `;
+            var fila = document.createElement("tr");
+            fila.innerHTML =
+                '<td>' + _esc(item.hora) + '</td>' +
+                '<td>' + _esc(item.nombre) + '</td>' +
+                '<td>' + _esc(item.rut) + '</td>' +
+                '<td>' + _esc(item.tipo_acceso) + '</td>' +
+                '<td>' + _esc(item.bloque) + '</td>' +
+                '<td>' + _esc(item.plan) + '</td>';
             tbody.appendChild(fila);
         });
     }
 
     function cargarTablaSeguimiento(items) {
-        const tbody = document.getElementById("tablaSeguimiento");
+        var tbody = document.getElementById("tablaSeguimiento");
         tbody.innerHTML = "";
         if (!items.length) {
             tbody.innerHTML = '<tr><td colspan="9">No hay estudiantes para los filtros seleccionados.</td></tr>';
             return;
         }
         items.forEach(function(item) {
-            const fila = document.createElement("tr");
+            var fila = document.createElement("tr");
             fila.classList.add("fila-estado-" + item.estado_clase);
-            fila.innerHTML = `
-                <td>${item.nombre}</td>
-                <td>${item.rut}</td>
-                <td>${item.area}</td>
-                <td>${item.plan}</td>
-                <td>${item.bloque}</td>
-                <td>${badgeEstadoSeguimiento(item)}</td>
-                <td>${badge(item.invitacion_1, item.invitacion_1_atrasada)}</td>
-                <td>${badge(item.invitacion_2, item.invitacion_2_atrasada)}</td>
-                <td>${badge(item.invitaciones_gestionadas)}</td>
-            `;
+            fila.innerHTML =
+                '<td>' + _esc(item.nombre) + '</td>' +
+                '<td>' + _esc(item.rut) + '</td>' +
+                '<td>' + _esc(item.area) + '</td>' +
+                '<td>' + _esc(item.plan) + '</td>' +
+                '<td>' + _esc(item.bloque) + '</td>' +
+                '<td>' + badgeEstadoSeguimiento(item) + '</td>' +
+                '<td>' + badge(item.invitacion_1, item.invitacion_1_atrasada) + '</td>' +
+                '<td>' + badge(item.invitacion_2, item.invitacion_2_atrasada) + '</td>' +
+                '<td>' + badge(item.invitaciones_gestionadas) + '</td>';
             tbody.appendChild(fila);
         });
     }
 
     function limpiarFiltros() {
-        filtroBloque.value = "";
-        filtroBusqueda.value = "";
-        filtroArea.value = "";
-        filtroPlan.value = "";
-        filtroEstado.value = "";
+        filtroBloque.value     = "";
+        filtroBusqueda.value   = "";
+        filtroArea.value       = "";
+        filtroPlan.value       = "";
+        filtroEstado.value     = "";
         filtroTipoAcceso.value = "";
-        filtroResultado.value = "";
+        filtroResultado.value  = "";
         _cache.clear();
         cargarPlanesPorArea();
-        cargarDashboard();
+        _mostrarEstadoInicial();
     }
+
+    /* ─── Listeners ─── */
+
+    filtroBloque.addEventListener("change", function() {
+        _cache.clear();
+        if (!filtroBloque.value) {
+            _mostrarEstadoInicial();
+            return;
+        }
+        cargarDashboard();
+    });
 
     filtroArea.addEventListener("change", async function() {
         await cargarPlanesPorArea();
-        await cargarDashboard();
+        if (filtroBloque.value) cargarDashboard();
     });
 
-    filtroBloque.addEventListener("change", function() { _cache.clear(); cargarDashboard(); });
-    filtroPlan.addEventListener("change", cargarDashboard);
-    filtroEstado.addEventListener("change", cargarDashboard);
-    filtroTipoAcceso.addEventListener("change", cargarDashboard);
-    filtroResultado.addEventListener("change", cargarDashboard);
+    filtroPlan.addEventListener("change", function() {
+        if (filtroBloque.value) cargarDashboard();
+    });
+    filtroEstado.addEventListener("change", function() {
+        if (filtroBloque.value) cargarDashboard();
+    });
+    filtroTipoAcceso.addEventListener("change", function() {
+        if (filtroBloque.value) cargarDashboard();
+    });
+    filtroResultado.addEventListener("change", function() {
+        if (filtroBloque.value) cargarDashboard();
+    });
 
     filtroBusqueda.addEventListener("input", function() {
         clearTimeout(temporizadorBusqueda);
+        if (!filtroBloque.value) return;
         temporizadorBusqueda = setTimeout(function() {
             cargarDashboard();
         }, 300);
     });
 
-    cargarDashboard();
-    setInterval(function() { cargarDashboard(true); }, 15000);
+    /* ─── Init: estado inicial, sin llamada al servidor ─── */
+    _mostrarEstadoInicial();
+
+    /* ─── Auto-refresh: solo cuando hay bloque seleccionado ─── */
+    setInterval(function() {
+        if (!filtroBloque.value) return;
+        cargarDashboard(true);
+    }, 15000);
 </script>
 
 <script>
@@ -721,8 +796,8 @@
         overlay.classList.toggle("active", open);
         if (btn) btn.setAttribute("aria-expanded", String(open));
     }
-    if (btn) btn.addEventListener("click", () => toggle(!sidebar.classList.contains("open")));
-    if (overlay) overlay.addEventListener("click", () => toggle(false));
+    if (btn) btn.addEventListener("click", function() { toggle(!sidebar.classList.contains("open")); });
+    if (overlay) overlay.addEventListener("click", function() { toggle(false); });
 }());
 </script>
 
