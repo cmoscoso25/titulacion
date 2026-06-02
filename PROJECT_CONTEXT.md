@@ -6,6 +6,16 @@ Sistema institucional de Titulación INACAP Sede Arica 2026.
 
 Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
 
+## Reportes integrado a ops-layout (2026-06-02)
+
+`reportes.html` migrado de layout propio (`.marco` + `<header class="barra">`) a `ops-layout` global:
+- Sidebar con permisos (igual que los demás módulos), "Reportes" como item activo
+- `ops-topbar` global (elimina header duplicado)
+- `ops-scroll rep-view` — `.rep-view` en `reportes.css` zeroes padding del scroll
+- El `.rep-header` (command bar con filtros, Excel, Imprimir), `.rep-strip` y los 5 tabs no se tocaron
+- `@media print` actualizado: referencia `ops-layout` en vez de `.marco`/`.barra`
+- Ahora responsive por herencia de `inicio.css` + breakpoints propios de `reportes.css`
+
 ## Menú y Inicio por permisos (2026-06-02)
 
 Nuevo `titulacion/context_processors.py` agrega `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso` a todos los templates automáticamente (registrado en `settings.py`).
