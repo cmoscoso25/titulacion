@@ -180,6 +180,21 @@ Sistema de variables en reportes.css:
 
 ## Clases principales por página
 
+### panel_control.html → inicio.css + dashboard.css
+Usa el layout global `ops-layout` (sidebar + topbar) igual que inicio.html y registro_ingreso.html.
+Carga: `base.css` → `inicio.css` → `dashboard.css`.
+El `dashboard.css` solo contiene estilos del contenido interno: buscador, filtros, KPIs, tabs, tablas.
+NO contiene estilos de layout, hero ni marco — eso lo maneja `inicio.css`.
+
+Clases funcionales (NO renombrar — referenciadas por JS):
+- `#filtroCeremonia`, `#filtroBloque`, `#filtroBusqueda`, `#filtroArea`, `#filtroPlan`, `#filtroEstado`, `#filtroTipoAcceso`, `#filtroResultado`
+- `#resultadoBusqueda`, `#kpiEstudiantesPresentes`, `#kpiEstudiantesPendientes`, `#kpiInvitadosPresentes`, `#kpiTotalAsistentes`, `#kpiTotalAtrasados`, `#kpiAlertasQr`, `#kpiPctEstudiantes`, `#kpiPctInvitados`
+- `#tablaAvancePlanes`, `#tablaUltimosMovimientos`, `#tablaAtrasados`, `#tablaSeguimiento`, `#ultimaActualizacion`
+- `.tab-dashboard`, `.panel-tab`, `.activo`
+- `cargarDashboard()` — se llama cada 15 segundos vía `setInterval`
+- `urlDatosPanel` → `{% url 'titulacion:datos_panel_control' %}`
+- `urlPlanesPorArea` → `{% url 'titulacion:obtener_planes_por_area' %}`
+
 ### tarjetas.html → tarjetas.css
 Diseño horizontal 3 columnas (ticket institucional):
 - `.tarjeta-fisica` — contenedor principal, `grid-template-columns: 230px 1fr 210px`

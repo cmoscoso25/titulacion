@@ -92,7 +92,7 @@ titulacion_inacap/
 │       ├── inicio.css            ← layout ops-layout global; auto-fit grids (KPIs, módulos, grupos); breakpoints 480/768/1024/1366/1921px; --sb-w clamp por breakpoint
 │       ├── carga_excel.css
 │       ├── agregar_estudiante.css
-│       ├── dashboard.css         ← KPIs coloreados, filtros, tabs, barra-progreso
+│       ├── dashboard.css         ← KPIs coloreados, filtros, tabs, barra-progreso. NO tiene layout propio; usa ops-layout de inicio.css
 │       ├── cambio_ceremonia.css
 │       ├── tarjetas.css
 │       ├── entrega.css
