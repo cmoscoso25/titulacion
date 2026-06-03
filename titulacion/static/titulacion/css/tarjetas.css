@@ -506,23 +506,17 @@
 
     .tarjeta-fisica{
         display: grid !important;
-        grid-template-columns: 200px 1fr 180px !important;
+        grid-template-columns: 26% 1fr 24% !important;
         width: 100% !important;
-        min-height: 84mm !important;
-        max-height: 84mm !important;
+        min-height: 76mm !important;
+        height: auto !important;
         margin: 0 0 4mm !important;
         border-radius: 6px !important;
         box-shadow: none !important;
         border: 1px solid #ccc !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-    }
-
-    .tarjeta-fisica:nth-child(3n){
-        page-break-after: always;
-        break-after: page;
-        margin-bottom: 0 !important;
     }
 
     .tf-logo{ height: 26px !important; }

@@ -1073,3 +1073,76 @@ body.capturando-invitacion .tarjeta {
     .qr-box img { width: 98px; height: 98px; }
     .codigo-acceso { font-size: .62rem; }
 }
+
+/* ============================================================
+   IMPRESIÓN DIRECTA (Ctrl+P desde la página)
+   Una tarjeta por hoja, landscape, sin UI
+   ============================================================ */
+@media print {
+    @page {
+        size: letter landscape;
+        margin: 10mm;
+    }
+
+    .ops-sidebar,
+    .ops-topbar,
+    .ops-overlay,
+    .ops-hamburger,
+    .ops-page-footer,
+    .entrega-mod-header,
+    .buscador-box,
+    .resumen-resultados,
+    .botones-acciones,
+    .estado-pill,
+    .acciones-globales,
+    .ops-mensajes,
+    .helper,
+    .encabezado-estudiante {
+        display: none !important;
+    }
+
+    .ops-layout,
+    .ops-main,
+    .ops-scroll {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: white !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+    }
+
+    .estudiante-box {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .lista-invitaciones {
+        padding: 0 !important;
+        gap: 0 !important;
+        background: none !important;
+    }
+
+    .tarjeta {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        break-after: page !important;
+        page-break-after: always !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 4px !important;
+    }
+
+    .tarjeta:last-child {
+        break-after: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    .tarjeta,
+    .tarjeta * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

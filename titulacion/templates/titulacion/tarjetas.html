@@ -125,8 +125,11 @@
                 Total tarjetas: <strong>{{ total_tarjetas }}</strong>
             </div>
             <div class="acciones">
-                <button type="button" onclick="window.print()" class="btn-secundario">
-                    Imprimir / Descargar PDF
+                <button type="button" onclick="imprimirTarjetas('carta')" class="btn-secundario">
+                    Imprimir (Carta)
+                </button>
+                <button type="button" onclick="imprimirTarjetas('oficio')" class="btn-secundario">
+                    Imprimir (Oficio)
                 </button>
                 <a href="{% url 'titulacion:inicio' %}" class="btn-secundario">Volver al panel</a>
             </div>
@@ -349,6 +352,21 @@
     </main>
 
 </div>
+
+
+<script>
+    function imprimirTarjetas(tamano) {
+        const estiloExistente = document.getElementById('print-page-size');
+        if (estiloExistente) estiloExistente.remove();
+        const estilo = document.createElement('style');
+        estilo.id = 'print-page-size';
+        estilo.textContent = tamano === 'oficio'
+            ? '@media print { @page { size: legal portrait; margin: 8mm 10mm; } }'
+            : '@media print { @page { size: letter portrait; margin: 8mm 10mm; } }';
+        document.head.appendChild(estilo);
+        window.print();
+    }
+</script>
 
 </body>
 </html>
