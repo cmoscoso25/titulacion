@@ -399,7 +399,7 @@
         if (datos.tipo === "OTRA_CEREMONIA") {
             resultado.classList.add("rechazado");
             estadoVisual.classList.add("estado-no");
-            estadoTexto.innerText = "OTRA CEREMONIA";
+            estadoTexto.innerText = "ACCESO DENEGADO";
             return;
         }
         if (datos.tipo === "SIN_CEREMONIA_ACTIVA") {
@@ -525,11 +525,10 @@
         return "rechazado";
     }
     function badgeEvento(r) {
-        if (r === "PERMITIDO")      return "AUTORIZADO";
-        if (r === "DUPLICADO")      return "DUPLICADO";
-        if (r === "ATRASADO")       return "ATRASADO";
-        if (r === "OTRA_CEREMONIA") return "OTRA CER.";
-        return r;
+        if (r === "PERMITIDO") return "AUTORIZADO";
+        if (r === "DUPLICADO") return "DUPLICADO";
+        if (r === "ATRASADO")  return "ATRASADO";
+        return "DENEGADO";   // OTRA_CEREMONIA, DENEGADO y cualquier otro resultado
     }
 
     function actualizarRegistros() {
