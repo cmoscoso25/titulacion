@@ -95,6 +95,14 @@
     border: 1px solid #dbe3ea;
     border-radius: 10px;
     padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+}
+
+/* Form wrapper: participa en el gap de cc-col-main */
+.cc-cambio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .cc-card-title {
@@ -291,6 +299,8 @@
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    border-left: 2px solid #e5e7eb;
+    padding-left: 8px;
 }
 
 .cc-info-label {
@@ -313,8 +323,13 @@
     white-space: nowrap;
 }
 
-.cc-info-val.ok  { color: #15803d; }
-.cc-info-val.err { color: #991b1b; }
+.cc-info-val.ok  { color: #15803d; font-weight: 700; }
+.cc-info-val.err { color: #991b1b; font-weight: 700; }
+
+/* Card del formulario con borde top navy sutil */
+.cc-card-form {
+    border-top: 3px solid #06152f;
+}
 
 /* ============================================================
    FORMULARIO DE CAMBIO

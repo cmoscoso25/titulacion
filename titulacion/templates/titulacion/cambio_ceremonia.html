@@ -228,97 +228,103 @@
                     </div>
                     {% endif %}
 
-                    <!-- Card: Estudiante seleccionado + formulario [condicional] -->
+                    <!-- Cards: Estudiante seleccionado + Nueva Ceremonia [condicional] -->
                     {% if estudiante_seleccionado %}
-                    <div class="cc-card">
-                        <div class="cc-card-title">Estudiante Seleccionado</div>
+                    <form method="POST" class="cc-cambio-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="estudiante_id" value="{{ estudiante_seleccionado.id }}">
 
-                        <!-- Datos del estudiante -->
-                        <div class="cc-student-grid">
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Nombre</span>
-                                <span class="cc-info-val" title="{{ estudiante_seleccionado.nombre_completo }}">{{ estudiante_seleccionado.nombre_completo }}</span>
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">RUT</span>
-                                <span class="cc-info-val">{{ estudiante_seleccionado.rut }}</span>
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Área</span>
-                                <span class="cc-info-val" title="{{ estudiante_seleccionado.plan_estudio.area.nombre }}">{{ estudiante_seleccionado.plan_estudio.area.nombre }}</span>
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Plan</span>
-                                <span class="cc-info-val" title="{{ estudiante_seleccionado.plan_estudio.nombre }}">{{ estudiante_seleccionado.plan_estudio.nombre }}</span>
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Bloque actual</span>
-                                <span class="cc-info-val" title="{{ estudiante_seleccionado.bloque_ceremonia.nombre }}">{{ estudiante_seleccionado.bloque_ceremonia.nombre }}</span>
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Fecha / Hora</span>
-                                <span class="cc-info-val">{{ estudiante_seleccionado.bloque_ceremonia.fecha|date:"d/m/Y" }} · {{ estudiante_seleccionado.bloque_ceremonia.hora_inicio|time:"H:i" }}</span>
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Ingreso</span>
-                                {% if estudiante_seleccionado.ingreso_confirmado %}
-                                    <span class="cc-info-val err">Registrado</span>
-                                {% else %}
-                                    <span class="cc-info-val ok">Sin registro</span>
-                                {% endif %}
-                            </div>
-                            <div class="cc-info-item">
-                                <span class="cc-info-label">Invitaciones</span>
-                                <span class="cc-info-val">{{ estudiante_seleccionado.invitaciones.all|length }}</span>
+                        <!-- Card: Datos del estudiante (solo lectura) -->
+                        <div class="cc-card">
+                            <div class="cc-card-title">Estudiante Seleccionado</div>
+                            <div class="cc-student-grid">
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Nombre</span>
+                                    <span class="cc-info-val" title="{{ estudiante_seleccionado.nombre_completo }}">{{ estudiante_seleccionado.nombre_completo }}</span>
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">RUT</span>
+                                    <span class="cc-info-val">{{ estudiante_seleccionado.rut }}</span>
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Área</span>
+                                    <span class="cc-info-val" title="{{ estudiante_seleccionado.plan_estudio.area.nombre }}">{{ estudiante_seleccionado.plan_estudio.area.nombre }}</span>
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Plan</span>
+                                    <span class="cc-info-val" title="{{ estudiante_seleccionado.plan_estudio.nombre }}">{{ estudiante_seleccionado.plan_estudio.nombre }}</span>
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Bloque actual</span>
+                                    <span class="cc-info-val" title="{{ estudiante_seleccionado.bloque_ceremonia.nombre }}">{{ estudiante_seleccionado.bloque_ceremonia.nombre }}</span>
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Fecha / Hora</span>
+                                    <span class="cc-info-val">{{ estudiante_seleccionado.bloque_ceremonia.fecha|date:"d/m/Y" }} · {{ estudiante_seleccionado.bloque_ceremonia.hora_inicio|time:"H:i" }}</span>
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Ingreso</span>
+                                    {% if estudiante_seleccionado.ingreso_confirmado %}
+                                        <span class="cc-info-val err">Registrado</span>
+                                    {% else %}
+                                        <span class="cc-info-val ok">Sin registro</span>
+                                    {% endif %}
+                                </div>
+                                <div class="cc-info-item">
+                                    <span class="cc-info-label">Invitaciones</span>
+                                    <span class="cc-info-val">{{ estudiante_seleccionado.invitaciones.all|length }}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Formulario de cambio -->
-                        <form method="POST" class="cc-form-fields">
-                            {% csrf_token %}
-                            <input type="hidden" name="estudiante_id" value="{{ estudiante_seleccionado.id }}">
+                        <!-- Card: Formulario de cambio -->
+                        <div class="cc-card cc-card-form">
+                            <div class="cc-card-title">Nueva Ceremonia</div>
+                            <div class="cc-form-fields">
 
-                            <div class="cc-field">
-                                <label for="bloque_destino">Nueva ceremonia / bloque <span class="cc-req">*</span></label>
-                                <select name="bloque_destino" id="bloque_destino" required>
-                                    <option value="">— Seleccionar bloque destino —</option>
-                                    {% for bloque in bloques_destino %}
-                                        {% if bloque.id != estudiante_seleccionado.bloque_ceremonia.id %}
-                                            <option value="{{ bloque.id }}">
-                                                {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} · {{ bloque.estado_registro }}
-                                            </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
+                                <div class="cc-field">
+                                    <label for="bloque_destino">Bloque de destino <span class="cc-req">*</span></label>
+                                    <select name="bloque_destino" id="bloque_destino" required>
+                                        <option value="">— Seleccionar bloque destino —</option>
+                                        {% for bloque in bloques_destino %}
+                                            {% if bloque.id != estudiante_seleccionado.bloque_ceremonia.id %}
+                                                <option value="{{ bloque.id }}">
+                                                    {{ bloque.nombre }} · {{ bloque.fecha|date:"d/m/Y" }} · {{ bloque.hora_inicio|time:"H:i" }} · {{ bloque.estado_registro }}
+                                                </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="cc-field">
+                                    <label for="motivo">Motivo institucional del cambio <span class="cc-req">*</span></label>
+                                    <textarea
+                                        name="motivo"
+                                        id="motivo"
+                                        rows="4"
+                                        placeholder="Ej: solicitud autorizada por coordinación, cruce de horario, situación familiar, corrección de asignación..."
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div class="cc-alerta">
+                                    Al confirmar, el sistema actualizará el bloque, regenerará el QR del titulado y reemplazará las invitaciones asociadas.
+                                </div>
+
+                                <div class="cc-form-actions">
+                                    <button
+                                        type="submit"
+                                        class="cc-btn-confirm"
+                                        onclick="return confirm('¿Confirmas el cambio de ceremonia? Se regenerarán los QR del estudiante y sus invitaciones.');"
+                                    >
+                                        Confirmar cambio de ceremonia
+                                    </button>
+                                </div>
+
                             </div>
+                        </div>
 
-                            <div class="cc-field">
-                                <label for="motivo">Motivo institucional del cambio <span class="cc-req">*</span></label>
-                                <textarea
-                                    name="motivo"
-                                    id="motivo"
-                                    rows="4"
-                                    placeholder="Ej: solicitud autorizada por coordinación, cruce de horario, situación familiar, corrección de asignación..."
-                                    required
-                                ></textarea>
-                            </div>
-
-                            <div class="cc-alerta">
-                                Al confirmar, el sistema actualizará el bloque, regenerará el QR del titulado y reemplazará las invitaciones asociadas.
-                            </div>
-
-                            <div class="cc-form-actions">
-                                <button
-                                    type="submit"
-                                    class="cc-btn-confirm"
-                                    onclick="return confirm('¿Confirmas el cambio de ceremonia? Se regenerarán los QR del estudiante y sus invitaciones.');"
-                                >
-                                    Confirmar cambio de ceremonia
-                                </button>
-                            </div>
-
-                        </form>
-                    </div>
+                    </form>
                     {% endif %}
 
                 </div><!-- cc-col-main -->
