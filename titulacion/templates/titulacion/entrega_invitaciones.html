@@ -194,8 +194,8 @@
                         para la búsqueda realizada.
                     </div>
                     <div class="acciones-globales">
-                        <button type="button" class="btn-accion btn-imprimir" onclick="descargarTodasLasInvitaciones()">
-                            Descargar todas
+                        <button type="button" class="btn-accion btn-imprimir" onclick="descargarTodasComoPDF()">
+                            Descargar todas (PDF)
                         </button>
                     </div>
                 </section>
@@ -235,23 +235,9 @@
                             <button
                                 type="button"
                                 class="btn-accion btn-imprimir"
-                                onclick="descargarGrupoInvitaciones('grupo-{{ estudiante.id }}')"
+                                onclick="descargarGrupoComoPDF('grupo-{{ estudiante.id }}')"
                             >
-                                Descargar PNG
-                            </button>
-                            <button
-                                type="button"
-                                class="btn-accion"
-                                onclick="descargarGrupoPDF('grupo-{{ estudiante.id }}', 'carta')"
-                            >
-                                PDF Carta
-                            </button>
-                            <button
-                                type="button"
-                                class="btn-accion"
-                                onclick="descargarGrupoPDF('grupo-{{ estudiante.id }}', 'oficio')"
-                            >
-                                PDF Oficio
+                                Descargar PDF
                             </button>
                             <form method="POST" action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}">
                                 {% csrf_token %}
@@ -468,86 +454,7 @@
             .replace(/-+/g, "-");
     }
 
-    async function descargarTarjetaComoImagen(elemento) {
-        const nombreArchivoBase = elemento.dataset.nombreArchivo || "invitacion.png";
-        const nombreArchivo = limpiarNombreArchivo(nombreArchivoBase);
-        await esperarImagenesDentro(elemento);
-
-        const clon = elemento.cloneNode(true);
-        clon.style.width = "1280px";
-        clon.style.maxWidth = "1280px";
-        clon.style.minWidth = "1280px";
-        clon.style.height = "auto";
-        clon.style.minHeight = "270px";
-        clon.style.margin = "0";
-        clon.style.transform = "none";
-        clon.style.position = "relative";
-        clon.style.left = "auto";
-        clon.style.top = "auto";
-        clon.style.opacity = "1";
-        clon.style.overflow = "hidden";
-
-        const contenedor = document.createElement("div");
-        contenedor.style.position = "fixed";
-        contenedor.style.left = "0";
-        contenedor.style.top = "-10000px";
-        contenedor.style.width = "1280px";
-        contenedor.style.height = "auto";
-        contenedor.style.background = "#fffaf0";
-        contenedor.style.overflow = "visible";
-        contenedor.style.zIndex = "999999";
-        contenedor.style.padding = "0";
-        contenedor.style.margin = "0";
-
-        contenedor.appendChild(clon);
-        document.body.appendChild(contenedor);
-
-        await esperarImagenesDentro(clon);
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        const dataUrl = await htmlToImage.toPng(clon, {
-            cacheBust: true,
-            pixelRatio: 3,
-            backgroundColor: "#fffaf0",
-            width: 1280,
-            height: clon.scrollHeight,
-            style: {
-                width: "1280px",
-                maxWidth: "1280px",
-                minWidth: "1280px",
-                transform: "none",
-                opacity: "1",
-                overflow: "hidden"
-            }
-        });
-
-        document.body.removeChild(contenedor);
-
-        const enlace = document.createElement("a");
-        enlace.href = dataUrl;
-        enlace.download = nombreArchivo;
-        document.body.appendChild(enlace);
-        enlace.click();
-        document.body.removeChild(enlace);
-    }
-
-    async function descargarTodasLasInvitaciones() {
-        const tarjetas = document.querySelectorAll(".tarjeta");
-        for (const tarjeta of tarjetas) {
-            await descargarTarjetaComoImagen(tarjeta);
-            await new Promise(resolve => setTimeout(resolve, 450));
-        }
-    }
-
-    async function descargarGrupoInvitaciones(claseGrupo) {
-        const tarjetas = document.querySelectorAll("." + claseGrupo + " .tarjeta");
-        for (const tarjeta of tarjetas) {
-            await descargarTarjetaComoImagen(tarjeta);
-            await new Promise(resolve => setTimeout(resolve, 450));
-        }
-    }
-
-    async function capturarTarjetaPNG(elemento) {
+    async function capturarTarjeta(elemento) {
         const clon = elemento.cloneNode(true);
         clon.style.cssText = "width:1280px;max-width:1280px;min-width:1280px;height:auto;min-height:270px;margin:0;transform:none;position:relative;left:auto;top:auto;opacity:1;overflow:hidden;";
         const contenedor = document.createElement("div");
@@ -569,33 +476,43 @@
         return { dataUrl, alturaCaptura };
     }
 
-    async function descargarTarjetaComoPDF(elemento, tamano) {
+    async function descargarTarjetaUniversalPDF(elemento) {
         const { jsPDF } = window.jspdf;
-        const nombreArchivoBase = (elemento.dataset.nombreArchivo || "invitacion.png").replace(/\.png$/i, ".pdf");
-        const nombreArchivo = limpiarNombreArchivo(nombreArchivoBase);
+        const nombreArchivo = limpiarNombreArchivo(
+            (elemento.dataset.nombreArchivo || "invitacion.png").replace(/\.png$/i, ".pdf")
+        );
         await esperarImagenesDentro(elemento);
-        const { dataUrl, alturaCaptura } = await capturarTarjetaPNG(elemento);
-        const formato = tamano === "oficio" ? "legal" : "letter";
-        const pdf = new jsPDF({ orientation: "landscape", format: formato, unit: "mm" });
-        const pageWidth  = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
+        const { dataUrl, alturaCaptura } = await capturarTarjeta(elemento);
+
+        // Página A4 landscape — universal para pantalla e impresión
+        const pdf = new jsPDF({ orientation: "landscape", format: "a4", unit: "mm" });
+        const pageW = pdf.internal.pageSize.getWidth();   // 297mm
+        const pageH = pdf.internal.pageSize.getHeight();  // 210mm
         const margen = 10;
-        const maxW = pageWidth  - margen * 2;
-        const maxH = pageHeight - margen * 2;
+        const maxW = pageW - margen * 2;
+        const maxH = pageH - margen * 2;
         const aspectRatio = 1280 / alturaCaptura;
         let imgW = maxW;
         let imgH = imgW / aspectRatio;
         if (imgH > maxH) { imgH = maxH; imgW = imgH * aspectRatio; }
-        const x = (pageWidth  - imgW) / 2;
-        const y = (pageHeight - imgH) / 2;
+        const x = (pageW - imgW) / 2;
+        const y = (pageH - imgH) / 2;
         pdf.addImage(dataUrl, "PNG", x, y, imgW, imgH);
         pdf.save(nombreArchivo);
     }
 
-    async function descargarGrupoPDF(claseGrupo, tamano) {
+    async function descargarGrupoComoPDF(claseGrupo) {
         const tarjetas = document.querySelectorAll("." + claseGrupo + " .tarjeta");
         for (const tarjeta of tarjetas) {
-            await descargarTarjetaComoPDF(tarjeta, tamano);
+            await descargarTarjetaUniversalPDF(tarjeta);
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    async function descargarTodasComoPDF() {
+        const tarjetas = document.querySelectorAll(".tarjeta");
+        for (const tarjeta of tarjetas) {
+            await descargarTarjetaUniversalPDF(tarjeta);
             await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
