@@ -390,9 +390,21 @@ def registro_ingreso(request):
 
 
 def ultimos_registros_ajax(request):
-    registros = RegistroIngreso.objects.select_related(
+    # Fetch más registros de los necesarios para poder deduplicar
+    registros_all = RegistroIngreso.objects.select_related(
         "estudiante",
-    ).order_by("-fecha_hora")[:20]
+    ).order_by("-fecha_hora")[:100]
+
+    # Mantener solo el escaneo más reciente por QR único (estudiante_id, invitacion_id)
+    seen = set()
+    registros = []
+    for r in registros_all:
+        key = (r.estudiante_id, r.invitacion_id)
+        if key not in seen:
+            seen.add(key)
+            registros.append(r)
+        if len(registros) >= 20:
+            break
 
     data = [
         {
