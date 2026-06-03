@@ -1,291 +1,55 @@
-# Contexto Proyecto Titulación INACAP
-
-## Descripción general
-
-Sistema institucional de Titulación INACAP Sede Arica 2026.
-
-Permite administrar ceremonias de titulación, invitados, accesos QR y control de asistentes.
-
-## Agregar Estudiante — workspace 2 columnas (2026-06-02, reconstruido)
-
-`agregar_estudiante.html` + `agregar_estudiante.css` reconstruidos como workspace operativo:
-- Mismo lenguaje visual que Panel de Control, Registro de Ingreso, Reportes
-- Load order: base → inicio → agregar_estudiante
-- `ops-scroll ag-view` → `ag-workspace` (grid `1fr 320px`)
-- Columna principal: 3 `ag-card` compactas (Ceremonia / Identificación / Plan Académico) + `ag-actions`
-- Columna lateral (320px): tabla "Últimos registros" siempre visible
-- `ag-card-title` gray 0.62rem uppercase — sin rojo, sin landing-page
-- Inputs `34px` / foco navy / botón "Guardar y generar QR" navy pill
-- Responsive: 1 columna ≤1024px / 2 columnas notebook (1fr 290px) / desktop (1fr 340px)
-- JS `actualizarPlanes()` / `actualizarInstitucion()` sin modificaciones
-
-## Cambio de Ceremonia — workspace 2 columnas (2026-06-02, reconstruido)
-
-`cambio_ceremonia.html` + `cambio_ceremonia.css` reconstruidos como workspace operativo:
-- Mismo lenguaje que Agregar Estudiante (cc-* prefix, ag-* pattern)
-- Load order: base → inicio → cambio_ceremonia
-- `ops-scroll cc-view` → `cc-workspace` (grid `1fr 340px`)
-- Columna principal: search card + results card (condicional) + student+form card (condicional)
-- Columna lateral (340px): historial de cambios siempre visible, 4 cols compactas
-- `cc-student-grid` (3 cols, datos readonly, sin borde rojo) para estudiante seleccionado
-- Formulario: select bloque_destino + textarea motivo + alerta azul + btn confirmar navy
-- Lógica backend, trazabilidad y regeneración QR: intactas
-
-## Carga Masiva Excel — ops-layout estándar (2026-06-02)
-
-`cargar_excel.html` + `carga_excel.css` migrados al estándar global:
-- Reemplaza `.marco` + `.barra` + `.hero-carga` por `ops-layout` con sidebar + `ops-topbar`
-- Load order: base → inicio → carga_excel
-- `ops-scroll ce-view` — `.ce-view` zeroes padding del scroll; variables semánticas `--ce-ok/warn/err/nvy/info`
-- `ce-cmd-bar` (command bar 52px: ícono Excel navy + título + subtítulo) reemplaza el hero rojo
-- `ce-kpi-strip` (4 KPIs: Estudiantes/ok, Ceremonias/nvy, Invitaciones/info, Alertas/warn) reemplaza `.resumen` con cards
-- Upload form en `.panel-carga` + `.zona-upload` (sin márgenes negativos)
-- `{% if resumen %}` muestra resultado post-procesamiento con claves reales del dict: `estudiantes_creados`, `estudiantes_actualizados`, `invitaciones_creadas`, `filas_omitidas`
-- Tabla preview en `.panel-preview` + `.tabla-carga`
-- Sidebar permisos: "Carga Masiva Excel" activo bajo perm_admin; JS hamburger idéntico
-- Responsive: 480px / 767px / 1024px / 1366px (notebook) / 1920px (desktop) / 1921px+ (TV) / max-height:800px (HDMI)
-
-## Reportes compactación notebook (2026-06-02)
-
-Segunda ronda de ajuste fino para 1366×768: breakpoints `1025-1366px` y `max-height:800px` reemplazados con valores más agresivos. Cambios clave: `rep-header` 44→42px, `rep-strip-item` padding 8→7px, `kpi-rep` padding 9→8px, `kpi-rep-top margin-bottom` 5→4px, `panel-rep` padding 10→9px, `rep-tabs-wrapper margin-bottom` ahora explícito en ambos breakpoints (7px/5px), `rep-actualizacion margin` reducido. Para 1366×768, ambos breakpoints son activos simultáneamente (width + height) y el HDMI gana por orden CSS.
-
-## Reportes CSS responsive corregido (2026-06-02)
-
-`reportes.css` — grids KPI y gráfico ajustados para ops-layout (viewport - sidebar):
-- `.kpis-reportes` y `.kpis-op`: de `repeat(N, 1fr)` forzado a `repeat(auto-fit, minmax(..., 1fr))` en todos los breakpoints — cards siempre ≥175px/150px, sin textos cortados
-- `.rep-kpis-2col` (tab Tiempos): eliminado `max-width:560px`, ahora ocupa 100% del contenedor
-- `kpi-rep-valor`: `clamp(1.3rem, 1.5vw, 1.75rem)` — evita overflow en cards pequeñas
-- `kpi-rep-texto`: añadido `word-break:break-word` — nombres de ceremonia ya no se cortan
-- `chart-container`: `clamp(200px, 28vh, 300px)` — gráfico respeta alto disponible por resolución
-- Breakpoint notebook 1025-1366px: padding compacto `11px 13px` + font reducido
-- Breakpoint HDMI (max-height:800px): todos los elementos compactados ~15%
-
-## Reportes integrado a ops-layout (2026-06-02)
-
-`reportes.html` migrado de layout propio (`.marco` + `<header class="barra">`) a `ops-layout` global:
-- Sidebar con permisos (igual que los demás módulos), "Reportes" como item activo
-- `ops-topbar` global (elimina header duplicado)
-- `ops-scroll rep-view` — `.rep-view` en `reportes.css` zeroes padding del scroll
-- El `.rep-header` (command bar con filtros, Excel, Imprimir), `.rep-strip` y los 5 tabs no se tocaron
-- `@media print` actualizado: referencia `ops-layout` en vez de `.marco`/`.barra`
-- Ahora responsive por herencia de `inicio.css` + breakpoints propios de `reportes.css`
-
-## Menú y Inicio por permisos (2026-06-02)
-
-Nuevo `titulacion/context_processors.py` agrega `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso` a todos los templates automáticamente (registrado en `settings.py`).
-
-Sidebars actualizados (nuevas secciones por permisos):
-- PRINCIPAL (todos), GESTIÓN DE ESTUDIANTES (perm_admin), OPERACIÓN DE CEREMONIA (perm_entrega/perm_ingreso), GESTIÓN Y CONTROL (perm_curricular), ANÁLISIS (perm_curricular/perm_admin), SISTEMA (perm_admin)
-- Templates actualizados: `inicio.html`, `panel_control.html`, `registro_ingreso.html`, `entrega_invitaciones.html`
-- Sin sidebar (usan layout propio `.marco`): `tarjetas`
-- Con ops-layout + sidebar: `inicio`, `panel_control`, `registro_ingreso`, `entrega_invitaciones`, `reportes`, `agregar_estudiante`, `cargar_excel`, `cambio_ceremonia`
-
-Cards de Inicio también filtradas por permisos (secciones vacías no se renderizan).
-
-## UX Panel de Control — bloque requerido (2026-06-02)
-
-Nuevo flujo:
-- Al abrir `/panel-control/`, selector `#filtroBloque` inicia vacío y aparece estado vacío "Seleccione un bloque" (no carga datos automáticamente).
-- Al seleccionar un bloque, se dispara `cargarDashboard()` automáticamente (sin botón Aplicar).
-- Auto-refresh de 15s solo se ejecuta cuando hay un bloque seleccionado.
-- Limpiar vuelve al estado inicial (vacío).
-- Bloque ABIERTA se marca con "▶ ... (Abierta)" en el selector.
-- Contador de planes visible como badge en el tab "Avance por plan".
-- Botón "Aplicar" eliminado. Solo queda "Buscar" y "Limpiar".
-- Nuevos estilos en `dashboard.css`: `.pc-empty-state`, `.pc-tab-count`.
-
-## Optimización Panel de Control (2026-06-02)
-
-`datos_panel_control` fue optimizado para eliminar N+1 queries:
-- `_estudiantes_atrasados_ids` (set) → ya existía para KPIs; ahora también se usa en el loop de seguimiento (elimina 1 query por estudiante)
-- `_invitaciones_atrasadas_ids` (set) → nueva query única antes del loop (elimina hasta 2 queries por estudiante)
-- `_atrasados_por_plan` (dict) → nueva query `annotate` antes del loop de planes (elimina 1 query por plan)
-- Resultado: de ~900 queries por llamada a ~12 queries fijas, independiente del volumen
-
-Frontend `panel_control.html` JS:
-- `AbortController` — cancela petición anterior si el usuario cambia filtros rápido
-- Caché 8s por clave de filtros — respuesta instantánea al volver a un filtro reciente
-- Indicador "actualizando..." solo si la respuesta tarda >300ms
-- `setInterval` pasa `esAutoRefresh=true` — no interrumpe fetch manual activo
-- `limpiarFiltros` y cambio de bloque invalidan caché
-
----
-
-## Estado del responsive (2026-06-02)
-
-El layout global (`inicio.css`) está **optimizado y estable** para:
-- Notebook 15" a 1366×768 — sin scroll, todo visible, sidebar compacto 172px
-- Monitor 22" a 1920×1080 — diseño estándar, sidebar 220px
-- TV/HDMI — sidebar 240px, tipografía y padding grandes (1921px+)
-- Tablet/móvil — sidebar en drawer con hamburger (≤768px)
-
-No modificar `inicio.css` sin probar en ambas resoluciones (1366×768 y 1920×1080).
-
----
-
-# Objetivos principales
-
-- modernizar proceso de titulación,
-- digitalizar invitaciones,
-- controlar acceso,
-- gestionar ceremonias,
-- facilitar administración institucional.
-
----
-
-# Funcionalidades principales
-
-## Gestión ceremonias
-
-- creación ceremonias,
-- asignación estudiantes,
-- cambio ceremonia,
-- estados.
-
----
-
-## Invitaciones
-
-- generación invitaciones,
-- entrega invitaciones,
-- control estados.
-
----
-
-## QR
-
-- generación QR,
-- validación QR,
-- control ingreso.
-
----
-
-## Dashboard
-
-- KPIs,
-- estadísticas,
-- asistentes,
-- estados.
-
----
-
-# Estructura principal
-
-```text
-titulacion_inacap/
-├── configuracion/
-│   └── settings.py
-├── titulacion/
-│   ├── views.py              ← lógica principal de todas las vistas
-│   ├── urls.py               ← rutas del sistema
-│   ├── models.py             ← EstudianteTitulado, Invitacion, Bloque, Ceremonia
-│   ├── generador_qr.py       ← generación imágenes QR con qrcode library
-│   ├── templates/titulacion/
-│   │   ├── login.html
-│   │   ├── inicio.html               ← 6 módulos con iconos institucionales (siglas)
-│   │   ├── cargar_excel.html
-│   │   ├── agregar_estudiante.html
-│   │   ├── panel_control.html        ← dashboard KPIs + filtros + 4 tabs
-│   │   ├── cambio_ceremonia.html
-│   │   ├── tarjetas.html             ← impresión tarjetas institucionales
-│   │   ├── entrega_invitaciones.html ← búsqueda y descarga PNG de invitaciones
-│   │   ├── registro_ingreso.html     ← control de acceso con lector QR USB HID
-│   │   └── reportes.html             ← dashboard premium: command bar + kpi-strip + 5 tabs (segment control) + Chart.js + export Excel
-│   └── static/titulacion/css/
-│       ├── base.css              ← variables, reset, header, botones, badges globales
-│       ├── login.css             ← layout fullscreen login (usa vars de base.css)
-│       ├── inicio.css            ← layout ops-layout global; auto-fit grids (KPIs, módulos, grupos); breakpoints 480/768/1024/1366/1921px; --sb-w clamp por breakpoint
-│       ├── carga_excel.css
-│       ├── agregar_estudiante.css
-│       ├── dashboard.css         ← rediseño ejecutivo pc-*: cmd-bar + kpi-strip + filter-bar + pc-content. pc-view zeroes ops-scroll padding. NO tiene hero propio.
-│       ├── cambio_ceremonia.css
-│       ├── tarjetas.css
-│       ├── entrega.css
-│       ├── registro.css          ← centro control: reg-cmd-bar + reg-kpi-strip + reg-body(2cols) + reg-cer-strip. Sin scroll normal. Variables --ok/--wrn/--err/--nvy
-│       └── reportes.css          ← sistema enterprise premium: command-bar, kpi-strip, segment-tabs, kpi-rep border-top, variables semánticas --c-ok/err/warn/info/navy/teal
-├── media/                    ← imágenes QR generadas (no en git)
-├── staticfiles/              ← salida de collectstatic (no en git)
-├── manage.py
-├── db.sqlite3
-└── requirements.txt
-```
-
----
-
-# Despliegue en PythonAnywhere
-
-**Cuenta:** titulacion2026.pythonanywhere.com
-**Ruta del proyecto:** `~/titulacion` (NO `~/titulacion_inacap`)
-**Rama:** `main`
-
-## Comandos de despliegue (consola Bash de PythonAnywhere)
-
-```bash
-cd ~/titulacion
-git pull origin main
-python manage.py collectstatic --noinput
-```
-
-Luego presionar **Reload** en el tab **Web** de PythonAnywhere.
-
-## Archivos estáticos
-
-- Los archivos en `titulacion/static/` se deben copiar con `collectstatic` a `staticfiles/`.
-- PythonAnywhere sirve estáticos desde `~/titulacion/staticfiles/`, no desde `~/titulacion/titulacion/static/`.
-- Si un cambio de CSS no se refleja en producción, siempre ejecutar `collectstatic` + Reload.
-
----
-
-# Colores institucionales INACAP
-
-Definidos en `base.css` como variables CSS:
-
-```css
---rojo: #e30613;
---rojo-oscuro: #b10510;
---azul: #06152f;        /* azul marino institucional */
---negro: #161616;
---blanco: #ffffff;
---oro: #c9a227;         /* dorado decorativo tarjetas */
---crema: #faf5ea;       /* fondo columna izquierda tarjetas */
---crema-borde: #dfc98a; /* borde columna izquierda */
-```
-
----
-
-# Sistema de permisos
-
-El sistema usa **grupos Django** por nombre, NO permisos de modelo. Ver `titulacion/permisos.py`.
-
-| Grupo Django | Acceso |
-|---|---|
-| `ADMIN_TITULACION` | Todo el sistema |
-| `ADMISION` | Registro de ingreso + Entrega de invitaciones |
-| `CURRICULAR` | Panel control, reportes, cambio de ceremonia |
-| `ENTREGA_INVITACIONES` | Solo entrega de invitaciones |
-| `INGRESO` | Solo registro de ingreso QR (usuario DAE) |
-| `DACOM` | Solo entrega de invitaciones (DACOM) |
-
-**IMPORTANTE**: Al crear usuarios en Django Admin, asignar el grupo correspondiente. No asignar permisos individuales de modelo.
-
----
-
-# Lector QR
-
-- **Tipo:** USB HID en modo teclado (no requiere cámara).
-- **Funcionamiento:** el lector envía el código como si fuera texto de teclado más Enter.
-- **Campo:** `#inputQR` con `autofocus`, captura en evento `keydown` tecla Enter.
-- **Vista:** `registro_ingreso` → valida contra `EstudianteTitulado.codigo_qr_estudiante` e `Invitacion.codigo_qr`.
-- **Endpoint de validación:** `POST /validar-codigo/` → devuelve JSON con resultado.
-
----
-
-# Generación de QR
-
-- **Librería:** `qrcode` (Python).
-- **Archivo:** `titulacion/generador_qr.py`.
-- **Funciones clave:**
-  - `generar_qr_estudiante(estudiante)` — genera y guarda QR del titulado.
-  - `generar_qr_invitacion(invitacion)` — genera y guarda QR de invitado.
-  - `crear_imagen_qr(codigo)` — crea imagen PNG en memoria.
-- **Imágenes:** se guardan en `media/` y se referencian desde el modelo vía `ImageField`.
+# Contexto Proyecto — Titulación INACAP 2026
+
+Sistema Django: gestión de Ceremonias de Titulación, Sede Arica.
+Funciones: ceremonias, invitaciones QR, acceso físico, dashboard, administración.
+
+## Módulos y estado
+
+| Módulo | URL | Layout/Prefijo CSS | Estado |
+|---|---|---|---|
+| Inicio | `/inicio/` | ops-layout | ✓ ESTABLE |
+| Panel de Control | `/panel-control/` | ops-layout + `pc-*` | ✓ ESTABLE |
+| Registro de Ingreso | `/registro/` | ops-layout + `reg-*` | ✓ ESTABLE |
+| Entrega Invitaciones | `/entrega-invitaciones/` | ops-layout | ✓ ESTABLE |
+| Reportes | `/reportes/` | ops-layout + `rep-*` | ✓ ESTABLE |
+| Agregar Estudiante | `/agregar-estudiante/` | ops-layout + `ag-*` workspace | ✓ ESTABLE |
+| Carga Masiva Excel | `/cargar-excel/` | ops-layout + `ce-*` | ✓ ESTABLE |
+| Cambio de Ceremonia | `/cambio-ceremonia/` | ops-layout + `cc-*` workspace | ✓ ESTABLE |
+| Tarjetas QR | `/tarjetas/` | `.marco` (legacy, sin sidebar) | — |
+| Login | `/login/` | fullscreen | — |
+
+## Estándar visual ops-layout (todos los módulos excepto tarjetas)
+- Estructura: `ops-sidebar` + `ops-main` (`ops-topbar` + `ops-overlay` + `ops-mensajes` + `ops-scroll`)
+- Workspace pattern: `[xx-view] → xx-cmd-bar (52px) + xx-workspace (grid 1fr [lateral])`
+- Cards: fondo blanco, `border: 1px solid #dbe3ea`, `radius: 10px`, `box-shadow: 0 1px 3px`
+- Card titles: `0.62rem / #9ca3af / uppercase / border-bottom:#f3f4f6`
+- Inputs: `34px`. Botón acción: navy pill `#06152f`. Cancelar: gray outline.
+- Ver `FRONTEND_MAP.md` para breakpoints, IDs JS y clases específicas.
+
+## Decisiones técnicas clave
+- **Panel Control:** inicia vacío; carga solo cuando `filtroBloque !== ""`. Auto-refresh 15s.
+  ORM: ~12 queries fijas (era ~900 con N+1). JS: AbortController + caché 8s por filtro.
+- **Context processor:** `titulacion/context_processors.py` inyecta `perm_*` — registrado en `settings.py TEMPLATES`.
+- **Cambio de Ceremonia:** `form.cc-cambio-form` (flex-column gap-10px) envuelve 2 cards separadas.
+  `cc-card-form` tiene `border-top: 3px solid #06152f`. Trazabilidad y QR intactos.
+- **Carga Excel:** objeto `resumen` del procesador: claves `estudiantes_creados`, `estudiantes_actualizados`, `invitaciones_creadas`, `filas_omitidas`.
+- **Agregar Estudiante:** JS `actualizarPlanes()` + `actualizarInstitucion()` filtran planes por área dinámicamente.
+- **Reportes:** `rep-view` zeroes padding. KPI grids: `auto-fit minmax` — nunca `repeat(N, 1fr)`.
+  Breakpoints `1025-1366px` + `max-height:800px` aplican simultáneamente en notebook — HDMI gana (viene último).
+
+## Sistema de permisos
+Grupos Django: `ADMIN_TITULACION` / `ADMISION` / `CURRICULAR` / `ENTREGA_INVITACIONES` / `INGRESO` / `DACOM`.
+Ver `titulacion/permisos.py`. Funciones: `es_admin_titulacion()`, `es_admision()`, `es_curricular()`, `es_entrega()`, `es_ingreso()`.
+QR: `titulacion/generador_qr.py` → `generar_qr_estudiante()`, `generar_qr_invitacion()`, `crear_imagen_qr()`.
+Lector QR: USB HID teclado, endpoint `POST /validar-codigo/` → JSON.
+
+## Despliegue en PythonAnywhere
+- **Cuenta:** titulacion2026.pythonanywhere.com · **Ruta:** `~/titulacion` · **Rama:** `main`
+- **Flujo:** `git pull origin main` → `python manage.py collectstatic --noinput` → Reload (tab Web)
+- Estáticos: servidos desde `~/titulacion/staticfiles/` (NO desde `titulacion/static/`).
+- Siempre ejecutar `collectstatic` + Reload al cambiar CSS/static.
+
+## Colores institucionales (base.css)
+`--rojo:#e30613` · `--rojo-oscuro:#b10510` · `--azul:#06152f` (navy) · `--negro:#161616`
+`--oro:#c9a227` · `--crema:#faf5ea` · `--crema-borde:#dfc98a`
+Módulos nuevos usan `#06152f` como primario — NO `var(--rojo)`.

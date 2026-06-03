@@ -1,373 +1,71 @@
-# Instrucciones para Claude - Proyecto Titulación INACAP
+# Claude — Titulación INACAP 2026
 
-Este proyecto corresponde al sistema institucional de Ceremonia de Titulación INACAP Sede Arica 2026.
+## Al iniciar cada sesión
+1. Leer `PROJECT_CONTEXT.md` siempre.
+2. Para tareas frontend/CSS/JS: leer también `FRONTEND_MAP.md`.
+3. Usar Ruflo `memory_search` para recuperar contexto de sesiones anteriores.
+4. Usar CodeGraph ANTES de leer archivos: `codegraph_context` → `codegraph_search` → `codegraph_node`.
 
-## Regla principal
+## Reglas obligatorias
 
-Antes de modificar cualquier archivo:
+**Antes de modificar:**
+1. Usar CodeGraph para identificar archivos relacionados. No leer archivos completos innecesariamente.
+2. Explicar: problema detectado · archivos afectados · solución propuesta · riesgos.
+3. No modificar sin haber explicado el impacto.
 
-1. Usar CodeGraph para explorar el proyecto.
-2. No leer archivos completos innecesariamente.
-3. Identificar primero archivos relacionados.
-4. Explicar qué archivos se modificarán antes de editar.
-5. No romper funcionalidades existentes.
-6. Mantener diseño institucional.
-7. Entregar siempre archivos completos.
-8. Mantener compatibilidad responsive.
+**Durante:**
+4. No romper funcionalidades existentes.
+5. No alterar backend, modelos, vistas, permisos ni URLs salvo solicitud explícita.
+6. Entregar archivos COMPLETOS cuando se reescriben. No fragmentos parciales.
+7. CSS y HTML deben usar exactamente las mismas clases — discrepancia silenciosa.
 
----
+**Al finalizar:**
+8. Actualizar `CLAUDE.md`, `PROJECT_CONTEXT.md` y/o `FRONTEND_MAP.md` según corresponda.
+9. Guardar decisiones importantes en Ruflo (`memory_store`, namespace `titulacion_inacap`).
+10. Commit + push si fue solicitado.
 
-# Preferencias del desarrollador
-
-- Responder en español.
-- Código claro y entendible.
-- Mantener naming consistente.
-- No simplificar eliminando lógica existente.
-- No romper endpoints.
-- No eliminar responsive existente.
+## Preferencias del desarrollador
+- Responder en español · código claro · naming consistente.
+- No simplificar eliminando lógica · no romper responsive existente.
 - No alterar estructura sin explicar impacto.
 
----
-
-# Stack
-
-- Django
-- Python
-- SQLite
-- HTML
-- CSS
-- JavaScript
-
----
-
-# Objetivo del sistema
-
-El sistema permite:
-
-- gestión de ceremonias,
-- entrega de invitaciones,
-- control acceso mediante QR,
-- dashboard institucional,
-- validación asistentes,
-- administración de estudiantes,
-- gestión de permisos,
-- cambio de ceremonia,
-- control de estados.
-
----
-
-# Archivos críticos
-
-Antes de modificar revisar:
-
-- manage.py
-- configuracion/settings.py
-- titulacion/views.py
-- titulacion/urls.py
-- titulacion/models.py
-- titulacion/permisos.py  ← sistema de grupos/roles
-- templates principales
-- CSS institucional
-
----
-
-# Sistema de permisos (permisos.py)
-
-**IMPORTANTE**: El sistema valida por **nombre de grupo Django**, NO por permisos de modelo Django. Los permisos asignados en Django Admin a un grupo no tienen efecto; lo que importa es el nombre del grupo.
-
-## Grupos definidos en `permisos.py`
-
-| Constante | Nombre grupo Django | Acceso |
-|-----------|--------------------|----|
-| `GRUPO_ADMIN` | `ADMIN_TITULACION` | Todo el sistema |
-| `GRUPO_ADMISION` | `ADMISION` | Registro de ingreso + Entrega |
-| `GRUPO_CURRICULAR` | `CURRICULAR` | Panel control, reportes, cambio ceremonia |
-| `GRUPO_ENTREGA` | `ENTREGA_INVITACIONES` | Solo entrega de invitaciones |
-| `GRUPO_INGRESO` | `INGRESO` | Solo registro de ingreso QR (DAE) |
-| `GRUPO_DACOM` | `DACOM` | Solo entrega de invitaciones (DACOM) |
-
-## Funciones de chequeo
-
-- `es_admin_titulacion(u)` → is_superuser o ADMIN_TITULACION
-- `es_admision(u)` → ADMIN o ADMISION
-- `es_curricular(u)` → ADMIN o CURRICULAR
-- `es_entrega(u)` → ADMIN, ADMISION, ENTREGA_INVITACIONES o DACOM
-- `es_ingreso(u)` → ADMIN, ADMISION o INGRESO
-
-## Decorators y rutas protegidas
-
-- `acceso_admin` → cargar-excel, agregar-estudiante, tarjetas, reprogramar bloque
-- `acceso_curricular` → panel-control, cambio-ceremonia, reportes
-- `acceso_entrega` → entrega-invitaciones
-- `acceso_ingreso` → registro/, validar-codigo/, registro-ultimos/, bloques abrir/cerrar
-- `acceso_general` → inicio/ (solo requiere login)
-
-## Regla al crear nuevo usuario
-
-Al crear un usuario en Django Admin, asignarle el grupo correcto según su rol. **No asignar permisos individuales de modelo** — solo el grupo.
-
-## Logout
-
-El logout usa una vista custom (`logout_view` en `views.py`) en lugar de `auth_views.LogoutView`. Acepta GET y POST, siempre cierra sesión y redirige a `titulacion:login`. Compatible con Django 5.x/6.x donde `LogoutView` nativo requiere `registration/logged_out.html` para peticiones GET.
-
-## Nota base.css vs inicio.css
-
-`base.css` tiene reglas de alta especificidad (`button[type="submit"]`) que aplican a todos los botones. Las clases de `inicio.css` deben usar mayor especificidad (`.ops-topbar .ops-btn-logout`) o `!important` donde sea necesario para anular `base.css`. Verificar siempre el orden de carga: `base.css` → `inicio.css` (inicio.css carga después y puede anular).
-
----
-
-# Mapeo CSS ↔ Template ↔ Vista
-
-Cada página tiene su propio CSS. El CSS y el HTML DEBEN usar exactamente las mismas clases. Si se modifica uno, revisar el otro.
-
-| URL | Vista (views.py) | Template | CSS |
-|-----|-----------------|----------|-----|
-| `/login/` | auth Django | `login.html` | `login.css` (usa vars de base.css) |
-| `/inicio/` | `inicio` | `inicio.html` | `inicio.css` |
-| `/cargar-excel/` | `cargar_excel` | `cargar_excel.html` | `carga_excel.css` |
-| `/agregar-estudiante/` | `agregar_estudiante` | `agregar_estudiante.html` | `agregar_estudiante.css` |
-| `/panel-control/` | `panel_control` | `panel_control.html` | `dashboard.css` |
-| `/cambio-ceremonia/` | `cambio_ceremonia` | `cambio_ceremonia.html` | `cambio_ceremonia.css` (cc-* workspace) |
-| `/tarjetas/` | `tarjetas_invitacion` | `tarjetas.html` | `tarjetas.css` |
-| `/entrega-invitaciones/` | `entrega_invitaciones` | `entrega_invitaciones.html` | `entrega.css` |
-| `/registro/` | `registro_ingreso` | `registro_ingreso.html` | `registro.css` |
-| `/reportes/` | `reportes` | `reportes.html` | `reportes.css` |
-| `/reportes/datos/` | `datos_reportes` | — JSON | — |
-| `/reportes/exportar/excel/` | `exportar_reportes_excel` | — Excel | — |
-| `/registro-ultimos/` | `ultimos_registros_ajax` | — JSON | — |
-| `/validar-codigo/` | `validar_codigo_ingreso` | — JSON | — |
-
-**REGLA CRÍTICA**: Antes de modificar cualquier CSS, leer el HTML correspondiente para verificar las clases reales. Antes de modificar cualquier HTML, leer el CSS correspondiente. Una discrepancia de nombres de clase rompe el diseño silenciosamente.
-
-## Regla crítica: base.css define los heroes y paneles
-
-**IMPORTANTE**: Cuando se agrega un nuevo módulo, sus clases `.hero-X`, `.hero-X-contenido` y `.hero-X h1/p` deben agregarse a las listas de selectores en `base.css`. Si no están en esas listas, el banner rojo y los estilos de tipografía del hero NO se aplicarán.
-
-Lo mismo aplica para paneles: las clases `.panel-X` deben agregarse a la lista de paneles en `base.css` para recibir `background`, `border-radius`, `box-shadow` y `border`.
-
-**Listas a actualizar en `base.css` al crear nuevo módulo:**
-1. Selector principal del hero (línea ~278) — fondo rojo gradiente
-2. Selector `::after` del hero (línea ~291) — círculo decorativo
-3. Selector de contenido del hero (línea ~309) — ancho y padding
-4. Selector `h1` del hero (línea ~323)
-5. Selector `p` del hero (línea ~335)
-6. Lista de paneles (línea ~387) — sombra, borde, fondo blanco
-7. Responsive 320-480px: contenedor hero (línea ~622)
-8. Responsive 481-767px: contenedor hero (línea ~645)
-9. Responsive max-height 800px: contenedor y h1 (línea ~683)
-
-## Arquitectura visual del módulo Reportes (premium)
-
-`reportes.html` NO usa `hero-reportes`. Tiene layout propio:
-- `.rep-header` — command bar gris claro (fondo `#f8fafc`), no rojo
-- `.rep-strip` — franja blanca con 4 KPIs rápidos (IDs: `stripTit`, `stripIng`, `stripPct`, `stripPeak`)
-- `.rep-main` — fondo página `#f4f6f9`
-- `.rep-tabs-seg` — segment control tabs (pill style, no underline)
-- `.kpi-rep` — cards con `border-top` semántico + gradiente sutil de fondo
-- `.panel-rep` — paneles blancos con sombra enterprise
-
-Reglas de color para reportes:
-- NO usar `var(--rojo)` como color primario (solo en badges de denegado/error)
-- Primario: `--c-navy:#06152f` (azul marino)
-- Éxito/presencia: `--c-ok:#16a34a`
-- Alerta: `--c-warn:#d97706`
-- Error: `--c-err:#dc2626`
-
-Sistema de variables en reportes.css:
-`--c-ok`, `--c-err`, `--c-warn`, `--c-info`, `--c-navy`, `--c-teal` + sus variantes `-bg` y `-border`
-
-**REGLA**: Si se crea otro módulo de análisis/dashboard, seguir el patrón `.rep-header` + `.rep-strip` + `.rep-main` en lugar del hero rojo estándar.
-
-## Clases principales por página
-
-### panel_control.html → inicio.css + dashboard.css
-Dashboard operativo ejecutivo. Carga: `base.css` → `inicio.css` → `dashboard.css`.
-Usa `ops-layout` con clase adicional `pc-view` en `ops-scroll` que zeroes padding (layout full-width).
-
-**Estructura visual (patrón similar a registro_ingreso.html):**
-- `.pc-cmd-bar` — command bar 52px: ícono navy + título + subtítulo + badge estado ceremonia
-- `.pc-kpi-strip` — franja 6 KPIs con border-top semántico (ok/nvy/info/wrn/err)
-- `.pc-filter-bar` — card filtros compacta (margen 12px 16px): busqueda + grid auto-fit 6 filtros + Aplicar/Limpiar
-- `.pc-filter-footer` — resultado búsqueda inline + auto-actualización discreta
-- `.pc-content` — panel blanco (margen 8px 16px): tabs + tablas
-- `.pc-footer` — footer con márgenes propios
-
-**Clases/IDs NO renombrar (referenciados por JS):**
-- IDs filtros: `#filtroCeremonia`, `#filtroBloque`, `#filtroBusqueda`, `#filtroArea`, `#filtroPlan`, `#filtroEstado`, `#filtroTipoAcceso`, `#filtroResultado`
-- IDs KPIs: `#kpiEstudiantesPresentes`, `#kpiEstudiantesPendientes`, `#kpiInvitadosPresentes`, `#kpiTotalAsistentes`, `#kpiTotalAtrasados`, `#kpiAlertasQr`, `#kpiPctEstudiantes`, `#kpiPctInvitados`
-- IDs tablas: `#tablaAvancePlanes`, `#tablaUltimosMovimientos`, `#tablaAtrasados`, `#tablaSeguimiento`
-- IDs UI: `#resultadoBusqueda`, `#ultimaActualizacion`
-- Clases JS: `.tab-dashboard`, `.panel-tab`, `.activo`, `.resultado-busqueda` + `.rb-*`, `.badge` + `.badge-si/no/atrasado`, `.fila-estado-*`, `.barra-progreso`
-- Funciones: `cargarDashboard()` (setInterval 15s), `cambiarTab()`, `limpiarFiltros()`, `cargarPlanesPorArea()`
-
-### tarjetas.html → tarjetas.css
-Diseño horizontal 3 columnas (ticket institucional):
-- `.tarjeta-fisica` — contenedor principal, `grid-template-columns: 230px 1fr 210px`
-- `.tf-izq` — columna izquierda, fondo crema `#faf5ea`
-- `.tf-centro` — columna central, blanca
-- `.tf-der` — columna derecha oscura
-- `.tf-der-azul` — fondo azul marino (titulado)
-- `.tf-der-rojo` — fondo rojo oscuro (invitado)
-- `.tf-titulo-inv` — "INVITACIÓN" en Georgia itálica dorada
-- `.tf-msg-logro` — "tu logro" en Georgia itálica dorada
-- `.tf-cod-val` — código en Courier New blanco
-
-### entrega_invitaciones.html → entrega.css
-Diseño horizontal 3 columnas (descargable como PNG via html2canvas):
-- `.tarjeta` — contenedor principal, `grid-template-columns: 210px 1fr 190px`
-- `.tarjeta-left` — columna izquierda, fondo crema
-- `.tarjeta-center` — columna central, blanca
-- `.tarjeta-right` — columna derecha oscura
-- `.tarjeta-right-titulado` — fondo `var(--azul)`
-- `.tarjeta-right-invitado` — fondo `var(--rojo-oscuro)`
-- `.tipo-invitacion` — "INVITACIÓN" en Georgia itálica dorada
-- `.texto-logro h3` — "tu logro" en Georgia itálica dorada
-- `.codigo-acceso` — código en Courier New blanco
-
-### inicio.html → inicio.css (layout global ops-layout, responsive mobile-first) ✓ ESTABLE
-> **Versión estable** — optimizado y validado para notebook 15" (1366×768), monitor 22" (1920×1080) y TV/HDMI. No modificar breakpoints sin prueba visual en ambas resoluciones.
-Sistema de tarjetas: toda la tarjeta es `<a class="modulo">` (link completo, sin botón separado).
-Iconografía: SVG inline Lucide (15px en contenedor 30px). NO usar siglas de texto como iconos.
-Color accent: `style="--mc:#HEX"` en cada `.modulo` → `::before` usa `var(--mc)` para la línea deslizante en hover.
-Variables globales: `--sb-w` (ancho sidebar), `--topbar-h` (altura topbar), `--rojo-ops`, `--negro-ops`.
-
-**Grids:**
-- `ops-kpis`: `repeat(auto-fit, minmax(130px, 1fr))` base; `repeat(5, 1fr)` forzado en 1025-1366px
-- `ops-grupos`: `repeat(2, 1fr)` en 769-1920px; `repeat(4, 1fr)` en 1921px+; `1fr` en ≤1024px
-- `ops-mods`: `repeat(2, 1fr)` fijo en notebook; `auto-fit minmax(160px)` en base
-- `ops-footer-row`: `1fr clamp(200px, 22vw, 280px)` base; `1fr clamp(180px,17vw,220px)` en notebook
-
-**`.ops-nav-item`**: `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` en base para evitar que textos largos rompan en 2 líneas. El icono tiene `min-width` para no comprimirse.
-
-**Breakpoints responsivos en inicio.css:**
-| Rango | `--sb-w` | `--topbar-h` | Comportamiento destacado |
-|---|---|---|---|
-| ≤480px | sidebar oculto | 48px | KPIs 2 cols, módulos 1 col |
-| 481–767px | sidebar oculto | 48px | KPIs 2 cols, módulos 2 cols |
-| ≤768px | oculto (hamburger) | 48px | sidebar en drawer overlay |
-| 768–1024px | 192px | 48px | grupos 1 col, módulos 2 cols |
-| **1025–1366px** | **172px** | **44px** | todo compacto: KPIs 5 cols forzadas, font nav 0.72rem, cards min, footer-row estrecho |
-| 1367–1920px | 220px | 48px | valores por defecto (monitor estándar) |
-| 1921px+ | 240px | 54px | grupos 4 cols, tipografía y padding grandes (TV) |
-| height≤700 + wide | — | — | ultra-compacto para notebook vía HDMI |
-
-### agregar_estudiante.html → agregar_estudiante.css ✓ WORKSPACE (reconstruido 2026-06-02)
-Workspace operativo de 2 columnas — mismo lenguaje visual que Panel de Control y Registro de Ingreso. SIN hero rojo, SIN card gigante central.
-- `ops-scroll ag-view` — zeroes padding, flex-column, fondo `#f4f6f9`
-- `ag-cmd-bar` — command bar 52px: ícono navy + título + subtítulo
-- `ag-workspace` — `grid: [1fr | 320px]`, gap 12px, padding 12px 16px
-- `ag-col-main` — columna izquierda: 3 cards apiladas + acciones
-  - `ag-card` "CEREMONIA" — select bloque full-width
-  - `ag-card` "IDENTIFICACIÓN" — `ag-fields-3`: [RUT][Nombre×2] / [Jornada][Correo][Teléfono]
-  - `ag-card` "PLAN ACADÉMICO" — `ag-fields-3`: [Área][Plan][Institución readonly]
-  - `ag-actions` — `ag-btn-save` (navy pill) + `ag-btn-cancel` (gray outline)
-- `ag-col-side` — columna derecha 320px: `ag-card` "ÚLTIMOS REGISTROS" siempre visible
-- `ag-card-title` — `0.62rem / gray #9ca3af / uppercase` (NO rojo)
-- Inputs `34px` / labels `0.62rem gray` / foco navy (no rojo)
-- Responsive: `1fr` en ≤1024px; `1fr 290px` en 1025-1366px; `1fr 340px` en 1367+
-
-**Clases JS-referenced (NO renombrar):**
-- IDs: `#bloque_id`, `#rut`, `#nombre_completo`, `#jornada`, `#correo`, `#telefono`, `#area_sel`, `#plan_id`, `#institucion_display`
-- Funciones JS: `actualizarPlanes()`, `actualizarInstitucion()`
-
-### cambio_ceremonia.html → cambio_ceremonia.css ✓ WORKSPACE (reconstruido 2026-06-02)
-Workspace operativo 2 columnas — mismo lenguaje que Agregar Estudiante. SIN hero rojo, SIN .marco.
-- `ops-scroll cc-view` — zeroes padding, flex-column, fondo `#f4f6f9`
-- `cc-cmd-bar` — 52px: ícono flechas navy + "Cambio de Ceremonia" + subtítulo
-- `cc-workspace` — `grid: [1fr | 340px]`, gap 12px
-- `cc-col-main` — apilado vertical:
-  - `cc-card` "BUSCAR ESTUDIANTE" — `cc-search-row`: input flex + btn-search navy
-  - `cc-card` "RESULTADOS (N)" — `cc-table` + `cc-btn-select` navy [si `estudiantes`]
-  - `cc-card` "ESTUDIANTE SELECCIONADO" [si `estudiante_seleccionado`]:
-    - `cc-student-grid` (3 cols, datos readonly) — sin borde rojo
-    - `cc-field` select bloque_destino + textarea motivo + `cc-alerta` azul + btn confirmar navy
-- `cc-col-side` (340px): `cc-card` "HISTORIAL" — tabla 4 cols (Fecha, Estudiante, De, A) con truncación
-- `cc-table-hist` para historial estrecho (min-width 290px)
-- Sidebar: "Cambio de Ceremonia" activo bajo `perm_curricular`
-
-**IDs/names de formulario (NO renombrar):**
-- `name="bloque_destino"`, `id="bloque_destino"`, `name="motivo"`, `id="motivo"`, `name="estudiante_id"`, `name="q"`
-
-### cargar_excel.html → carga_excel.css
-Carga masiva desde archivo Excel. Usa ops-layout estándar — SIN hero rojo.
-- `ops-scroll ce-view` — zeroes padding, define variables `--ce-ok/warn/err/nvy/info`
-- `ce-cmd-bar` — command bar 52px: ícono Excel navy + título + subtítulo
-- `ce-kpi-strip` — 4 KPIs: Estudiantes (ok/verde), Ceremonias (nvy), Invitaciones (info/azul), Alertas (warn/ámbar)
-- `.contenido-carga` — flex column con gap, fondo `#f4f6f9`
-- `.panel-carga` — card blanca: título, descripción, `.zona-upload` con dashed border
-- `.ce-btn-upload` — label del input file (borde gris, hover navy)
-- `.ce-btn-procesar` — submit button (fondo navy, border-radius 999px)
-- `{% if resumen %}` `.panel-resumen-carga` — muestra resultado post-carga (claves: `estudiantes_creados`, `estudiantes_actualizados`, `invitaciones_creadas`, `filas_omitidas`)
-- `.panel-preview` + `.tabla-carga` — tabla de vista previa 30 últimos registros
-- `.estado-carga.estado-ok` — badge verde "Procesado"
-
-### registro_ingreso.html → registro.css
-Centro de control operativo. Lector QR USB HID (modo teclado HID, no cámara).
-Sin scroll vertical en uso normal. Optimizado 1366×768 y 1920×1080.
-
-**Estructura visual (patrón similar a reportes.html):**
-- `.reg-view` — clase adicional sobre `ops-scroll`; zeroes padding, activa flex-column. Define variables `--ok`, `--wrn`, `--err`, `--nvy`, `--bd`, `--bg`
-- `.reg-cmd-bar` — command bar 52px: título + ícono navy + info ceremonia activa + badge ABIERTA/CERRADA
-- `.reg-kpi-strip` — franja 5 KPIs compactos (colores semánticos via `::after` top-border)
-- `.reg-body` — grid 2×1fr, `flex:1`, `overflow:hidden`
-- `.reg-col-scanner` — panel izquierdo: lector QR + resultado escaneo + ingreso manual
-- `.reg-col-monitor` — panel derecho: timeline tiempo real (scroll interno en `.reg-timeline`)
-- `.reg-cer-strip` — barra inferior 52px: chips ceremonia con botones Abrir/Cerrar/Reprogramar
-
-**Agregar Estudiante workspace (2026-06-02, reconstruido):** `agregar_estudiante.html` usa `ops-layout` + `ops-scroll ag-view`. Workspace de 2 columnas (`ag-workspace`): columna principal con 3 `ag-card` compactas (Ceremonia, Identificación, Plan Académico) + `ag-actions`; columna lateral con `ag-card` de últimos registros. Inputs `34px`, labels `0.62rem` gray. SIN clases `.panel-formulario`, `.grid-campos`, `.contenido-agregar`, `.seccion-form` (eliminadas). Messages van en `ops-mensajes` ANTES del `ops-scroll`.
-
-**Reportes breakpoints notebook (2026-06-02):** Para notebook 1366×768, AMBOS breakpoints `1025-1366px` (width) y `max-height:800px` (height) aplican simultáneamente. El HDMI/height viene ÚLTIMO en el CSS y gana sobre el width breakpoint. `rep-tabs-wrapper margin-bottom` y `rep-actualizacion margin` DEBEN estar en AMBOS breakpoints — son los más olvidados. El `kpi-rep-top margin-bottom` también se olvida frecuentemente y suma espacios verticales.
-
-**Reportes grids CSS (2026-06-02):** `.kpis-reportes` y `.kpis-op` usan `repeat(auto-fit, minmax(175px/150px, 1fr))` en todos los breakpoints — NUNCA `repeat(N, 1fr)` forzado, causa cards rotas dentro de ops-layout con sidebar. `.rep-kpis-2col` sin `max-width`. `kpi-rep-texto` tiene `word-break:break-word`. `chart-container` usa `clamp` para altura responsiva.
-
-**Reportes en ops-layout (2026-06-02):** `reportes.html` usa `ops-layout` + `ops-scroll rep-view`. La clase `.rep-view` en `reportes.css` zeroes el padding de `ops-scroll` para que `.rep-header` y `.rep-strip` vayan de borde a borde. El `@media print` referencia `.ops-layout/.ops-main/.ops-scroll` en vez de `.marco/.barra`. El interior (command bar, strip, tabs, Chart.js) no se modifica. Sidebar idéntico a los demás módulos con "Reportes" activo.
-
-**Context processor de permisos (2026-06-02):** `titulacion/context_processors.py` inyecta `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso` en todos los templates. Registrado en `settings.py` TEMPLATES context_processors. Sidebars usan estas variables con `{% if %}` para mostrar solo secciones autorizadas. Solo templates con `ops-layout` tienen sidebar: `inicio.html`, `panel_control.html`, `registro_ingreso.html`, `entrega_invitaciones.html`. Los demás usan layout `.marco` sin sidebar. NO agregar `request.user.is_staff` para Configuración — usar `perm_admin` en su lugar.
-
-**Flujo bloque-requerido en panel_control (2026-06-02):** El panel inicia en estado vacío — no llama al servidor al cargar. Solo carga datos cuando `filtroBloque.value !== ""`. El auto-refresh (15s) también verifica esto antes de ejecutar. `limpiarFiltros()` llama `_mostrarEstadoInicial()` (no `cargarDashboard()`). Los demás listeners también verifican que haya bloque antes de lanzar fetch. IDs nuevos: `#pc-empty-state`, `#pc-tabs-content`, `#pcAutoupdate`, `#planCount`. Función nueva: `_mostrarEstadoInicial()`, `_mostrarDatos()`.
-
-**Optimización ORM datos_panel_control (2026-06-02):** Los sets `_estudiantes_atrasados_ids` e `_invitaciones_atrasadas_ids` y el dict `_atrasados_por_plan` deben pre-calcularse ANTES de los loops de `seguimiento_estudiantes` y `avance_por_plan`. Sin ellos se producen N+1 queries (~900 queries para 300 estudiantes). No reinsertar `.exists()` ni `.count()` dentro de esos loops.
-
-**Clases JS-referenced (NO renombrar):**
-- `.lector-usb`, `.indicador-lector`, `.input-qr-usb`, `.pulso-qr`
-- `.lector-activo`, `.lector-procesando`, `.lector-capturando`, `.lector-sin-foco`, `.lector-enfocado`
-- `.resultado-validacion` + `.visible`, `.permitido`, `.rechazado`, `.atrasado`, `.error`
-- `.estado-grande` + `.estado-ok`, `.estado-no`, `.estado-alerta`, `.estado-tarde`, `.estado-duplicado`
-- `.resultado-detalle-grid`, `.rd-item`, `.rd-item--wide`
-- `.reg-evento--{permitido|duplicado|atrasado|rechazado}`, `.reg-evento-dot`, `.reg-evento-body`, `.reg-evento-nombre`, `.reg-evento-tipo`, `.reg-evento-meta`, `.reg-evento-badge`, `.reg-evento-hora`, `.reg-tl-empty`
-
-**REGLA**: NO usar `ops-kpis` ni `kpi-card` en este módulo. Usar clases `reg-*` propias.
-
----
-
-# Forma de trabajo
-
-Antes de editar:
-
-1. Explicar problema detectado.
-2. Explicar archivos relacionados.
-3. Explicar solución propuesta.
-4. Explicar riesgos posibles.
-5. Esperar aprobación antes de modificar.
-
----
-
-# Reglas frontend
-
-- Mantener identidad institucional INACAP.
-- Mantener diseño premium.
-- Responsive obligatorio.
-- No generar scroll innecesario.
-- Mantener experiencia fluida en móviles y TV.
-
----
-
-# Regla importante
-
-Siempre entregar archivos completos.
-
-Usar:
-
-"Reemplaza TODO el archivo por este código"
-
-No entregar fragmentos parciales salvo que se solicite explícitamente.
+## Stack
+Django · Python · SQLite · HTML · CSS · JS (vanilla)
+
+## Archivos críticos
+- `configuracion/settings.py` — base del sistema
+- `titulacion/views.py` — toda la lógica de vistas
+- `titulacion/urls.py` — todas las rutas
+- `titulacion/models.py` — EstudianteTitulado, Invitacion, BloqueCeremonia, Ceremonia
+- `titulacion/permisos.py` — sistema de grupos (validación por nombre, no por permisos de modelo)
+- `titulacion/context_processors.py` — inyecta `perm_*` en todos los templates
+
+## Sistema de permisos ⚠️ CRÍTICO
+Valida por **nombre de grupo Django**, NO por permisos de modelo.
+
+| Grupo Django | Acceso |
+|---|---|
+| `ADMIN_TITULACION` | Todo el sistema |
+| `ADMISION` | Registro de ingreso + Entrega |
+| `CURRICULAR` | Panel control, reportes, cambio ceremonia |
+| `ENTREGA_INVITACIONES` | Solo entrega |
+| `INGRESO` | Solo registro QR (DAE) |
+| `DACOM` | Solo entrega (DACOM) |
+
+Context vars en todos los templates: `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso`.
+Decorators de ruta: `acceso_admin` / `acceso_curricular` / `acceso_entrega` / `acceso_ingreso` / `acceso_general`.
+Al crear usuarios en Django Admin: asignar solo el grupo — NO permisos individuales de modelo.
+
+## Advertencias técnicas
+- `base.css` tiene alta especificidad en `button[type="submit"]` — anular con selector más específico o `!important`.
+- Logout: vista custom `logout_view` (acepta GET+POST) — no usar `auth_views.LogoutView`.
+- Panel Control ORM: sets `_estudiantes_atrasados_ids`, `_invitaciones_atrasadas_ids`, `_atrasados_por_plan` DEBEN pre-calcularse ANTES de los loops. Nunca reinsertar `.exists()` ni `.count()` dentro de ellos (provoca N+1 ~900 queries).
+- Reportes KPI grids: usar `repeat(auto-fit, minmax(...))` — NUNCA `repeat(N, 1fr)` forzado con sidebar activo.
+
+## Reglas frontend (resumen)
+- Para cualquier tarea visual: leer `FRONTEND_MAP.md` primero.
+- No crear layouts nuevos — reutilizar `ops-layout` (inicio.css).
+- No usar hero rojo en módulos nuevos — patrón: cmd-bar + workspace.
+- `tarjetas.html` es el único módulo sin ops-layout (usa `.marco`).
+- Responsive obligatorio. No generar scroll horizontal.
+- CSS load order siempre: `base.css` → `inicio.css` → `[módulo].css`.
