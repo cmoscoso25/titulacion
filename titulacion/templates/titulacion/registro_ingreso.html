@@ -283,7 +283,7 @@
 
                     <div id="registros-timeline" class="reg-timeline">
                         {% for r in ultimos_registros %}
-                        <div class="reg-evento reg-evento--{% if r.resultado == 'PERMITIDO' %}permitido{% elif r.resultado == 'DUPLICADO' %}duplicado{% elif r.resultado == 'ATRASADO' %}atrasado{% else %}rechazado{% endif %}">
+                        <div class="reg-evento reg-evento--{% if r.resultado == 'PERMITIDO' %}permitido{% elif r.resultado == 'DUPLICADO' %}duplicado{% elif r.resultado == 'ATRASADO' %}atrasado{% else %}rechazado{% endif %}" data-tl-key="{{ r.estudiante.nombre_completo|default:'—'|lower }}|{% if r.tipo == 'ESTUDIANTE' %}titulado{% else %}invitado{% endif %}">
                             <span class="reg-evento-dot"></span>
                             <div class="reg-evento-body">
                                 <span class="reg-evento-nombre">{% if r.estudiante %}{{ r.estudiante.nombre_completo }}{% else %}—{% endif %}</span>
@@ -446,7 +446,9 @@
                 mostrarResultado({ estado:"error", titulo:"Error "+resp.status, mensaje:"No se pudo procesar. Intenta nuevamente." });
                 return;
             }
-            mostrarResultado(await resp.json());
+            const datosResp = await resp.json();
+            mostrarResultado(datosResp);
+            agregarAlTimeline(datosResp);
         } catch (err) {
             mostrarResultado({ estado:"error", titulo:"Error de conexión", mensaje:"Verifica la red." });
         }
@@ -541,9 +543,10 @@
                     return;
                 }
                 tl.innerHTML = data.registros.map(r => {
-                    const cls = claseEvento(r.resultado);
+                    const cls  = claseEvento(r.resultado);
                     const tipo = r.tipo === "ESTUDIANTE" ? "Titulado" : r.tipo === "INVITADO" ? "Invitado" : r.tipo;
-                    return `<div class="reg-evento reg-evento--${cls}">
+                    const key  = (r.nombre + "|" + tipo).toLowerCase();
+                    return `<div class="reg-evento reg-evento--${cls}" data-tl-key="${key}">
                         <span class="reg-evento-dot"></span>
                         <div class="reg-evento-body">
                             <span class="reg-evento-nombre">${r.nombre}</span>
@@ -557,6 +560,68 @@
                 }).join("");
             })
             .catch(() => {});
+    }
+
+    /* === ACTUALIZACIÓN INMEDIATA DEL TIMELINE POST-SCAN ===
+       Evita el gap de 800ms entre el resultado del panel izquierdo
+       y la actualización del timeline derecho.
+       Llave de dedup: "nombre|titulado" o "nombre|invitado"
+       (misma lógica que el backend, sin necesitar estudiante_id) */
+    function agregarAlTimeline(datos) {
+        if (!datos.nombre) return;
+        if (datos.tipo === "SIN_CEREMONIA_ACTIVA" || datos.tipo === "INVALIDO") return;
+
+        const tl = document.getElementById("registros-timeline");
+        if (!tl) return;
+
+        // Mapear campos del scan al resultado real almacenado en DB
+        let resultado;
+        if (datos.atrasado === true)              resultado = "ATRASADO";
+        else if (datos.tipo === "DUPLICADO")      resultado = "DUPLICADO";
+        else if (datos.tipo === "OTRA_CEREMONIA") resultado = "OTRA_CEREMONIA";
+        else if (datos.estado === "permitido")    resultado = "PERMITIDO";
+        else                                      resultado = "DENEGADO";
+
+        const tipoDisplay = (datos.invitacion != null) ? "Invitado" : "Titulado";
+        const key   = (datos.nombre + "|" + tipoDisplay).toLowerCase();
+        const cls   = claseEvento(resultado);
+        const badge = badgeEvento(resultado);
+        const hora  = new Date().toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" });
+
+        // Buscar entrada existente iterando (evita problemas de escape en querySelector)
+        let existing = null;
+        for (const el of tl.querySelectorAll(".reg-evento")) {
+            if (el.dataset.tlKey === key) { existing = el; break; }
+        }
+
+        if (existing) {
+            // Actualizar en lugar (no insertar duplicado)
+            existing.className = "reg-evento reg-evento--" + cls;
+            existing.querySelector(".reg-evento-badge").textContent = badge;
+            existing.querySelector(".reg-evento-hora").textContent  = hora;
+            tl.insertBefore(existing, tl.firstChild);
+        } else {
+            // Eliminar estado vacío si existe
+            const empty = tl.querySelector(".reg-tl-empty");
+            if (empty) empty.remove();
+            // Insertar nueva entrada al tope
+            const div = document.createElement("div");
+            div.className = "reg-evento reg-evento--" + cls;
+            div.dataset.tlKey = key;
+            div.innerHTML =
+                '<span class="reg-evento-dot"></span>' +
+                '<div class="reg-evento-body">' +
+                    '<span class="reg-evento-nombre">' + datos.nombre + '</span>' +
+                    '<span class="reg-evento-tipo">' + tipoDisplay + '</span>' +
+                '</div>' +
+                '<div class="reg-evento-meta">' +
+                    '<span class="reg-evento-badge">' + badge + '</span>' +
+                    '<span class="reg-evento-hora">' + hora + '</span>' +
+                '</div>';
+            tl.insertBefore(div, tl.firstChild);
+            // Limitar a 20 entradas
+            while (tl.children.length > 20) tl.removeChild(tl.lastChild);
+        }
     }
 
     setInterval(actualizarRegistros, 5000);

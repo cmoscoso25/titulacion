@@ -365,13 +365,22 @@ def registro_ingreso(request):
     for b in bloques:
         b.ingresos = ingresados_dict.get(b.id, 0)
 
-    ultimos_registros = RegistroIngreso.objects.select_related(
+    _raw_registros = RegistroIngreso.objects.select_related(
         "estudiante",
         "invitacion",
         "estudiante__bloque_ceremonia",
         "estudiante__plan_estudio",
         "estudiante__plan_estudio__area",
-    ).order_by("-fecha_hora")[:20]
+    ).order_by("-fecha_hora")[:100]
+    _seen_reg = set()
+    ultimos_registros = []
+    for _r in _raw_registros:
+        _k = (_r.estudiante_id, _r.invitacion_id)
+        if _k not in _seen_reg:
+            _seen_reg.add(_k)
+            ultimos_registros.append(_r)
+        if len(ultimos_registros) >= 20:
+            break
 
     return render(
         request,
