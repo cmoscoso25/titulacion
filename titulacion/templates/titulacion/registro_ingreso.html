@@ -354,8 +354,7 @@
 <script>
     const URL_ULTIMOS = "{% url 'titulacion:ultimos_registros_ajax' %}";
 
-    let ultimoCodigoLeido = "";
-    let bloqueoLectura = false;
+    const codigosEnProceso = new Set();  // debounce por código, no global
 
     const resultado        = document.getElementById("resultado");
     const estadoVisual     = document.getElementById("estadoVisual");
@@ -468,16 +467,22 @@
         }
     }
 
+    // Misma normalización que el backend: apóstrofes/backticks → guión, sin espacios
+    function normalizarCodigoQR(c) {
+        return c.trim().toUpperCase()
+            .replace(/['‘’`´]/g, '-')
+            .replace(/\s+/g, '');
+    }
+
     function procesarLecturaQR(codigo) {
-        if (bloqueoLectura) return;
-        if (codigo === ultimoCodigoLeido) return;
-        bloqueoLectura = true;
-        ultimoCodigoLeido = codigo;
+        const codigoNorm = normalizarCodigoQR(codigo);
+        if (codigosEnProceso.has(codigoNorm)) return;  // mismo código en vuelo → ignorar
+        codigosEnProceso.add(codigoNorm);
         indicadorLector.classList.remove("lector-activo","lector-capturando","lector-sin-foco");
         indicadorLector.classList.add("lector-procesando");
         textoIndicador.innerText = "Procesando...";
-        validarCodigo(codigo).finally(() => {
-            setTimeout(() => { bloqueoLectura = false; ultimoCodigoLeido = ""; activarIndicador(); inputQR.focus(); }, 2500);
+        validarCodigo(codigoNorm).finally(() => {
+            setTimeout(() => { codigosEnProceso.delete(codigoNorm); activarIndicador(); inputQR.focus(); }, 1500);
             setTimeout(actualizarRegistros, 800);
         });
     }
@@ -491,22 +496,20 @@
         if (e.key.length > 1 && e.key !== "Enter") return;
         if (e.key === "Enter") {
             const c = bufferQR.trim(); bufferQR = ""; clearTimeout(timerQR); inputQR.value = "";
-            if (c.length >= MIN_CHARS && !bloqueoLectura) { e.preventDefault(); procesarLecturaQR(c); }
+            if (c.length >= MIN_CHARS) { e.preventDefault(); procesarLecturaQR(c); }
         } else {
             bufferQR += e.key; inputQR.value = bufferQR;
-            if (!bloqueoLectura) {
-                indicadorLector.classList.remove("lector-activo","lector-sin-foco","lector-procesando");
-                indicadorLector.classList.add("lector-capturando");
-                textoIndicador.innerText = "Capturando código...";
-            }
+            indicadorLector.classList.remove("lector-activo","lector-sin-foco","lector-procesando");
+            indicadorLector.classList.add("lector-capturando");
+            textoIndicador.innerText = "Capturando código...";
             clearTimeout(timerQR);
-            timerQR = setTimeout(() => { bufferQR = ""; if (!bloqueoLectura) { inputQR.value = ""; activarIndicador(); } }, MAX_MS);
+            timerQR = setTimeout(() => { bufferQR = ""; inputQR.value = ""; activarIndicador(); }, MAX_MS);
         }
     });
 
     document.addEventListener("click", e => { if (!e.target.closest("#formManual")) inputQR.focus(); });
-    inputQR.addEventListener("focus", () => { indicadorLector.classList.add("lector-enfocado"); if (!bloqueoLectura) { indicadorLector.classList.remove("lector-sin-foco"); indicadorLector.classList.add("lector-activo"); textoIndicador.innerText = "Listo para escanear"; } });
-    inputQR.addEventListener("blur",  () => { indicadorLector.classList.remove("lector-enfocado"); if (!bloqueoLectura) { indicadorLector.classList.remove("lector-activo"); indicadorLector.classList.add("lector-sin-foco"); textoIndicador.innerText = "Haz clic aquí para activar el lector"; } });
+    inputQR.addEventListener("focus", () => { indicadorLector.classList.add("lector-enfocado"); indicadorLector.classList.remove("lector-sin-foco"); indicadorLector.classList.add("lector-activo"); textoIndicador.innerText = "Listo para escanear"; });
+    inputQR.addEventListener("blur",  () => { indicadorLector.classList.remove("lector-enfocado"); indicadorLector.classList.remove("lector-activo"); indicadorLector.classList.add("lector-sin-foco"); textoIndicador.innerText = "Haz clic aquí para activar el lector"; });
 
     document.getElementById("formManual").addEventListener("submit", e => {
         e.preventDefault();

@@ -528,6 +528,7 @@ def validar_codigo_ingreso(request):
 def registrar_ingreso_estudiante(estudiante, bloque_activo):
     bloque_estudiante = estudiante.bloque_ceremonia
 
+    # 1. Validar pertenencia a la ceremonia abierta (sin lock, solo lectura)
     if bloque_estudiante.id != bloque_activo.id:
         RegistroIngreso.objects.create(
             estudiante=estudiante,
@@ -556,46 +557,50 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
 
     es_atrasado = bloque_esta_cerrado(bloque_estudiante)
 
-    if estudiante.ingreso_confirmado:
+    # 2. Sección crítica: lock de fila para evitar doble-registro simultáneo
+    with transaction.atomic():
+        est = EstudianteTitulado.objects.select_for_update().get(pk=estudiante.pk)
+
+        if est.ingreso_confirmado:
+            RegistroIngreso.objects.create(
+                estudiante=est,
+                invitacion=None,
+                tipo="ESTUDIANTE",
+                resultado="DUPLICADO",
+                observacion="Se intentó registrar nuevamente la tarjeta del estudiante.",
+            )
+
+            return JsonResponse({
+                "estado": "rechazado",
+                "ok": False,
+                "tipo": "DUPLICADO",
+                "titulo": "QR ya utilizado",
+                "mensaje": "Este estudiante ya fue registrado anteriormente.",
+                "nombre": est.nombre_completo,
+                "rut": est.rut,
+                "area": obtener_area_estudiante(est),
+                "plan": obtener_plan_estudiante(est),
+                "bloque": obtener_bloque_estudiante(est),
+                "atrasado": False,
+            })
+
+        est.ingreso_confirmado = True
+        est.fecha_hora_ingreso = timezone.now()
+        est.save()
+
+        resultado = "ATRASADO" if es_atrasado else "PERMITIDO"
+
         RegistroIngreso.objects.create(
-            estudiante=estudiante,
+            estudiante=est,
             invitacion=None,
             tipo="ESTUDIANTE",
-            resultado="DUPLICADO",
-            observacion="Se intentó registrar nuevamente la tarjeta del estudiante.",
+            resultado=resultado,
+            observacion=(
+                "Ingreso del estudiante registrado como atrasado."
+                if es_atrasado
+                else "Ingreso del estudiante registrado correctamente."
+            ),
         )
-
-        return JsonResponse({
-            "estado": "rechazado",
-            "ok": False,
-            "tipo": "DUPLICADO",
-            "titulo": "QR ya utilizado",
-            "mensaje": "Este estudiante ya fue registrado anteriormente.",
-            "nombre": estudiante.nombre_completo,
-            "rut": estudiante.rut,
-            "area": obtener_area_estudiante(estudiante),
-            "plan": obtener_plan_estudiante(estudiante),
-            "bloque": obtener_bloque_estudiante(estudiante),
-            "atrasado": False,
-        })
-
-    estudiante.ingreso_confirmado = True
-    estudiante.fecha_hora_ingreso = timezone.now()
-    estudiante.save()
-
-    resultado = "ATRASADO" if es_atrasado else "PERMITIDO"
-
-    RegistroIngreso.objects.create(
-        estudiante=estudiante,
-        invitacion=None,
-        tipo="ESTUDIANTE",
-        resultado=resultado,
-        observacion=(
-            "Ingreso del estudiante registrado como atrasado."
-            if es_atrasado
-            else "Ingreso del estudiante registrado correctamente."
-        ),
-    )
 
     return JsonResponse({
         "estado": "permitido",
@@ -649,47 +654,51 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
 
     es_atrasado = bloque_esta_cerrado(bloque_estudiante)
 
-    if invitacion.usada:
+    # 2. Sección crítica: lock de fila para evitar doble-registro simultáneo
+    with transaction.atomic():
+        inv = Invitacion.objects.select_for_update().get(pk=invitacion.pk)
+
+        if inv.usada:
+            RegistroIngreso.objects.create(
+                estudiante=estudiante,
+                invitacion=inv,
+                tipo="INVITADO",
+                resultado="DUPLICADO",
+                observacion="Se intentó reutilizar una invitación.",
+            )
+
+            return JsonResponse({
+                "estado": "rechazado",
+                "ok": False,
+                "tipo": "DUPLICADO",
+                "titulo": "Invitación ya utilizada",
+                "mensaje": "Esta invitación ya fue registrada anteriormente.",
+                "nombre": estudiante.nombre_completo,
+                "rut": estudiante.rut,
+                "area": obtener_area_estudiante(estudiante),
+                "plan": obtener_plan_estudiante(estudiante),
+                "bloque": obtener_bloque_estudiante(estudiante),
+                "invitacion": inv.numero_invitacion,
+                "atrasado": False,
+            })
+
+        inv.usada = True
+        inv.fecha_uso = timezone.now()
+        inv.save()
+
+        resultado = "ATRASADO" if es_atrasado else "PERMITIDO"
+
         RegistroIngreso.objects.create(
             estudiante=estudiante,
-            invitacion=invitacion,
+            invitacion=inv,
             tipo="INVITADO",
-            resultado="DUPLICADO",
-            observacion="Se intentó reutilizar una invitación.",
+            resultado=resultado,
+            observacion=(
+                f"Ingreso atrasado registrado para invitación {inv.numero_invitacion}."
+                if es_atrasado
+                else f"Ingreso registrado para invitación {inv.numero_invitacion}."
+            ),
         )
-
-        return JsonResponse({
-            "estado": "rechazado",
-            "ok": False,
-            "tipo": "DUPLICADO",
-            "titulo": "Invitación ya utilizada",
-            "mensaje": "Esta invitación ya fue registrada anteriormente.",
-            "nombre": estudiante.nombre_completo,
-            "rut": estudiante.rut,
-            "area": obtener_area_estudiante(estudiante),
-            "plan": obtener_plan_estudiante(estudiante),
-            "bloque": obtener_bloque_estudiante(estudiante),
-            "invitacion": invitacion.numero_invitacion,
-            "atrasado": False,
-        })
-
-    invitacion.usada = True
-    invitacion.fecha_uso = timezone.now()
-    invitacion.save()
-
-    resultado = "ATRASADO" if es_atrasado else "PERMITIDO"
-
-    RegistroIngreso.objects.create(
-        estudiante=estudiante,
-        invitacion=invitacion,
-        tipo="INVITADO",
-        resultado=resultado,
-        observacion=(
-            f"Ingreso atrasado registrado para invitación {invitacion.numero_invitacion}."
-            if es_atrasado
-            else f"Ingreso registrado para invitación {invitacion.numero_invitacion}."
-        ),
-    )
 
     return JsonResponse({
         "estado": "permitido",
@@ -697,16 +706,16 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
         "tipo": resultado,
         "titulo": "Ingreso atrasado registrado" if es_atrasado else "Ingreso autorizado",
         "mensaje": (
-            f"Invitación {invitacion.numero_invitacion} registrada después del cierre de ingreso."
+            f"Invitación {inv.numero_invitacion} registrada después del cierre de ingreso."
             if es_atrasado
-            else f"Invitación {invitacion.numero_invitacion} registrada correctamente."
+            else f"Invitación {inv.numero_invitacion} registrada correctamente."
         ),
         "nombre": estudiante.nombre_completo,
         "rut": estudiante.rut,
         "area": obtener_area_estudiante(estudiante),
         "plan": obtener_plan_estudiante(estudiante),
         "bloque": obtener_bloque_estudiante(estudiante),
-        "invitacion": invitacion.numero_invitacion,
+        "invitacion": inv.numero_invitacion,
         "invitados_presentes": estudiante.invitaciones.filter(usada=True).count(),
         "atrasado": es_atrasado,
     })
