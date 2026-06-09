@@ -61,6 +61,8 @@ Al crear usuarios en Django Admin: asignar solo el grupo — NO permisos individ
 - Logout: vista custom `logout_view` (acepta GET+POST) — no usar `auth_views.LogoutView`.
 - Panel Control ORM: sets `_estudiantes_atrasados_ids`, `_invitaciones_atrasadas_ids`, `_atrasados_por_plan` DEBEN pre-calcularse ANTES de los loops. Nunca reinsertar `.exists()` ni `.count()` dentro de ellos (provoca N+1 ~900 queries).
 - Reportes KPI grids: usar `repeat(auto-fit, minmax(...))` — NUNCA `repeat(N, 1fr)` forzado con sidebar activo.
+- Comando `reset_registro_ingreso`: en `titulacion/management/commands/`. Resetea SOLO RegistroIngreso +
+  campos de presencia (ingreso_confirmado, usada). NO toca QRs, invitaciones ni ceremonias. Requiere "CONFIRMAR" o `--confirmar`.
 - Registro de Ingreso QR: el JSON de `validar_codigo_ingreso` tiene campo `tipo_entrada` ("Estudiante" / "Invitado 1" / "Invitado 2") y `ceremonia` (nombre del bloque). El campo `tipo` sigue siendo el código de estado para lógica JS — no cambiar.
 
 ## Reglas frontend (resumen)

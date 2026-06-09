@@ -36,6 +36,10 @@ Funciones: ceremonias, invitaciones QR, acceso físico, dashboard, administraci�
 - **Agregar Estudiante:** JS `actualizarPlanes()` + `actualizarInstitucion()` filtran planes por área dinámicamente.
 - **Reportes:** `rep-view` zeroes padding. KPI grids: `auto-fit minmax` — nunca `repeat(N, 1fr)`.
   Breakpoints `1025-1366px` + `max-height:800px` aplican simultáneamente en notebook — HDMI gana (viene último).
+- **Comando reset_registro_ingreso (2026-06-09):** `python manage.py reset_registro_ingreso`
+  Elimina `RegistroIngreso`, resetea `ingreso_confirmado`/`fecha_hora_ingreso` en estudiantes y
+  `usada`/`fecha_uso` en invitaciones. Requiere escribir "CONFIRMAR" (o flag `--confirmar`).
+  No borra QRs, invitaciones, ceremonias ni datos de estudiantes.
 - **Registro de Ingreso — mensajes QR (2026-06-09):** `validar_codigo_ingreso` retorna campo `tipo_entrada`
   ("Estudiante" / "Invitado 1" / "Invitado 2") y `ceremonia` (nombre del bloque) en todos los JsonResponse
   de `registrar_ingreso_estudiante` y `registrar_ingreso_invitado`. El template usa `tipo_entrada` en el
