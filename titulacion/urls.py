@@ -90,6 +90,12 @@ urlpatterns = [
     ),
 
     path(
+        "bloques/<int:bloque_id>/cerrar-ingreso/",
+        acceso_ingreso(views.cerrar_ingreso_bloque_ceremonia),
+        name="cerrar_ingreso_bloque_ceremonia",
+    ),
+
+    path(
         "bloques/<int:bloque_id>/cerrar/",
         acceso_ingreso(views.cerrar_bloque_ceremonia),
         name="cerrar_bloque_ceremonia",

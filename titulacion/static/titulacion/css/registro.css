@@ -107,6 +107,7 @@
 }
 
 .reg-cmd-badge--abierta  { background: #dcfce7; color: #15803d; border: 1px solid var(--ok-bd); }
+.reg-cmd-badge--atrasado { background: #ffedd5; color: #c2410c; border: 1px solid #fdba74; }
 .reg-cmd-badge--cerrada  { background: #fee2e2; color: #991b1b; border: 1px solid var(--err-bd); }
 .reg-cmd-badge--sin      { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
 
@@ -600,6 +601,7 @@
 }
 
 .reg-cer-chip--abierta  { background: var(--ok-bg); border-color: var(--ok-bd); }
+.reg-cer-chip--atrasado { background: #fff7ed; border-color: #fdba74; }
 .reg-cer-chip--cerrada  { background: var(--err-bg); border-color: var(--err-bd); }
 
 .reg-cer-chip-info {
@@ -646,6 +648,7 @@
 }
 
 .reg-cer-badge--abierta  { background: #dcfce7; color: #15803d; }
+.reg-cer-badge--atrasado { background: #ffedd5; color: #c2410c; }
 .reg-cer-badge--cerrada  { background: #fee2e2; color: #dc2626; }
 .reg-cer-badge--prog     { background: #fef3c7; color: #d97706; }
 
@@ -665,7 +668,8 @@
 
 .reg-cer-chip-btn:hover         { opacity: 0.82; }
 .reg-cer-btn--abrir             { background: var(--ok); color: #fff; }
-.reg-cer-btn--cerrar            { background: var(--err); color: #fff; }
+.reg-cer-btn--cerrar            { background: #f97316; color: #fff; }
+.reg-cer-btn--finalizar         { background: var(--err); color: #fff; }
 .reg-cer-btn--reprogramar       { background: var(--wrn); color: #111; }
 
 .reg-cer-empty {

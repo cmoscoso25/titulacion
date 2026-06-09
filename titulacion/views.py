@@ -104,17 +104,20 @@ def obtener_bloque_estudiante(estudiante):
 
 
 def obtener_ceremonia_activa():
-    return BloqueCeremonia.objects.filter(
+    bloque_abierto = BloqueCeremonia.objects.filter(
         estado_registro="ABIERTA"
-    ).select_related(
-        "ceremonia"
-    ).first()
+    ).select_related("ceremonia").first()
+    if bloque_abierto:
+        return bloque_abierto
+    return BloqueCeremonia.objects.filter(
+        estado_registro="CERRADA_INGRESO"
+    ).select_related("ceremonia").order_by("-fecha_cierre_registro").first()
 
 
 def bloque_esta_cerrado(bloque):
     if not bloque:
         return False
-    return bloque.estado_registro == "CERRADA"
+    return bloque.estado_registro == "CERRADA_INGRESO"
 
 
 def asegurar_qr_estudiante(estudiante):
@@ -1324,12 +1327,23 @@ def abrir_bloque_ceremonia(request, bloque_id):
 
 
 @require_POST
+def cerrar_ingreso_bloque_ceremonia(request, bloque_id):
+    bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
+    bloque.cerrar_ingreso()
+    messages.success(
+        request,
+        f"Ingreso cerrado para {bloque.nombre}. Los próximos escaneos quedarán registrados como ATRASADOS.",
+    )
+    return redirect("titulacion:registro_ingreso")
+
+
+@require_POST
 def cerrar_bloque_ceremonia(request, bloque_id):
     bloque = get_object_or_404(BloqueCeremonia, id=bloque_id)
     bloque.cerrar()
     messages.success(
         request,
-        f"La ceremonia {bloque.nombre} fue cerrada correctamente. Los próximos ingresos quedarán como atrasados."
+        f"La ceremonia {bloque.nombre} fue finalizada y cerrada completamente.",
     )
     return redirect("titulacion:registro_ingreso")
 

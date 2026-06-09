@@ -154,16 +154,27 @@
                     </div>
                 </div>
                 <div class="reg-cmd-right">
-                    {% for bloque in bloques %}{% if bloque.estado_registro == "ABIERTA" %}
-                    <div class="reg-cmd-cer-info">
-                        <span class="reg-cmd-cer-name">{{ bloque.nombre }}</span>
-                        <span class="reg-cmd-cer-meta">{{ bloque.fecha|date:"d \d\e F \d\e Y" }} &nbsp;·&nbsp; {{ bloque.hora_inicio|time:"H:i" }} hrs.</span>
-                    </div>
-                    <span class="reg-cmd-badge reg-cmd-badge--abierta">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
-                        ABIERTA
-                    </span>
-                    {% endif %}{% endfor %}
+                    {% for bloque in bloques %}
+                        {% if bloque.estado_registro == "ABIERTA" %}
+                        <div class="reg-cmd-cer-info">
+                            <span class="reg-cmd-cer-name">{{ bloque.nombre }}</span>
+                            <span class="reg-cmd-cer-meta">{{ bloque.fecha|date:"d \d\e F \d\e Y" }} &nbsp;·&nbsp; {{ bloque.hora_inicio|time:"H:i" }} hrs.</span>
+                        </div>
+                        <span class="reg-cmd-badge reg-cmd-badge--abierta">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+                            ABIERTA
+                        </span>
+                        {% elif bloque.estado_registro == "CERRADA_INGRESO" %}
+                        <div class="reg-cmd-cer-info">
+                            <span class="reg-cmd-cer-name">{{ bloque.nombre }}</span>
+                            <span class="reg-cmd-cer-meta">{{ bloque.fecha|date:"d \d\e F \d\e Y" }} &nbsp;·&nbsp; {{ bloque.hora_inicio|time:"H:i" }} hrs.</span>
+                        </div>
+                        <span class="reg-cmd-badge reg-cmd-badge--atrasado">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+                            ACEPTA ATRASADOS
+                        </span>
+                        {% endif %}
+                    {% endfor %}
                     {% if not bloques %}
                     <span class="reg-cmd-badge reg-cmd-badge--sin">Sin ceremonia activa</span>
                     {% endif %}
@@ -315,7 +326,7 @@
                 </span>
                 <div class="reg-cer-list">
                     {% for bloque in bloques %}
-                    <div class="reg-cer-chip reg-cer-chip--{% if bloque.estado_registro == 'ABIERTA' %}abierta{% elif bloque.estado_registro == 'CERRADA' %}cerrada{% else %}programada{% endif %}">
+                    <div class="reg-cer-chip reg-cer-chip--{% if bloque.estado_registro == 'ABIERTA' %}abierta{% elif bloque.estado_registro == 'CERRADA_INGRESO' %}atrasado{% elif bloque.estado_registro == 'CERRADA' %}cerrada{% else %}programada{% endif %}">
                         <div class="reg-cer-chip-info">
                             <span class="reg-cer-chip-name">{{ bloque.nombre }}</span>
                             <span class="reg-cer-chip-meta">{{ bloque.fecha|date:"d/m" }} · {{ bloque.hora_inicio|time:"H:i" }}</span>
@@ -323,9 +334,15 @@
                         <span class="reg-cer-chip-count" title="Ingresos registrados">{{ bloque.ingresos }}</span>
                         {% if bloque.estado_registro == "ABIERTA" %}
                             <span class="reg-cer-chip-badge reg-cer-badge--abierta">ABIERTA</span>
-                            <form method="POST" action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Deseas cerrar esta ceremonia?');" style="display:inline">
+                            <form method="POST" action="{% url 'titulacion:cerrar_ingreso_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Cerrar ingreso normal? Los próximos escaneos quedarán como ATRASADOS.');" style="display:inline">
                                 {% csrf_token %}
-                                <button type="submit" class="reg-cer-chip-btn reg-cer-btn--cerrar">Cerrar</button>
+                                <button type="submit" class="reg-cer-chip-btn reg-cer-btn--cerrar">Cerrar Ingreso</button>
+                            </form>
+                        {% elif bloque.estado_registro == "CERRADA_INGRESO" %}
+                            <span class="reg-cer-chip-badge reg-cer-badge--atrasado">ACEPTA ATRASADOS</span>
+                            <form method="POST" action="{% url 'titulacion:cerrar_bloque_ceremonia' bloque.id %}" onsubmit="return confirm('¿Finalizar ceremonia completamente? Ya no se aceptarán más ingresos.');" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="reg-cer-chip-btn reg-cer-btn--finalizar">Finalizar</button>
                             </form>
                         {% elif bloque.estado_registro == "CERRADA" %}
                             <span class="reg-cer-chip-badge reg-cer-badge--cerrada">CERRADA</span>

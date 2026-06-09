@@ -31,6 +31,7 @@ class BloqueCeremonia(models.Model):
     ESTADOS = [
         ("PROGRAMADA", "Programada"),
         ("ABIERTA", "Abierta"),
+        ("CERRADA_INGRESO", "Cerrada (acepta atrasados)"),
         ("CERRADA", "Cerrada"),
     ]
 
@@ -68,6 +69,9 @@ class BloqueCeremonia(models.Model):
     def esta_abierta(self):
         return self.estado_registro == "ABIERTA"
 
+    def esta_cerrada_ingreso(self):
+        return self.estado_registro == "CERRADA_INGRESO"
+
     def esta_cerrada(self):
         return self.estado_registro == "CERRADA"
 
@@ -85,6 +89,11 @@ class BloqueCeremonia(models.Model):
         self.estado_registro = "ABIERTA"
         self.fecha_apertura_registro = timezone.now()
         self.fecha_cierre_registro = None
+        self.save()
+
+    def cerrar_ingreso(self):
+        self.estado_registro = "CERRADA_INGRESO"
+        self.fecha_cierre_registro = timezone.now()
         self.save()
 
     def cerrar(self):
