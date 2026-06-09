@@ -216,6 +216,9 @@
                             <button class="tab-reporte" onclick="cambiarTab('comparativo', this)" role="tab">
                                 Comparativo
                             </button>
+                            <button class="tab-reporte" onclick="cambiarTab('invitaciones', this)" role="tab">
+                                Invitaciones
+                            </button>
                         </nav>
                     </div>
 
@@ -496,6 +499,89 @@
 
                     </div>
 
+                    <!-- TAB 6: Invitaciones -->
+                    <div id="tab-invitaciones" class="panel-tab-rep" data-titulo="Estado de Invitaciones">
+
+                        <div class="kpis-op">
+                            <div class="kpi-rep kpi-azul">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">Total titulados</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="invTotalTitulados">—</span>
+                                <span class="kpi-rep-sub">En el sistema</span>
+                            </div>
+                            <div class="kpi-rep kpi-verde">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">Gestionados</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="invGestionados">—</span>
+                                <span class="kpi-rep-sub">Invitaciones entregadas</span>
+                            </div>
+                            <div class="kpi-rep kpi-rojo">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">No gestionados</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="invNoGestionados">—</span>
+                                <span class="kpi-rep-sub">Sin invitaciones entregadas</span>
+                            </div>
+                            <div class="kpi-rep kpi-verde">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">% Gestionado</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="invPctGestionados">—</span>
+                                <span class="kpi-rep-sub">Del total de titulados</span>
+                            </div>
+                            <div class="kpi-rep kpi-dorado">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">Inv. entregadas</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="invInvGestionadas">—</span>
+                                <span class="kpi-rep-sub">Tarjetas físicas entregadas</span>
+                            </div>
+                            <div class="kpi-rep kpi-rojo">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">Inv. pendientes</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="invInvPendientes">—</span>
+                                <span class="kpi-rep-sub">Tarjetas sin entregar</span>
+                            </div>
+                        </div>
+
+                        <div class="panel-rep">
+                            <div class="panel-rep-titulo">
+                                Gestión de invitaciones por ceremonia
+                                <small>Estudiantes con invitaciones entregadas vs pendientes</small>
+                            </div>
+                            <div class="tabla-scroll">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Bloque</th>
+                                            <th>Fecha</th>
+                                            <th>Total est.</th>
+                                            <th>Gestionados</th>
+                                            <th>Pendientes</th>
+                                            <th>% Gestión</th>
+                                            <th>Inv. generadas</th>
+                                            <th>Inv. entregadas</th>
+                                            <th>Inv. pendientes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaInvitaciones">
+                                        <tr><td colspan="9">Cargando...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="rep-actualizacion">
                         Última actualización: <span id="repUltimaActualizacion">—</span>
                     </div>
@@ -540,9 +626,10 @@
 
     function badgeEstado(estado) {
         const map = {
-            "ABIERTA":    '<span class="badge badge-si">Abierta</span>',
-            "CERRADA":    '<span class="badge badge-no">Cerrada</span>',
-            "PROGRAMADA": '<span class="badge badge-atrasado">Programada</span>',
+            "ABIERTA":         '<span class="badge badge-si">Abierta</span>',
+            "CERRADA":         '<span class="badge badge-no">Cerrada</span>',
+            "CERRADA_INGRESO": '<span class="badge badge-atrasado">Acepta atrasados</span>',
+            "PROGRAMADA":      '<span class="badge badge-atrasado">Programada</span>',
         };
         return map[estado] || estado;
     }
@@ -681,6 +768,40 @@
         });
     }
 
+    /* === INVITACIONES === */
+    function renderInvitaciones(datos) {
+        var inv = datos.invitaciones;
+        set("invTotalTitulados", inv.total_titulados);
+        set("invGestionados", inv.total_gestionados);
+        set("invNoGestionados", inv.total_no_gestionados);
+        set("invPctGestionados", inv.pct_gestionados + "%");
+        set("invInvGestionadas", inv.total_inv_gestionadas);
+        set("invInvPendientes", inv.total_inv_no_gestionadas);
+
+        var tbody = document.getElementById("tablaInvitaciones");
+        var bloques = datos.por_bloque;
+        if (!bloques.length) {
+            tbody.innerHTML = '<tr><td colspan="9">Sin datos para el filtro seleccionado.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = bloques.map(function(b) {
+            var inv_total = b.inv_gestionadas + b.inv_no_gestionadas;
+            return '<tr>' +
+                '<td><strong>' + _esc(b.bloque) + '</strong></td>' +
+                '<td>' + _esc(b.fecha) + '</td>' +
+                '<td>' + b.esperados + '</td>' +
+                '<td>' + b.est_gestionados + '</td>' +
+                '<td>' + b.est_no_gestionados + '</td>' +
+                '<td><strong>' + b.pct_gestionados + '%</strong>' +
+                    '<div class="rep-prog-bar"><div style="width:' + Math.min(b.pct_gestionados, 100) + '%"></div></div>' +
+                '</td>' +
+                '<td>' + inv_total + '</td>' +
+                '<td>' + b.inv_gestionadas + '</td>' +
+                '<td>' + b.inv_no_gestionadas + '</td>' +
+            '</tr>';
+        }).join('');
+    }
+
     /* === COMPARATIVO === */
     function renderComparativo(bloques) {
         const tbody = document.getElementById("tablaComparativo");
@@ -720,6 +841,7 @@
             renderOperativo(datos.operativo);
             renderTiempos(datos.tiempos);
             renderComparativo(datos.por_bloque);
+            renderInvitaciones(datos);
 
             document.getElementById("repUltimaActualizacion").textContent =
                 new Date().toLocaleTimeString("es-CL");

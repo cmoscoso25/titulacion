@@ -1617,6 +1617,12 @@ def _calcular_reportes(bloque_id=None):
         inv_no_usadas_b = inv_b.filter(usada=False).count()
         total_asistentes_b = ingresados_b + inv_usadas_b
 
+        est_gestionados_b = est_b.filter(invitaciones_entregadas=True).count()
+        est_no_gestionados_b = est_b.filter(invitaciones_entregadas=False).count()
+        inv_gestionadas_b = inv_b.filter(estudiante__invitaciones_entregadas=True).count()
+        inv_no_gestionadas_b = inv_b.filter(estudiante__invitaciones_entregadas=False).count()
+        pct_gestionados_b = round(est_gestionados_b / esperados * 100, 1) if esperados > 0 else 0.0
+
         reg_b = RegistroIngreso.objects.filter(estudiante__bloque_ceremonia=bloque)
         atrasados_b = reg_b.filter(resultado="ATRASADO").values("estudiante_id").distinct().count()
 
@@ -1661,6 +1667,11 @@ def _calcular_reportes(bloque_id=None):
             "ultimo_ingreso": ultimo_b,
             "tiempo_flujo": tiempo_flujo_b,
             "hora_peak": hora_peak_b,
+            "est_gestionados": est_gestionados_b,
+            "est_no_gestionados": est_no_gestionados_b,
+            "inv_gestionadas": inv_gestionadas_b,
+            "inv_no_gestionadas": inv_no_gestionadas_b,
+            "pct_gestionados": pct_gestionados_b,
         })
 
     total_reg = reg_qs.count()
@@ -1713,11 +1724,27 @@ def _calcular_reportes(bloque_id=None):
         "prom_por_minuto": prom_por_min,
     }
 
+    total_gestionados = est_qs.filter(invitaciones_entregadas=True).count()
+    total_no_gestionados = est_qs.filter(invitaciones_entregadas=False).count()
+    total_inv_gestionadas = inv_qs.filter(estudiante__invitaciones_entregadas=True).count()
+    total_inv_no_gestionadas = inv_qs.filter(estudiante__invitaciones_entregadas=False).count()
+    pct_gestionados_global = round(total_gestionados / total_titulados * 100, 1) if total_titulados > 0 else 0.0
+
+    invitaciones_resumen = {
+        "total_titulados": total_titulados,
+        "total_gestionados": total_gestionados,
+        "total_no_gestionados": total_no_gestionados,
+        "total_inv_gestionadas": total_inv_gestionadas,
+        "total_inv_no_gestionadas": total_inv_no_gestionadas,
+        "pct_gestionados": pct_gestionados_global,
+    }
+
     return {
         "dashboard": dashboard,
         "por_bloque": por_bloque,
         "operativo": operativo,
         "tiempos": tiempos,
+        "invitaciones": invitaciones_resumen,
     }
 
 
