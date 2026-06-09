@@ -545,6 +545,7 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
             "estado": "rechazado",
             "ok": False,
             "tipo": "OTRA_CEREMONIA",
+            "tipo_entrada": "Estudiante",
             "titulo": "QR de otra ceremonia",
             "mensaje": f"Este QR pertenece a {bloque_estudiante.nombre}, no a {bloque_activo.nombre}.",
             "nombre": estudiante.nombre_completo,
@@ -552,6 +553,7 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
             "area": obtener_area_estudiante(estudiante),
             "plan": obtener_plan_estudiante(estudiante),
             "bloque": obtener_bloque_estudiante(estudiante),
+            "ceremonia": bloque_estudiante.nombre,
             "atrasado": False,
         })
 
@@ -574,6 +576,7 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
                 "estado": "rechazado",
                 "ok": False,
                 "tipo": "DUPLICADO",
+                "tipo_entrada": "Estudiante",
                 "titulo": "QR ya utilizado",
                 "mensaje": "Este estudiante ya fue registrado anteriormente.",
                 "nombre": est.nombre_completo,
@@ -581,6 +584,7 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
                 "area": obtener_area_estudiante(est),
                 "plan": obtener_plan_estudiante(est),
                 "bloque": obtener_bloque_estudiante(est),
+                "ceremonia": bloque_estudiante.nombre,
                 "atrasado": False,
             })
 
@@ -606,6 +610,7 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
         "estado": "permitido",
         "ok": True,
         "tipo": resultado,
+        "tipo_entrada": "Estudiante",
         "titulo": "Ingreso atrasado registrado" if es_atrasado else "Ingreso autorizado",
         "mensaje": (
             "Estudiante registrado después del cierre de ingreso."
@@ -617,6 +622,7 @@ def registrar_ingreso_estudiante(estudiante, bloque_activo):
         "area": obtener_area_estudiante(estudiante),
         "plan": obtener_plan_estudiante(estudiante),
         "bloque": obtener_bloque_estudiante(estudiante),
+        "ceremonia": bloque_estudiante.nombre,
         "atrasado": es_atrasado,
     })
 
@@ -641,6 +647,7 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
             "estado": "rechazado",
             "ok": False,
             "tipo": "OTRA_CEREMONIA",
+            "tipo_entrada": f"Invitado {invitacion.numero_invitacion}",
             "titulo": "Invitación de otra ceremonia",
             "mensaje": f"Esta invitación pertenece a {bloque_estudiante.nombre}, no a {bloque_activo.nombre}.",
             "nombre": estudiante.nombre_completo,
@@ -649,6 +656,7 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
             "plan": obtener_plan_estudiante(estudiante),
             "bloque": obtener_bloque_estudiante(estudiante),
             "invitacion": invitacion.numero_invitacion,
+            "ceremonia": bloque_estudiante.nombre,
             "atrasado": False,
         })
 
@@ -671,6 +679,7 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
                 "estado": "rechazado",
                 "ok": False,
                 "tipo": "DUPLICADO",
+                "tipo_entrada": f"Invitado {inv.numero_invitacion}",
                 "titulo": "Invitación ya utilizada",
                 "mensaje": "Esta invitación ya fue registrada anteriormente.",
                 "nombre": estudiante.nombre_completo,
@@ -679,6 +688,7 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
                 "plan": obtener_plan_estudiante(estudiante),
                 "bloque": obtener_bloque_estudiante(estudiante),
                 "invitacion": inv.numero_invitacion,
+                "ceremonia": bloque_estudiante.nombre,
                 "atrasado": False,
             })
 
@@ -704,11 +714,12 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
         "estado": "permitido",
         "ok": True,
         "tipo": resultado,
+        "tipo_entrada": f"Invitado {inv.numero_invitacion}",
         "titulo": "Ingreso atrasado registrado" if es_atrasado else "Ingreso autorizado",
         "mensaje": (
-            f"Invitación {inv.numero_invitacion} registrada después del cierre de ingreso."
+            f"Invitado {inv.numero_invitacion} registrado después del cierre de ingreso."
             if es_atrasado
-            else f"Invitación {inv.numero_invitacion} registrada correctamente."
+            else f"Invitado {inv.numero_invitacion} registrado correctamente."
         ),
         "nombre": estudiante.nombre_completo,
         "rut": estudiante.rut,
@@ -716,6 +727,7 @@ def registrar_ingreso_invitado(invitacion, bloque_activo):
         "plan": obtener_plan_estudiante(estudiante),
         "bloque": obtener_bloque_estudiante(estudiante),
         "invitacion": inv.numero_invitacion,
+        "ceremonia": bloque_estudiante.nombre,
         "invitados_presentes": estudiante.invitaciones.filter(usada=True).count(),
         "atrasado": es_atrasado,
     })

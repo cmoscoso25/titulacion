@@ -250,6 +250,10 @@
                                 <span id="detallePlan">—</span>
                             </div>
                             <div class="rd-item rd-item--wide">
+                                <strong>Ceremonia</strong>
+                                <span id="detalleCeremonia">—</span>
+                            </div>
+                            <div class="rd-item rd-item--wide">
                                 <strong>Mensaje</strong>
                                 <span id="resultadoMensaje">Esperando lectura de QR.</span>
                             </div>
@@ -364,6 +368,7 @@
     const detalleRut       = document.getElementById("detalleRut");
     const detallePlan      = document.getElementById("detallePlan");
     const detalleTipo      = document.getElementById("detalleTipo");
+    const detalleCeremonia = document.getElementById("detalleCeremonia");
     const detalleHora      = document.getElementById("detalleHora");
     const inputQR          = document.getElementById("inputQR");
     const indicadorLector  = document.getElementById("indicadorLector");
@@ -377,11 +382,12 @@
         resultado.classList.add("visible");
 
         resultadoMensaje.innerText = datos.mensaje || "";
-        detalleNombre.innerText = limpiarTexto(datos.nombre);
-        detalleRut.innerText    = limpiarTexto(datos.rut);
-        detallePlan.innerText   = limpiarTexto(datos.plan);
-        detalleTipo.innerText   = limpiarTexto(datos.tipo);
-        detalleHora.innerText   = new Date().toLocaleTimeString("es-CL");
+        detalleNombre.innerText    = limpiarTexto(datos.nombre);
+        detalleRut.innerText       = limpiarTexto(datos.rut);
+        detallePlan.innerText      = limpiarTexto(datos.plan);
+        detalleTipo.innerText      = limpiarTexto(datos.tipo_entrada);
+        detalleCeremonia.innerText = limpiarTexto(datos.ceremonia);
+        detalleHora.innerText      = new Date().toLocaleTimeString("es-CL");
 
         if (datos.atrasado === true) {
             resultado.classList.add("atrasado");
