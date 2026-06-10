@@ -679,6 +679,253 @@
     .kpis-op{ grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); }
 }
 
+/* ============================================================
+   DASHBOARD — ARGON STYLE
+   ============================================================ */
+
+/* ROW 1: hero cards */
+.dash-hero-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.dash-hero-card{
+    position:relative;
+    border-radius:var(--rep-radius);
+    padding:16px 16px 0;
+    color:#fff;
+    overflow:hidden;
+    box-shadow:0 4px 16px rgba(0,0,0,.14);
+    display:flex;
+    flex-direction:column;
+    min-height:118px;
+    transition:transform .15s, box-shadow .15s;
+}
+
+.dash-hero-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+
+.dash-hero-navy  { background:linear-gradient(135deg,#06152f 0%,#1e3a6e 100%); }
+.dash-hero-green { background:linear-gradient(135deg,#14532d 0%,#16a34a 100%); }
+.dash-hero-red   { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%); }
+.dash-hero-indigo{ background:linear-gradient(135deg,#1e1b4b 0%,#4f46e5 100%); }
+
+.dash-hero-icon{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:30px;
+    height:30px;
+    opacity:.22;
+    pointer-events:none;
+}
+
+.dash-hero-label{
+    font-size:.6rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    opacity:.75;
+    margin-bottom:3px;
+}
+
+.dash-hero-value{
+    font-size:clamp(1.6rem,2.2vw,2.3rem);
+    font-weight:800;
+    line-height:1;
+    letter-spacing:-.03em;
+    margin-bottom:3px;
+}
+
+.dash-hero-sub{
+    font-size:.6rem;
+    opacity:.65;
+    margin-bottom:12px;
+    flex:1;
+}
+
+.dash-hero-bar-wrap{
+    height:3px;
+    background:rgba(255,255,255,.18);
+    margin:0 -16px;
+    overflow:hidden;
+}
+
+.dash-hero-bar{
+    height:100%;
+    background:rgba(255,255,255,.55);
+    border-radius:99px;
+    transition:width .7s ease;
+}
+
+/* ROW 2: chart + progress track */
+.dash-mid-grid{
+    display:grid;
+    grid-template-columns:3fr 2fr;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.dash-chart-panel,
+.dash-track-panel{ margin-bottom:0 !important; }
+
+.dash-track-list{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+}
+
+.dash-track-item{ display:flex; flex-direction:column; gap:4px; }
+
+.dash-track-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:8px;
+}
+
+.dash-track-name{
+    font-size:.71rem;
+    font-weight:600;
+    color:var(--texto);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    flex:1;
+    min-width:0;
+}
+
+.dash-track-pct{
+    font-size:.68rem;
+    font-weight:800;
+    color:var(--c-ok);
+    flex-shrink:0;
+}
+
+.dash-track-pct.warn{ color:var(--c-warn); }
+.dash-track-pct.err { color:var(--c-err);  }
+
+.dash-track-nums{
+    font-size:.59rem;
+    color:var(--texto-muted);
+}
+
+.dash-track-bar{
+    height:6px;
+    background:#e8edf4;
+    border-radius:99px;
+    overflow:hidden;
+}
+
+.dash-track-fill{
+    height:100%;
+    border-radius:99px;
+    background:linear-gradient(90deg,var(--c-ok),#34d399);
+    transition:width .55s ease;
+}
+
+.dash-track-fill.warn{
+    background:linear-gradient(90deg,var(--c-warn),#fbbf24);
+}
+
+.dash-track-empty{
+    font-size:.75rem;
+    color:var(--texto-muted);
+    padding:12px 0;
+}
+
+/* ROW 3: chips */
+.dash-chips-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.dash-chip{
+    background:var(--rep-card-bg);
+    border:1px solid var(--rep-border);
+    border-radius:var(--rep-radius);
+    padding:11px 13px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    box-shadow:var(--rep-shadow-xs);
+    transition:box-shadow .15s, transform .12s;
+}
+
+.dash-chip:hover{
+    box-shadow:var(--rep-shadow-sm);
+    transform:translateY(-1px);
+}
+
+.dash-chip-icon{
+    width:26px;
+    height:26px;
+    flex-shrink:0;
+    color:#94a3b8;
+}
+
+.dash-chip-body{
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    flex:1;
+}
+
+.dash-chip-val{
+    font-size:clamp(.9rem,1.1vw,1.2rem);
+    font-weight:800;
+    color:var(--texto);
+    line-height:1.1;
+    letter-spacing:-.02em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.dash-chip-val--sm{
+    font-size:clamp(.68rem,.82vw,.82rem);
+    white-space:normal;
+    word-break:break-word;
+    overflow:visible;
+    text-overflow:unset;
+    letter-spacing:0;
+}
+
+.dash-chip-lbl{
+    font-size:.58rem;
+    font-weight:600;
+    color:var(--texto-muted);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    margin-top:2px;
+}
+
+/* ─── Responsive additions ─── */
+@media (max-width:767px){
+    .dash-hero-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+    .dash-mid-grid  { grid-template-columns:1fr; }
+    .dash-chips-grid{ grid-template-columns:repeat(2,1fr); gap:8px; }
+    .dash-hero-value{ font-size:clamp(1.4rem,5vw,1.8rem); }
+}
+
+@media (min-width:1025px) and (max-width:1366px){
+    .dash-hero-card { min-height:100px; padding:12px 13px 0; }
+    .dash-hero-value{ font-size:clamp(1.3rem,1.8vw,1.75rem); }
+    .dash-hero-icon { width:24px; height:24px; }
+    .dash-hero-sub  { margin-bottom:9px; }
+    .dash-chip      { padding:9px 10px; gap:7px; }
+    .dash-chip-icon { width:22px; height:22px; }
+    .dash-chips-grid{ gap:8px; }
+    .dash-mid-grid  { gap:9px; }
+    .dash-hero-grid { gap:9px; }
+}
+
 /* Pantalla baja / HDMI (max-height:800px — también aplica para notebook 15" 1366x768) */
 @media (max-height:800px) and (min-width:900px){
     .rep-header{ min-height:42px; }
