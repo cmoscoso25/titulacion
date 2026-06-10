@@ -670,17 +670,22 @@
             tbody.innerHTML = '<tr><td colspan="5">No hay información para los filtros seleccionados.</td></tr>';
             return;
         }
+        var avatarColors = ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f59e0b','#06b6d4','#ef4444','#6366f1'];
         items.forEach(function(item, idx) {
             var detalleId = "plan-det-" + idx;
-            var btnVer = "";
-            if (item.presentes > 0) {
-                btnVer = ' <button class="pc-btn-ver-presentes" onclick="togglePlanDetalle(\'' + detalleId + '\', this)">ver ▾</button>';
-            }
+            var tieneDetalle = item.detalle_presentes && item.detalle_presentes.length > 0;
+
             var fila = document.createElement("tr");
-            fila.className = "pc-plan-row";
+            fila.className = "pc-plan-row" + (tieneDetalle ? " expandible" : "");
+            if (tieneDetalle) {
+                fila.onclick = (function(dId) {
+                    return function() { togglePlanDetalle(dId, this); };
+                })(detalleId);
+            }
+            var chevron = tieneDetalle ? '<span class="pc-plan-chevron">›</span>' : '';
             fila.innerHTML =
-                '<td>' + _esc(item.plan) + '</td>' +
-                '<td><span>' + item.presentes + ' / ' + item.total + '</span>' + btnVer + '</td>' +
+                '<td><span class="pc-plan-nombre">' + _esc(item.plan) + chevron + '</span></td>' +
+                '<td><span>' + item.presentes + ' / ' + item.total + '</span></td>' +
                 '<td>' + item.pendientes + '</td>' +
                 '<td>' + item.atrasados + '</td>' +
                 '<td>' +
@@ -691,30 +696,41 @@
                 '</td>';
             tbody.appendChild(fila);
 
-            if (item.detalle_presentes && item.detalle_presentes.length > 0) {
+            if (tieneDetalle) {
                 var filaDetalle = document.createElement("tr");
                 filaDetalle.id = detalleId;
                 filaDetalle.className = "pc-plan-detalle";
                 filaDetalle.style.display = "none";
                 var html = '<td colspan="5"><div class="pc-detalle-inner">' +
-                    '<table class="pc-detalle-tabla"><thead><tr><th>RUT</th><th>Nombre</th></tr></thead><tbody>';
-                item.detalle_presentes.forEach(function(est) {
-                    html += '<tr><td>' + _esc(est.rut) + '</td><td>' + _esc(est.nombre) + '</td></tr>';
+                    '<div class="pc-detalle-header"><span class="pc-detalle-count">' +
+                    item.detalle_presentes.length + ' estudiante' + (item.detalle_presentes.length !== 1 ? 's' : '') + ' presente' + (item.detalle_presentes.length !== 1 ? 's' : '') +
+                    '</span></div><div class="pc-estudiantes-grid">';
+                item.detalle_presentes.forEach(function(est, i) {
+                    var partes = est.nombre.trim().split(' ');
+                    var iniciales = (partes[0] ? partes[0][0] : '') + (partes[1] ? partes[1][0] : '');
+                    var color = avatarColors[i % avatarColors.length];
+                    html += '<div class="pc-est-card">' +
+                        '<div class="pc-est-avatar" style="background:' + color + '">' + _esc(iniciales.toUpperCase()) + '</div>' +
+                        '<div class="pc-est-info">' +
+                            '<div class="pc-est-nombre">' + _esc(est.nombre) + '</div>' +
+                            '<div class="pc-est-rut">' + _esc(est.rut) + '</div>' +
+                        '</div></div>';
                 });
-                html += '</tbody></table></div></td>';
+                html += '</div></div></td>';
                 filaDetalle.innerHTML = html;
                 tbody.appendChild(filaDetalle);
             }
         });
     }
 
-    function togglePlanDetalle(id, btn) {
+    function togglePlanDetalle(id, fila) {
         var row = document.getElementById(id);
         if (!row) return;
         var visible = row.style.display !== "none";
         row.style.display = visible ? "none" : "";
-        btn.textContent = visible ? "ver ▾" : "ocultar ▴";
-        btn.classList.toggle("activo", !visible);
+        var chevron = fila.querySelector(".pc-plan-chevron");
+        if (chevron) chevron.classList.toggle("abierto", !visible);
+        fila.classList.toggle("expandido", !visible);
     }
 
     function cargarTablaMovimientos(items) {
