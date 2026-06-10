@@ -162,9 +162,9 @@
                         <a id="btnExcel" href="{% url 'titulacion:exportar_reportes_excel' %}" class="btn-rep-excel">
                             ↓&nbsp;Excel
                         </a>
-                        <button type="button" class="btn-rep-print" onclick="window.print()">
-                            ⎙&nbsp;Imprimir
-                        </button>
+                        <a id="btnPdf" href="{% url 'titulacion:reporte_pdf' %}" target="_blank" class="btn-rep-print">
+                            &#8659;&nbsp;Descargar PDF
+                        </a>
                     </div>
                 </div>
             </div>
@@ -725,8 +725,10 @@
 <script>
     const URL_DATOS = "{% url 'titulacion:datos_reportes' %}";
     const URL_EXCEL = "{% url 'titulacion:exportar_reportes_excel' %}";
+    const URL_PDF   = "{% url 'titulacion:reporte_pdf' %}";
     const filtroBloque = document.getElementById("filtroBloque");
     const btnExcel     = document.getElementById("btnExcel");
+    const btnPdf       = document.getElementById("btnPdf");
 
     let graficoTiempos = null;
     let graficoDashboard = null;
@@ -1162,6 +1164,7 @@
         const bloque = filtroBloque.value;
         const params = bloque ? "?bloque=" + bloque : "";
         btnExcel.href = URL_EXCEL + params;
+        if (btnPdf) btnPdf.href = URL_PDF + params;
 
         try {
             const resp  = await fetch(URL_DATOS + params);

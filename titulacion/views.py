@@ -1790,6 +1790,22 @@ def datos_reportes(request):
     return JsonResponse(_calcular_reportes(bloque_id=bloque_id))
 
 
+def reporte_pdf(request):
+    bloque_id = request.GET.get("bloque", "").strip() or None
+    datos = _calcular_reportes(bloque_id=bloque_id)
+
+    por_hora = datos["tiempos"]["por_hora"]
+    max_tiempos = max((item["total"] for item in por_hora), default=1)
+
+    ahora = timezone.localtime(timezone.now()).strftime("%d/%m/%Y %H:%M hrs")
+
+    return render(request, "titulacion/reporte_pdf.html", {
+        "datos": datos,
+        "ahora": ahora,
+        "max_tiempos": max_tiempos,
+    })
+
+
 def exportar_reportes_excel(request):
     import openpyxl
     from openpyxl.styles import Alignment, Font, PatternFill

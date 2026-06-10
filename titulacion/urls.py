@@ -166,4 +166,10 @@ urlpatterns = [
         acceso_curricular(views.exportar_reportes_excel),
         name="exportar_reportes_excel",
     ),
+
+    path(
+        "reportes/pdf/",
+        acceso_curricular(views.reporte_pdf),
+        name="reporte_pdf",
+    ),
 ]

@@ -1,0 +1,1177 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</title>
+<style>
+/* ============================================================
+   REPORTE PDF — Formato A4 portrait, optimizado para impresi&#243;n
+   ============================================================ */
+@page {
+    size: A4 portrait;
+    margin: 1.4cm 1.6cm 1.8cm 1.6cm;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #1e293b;
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* --- PORTADA --- */
+.portada {
+    min-height: 26cm;
+    display: flex;
+    flex-direction: column;
+}
+
+.portada-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 3px solid #06152f;
+    margin-bottom: 28px;
+}
+
+.portada-inst-name {
+    font-size: 14pt;
+    font-weight: 800;
+    color: #06152f;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+.portada-inst-sub {
+    font-size: 8pt;
+    color: #64748b;
+    margin-top: 3px;
+    font-weight: 500;
+}
+
+.portada-badge {
+    background: #06152f;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    white-space: nowrap;
+}
+
+.portada-titulo {
+    font-size: 28pt;
+    font-weight: 900;
+    color: #06152f;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    letter-spacing: -.01em;
+}
+
+.portada-subtitulo {
+    font-size: 11.5pt;
+    color: #475569;
+    margin-bottom: 36px;
+    font-weight: 400;
+}
+
+.portada-accent {
+    height: 4px;
+    background: linear-gradient(90deg, #06152f 0%, #0284c7 60%, #16a34a 100%);
+    border-radius: 2px;
+    margin-bottom: 32px;
+}
+
+/* KPI grid en portada */
+.kpi-grid {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+.kpi-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    padding: 12px 14px;
+}
+
+.kpi-card-val {
+    font-size: 20pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.kpi-card-lbl {
+    font-size: 7pt;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    display: block;
+}
+
+.kpi-card-sub {
+    font-size: 7pt;
+    color: #94a3b8;
+    margin-top: 3px;
+    display: block;
+}
+
+/* --- SECCIONES --- */
+.seccion {
+    page-break-before: always;
+    padding-top: 0;
+}
+
+.sec-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    background: #06152f;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 5px;
+    margin-bottom: 14px;
+}
+
+.sec-num {
+    font-size: 7pt;
+    font-weight: 700;
+    color: rgba(255,255,255,.55);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-bottom: 2px;
+}
+
+.sec-title {
+    font-size: 11.5pt;
+    font-weight: 800;
+    letter-spacing: .01em;
+}
+
+.sec-sub {
+    font-size: 7.5pt;
+    color: rgba(255,255,255,.6);
+    margin-top: 2px;
+}
+
+.sec-date {
+    font-size: 7pt;
+    color: rgba(255,255,255,.5);
+    white-space: nowrap;
+    padding-top: 3px;
+}
+
+/* --- TABLAS --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 8pt;
+}
+
+thead th {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 5.5px 7px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 7pt;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    white-space: nowrap;
+}
+
+tbody tr:nth-child(even) { background: #f8fafc; }
+tbody tr:nth-child(odd)  { background: white; }
+
+tbody td {
+    padding: 5.5px 7px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.font-bold { font-weight: 700; }
+.text-muted { color: #94a3b8; }
+.text-sm { font-size: 7.5pt; }
+
+/* --- BADGES --- */
+.badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 6.5pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    white-space: nowrap;
+}
+.badge-ok   { background: #dcfce7; color: #166534; }
+.badge-warn { background: #fef3c7; color: #92400e; }
+.badge-err  { background: #fee2e2; color: #991b1b; }
+.badge-info { background: #dbeafe; color: #1e40af; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+
+/* --- COLOR HELPERS --- */
+.c-ok   { color: #16a34a; font-weight: 700; }
+.c-err  { color: #dc2626; font-weight: 700; }
+.c-warn { color: #d97706; font-weight: 700; }
+.c-info { color: #0284c7; font-weight: 700; }
+.c-indigo { color: #4338ca; font-weight: 700; }
+
+/* --- INFO BOXES (2 columnas) --- */
+.col-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.info-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+
+.info-box-title {
+    font-size: 7pt;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 8pt;
+    gap: 8px;
+}
+
+.info-row:last-child { border-bottom: none; }
+.info-row-lbl { color: #475569; }
+.info-row-val { font-weight: 700; color: #0f172a; text-align: right; flex-shrink: 0; }
+
+/* --- PROGRESS BAR --- */
+.pbar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 70px;
+}
+
+.pbar-track {
+    flex: 1;
+    height: 5px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.pbar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: #0284c7;
+}
+
+.pbar-fill--ok   { background: #16a34a; }
+.pbar-fill--warn { background: #d97706; }
+.pbar-fill--err  { background: #dc2626; }
+.pbar-fill--peak { background: #16a34a; }
+
+/* --- FOOTER --- */
+.page-footer {
+    margin-top: 16px;
+    padding-top: 6px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 6.5pt;
+    color: #94a3b8;
+}
+
+/* --- NOTA EXPLICATIVA --- */
+.nota-seccion {
+    background: #f0f9ff;
+    border-left: 3px solid #0284c7;
+    padding: 8px 12px;
+    border-radius: 0 5px 5px 0;
+    font-size: 7.5pt;
+    color: #0369a1;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+/* --- SUBSECCIÓN --- */
+.subseccion-titulo {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #334155;
+    border-bottom: 1.5px solid #e2e8f0;
+    padding-bottom: 5px;
+    margin: 14px 0 9px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* --- PANTALLA: botón imprimir --- */
+@media screen {
+    body {
+        background: #e5e7eb;
+        padding: 24px;
+    }
+    .page {
+        background: white;
+        width: 21cm;
+        min-height: 29.7cm;
+        margin: 0 auto 24px;
+        padding: 1.4cm 1.6cm 1.8cm 1.6cm;
+        box-shadow: 0 4px 24px rgba(0,0,0,.15);
+        border-radius: 4px;
+    }
+    .print-toolbar {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100;
+        display: flex;
+        gap: 10px;
+    }
+    .btn-pdf {
+        background: #06152f;
+        color: white;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0,0,0,.3);
+        font-family: inherit;
+    }
+    .btn-pdf:hover { background: #0f2756; }
+    .btn-pdf-close {
+        background: white;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        font-family: inherit;
+    }
+}
+
+/* --- IMPRESIÓN: ocultar toolbar --- */
+@media print {
+    .print-toolbar { display: none !important; }
+    .page { padding: 0; margin: 0; box-shadow: none; }
+    body { background: white; padding: 0; }
+    .seccion { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- BARRA FIJA (solo en pantalla) -->
+<div class="print-toolbar">
+    <button class="btn-pdf" onclick="window.print()">&#8659;&nbsp; Guardar / Imprimir PDF</button>
+    <button class="btn-pdf-close" onclick="window.close()">Cerrar</button>
+</div>
+
+<!-- ================================================================
+     P&#193;GINA 0: PORTADA
+     ================================================================ -->
+<div class="page">
+<div class="portada">
+
+    <div class="portada-top">
+        <div>
+            <div class="portada-inst-name">INACAP</div>
+            <div class="portada-inst-sub">Instituto Nacional de Capacitaci&#243;n Profesional &mdash; Sede Arica</div>
+        </div>
+        <div class="portada-badge">Informe Oficial 2026</div>
+    </div>
+
+    <div class="portada-titulo">
+        Informe de<br>Ceremonia de<br>Titulaci&#243;n 2026
+    </div>
+
+    <div class="portada-subtitulo">
+        Reporte ejecutivo completo para Vicerrector&#237;a<br>
+        Direcci&#243;n Inform&#225;tica, Ciberseguridad y Telecomunicaciones
+    </div>
+
+    <div class="portada-accent"></div>
+
+    <!-- KPIs de portada -->
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card" style="border-top:3px solid #06152f;">
+            <span class="kpi-card-val">{{ datos.dashboard.total_titulados }}</span>
+            <span class="kpi-card-lbl">Titulados convocados</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #16a34a;">
+            <span class="kpi-card-val" style="color:#16a34a;">{{ datos.dashboard.total_ingresados }}</span>
+            <span class="kpi-card-lbl">Ingresaron a ceremonia</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #0284c7;">
+            <span class="kpi-card-val" style="color:#0284c7;">{{ datos.dashboard.pct_asistencia }}%</span>
+            <span class="kpi-card-lbl">Tasa de asistencia</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #7c3aed;">
+            <span class="kpi-card-val" style="color:#7c3aed;">{{ datos.dashboard.total_personas }}</span>
+            <span class="kpi-card-lbl">Total personas (c/ invitados)</span>
+        </div>
+    </div>
+
+    <div class="kpi-grid kpi-grid-4" style="margin-top:0;">
+        <div class="kpi-card" style="border-top:3px solid #16a34a;">
+            <span class="kpi-card-val" style="color:#16a34a;">{{ datos.dashboard.total_puntuales }}</span>
+            <span class="kpi-card-lbl">Puntuales</span>
+            <span class="kpi-card-sub">{{ datos.dashboard.pct_puntuales }}% del total</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #d97706;">
+            <span class="kpi-card-val" style="color:#d97706;">{{ datos.dashboard.total_atrasados }}</span>
+            <span class="kpi-card-lbl">Atrasados</span>
+            <span class="kpi-card-sub">{{ datos.dashboard.pct_atrasados }}% del total</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #0f766e;">
+            <span class="kpi-card-val" style="color:#0f766e;">{{ datos.dashboard.total_inv_usadas }}</span>
+            <span class="kpi-card-lbl">Invitados ingresados</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #4338ca;">
+            <span class="kpi-card-val" style="color:#4338ca;">{{ datos.invitaciones.pct_gestionados }}%</span>
+            <span class="kpi-card-lbl">Inv. gestionadas</span>
+            <span class="kpi-card-sub">{{ datos.invitaciones.total_gestionados }} titulados</span>
+        </div>
+    </div>
+
+    <div style="flex:1;"></div>
+
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-size:7.5pt; color:#475569; line-height:1.6;">
+        <strong style="color:#1e293b;">Contenido del informe:</strong>
+        &nbsp;1. Resumen Ejecutivo &nbsp;|&nbsp;
+        2. Detalle por Ceremonia &nbsp;|&nbsp;
+        3. Comparativo entre Ceremonias &nbsp;|&nbsp;
+        4. Gesti&#243;n de Invitaciones &nbsp;|&nbsp;
+        5. Operativo QR &nbsp;|&nbsp;
+        6. An&#225;lisis de Tiempos
+    </div>
+
+    <div class="page-footer" style="margin-top:12px;">
+        <span>Sistema de Gesti&#243;n Ceremonia de Titulaci&#243;n &mdash; INACAP Sede Arica</span>
+        <span>Generado el {{ ahora }}</span>
+    </div>
+</div>
+</div><!-- /page portada -->
+
+
+<!-- ================================================================
+     S&#201;CCI&#211;N 1: RESUMEN EJECUTIVO
+     ================================================================ -->
+<div class="page seccion">
+
+    <div class="sec-header">
+        <div>
+            <div class="sec-num">Secci&#243;n 1 de 6</div>
+            <div class="sec-title">Resumen Ejecutivo</div>
+            <div class="sec-sub">Indicadores generales del proceso de titulaci&#243;n</div>
+        </div>
+        <div class="sec-date">{{ ahora }}</div>
+    </div>
+
+    <div class="nota-seccion">
+        Esta secci&#243;n consolida los indicadores clave del proceso de titulaci&#243;n.
+        Los valores presentados abarcan <strong>todas las ceremonias</strong> del evento. Los colores indican el estado:
+        <strong style="color:#16a34a;">verde</strong> = favorable &nbsp;&middot;&nbsp;
+        <strong style="color:#d97706;">&#225;mbar</strong> = atenci&#243;n &nbsp;&middot;&nbsp;
+        <strong style="color:#dc2626;">rojo</strong> = cr&#237;tico.
+    </div>
+
+    <!-- KPIs asistencia -->
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card">
+            <span class="kpi-card-val">{{ datos.dashboard.total_titulados }}</span>
+            <span class="kpi-card-lbl">Titulados convocados</span>
+            <span class="kpi-card-sub">Base del universo</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#16a34a;">{{ datos.dashboard.total_ingresados }}</span>
+            <span class="kpi-card-lbl">Ingresados a tiempo</span>
+            <span class="kpi-card-sub">Puntuales + atrasados</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#dc2626;">{{ datos.dashboard.total_ausentes }}</span>
+            <span class="kpi-card-lbl">Ausentes</span>
+            <span class="kpi-card-sub">No se presentaron</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#0284c7;">{{ datos.dashboard.pct_asistencia }}%</span>
+            <span class="kpi-card-lbl">% Asistencia</span>
+            <span class="kpi-card-sub">Sobre total convocados</span>
+        </div>
+    </div>
+
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#16a34a;">{{ datos.dashboard.total_puntuales }}</span>
+            <span class="kpi-card-lbl">Puntuales</span>
+            <span class="kpi-card-sub">{{ datos.dashboard.pct_puntuales }}% de los ingresados</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#d97706;">{{ datos.dashboard.total_atrasados }}</span>
+            <span class="kpi-card-lbl">Atrasados</span>
+            <span class="kpi-card-sub">{{ datos.dashboard.pct_atrasados }}% de los ingresados</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#0f766e;">{{ datos.dashboard.total_inv_usadas }}</span>
+            <span class="kpi-card-lbl">Invitados ingresados</span>
+            <span class="kpi-card-sub">QR de invitaci&#243;n validados</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val">{{ datos.dashboard.total_personas }}</span>
+            <span class="kpi-card-lbl">Total personas</span>
+            <span class="kpi-card-sub">Titulados + invitados</span>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="info-box">
+            <div class="info-box-title">Detalles de asistencia y puntualidad</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Tasa de asistencia</span>
+                <span class="info-row-val c-ok">{{ datos.dashboard.pct_asistencia }}%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Tasa de ausentismo</span>
+                <span class="info-row-val c-err">{{ datos.dashboard.pct_ausencia }}%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Titulados puntuales</span>
+                <span class="info-row-val c-ok">{{ datos.dashboard.total_puntuales }} &mdash; {{ datos.dashboard.pct_puntuales }}%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Titulados atrasados</span>
+                <span class="info-row-val c-warn">{{ datos.dashboard.total_atrasados }} &mdash; {{ datos.dashboard.pct_atrasados }}%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Hora peak de ingreso</span>
+                <span class="info-row-val">{{ datos.dashboard.hora_peak|default:"—" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">&#218;ltimo ingreso registrado</span>
+                <span class="info-row-val">{{ datos.dashboard.ultimo_ingreso|default:"—" }}</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">Gesti&#243;n de invitaciones</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Total titulados en sistema</span>
+                <span class="info-row-val">{{ datos.invitaciones.total_titulados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Con invitaciones gestionadas</span>
+                <span class="info-row-val c-ok">{{ datos.invitaciones.total_gestionados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Sin gestionar (pendientes)</span>
+                <span class="info-row-val c-err">{{ datos.invitaciones.total_no_gestionados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">% Titulados gestionados</span>
+                <span class="info-row-val c-indigo">{{ datos.invitaciones.pct_gestionados }}%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Invitaciones entregadas</span>
+                <span class="info-row-val">{{ datos.invitaciones.total_inv_gestionadas }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Invitaciones pendientes</span>
+                <span class="info-row-val c-warn">{{ datos.invitaciones.total_inv_no_gestionadas }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="info-box">
+            <div class="info-box-title">Ceremonias destacadas</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Mayor asistencia</span>
+                <span class="info-row-val c-ok">{{ datos.dashboard.ceremonia_mayor_asistencia|default:"—" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Mayor cantidad de atrasados</span>
+                <span class="info-row-val c-warn">{{ datos.dashboard.ceremonia_mayor_atraso|default:"—" }}</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">Operativo QR (resumen)</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Total lecturas QR</span>
+                <span class="info-row-val">{{ datos.operativo.total_registros }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">QR v&#225;lidos</span>
+                <span class="info-row-val c-ok">{{ datos.operativo.qr_validos }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Intentos fallidos (inv&#225;lidos + duplicados)</span>
+                <span class="info-row-val c-err">{{ datos.operativo.intentos_fallidos }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <span>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</span>
+        <span>{{ ahora }}</span>
+    </div>
+</div><!-- /page sec1 -->
+
+
+<!-- ================================================================
+     S&#201;CCI&#211;N 2: DETALLE POR CEREMONIA
+     ================================================================ -->
+<div class="page seccion">
+
+    <div class="sec-header">
+        <div>
+            <div class="sec-num">Secci&#243;n 2 de 6</div>
+            <div class="sec-title">Detalle por Bloque de Ceremonia</div>
+            <div class="sec-sub">Estado de asistencia, invitados y tiempos por cada bloque</div>
+        </div>
+        <div class="sec-date">{{ datos.por_bloque|length }} bloques</div>
+    </div>
+
+    <div class="nota-seccion">
+        La tabla muestra el estado detallado de cada bloque. <strong>% Asist.</strong> indica el porcentaje de titulados que ingresaron sobre el total convocado.
+        <strong>Total Asist.</strong> incluye titulados + invitados. Los colores en % Asist. indican:
+        <span class="c-ok">&#9632; &ge;70%</span> &nbsp;
+        <span class="c-warn">&#9632; 40&ndash;69%</span> &nbsp;
+        <span class="c-err">&#9632; &lt;40%</span>.
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Bloque de ceremonia</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th class="text-right">Convocados</th>
+                <th class="text-right">Ingresados</th>
+                <th class="text-right">Ausentes</th>
+                <th class="text-right">% Asist.</th>
+                <th class="text-right">Atrasados</th>
+                <th class="text-right">Invitados</th>
+                <th class="text-right">Total</th>
+                <th>Hora peak</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in datos.por_bloque %}
+            <tr class="no-break">
+                <td class="font-bold">{{ b.bloque }}</td>
+                <td>{{ b.fecha }}</td>
+                <td>{{ b.hora_inicio }}</td>
+                <td>
+                    {% if b.estado == "ACTIVA" %}
+                        <span class="badge badge-ok">Activa</span>
+                    {% elif b.estado == "PROGRAMADA" %}
+                        <span class="badge badge-info">Programada</span>
+                    {% elif b.estado == "CERRADA_INGRESO" %}
+                        <span class="badge badge-warn">Con Atrasados</span>
+                    {% elif b.estado == "FINALIZADA" %}
+                        <span class="badge badge-gray">Finalizada</span>
+                    {% else %}
+                        <span class="badge badge-gray">{{ b.estado }}</span>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ b.esperados }}</td>
+                <td class="text-right {% if b.ingresados > 0 %}c-ok{% endif %}">{{ b.ingresados }}</td>
+                <td class="text-right {% if b.ausentes > 0 %}c-err{% endif %}">{{ b.ausentes }}</td>
+                <td class="text-right font-bold
+                    {% if b.pct >= 70 %}c-ok{% elif b.pct >= 40 %}c-warn{% else %}c-err{% endif %}">
+                    {{ b.pct }}%
+                </td>
+                <td class="text-right
+                    {% if b.atrasados >= 20 %}c-err{% elif b.atrasados > 0 %}c-warn{% endif %}">
+                    {{ b.atrasados }}
+                </td>
+                <td class="text-right">{{ b.inv_usadas }}</td>
+                <td class="text-right font-bold">{{ b.total_asistentes }}</td>
+                <td>{{ b.hora_peak }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="12" class="text-center text-muted" style="padding:16px;">Sin datos disponibles.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="page-footer">
+        <span>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</span>
+        <span>{{ ahora }}</span>
+    </div>
+</div><!-- /page sec2 -->
+
+
+<!-- ================================================================
+     S&#201;CCI&#211;N 3: COMPARATIVO
+     ================================================================ -->
+<div class="page seccion">
+
+    <div class="sec-header">
+        <div>
+            <div class="sec-num">Secci&#243;n 3 de 6</div>
+            <div class="sec-title">Comparativo entre Ceremonias</div>
+            <div class="sec-sub">An&#225;lisis comparativo del rendimiento de cada bloque para toma de decisiones</div>
+        </div>
+        <div class="sec-date">{{ datos.por_bloque|length }} bloques</div>
+    </div>
+
+    <div class="nota-seccion">
+        Esta secci&#243;n permite comparar el desempe&#241;o entre ceremonias. Los indicadores coloreados facilitan identificar
+        qu&#233; bloques requieren atenci&#243;n especial. <strong>Atrasados</strong> con valor
+        <span class="c-err">rojo</span> (&ge;20) requieren revisi&#243;n del proceso de convocatoria para futuras versiones.
+    </div>
+
+    <!-- Resumen estad&#237;stico -->
+    <div class="kpi-grid kpi-grid-4" style="margin-bottom:14px;">
+        <div class="kpi-card">
+            <span class="kpi-card-val">{{ datos.por_bloque|length }}</span>
+            <span class="kpi-card-lbl">Ceremonias realizadas</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val">{{ datos.dashboard.total_titulados }}</span>
+            <span class="kpi-card-lbl">Total titulados</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val"
+                style="color:{% if datos.dashboard.pct_asistencia >= 70 %}#16a34a{% elif datos.dashboard.pct_asistencia >= 40 %}#d97706{% else %}#dc2626{% endif %};">
+                {{ datos.dashboard.pct_asistencia }}%
+            </span>
+            <span class="kpi-card-lbl">Asistencia global</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card-val" style="color:#d97706;">{{ datos.dashboard.total_atrasados }}</span>
+            <span class="kpi-card-lbl">Atrasados totales</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Bloque de ceremonia</th>
+                <th>Estado</th>
+                <th class="text-right">Titulados</th>
+                <th class="text-right">Ingresados</th>
+                <th class="text-right" style="min-width:70px;">% Asist.</th>
+                <th class="text-right">Invitados</th>
+                <th class="text-right">Total Asist.</th>
+                <th class="text-right">Atrasados</th>
+                <th>Hora peak</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in datos.por_bloque %}
+            <tr class="no-break">
+                <td>
+                    <strong>{{ b.bloque }}</strong>
+                    <div style="font-size:6.5pt; color:#94a3b8; margin-top:2px;">{{ b.fecha }} &middot; {{ b.hora_inicio }}</div>
+                </td>
+                <td>
+                    {% if b.estado == "ACTIVA" %}
+                        <span class="badge badge-ok">Activa</span>
+                    {% elif b.estado == "PROGRAMADA" %}
+                        <span class="badge badge-info">Programada</span>
+                    {% elif b.estado == "CERRADA_INGRESO" %}
+                        <span class="badge badge-warn">Con Atrasados</span>
+                    {% else %}
+                        <span class="badge badge-gray">Finalizada</span>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ b.esperados }}</td>
+                <td class="text-right {% if b.ingresados > 0 %}c-ok{% endif %}">{{ b.ingresados }}</td>
+                <td class="text-right">
+                    <div class="pbar-wrap">
+                        <div class="pbar-track">
+                            <div class="pbar-fill {% if b.pct >= 70 %}pbar-fill--ok{% elif b.pct >= 40 %}pbar-fill--warn{% else %}pbar-fill--err{% endif %}"
+                                style="width:{{ b.pct }}%;"></div>
+                        </div>
+                        <span class="font-bold {% if b.pct >= 70 %}c-ok{% elif b.pct >= 40 %}c-warn{% else %}c-err{% endif %}"
+                            style="min-width:30px; text-align:right;">{{ b.pct }}%</span>
+                    </div>
+                </td>
+                <td class="text-right">{{ b.inv_usadas }}</td>
+                <td class="text-right font-bold">{{ b.total_asistentes }}</td>
+                <td class="text-right">
+                    <span class="badge {% if b.atrasados == 0 %}badge-ok{% elif b.atrasados >= 20 %}badge-err{% else %}badge-warn{% endif %}">
+                        {{ b.atrasados }}
+                    </span>
+                </td>
+                <td style="white-space:nowrap;">{{ b.hora_peak }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="9" class="text-center text-muted" style="padding:16px;">Sin datos disponibles.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="page-footer">
+        <span>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</span>
+        <span>{{ ahora }}</span>
+    </div>
+</div><!-- /page sec3 -->
+
+
+<!-- ================================================================
+     S&#201;CCI&#211;N 4: GESTI&#211;N DE INVITACIONES
+     ================================================================ -->
+<div class="page seccion">
+
+    <div class="sec-header">
+        <div>
+            <div class="sec-num">Secci&#243;n 4 de 6</div>
+            <div class="sec-title">Gesti&#243;n de Invitaciones</div>
+            <div class="sec-sub">Estado de entrega de invitaciones a los titulados</div>
+        </div>
+        <div class="sec-date">{{ ahora }}</div>
+    </div>
+
+    <div class="nota-seccion">
+        Un titulado est&#225; <strong>gestionado</strong> cuando se le han entregado f&#237;sicamente sus tarjetas de invitaci&#243;n.
+        Un titulado <strong>no gestionado</strong> a&#250;n no ha recibido sus invitaciones y representa riesgo operacional para la ceremonia.
+        El <strong>% Gesti&#243;n</strong> coloreado en <span class="c-err">rojo</span> (&lt;50%) requiere atenci&#243;n urgente.
+    </div>
+
+    <!-- Hero KPIs -->
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card" style="border-top:3px solid #4338ca;">
+            <span class="kpi-card-val" style="color:#4338ca;">{{ datos.invitaciones.pct_gestionados }}%</span>
+            <span class="kpi-card-lbl">% Titulados gestionados</span>
+            <span class="kpi-card-sub">Indicador clave</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #16a34a;">
+            <span class="kpi-card-val" style="color:#16a34a;">{{ datos.invitaciones.total_gestionados }}</span>
+            <span class="kpi-card-lbl">Con invitaciones</span>
+            <span class="kpi-card-sub">Invitaciones entregadas</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #dc2626;">
+            <span class="kpi-card-val" style="color:#dc2626;">{{ datos.invitaciones.total_no_gestionados }}</span>
+            <span class="kpi-card-lbl">Sin gestionar</span>
+            <span class="kpi-card-sub">Sin invitaciones</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #d97706;">
+            <span class="kpi-card-val" style="color:#d97706;">{{ datos.invitaciones.total_inv_no_gestionadas }}</span>
+            <span class="kpi-card-lbl">Inv. pendientes</span>
+            <span class="kpi-card-sub">Tarjetas sin entregar</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Bloque de ceremonia</th>
+                <th>Fecha</th>
+                <th class="text-right">Total est.</th>
+                <th class="text-right">Gestionados</th>
+                <th class="text-right">Pendientes</th>
+                <th class="text-right" style="min-width:80px;">% Gesti&#243;n</th>
+                <th class="text-right">Inv. generadas</th>
+                <th class="text-right">Inv. entregadas</th>
+                <th class="text-right">Inv. pendientes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in datos.por_bloque %}
+            <tr class="no-break">
+                <td class="font-bold">{{ b.bloque }}</td>
+                <td>{{ b.fecha }}</td>
+                <td class="text-right">{{ b.esperados }}</td>
+                <td class="text-right c-ok">{{ b.est_gestionados }}</td>
+                <td class="text-right {% if b.est_no_gestionados > 0 %}c-err{% endif %}">{{ b.est_no_gestionados }}</td>
+                <td class="text-right">
+                    <div class="pbar-wrap">
+                        <div class="pbar-track">
+                            <div class="pbar-fill {% if b.pct_gestionados >= 80 %}pbar-fill--ok{% elif b.pct_gestionados >= 50 %}pbar-fill--warn{% else %}pbar-fill--err{% endif %}"
+                                style="width:{{ b.pct_gestionados }}%;"></div>
+                        </div>
+                        <span class="font-bold {% if b.pct_gestionados >= 80 %}c-ok{% elif b.pct_gestionados >= 50 %}c-warn{% else %}c-err{% endif %}"
+                            style="min-width:32px; text-align:right;">{{ b.pct_gestionados }}%</span>
+                    </div>
+                </td>
+                <td class="text-right">{{ b.inv_gestionadas|add:b.inv_no_gestionadas }}</td>
+                <td class="text-right c-ok">{{ b.inv_gestionadas }}</td>
+                <td class="text-right">
+                    <span class="badge {% if b.inv_no_gestionadas == 0 %}badge-ok{% elif b.inv_no_gestionadas > 5 %}badge-err{% else %}badge-warn{% endif %}">
+                        {{ b.inv_no_gestionadas }}
+                    </span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="9" class="text-center text-muted" style="padding:16px;">Sin datos disponibles.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="page-footer">
+        <span>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</span>
+        <span>{{ ahora }}</span>
+    </div>
+</div><!-- /page sec4 -->
+
+
+<!-- ================================================================
+     S&#201;CCI&#211;N 5: OPERATIVO QR
+     ================================================================ -->
+<div class="page seccion">
+
+    <div class="sec-header">
+        <div>
+            <div class="sec-num">Secci&#243;n 5 de 6</div>
+            <div class="sec-title">Operativo de Registro QR</div>
+            <div class="sec-sub">Lecturas de c&#243;digo QR, resultados y desempe&#241;o por operador</div>
+        </div>
+        <div class="sec-date">{{ ahora }}</div>
+    </div>
+
+    <div class="nota-seccion">
+        El operativo de registro utiliza c&#243;digos QR &#250;nicos asignados a cada titulado e invitado.
+        <strong>QR v&#225;lido</strong> = ingreso permitido. <strong>QR inv&#225;lido</strong> = QR no reconocido o de otra ceremonia.
+        <strong>Duplicado</strong> = QR ya le&#237;do anteriormente. <strong>Atrasado</strong> = ingreso fuera del horario asignado.
+        La tasa de &#233;xito se calcula como QR v&#225;lidos / total lecturas.
+    </div>
+
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card" style="border-top:3px solid #64748b;">
+            <span class="kpi-card-val">{{ datos.operativo.total_registros }}</span>
+            <span class="kpi-card-lbl">Total lecturas QR</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #16a34a;">
+            <span class="kpi-card-val" style="color:#16a34a;">{{ datos.operativo.qr_validos }}</span>
+            <span class="kpi-card-lbl">QR v&#225;lidos</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #dc2626;">
+            <span class="kpi-card-val" style="color:#dc2626;">{{ datos.operativo.qr_invalidos }}</span>
+            <span class="kpi-card-lbl">QR inv&#225;lidos</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid #d97706;">
+            <span class="kpi-card-val" style="color:#d97706;">{{ datos.operativo.qr_duplicados }}</span>
+            <span class="kpi-card-lbl">QR duplicados</span>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="info-box">
+            <div class="info-box-title">Resumen de validaciones QR</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Total lecturas realizadas</span>
+                <span class="info-row-val">{{ datos.operativo.total_registros }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Accesos permitidos (v&#225;lidos)</span>
+                <span class="info-row-val c-ok">{{ datos.operativo.qr_validos }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Accesos denegados (inv&#225;lidos)</span>
+                <span class="info-row-val c-err">{{ datos.operativo.qr_invalidos }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">QR duplicados (reingreso)</span>
+                <span class="info-row-val c-warn">{{ datos.operativo.qr_duplicados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Ingresos atrasados</span>
+                <span class="info-row-val c-warn">{{ datos.operativo.qr_atrasados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Total intentos fallidos</span>
+                <span class="info-row-val c-err">{{ datos.operativo.intentos_fallidos }}</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">An&#225;lisis de calidad del operativo</div>
+            <div class="info-row">
+                <span class="info-row-lbl">N&#250;mero de operadores activos</span>
+                <span class="info-row-val">{{ datos.operativo.por_operador|length }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Ingresos exitosos (QR v&#225;lidos)</span>
+                <span class="info-row-val c-ok">{{ datos.operativo.qr_validos }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Incidencias detectadas</span>
+                <span class="info-row-val {% if datos.operativo.intentos_fallidos > 0 %}c-warn{% else %}c-ok{% endif %}">
+                    {{ datos.operativo.intentos_fallidos }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {% if datos.operativo.por_operador %}
+    <div class="subseccion-titulo">Desempe&#241;o por operador</div>
+    <div class="nota-seccion">
+        Registros realizados por cada operador (usuario del sistema).
+        Un alto volumen individual puede indicar carga de trabajo o que otros operadores no estuvieron activos.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Operador (usuario)</th>
+                <th class="text-right">Registros realizados</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for op in datos.operativo.por_operador %}
+            <tr>
+                <td class="font-bold">{{ op.usuario }}</td>
+                <td class="text-right">{{ op.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <div class="page-footer">
+        <span>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</span>
+        <span>{{ ahora }}</span>
+    </div>
+</div><!-- /page sec5 -->
+
+
+<!-- ================================================================
+     S&#201;CCI&#211;N 6: AN&#193;LISIS DE TIEMPOS
+     ================================================================ -->
+<div class="page seccion">
+
+    <div class="sec-header">
+        <div>
+            <div class="sec-num">Secci&#243;n 6 de 6</div>
+            <div class="sec-title">An&#225;lisis de Tiempos de Ingreso</div>
+            <div class="sec-sub">Distribuci&#243;n horaria de ingresos y estad&#237;sticas de flujo</div>
+        </div>
+        <div class="sec-date">{{ ahora }}</div>
+    </div>
+
+    <div class="nota-seccion">
+        La <strong>hora peak</strong> (&#9733;) corresponde al horario con mayor cantidad de ingresos registrados.
+        La columna <strong>Distribuci&#243;n</strong> es proporcional al m&#225;ximo registrado en cualquier hora.
+        Esta informaci&#243;n es &#250;til para dimensionar el personal en futuras ceremonias y anticipar cuellos de botella.
+    </div>
+
+    <div class="col-2" style="margin-bottom:14px;">
+        <div class="info-box">
+            <div class="info-box-title">Estad&#237;sticas de flujo</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Hora peak de mayor afluencia</span>
+                <span class="info-row-val c-ok">{{ datos.tiempos.hora_peak|default:"—" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Promedio registros por minuto</span>
+                <span class="info-row-val">{{ datos.tiempos.prom_por_minuto }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Total horas con actividad</span>
+                <span class="info-row-val">{{ datos.tiempos.por_hora|length }}</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">Leyenda de jornadas</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Jornada Ma&#241;ana</span>
+                <span class="info-row-val text-muted">08:00 &ndash; 11:59</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Jornada Tarde</span>
+                <span class="info-row-val text-muted">12:00 &ndash; 17:59</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Jornada Noche</span>
+                <span class="info-row-val text-muted">18:00 &ndash; 23:59</span>
+            </div>
+        </div>
+    </div>
+
+    {% if datos.tiempos.por_hora %}
+    <table>
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Jornada</th>
+                <th class="text-right">Ingresos</th>
+                <th style="width:38%;">Distribuci&#243;n relativa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in datos.tiempos.por_hora %}
+            <tr class="no-break" {% if item.hora == datos.tiempos.hora_peak %}style="background:#f0fdf4;"{% endif %}>
+                <td class="font-bold {% if item.hora == datos.tiempos.hora_peak %}c-ok{% endif %}">
+                    {{ item.hora }}{% if item.hora == datos.tiempos.hora_peak %}&nbsp;&#9733;{% endif %}
+                </td>
+                <td class="text-muted">
+                    {% with h=item.hora|slice:":2" %}
+                        {% if h < "12" %}Jornada Ma&#241;ana
+                        {% elif h < "18" %}Jornada Tarde
+                        {% else %}Jornada Noche
+                        {% endif %}
+                    {% endwith %}
+                </td>
+                <td class="text-right font-bold">{{ item.total }}</td>
+                <td>
+                    {% widthratio item.total max_tiempos 100 as bar_w %}
+                    <div class="pbar-wrap">
+                        <div class="pbar-track">
+                            <div class="pbar-fill {% if item.hora == datos.tiempos.hora_peak %}pbar-fill--peak{% else %}pbar-fill--warn{% endif %}"
+                                style="width:{{ bar_w }}%;"></div>
+                        </div>
+                        <span class="text-muted" style="font-size:7pt; min-width:24px; text-align:right;">{{ bar_w }}%</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#94a3b8; text-align:center; padding:20px 0; font-size:9pt;">Sin datos de tiempos disponibles.</p>
+    {% endif %}
+
+    <div class="page-footer">
+        <span>Informe Ceremonia de Titulaci&#243;n 2026 &mdash; INACAP Sede Arica</span>
+        <span>Fin del informe &mdash; {{ ahora }}</span>
+    </div>
+</div><!-- /page sec6 -->
+
+<script>
+    // Auto-abrir di&#225;logo de impresi&#243;n al cargar la p&#225;gina
+    window.addEventListener('load', function() {
+        setTimeout(function() { window.print(); }, 600);
+    });
+</script>
+</body>
+</html>
