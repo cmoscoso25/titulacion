@@ -281,6 +281,33 @@
                                 <span class="kpi-rep-sub">Titulados presentes</span>
                             </div>
 
+                            <div class="kpi-rep kpi-rojo">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">% Ausentismo</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="kpiPctAusencia">—</span>
+                                <span class="kpi-rep-sub">No se presentaron</span>
+                            </div>
+
+                            <div class="kpi-rep kpi-verde">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">Puntuales</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="kpiTotalPuntuales">—</span>
+                                <span class="kpi-rep-sub" id="kpiPctPuntualesLbl">Ingresaron a tiempo</span>
+                            </div>
+
+                            <div class="kpi-rep kpi-dorado">
+                                <div class="kpi-rep-top">
+                                    <span class="kpi-rep-label">Atrasados</span>
+                                    <span class="kpi-rep-dot"></span>
+                                </div>
+                                <span class="kpi-rep-valor" id="kpiTotalAtrasados">—</span>
+                                <span class="kpi-rep-sub" id="kpiPctAtrasadosLbl">Ingresaron tarde</span>
+                            </div>
+
                             <div class="kpi-rep kpi-azul">
                                 <div class="kpi-rep-top">
                                     <span class="kpi-rep-label">Mayor asistencia</span>
@@ -314,7 +341,7 @@
                                     <span class="kpi-rep-dot" style="background:#94a3b8"></span>
                                 </div>
                                 <span class="kpi-rep-valor kpi-rep-texto" id="kpiUltimoIngreso">—</span>
-                                <span class="kpi-rep-sub">Registro más reciente</span>
+                                <span class="kpi-rep-sub">Registro más reciente (hora local)</span>
                             </div>
 
                         </div>
@@ -647,6 +674,13 @@
         set("kpiTotalInvitados", d.total_inv_usadas);
         set("kpiTotalPersonas", d.total_personas);
         set("kpiPctAsistencia", d.pct_asistencia + "%");
+        set("kpiPctAusencia", d.pct_ausencia + "%");
+        set("kpiTotalPuntuales", d.total_puntuales);
+        set("kpiTotalAtrasados", d.total_atrasados);
+        var elPunct = document.getElementById("kpiPctPuntualesLbl");
+        if (elPunct) elPunct.textContent = d.pct_puntuales + "% de los ingresos";
+        var elAtr = document.getElementById("kpiPctAtrasadosLbl");
+        if (elAtr) elAtr.textContent = d.pct_atrasados + "% de los ingresos";
         set("kpiMayorAsistencia", d.ceremonia_mayor_asistencia);
         set("kpiMayorAtraso", d.ceremonia_mayor_atraso);
         set("kpiHoraPeak", d.hora_peak);

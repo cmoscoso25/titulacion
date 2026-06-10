@@ -1561,20 +1561,35 @@ def _calcular_reportes(bloque_id=None):
     total_inv_usadas = inv_qs.filter(usada=True).count()
     total_personas = total_ingresados + total_inv_usadas
     pct_asistencia = round(total_ingresados / total_titulados * 100, 1) if total_titulados > 0 else 0.0
+    pct_ausencia = round(100 - pct_asistencia, 1)
+
+    # Puntualidad: ingresos a tiempo vs atrasados (por estudiante, no por registro)
+    ingresos_qs = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"])
+    total_puntuales = reg_qs.filter(resultado="PERMITIDO").values("estudiante_id").distinct().count()
+    total_atrasados = reg_qs.filter(resultado="ATRASADO").values("estudiante_id").distinct().count()
+    base_puntualidad = total_puntuales + total_atrasados
+    pct_puntuales = round(total_puntuales / base_puntualidad * 100, 1) if base_puntualidad > 0 else 0.0
+    pct_atrasados = round(total_atrasados / base_puntualidad * 100, 1) if base_puntualidad > 0 else 0.0
 
     hora_peak_row = (
-        reg_qs
-        .filter(resultado__in=["PERMITIDO", "ATRASADO"])
+        ingresos_qs
         .annotate(hora=TruncHour("fecha_hora"))
         .values("hora")
         .annotate(n=Count("id"))
         .order_by("-n")
         .first()
     )
-    hora_peak = hora_peak_row["hora"].strftime("%H:00") if hora_peak_row and hora_peak_row["hora"] else "-"
+    hora_peak = (
+        timezone.localtime(hora_peak_row["hora"]).strftime("%H:00")
+        if hora_peak_row and hora_peak_row["hora"] else "-"
+    )
 
-    ultimo_reg = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"]).order_by("-fecha_hora").first()
-    ultimo_ingreso_str = ultimo_reg.fecha_hora.strftime("%d/%m %H:%M") if ultimo_reg else "-"
+    # FIX: usar localtime para convertir UTC → America/Santiago antes de formatear
+    ultimo_reg = ingresos_qs.order_by("-fecha_hora").first()
+    ultimo_ingreso_str = (
+        timezone.localtime(ultimo_reg.fecha_hora).strftime("%d/%m %H:%M")
+        if ultimo_reg else "-"
+    )
 
     mejor = (
         EstudianteTitulado.objects
@@ -1606,6 +1621,11 @@ def _calcular_reportes(bloque_id=None):
         "total_inv_usadas": total_inv_usadas,
         "total_personas": total_personas,
         "pct_asistencia": pct_asistencia,
+        "pct_ausencia": pct_ausencia,
+        "total_puntuales": total_puntuales,
+        "total_atrasados": total_atrasados,
+        "pct_puntuales": pct_puntuales,
+        "pct_atrasados": pct_atrasados,
         "ceremonia_mayor_asistencia": ceremonia_mayor_asistencia,
         "ceremonia_mayor_atraso": ceremonia_mayor_atraso,
         "ultimo_ingreso": ultimo_ingreso_str,
