@@ -1191,6 +1191,38 @@
     .op-dist-bar    { height:14px; }
 }
 
+/* ============================================================
+   TAB TIEMPOS — leyenda del gráfico + chip peak
+   ============================================================ */
+
+.tmpo-peak-val{ color:#d97706; }
+
+.tmpo-legend{
+    display:flex;
+    gap:18px;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+.tmpo-leg-item{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:.68rem;
+    font-weight:600;
+    color:var(--texto-muted);
+}
+
+.tmpo-leg-dot{
+    width:10px;
+    height:10px;
+    border-radius:3px;
+    flex-shrink:0;
+}
+
+.tmpo-leg-peak-dot { background:rgba(22,163,74,.88); }
+.tmpo-leg-other-dot{ background:rgba(79,70,229,.62); }
+
 /* Pantalla baja / HDMI (max-height:800px — también aplica para notebook 15" 1366x768) */
 @media (max-height:800px) and (min-width:900px){
     .rep-header{ min-height:42px; }

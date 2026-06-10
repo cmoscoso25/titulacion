@@ -502,32 +502,61 @@
                     <!-- TAB 4: Tiempos -->
                     <div id="tab-tiempos" class="panel-tab-rep" data-titulo="Reporte de Tiempos">
 
-                        <div class="kpis-op rep-kpis-2col">
-                            <div class="kpi-rep kpi-dorado">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Hora peak</span>
-                                    <span class="kpi-rep-dot"></span>
+                        <!-- 4 chips compactos -->
+                        <div class="dash-chips-grid" style="margin-bottom:12px">
+
+                            <div class="dash-chip">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val tmpo-peak-val" id="tiempoHoraPeak">—</span>
+                                    <span class="dash-chip-lbl">Hora peak</span>
                                 </div>
-                                <span class="kpi-rep-valor" id="tiempoHoraPeak">—</span>
-                                <span class="kpi-rep-sub">Mayor concentración de ingresos</span>
                             </div>
-                            <div class="kpi-rep kpi-azul">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Promedio ingresos/min</span>
-                                    <span class="kpi-rep-dot"></span>
+
+                            <div class="dash-chip">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val dash-chip-val--sm" id="tiempoPromMin">—</span>
+                                    <span class="dash-chip-lbl">Promedio / minuto</span>
                                 </div>
-                                <span class="kpi-rep-valor" id="tiempoPromMin">—</span>
-                                <span class="kpi-rep-sub">Durante el período activo</span>
                             </div>
+
+                            <div class="dash-chip">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val" id="tiempoTotalIng">—</span>
+                                    <span class="dash-chip-lbl">Total ingresos</span>
+                                </div>
+                            </div>
+
+                            <div class="dash-chip">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val" id="tiempoHorasActivas">—</span>
+                                    <span class="dash-chip-lbl">Horas activas</span>
+                                </div>
+                            </div>
+
                         </div>
 
+                        <!-- Chart panel con total en cabecera -->
                         <div class="panel-rep">
                             <div class="panel-rep-titulo">
                                 Curva de ingresos por hora
-                                <small>Ingresos permitidos + atrasados</small>
+                                <small>Ingresos permitidos + atrasados &nbsp;·&nbsp; Total: <strong id="tiempoTotalChart">—</strong> registros</small>
                             </div>
-                            <div class="chart-container">
+                            <div class="chart-container" style="height:clamp(220px,32vh,340px)">
                                 <canvas id="chartTiempos"></canvas>
+                            </div>
+                            <div class="tmpo-legend">
+                                <span class="tmpo-leg-item">
+                                    <span class="tmpo-leg-dot tmpo-leg-peak-dot"></span>
+                                    Hora peak
+                                </span>
+                                <span class="tmpo-leg-item">
+                                    <span class="tmpo-leg-dot tmpo-leg-other-dot"></span>
+                                    Otros horarios
+                                </span>
                             </div>
                         </div>
 
@@ -929,31 +958,49 @@
 
     /* === TIEMPOS === */
     function renderTiempos(t) {
+        var labels       = t.por_hora.map(function(h) { return h.hora; });
+        var data         = t.por_hora.map(function(h) { return h.total; });
+        var totalIng     = data.reduce(function(a, b) { return a + b; }, 0);
+        var horasActivas = data.filter(function(v) { return v > 0; }).length;
+        var peakIdx      = labels.indexOf(t.hora_peak);
+
+        var colors = data.map(function(_, i) {
+            return i === peakIdx ? "rgba(22,163,74,.88)" : "rgba(79,70,229,.62)";
+        });
+        var hoverColors = data.map(function(_, i) {
+            return i === peakIdx ? "rgba(22,163,74,1)" : "rgba(79,70,229,.9)";
+        });
+
+        /* Chips */
         set("tiempoHoraPeak", t.hora_peak);
         set("tiempoPromMin", t.prom_por_minuto === "-" ? "-" : t.prom_por_minuto + " reg/min");
+        set("tiempoTotalIng", totalIng);
+        set("tiempoHorasActivas", horasActivas);
+        set("tiempoTotalChart", totalIng);
 
-        const ctx = document.getElementById("chartTiempos").getContext("2d");
-        const labels = t.por_hora.map(function(h) { return h.hora; });
-        const data   = t.por_hora.map(function(h) { return h.total; });
+        var ctx = document.getElementById("chartTiempos");
+        if (!ctx) return;
 
         if (graficoTiempos) {
             graficoTiempos.data.labels = labels;
             graficoTiempos.data.datasets[0].data = data;
+            graficoTiempos.data.datasets[0].backgroundColor = colors;
+            graficoTiempos.data.datasets[0].hoverBackgroundColor = hoverColors;
             graficoTiempos.update();
             return;
         }
 
-        graficoTiempos = new Chart(ctx, {
+        graficoTiempos = new Chart(ctx.getContext("2d"), {
             type: "bar",
             data: {
                 labels: labels,
                 datasets: [{
                     label: "Ingresos",
                     data: data,
-                    backgroundColor: "rgba(6,21,47,.7)",
-                    borderColor: "#06152f",
+                    backgroundColor: colors,
+                    hoverBackgroundColor: hoverColors,
                     borderWidth: 0,
-                    borderRadius: 6,
+                    borderRadius: 8,
                     borderSkipped: false,
                 }]
             },
@@ -965,15 +1012,22 @@
                     tooltip: {
                         backgroundColor: "#0f172a",
                         titleFont: { size: 11, weight: "600" },
-                        bodyFont: { size: 12, weight: "700" },
-                        padding: 10,
+                        bodyFont: { size: 13, weight: "700" },
+                        padding: 12,
                         cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                var v = context.parsed.y;
+                                var isPeak = context.label === t.hora_peak;
+                                return " " + v + " registros" + (isPeak ? "  ★ Peak" : "");
+                            }
+                        }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { stepSize: 1, font: { size: 11 }, color: "#94a3b8" },
+                        ticks: { font: { size: 11 }, color: "#94a3b8" },
                         grid: { color: "#f1f5f9" },
                         border: { color: "#e2e8f0" }
                     },
