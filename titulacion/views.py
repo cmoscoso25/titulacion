@@ -960,28 +960,26 @@ def datos_panel_control(request):
 
     registros_atrasados = registros_filtrados.filter(
         resultado="ATRASADO"
-    ).order_by("-fecha_hora")[:80]
+    ).order_by("estudiante__plan_estudio__nombre", "-fecha_hora")[:200]
 
-    atrasados = []
+    _atrasados_grupos = {}
     for registro in registros_atrasados:
         estudiante = registro.estudiante
-        atrasados.append({
+        plan = obtener_plan_estudiante(estudiante) if estudiante else "Sin plan informado"
+        if plan not in _atrasados_grupos:
+            _atrasados_grupos[plan] = []
+        _atrasados_grupos[plan].append({
             "nombre": estudiante.nombre_completo if estudiante else "Sin estudiante",
             "rut": estudiante.rut if estudiante else "-",
             "tipo_acceso": registro.tipo,
-            "resultado": registro.get_resultado_display(),
             "hora": registro.fecha_hora.strftime("%H:%M:%S"),
-            "area": obtener_area_estudiante(estudiante) if estudiante else "-",
-            "plan": obtener_plan_estudiante(estudiante) if estudiante else "-",
             "bloque": obtener_bloque_estudiante(estudiante) if estudiante else "-",
-            "ceremonia": (
-                estudiante.bloque_ceremonia.ceremonia.nombre
-                if estudiante
-                and estudiante.bloque_ceremonia
-                and estudiante.bloque_ceremonia.ceremonia
-                else "-"
-            ),
         })
+
+    atrasados = [
+        {"plan": plan, "total": len(ests), "estudiantes": ests}
+        for plan, ests in sorted(_atrasados_grupos.items())
+    ]
 
     return JsonResponse({
         "kpis": {

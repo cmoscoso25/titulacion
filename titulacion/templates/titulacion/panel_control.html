@@ -363,16 +363,12 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Hora</th>
-                                        <th>Nombre</th>
-                                        <th>RUT</th>
-                                        <th>Tipo</th>
-                                        <th>Ceremonia</th>
-                                        <th>Plan</th>
+                                        <th>Plan de estudio</th>
+                                        <th>Atrasados</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaAtrasados">
-                                    <tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>
+                                    <tr><td colspan="2">No hay ingresos atrasados registrados.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -755,19 +751,45 @@
         var tbody = document.getElementById("tablaAtrasados");
         tbody.innerHTML = "";
         if (!items.length) {
-            tbody.innerHTML = '<tr><td colspan="6">No hay ingresos atrasados registrados.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="2">No hay ingresos atrasados registrados.</td></tr>';
             return;
         }
-        items.forEach(function(item) {
+        var errColors = ['#ef4444','#f97316','#dc2626','#b91c1c','#e11d48','#db2777','#d97706','#c2410c'];
+        items.forEach(function(grupo, idx) {
+            var detalleId = "atrasado-det-" + idx;
             var fila = document.createElement("tr");
+            fila.className = "pc-plan-row expandible";
+            fila.onclick = (function(dId) {
+                return function() { togglePlanDetalle(dId, this); };
+            })(detalleId);
             fila.innerHTML =
-                '<td>' + _esc(item.hora) + '</td>' +
-                '<td>' + _esc(item.nombre) + '</td>' +
-                '<td>' + _esc(item.rut) + '</td>' +
-                '<td>' + _esc(item.tipo_acceso) + '</td>' +
-                '<td>' + _esc(item.bloque) + '</td>' +
-                '<td>' + _esc(item.plan) + '</td>';
+                '<td><span class="pc-plan-nombre">' + _esc(grupo.plan) +
+                    '<span class="pc-plan-chevron">›</span></span></td>' +
+                '<td>' + grupo.total + ' atrasado' + (grupo.total !== 1 ? 's' : '') + '</td>';
             tbody.appendChild(fila);
+
+            var filaDetalle = document.createElement("tr");
+            filaDetalle.id = detalleId;
+            filaDetalle.className = "pc-plan-detalle";
+            filaDetalle.style.display = "none";
+            var html = '<td colspan="2"><div class="pc-detalle-inner">' +
+                '<div class="pc-detalle-header"><span class="pc-detalle-count pc-detalle-count--err">' +
+                grupo.total + ' ingreso' + (grupo.total !== 1 ? 's' : '') + ' atrasado' + (grupo.total !== 1 ? 's' : '') +
+                '</span></div><div class="pc-estudiantes-grid">';
+            grupo.estudiantes.forEach(function(est, i) {
+                var partes = est.nombre.trim().split(' ');
+                var iniciales = (partes[0] ? partes[0][0] : '') + (partes[1] ? partes[1][0] : '');
+                var color = errColors[i % errColors.length];
+                html += '<div class="pc-est-card">' +
+                    '<div class="pc-est-avatar" style="background:' + color + '">' + _esc(iniciales.toUpperCase()) + '</div>' +
+                    '<div class="pc-est-info">' +
+                        '<div class="pc-est-nombre">' + _esc(est.nombre) + '</div>' +
+                        '<div class="pc-est-rut">' + _esc(est.rut) + ' · ' + _esc(est.hora) + '</div>' +
+                    '</div></div>';
+            });
+            html += '</div></div></td>';
+            filaDetalle.innerHTML = html;
+            tbody.appendChild(filaDetalle);
         });
     }
 

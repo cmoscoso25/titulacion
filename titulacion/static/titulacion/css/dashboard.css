@@ -551,6 +551,7 @@ tbody tr:hover { background: #fafbfc; }
     text-transform: uppercase;
     letter-spacing: 0.07em;
 }
+.pc-detalle-count--err { color: #dc2626; }
 
 /* Grid de tarjetas de estudiantes — compacto */
 .pc-estudiantes-grid {
