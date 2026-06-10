@@ -1053,6 +1053,144 @@
 /* Filas más altas para la tabla ceremonia */
 .tabla-ceremonia tbody tr td{ padding:13px 12px; }
 
+/* ============================================================
+   TAB OPERATIVO QR — rediseño profesional
+   ============================================================ */
+
+/* BLOQUE 1: hero + chips secundarios */
+.op-top-grid{
+    display:grid;
+    grid-template-columns:1fr 210px;
+    gap:12px;
+    margin-bottom:12px;
+    align-items:stretch;
+}
+
+.op-hero-card{ min-height:110px !important; }
+
+.op-secondary-col{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.op-chip-secondary{ flex:1; }
+
+.op-tasa-val{ font-size:clamp(.9rem,1.1vw,1.2rem) !important; }
+.op-tasa-ok  { color:#16a34a !important; }
+.op-tasa-warn{ color:#d97706 !important; }
+.op-tasa-err { color:#dc2626 !important; }
+
+/* BLOQUE 2: alert chips */
+.op-alerts-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.op-alert-chip{ align-items:flex-start; }
+
+.op-alert-red   { border-left:3px solid #dc2626; }
+.op-alert-red .dash-chip-icon    { color:#dc2626; }
+.op-alert-amber { border-left:3px solid #d97706; }
+.op-alert-amber .dash-chip-icon  { color:#d97706; }
+.op-alert-orange{ border-left:3px solid #ea580c; }
+.op-alert-orange .dash-chip-icon { color:#ea580c; }
+
+.op-alert-sub{
+    font-size:.58rem;
+    color:var(--texto-muted);
+    margin-top:2px;
+    display:block;
+}
+
+/* BLOQUE 3: barra distribución */
+.op-dist-panel{ margin-bottom:12px; }
+
+.op-dist-bar{
+    display:flex;
+    height:18px;
+    border-radius:10px;
+    overflow:hidden;
+    background:#e8edf4;
+    margin-bottom:10px;
+}
+
+.op-dist-seg{
+    height:100%;
+    transition:width .65s ease;
+    min-width:0;
+}
+
+.op-dist-valid   { background:#16a34a; }
+.op-dist-late    { background:#f59e0b; }
+.op-dist-dup     { background:#d97706; }
+.op-dist-invalid { background:#dc2626; }
+
+.op-dist-legend{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.op-leg-item{
+    font-size:.68rem;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+}
+
+.op-leg-item::before{
+    content:"";
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:3px;
+    flex-shrink:0;
+}
+
+.op-leg-valid::before  { background:#16a34a; }
+.op-leg-late::before   { background:#f59e0b; }
+.op-leg-dup::before    { background:#d97706; }
+.op-leg-inv::before    { background:#dc2626; }
+.op-leg-valid  { color:#15803d; }
+.op-leg-late   { color:#b45309; }
+.op-leg-dup    { color:#92400e; }
+.op-leg-inv    { color:#991b1b; }
+
+/* BLOQUE 4: tabla operadores */
+.op-oper-name{ font-size:.8rem; font-weight:600; color:var(--texto); }
+
+.op-oper-bar{
+    height:6px;
+    background:#e8edf4;
+    border-radius:99px;
+    overflow:hidden;
+}
+
+.op-oper-bar div{
+    height:100%;
+    border-radius:99px;
+    background:linear-gradient(90deg,#06152f,#1e3a6e);
+    transition:width .55s ease;
+}
+
+/* Responsive */
+@media (max-width:767px){
+    .op-top-grid    { grid-template-columns:1fr; }
+    .op-secondary-col{ flex-direction:row; }
+    .op-alerts-grid { grid-template-columns:repeat(2,1fr); }
+    .op-dist-bar    { height:12px; }
+}
+
+@media (min-width:1025px) and (max-width:1366px){
+    .op-top-grid    { grid-template-columns:1fr 190px; gap:9px; }
+    .op-alerts-grid { gap:8px; }
+    .op-dist-bar    { height:14px; }
+}
+
 /* Pantalla baja / HDMI (max-height:800px — también aplica para notebook 15" 1366x768) */
 @media (max-height:800px) and (min-width:900px){
     .rep-header{ min-height:42px; }

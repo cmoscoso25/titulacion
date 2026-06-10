@@ -392,57 +392,93 @@
                     <!-- TAB 3: Operativo -->
                     <div id="tab-operativo" class="panel-tab-rep" data-titulo="Reporte Operativo QR">
 
-                        <div class="kpis-op">
-                            <div class="kpi-rep kpi-verde">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">QR válidos</span>
-                                    <span class="kpi-rep-dot"></span>
-                                </div>
-                                <span class="kpi-rep-valor" id="opQrValidos">—</span>
-                                <span class="kpi-rep-sub">Resultado: PERMITIDO</span>
+                        <!-- BLOQUE 1: hero QR válidos + chips secundarios -->
+                        <div class="op-top-grid">
+
+                            <div class="dash-hero-card dash-hero-green op-hero-card">
+                                <svg class="dash-hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <div class="dash-hero-label">QR Válidos</div>
+                                <div class="dash-hero-value" id="opQrValidos">—</div>
+                                <div class="dash-hero-sub">Resultado: PERMITIDO</div>
+                                <div class="dash-hero-bar-wrap"><div class="dash-hero-bar" id="opHeroBar" style="width:0%"></div></div>
                             </div>
-                            <div class="kpi-rep kpi-rojo">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">QR inválidos</span>
-                                    <span class="kpi-rep-dot"></span>
+
+                            <div class="op-secondary-col">
+                                <div class="dash-chip op-chip-secondary">
+                                    <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                                    <div class="dash-chip-body">
+                                        <span class="dash-chip-val" id="opTotalReg">—</span>
+                                        <span class="dash-chip-lbl">Total registros</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="opQrInvalidos">—</span>
-                                <span class="kpi-rep-sub">DENEGADO + OTRA_CEREM.</span>
-                            </div>
-                            <div class="kpi-rep kpi-dorado">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">QR duplicados</span>
-                                    <span class="kpi-rep-dot"></span>
+                                <div class="dash-chip op-chip-secondary">
+                                    <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                                    <div class="dash-chip-body">
+                                        <span class="dash-chip-val op-tasa-val" id="opTasaExito">—</span>
+                                        <span class="dash-chip-lbl">Tasa de éxito</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="opQrDuplicados">—</span>
-                                <span class="kpi-rep-sub">Ya habían ingresado</span>
                             </div>
-                            <div class="kpi-rep kpi-dorado">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Atrasados</span>
-                                    <span class="kpi-rep-dot"></span>
-                                </div>
-                                <span class="kpi-rep-valor" id="opQrAtrasados">—</span>
-                                <span class="kpi-rep-sub">Después del cierre</span>
-                            </div>
-                            <div class="kpi-rep kpi-rojo">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Intentos fallidos</span>
-                                    <span class="kpi-rep-dot"></span>
-                                </div>
-                                <span class="kpi-rep-valor" id="opIntentosF">—</span>
-                                <span class="kpi-rep-sub">Inválidos + duplicados</span>
-                            </div>
-                            <div class="kpi-rep kpi-azul">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Total registros</span>
-                                    <span class="kpi-rep-dot"></span>
-                                </div>
-                                <span class="kpi-rep-valor" id="opTotalReg">—</span>
-                                <span class="kpi-rep-sub">Todos los intentos</span>
-                            </div>
+
                         </div>
 
+                        <!-- BLOQUE 2: 4 chips de alertas -->
+                        <div class="op-alerts-grid">
+
+                            <div class="dash-chip op-alert-chip op-alert-red">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val" id="opQrInvalidos">—</span>
+                                    <span class="dash-chip-lbl">QR inválidos</span>
+                                    <span class="op-alert-sub">DENEGADO + OTRA CER.</span>
+                                </div>
+                            </div>
+
+                            <div class="dash-chip op-alert-chip op-alert-amber">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val" id="opQrDuplicados">—</span>
+                                    <span class="dash-chip-lbl">QR duplicados</span>
+                                    <span class="op-alert-sub">Ya habían ingresado</span>
+                                </div>
+                            </div>
+
+                            <div class="dash-chip op-alert-chip op-alert-amber">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val" id="opQrAtrasados">—</span>
+                                    <span class="dash-chip-lbl">Atrasados</span>
+                                    <span class="op-alert-sub">Después del cierre</span>
+                                </div>
+                            </div>
+
+                            <div class="dash-chip op-alert-chip op-alert-orange">
+                                <svg class="dash-chip-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                <div class="dash-chip-body">
+                                    <span class="dash-chip-val" id="opIntentosF">—</span>
+                                    <span class="dash-chip-lbl">Intentos fallidos</span>
+                                    <span class="op-alert-sub">Inválidos + duplicados</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- BLOQUE 3: distribución de resultados -->
+                        <div class="panel-rep op-dist-panel">
+                            <div class="panel-rep-titulo">
+                                Distribución de resultados
+                                <small>Proporción por tipo de resultado QR</small>
+                            </div>
+                            <div class="op-dist-bar" id="opDistBar">
+                                <div class="op-dist-seg op-dist-valid"   id="opDistValid"  title="Válidos"></div>
+                                <div class="op-dist-seg op-dist-late"    id="opDistLate"   title="Atrasados"></div>
+                                <div class="op-dist-seg op-dist-dup"     id="opDistDup"    title="Duplicados"></div>
+                                <div class="op-dist-seg op-dist-invalid" id="opDistInv"    title="Inválidos"></div>
+                            </div>
+                            <div class="op-dist-legend" id="opDistLegend"></div>
+                        </div>
+
+                        <!-- BLOQUE 4: operadores -->
                         <div class="panel-rep">
                             <div class="panel-rep-titulo">Registros por operador</div>
                             <div class="tabla-scroll">
@@ -450,11 +486,12 @@
                                     <thead>
                                         <tr>
                                             <th>Operador / usuario</th>
-                                            <th>Registros realizados</th>
+                                            <th style="width:90px;text-align:right">Registros</th>
+                                            <th style="width:45%">Actividad</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaOperador">
-                                        <tr><td colspan="2">Cargando...</td></tr>
+                                        <tr><td colspan="3">Cargando...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -826,20 +863,67 @@
 
     /* === OPERATIVO === */
     function renderOperativo(op) {
-        set("opQrValidos", op.qr_validos);
+        var total   = op.total_registros || 1;
+        var validos = op.qr_validos || 0;
+        var tasa    = total > 1 ? Math.round(validos / total * 100) : 0;
+
+        /* Hero */
+        set("opQrValidos", validos);
+        var heroBar = document.getElementById("opHeroBar");
+        if (heroBar) heroBar.style.width = tasa + "%";
+
+        /* Chips secundarios */
+        set("opTotalReg", op.total_registros);
+        set("opTasaExito", tasa + "%");
+        var tasaEl = document.getElementById("opTasaExito");
+        if (tasaEl) {
+            tasaEl.className = "dash-chip-val op-tasa-val " +
+                (tasa >= 80 ? "op-tasa-ok" : tasa >= 60 ? "op-tasa-warn" : "op-tasa-err");
+        }
+
+        /* Alert chips */
         set("opQrInvalidos", op.qr_invalidos);
         set("opQrDuplicados", op.qr_duplicados);
         set("opQrAtrasados", op.qr_atrasados);
         set("opIntentosF", op.intentos_fallidos);
-        set("opTotalReg", op.total_registros);
 
+        /* Distribución */
+        var t      = op.total_registros || 1;
+        var pValid = (op.qr_validos    / t * 100).toFixed(1);
+        var pDup   = (op.qr_duplicados / t * 100).toFixed(1);
+        var pLate  = (op.qr_atrasados  / t * 100).toFixed(1);
+        var pInv   = (op.qr_invalidos  / t * 100).toFixed(1);
+        var setW = function(id, w) {
+            var el = document.getElementById(id);
+            if (el) el.style.width = Math.max(0, parseFloat(w)) + "%";
+        };
+        setW("opDistValid", pValid);
+        setW("opDistLate",  pLate);
+        setW("opDistDup",   pDup);
+        setW("opDistInv",   pInv);
+        var legend = document.getElementById("opDistLegend");
+        if (legend) {
+            legend.innerHTML =
+                '<span class="op-leg-item op-leg-valid">Válidos ' + pValid + '%</span>' +
+                '<span class="op-leg-item op-leg-late">Atrasados ' + pLate + '%</span>' +
+                '<span class="op-leg-item op-leg-dup">Duplicados ' + pDup + '%</span>' +
+                '<span class="op-leg-item op-leg-inv">Inválidos ' + pInv + '%</span>';
+        }
+
+        /* Tabla operadores con barra inline */
         const tbody = document.getElementById("tablaOperador");
         if (!op.por_operador.length) {
-            tbody.innerHTML = '<tr><td colspan="2">Sin registros de operadores.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3">Sin registros de operadores.</td></tr>';
             return;
         }
+        var maxOp = Math.max.apply(null, op.por_operador.map(function(o) { return o.total; }));
         tbody.innerHTML = op.por_operador.map(function(o) {
-            return '<tr><td>' + _esc(o.usuario) + '</td><td>' + o.total + '</td></tr>';
+            var pct = maxOp > 0 ? Math.round(o.total / maxOp * 100) : 0;
+            return '<tr>' +
+                '<td><span class="op-oper-name">' + _esc(o.usuario) + '</span></td>' +
+                '<td style="text-align:right;font-weight:700;font-size:.82rem">' + o.total + '</td>' +
+                '<td><div class="op-oper-bar"><div style="width:' + pct + '%"></div></div></td>' +
+            '</tr>';
         }).join('');
     }
 
