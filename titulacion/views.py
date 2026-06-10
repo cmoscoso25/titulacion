@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Max, Min, Q
-from django.db.models.functions import TruncHour
+from django.db.models.functions import TruncHour, TruncMinute
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -1729,18 +1729,37 @@ def _calcular_reportes(bloque_id=None):
         ],
     }
 
-    por_hora = list(
+    # Datos por minuto → agrupados en buckets de 30 min con timezone correcto
+    por_minuto_qs = list(
         reg_qs
         .filter(resultado__in=["PERMITIDO", "ATRASADO"])
-        .annotate(hora=TruncHour("fecha_hora"))
-        .values("hora")
+        .annotate(minuto=TruncMinute("fecha_hora"))
+        .values("minuto")
         .annotate(n=Count("id"))
-        .order_by("hora")
+        .order_by("minuto")
     )
-    por_hora_fmt = [
-        {"hora": item["hora"].strftime("%H:00") if item["hora"] else "?", "total": item["n"]}
-        for item in por_hora
-    ]
+
+    buckets_tramo = {}
+    for item in por_minuto_qs:
+        if item["minuto"]:
+            dt_local = timezone.localtime(item["minuto"])
+            bucket_m = 0 if dt_local.minute < 30 else 30
+            key = f"{dt_local.hour:02d}:{bucket_m:02d}"
+            buckets_tramo[key] = buckets_tramo.get(key, 0) + item["n"]
+
+    por_hora_fmt = []
+    hora_peak_tramo = hora_peak  # fallback al hourly si no hay tramos
+    max_tramo = 0
+    for start_str in sorted(buckets_tramo.keys()):
+        h, m = int(start_str[:2]), int(start_str[3:])
+        end_h = h if m + 30 < 60 else h + 1
+        end_m = (m + 30) % 60
+        rango = f"{start_str}–{end_h:02d}:{end_m:02d}"
+        total = buckets_tramo[start_str]
+        por_hora_fmt.append({"hora": rango, "total": total})
+        if total > max_tramo:
+            max_tramo = total
+            hora_peak_tramo = rango
 
     tiempos_global = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"]).aggregate(
         primer=Min("fecha_hora"), ultimo=Max("fecha_hora"), total=Count("id")
@@ -1752,7 +1771,7 @@ def _calcular_reportes(bloque_id=None):
 
     tiempos = {
         "por_hora": por_hora_fmt,
-        "hora_peak": hora_peak,
+        "hora_peak": hora_peak_tramo,   # formato "HH:MM–HH:MM"
         "prom_por_minuto": prom_por_min,
     }
 

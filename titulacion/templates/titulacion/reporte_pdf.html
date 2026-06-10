@@ -1080,8 +1080,9 @@ tbody td {
     </div>
 
     <div class="nota-seccion">
-        La <strong>hora peak</strong> (&#9733;) corresponde al horario con mayor cantidad de ingresos registrados.
-        La columna <strong>Distribuci&#243;n</strong> es proporcional al m&#225;ximo registrado en cualquier hora.
+        Los datos se agrupan en <strong>tramos de 30 minutos</strong> para mayor granularidad.
+        El <strong>tramo peak</strong> (&#9733;) es el intervalo de 30 min con mayor cantidad de ingresos.
+        La columna <strong>Distribuci&#243;n</strong> es proporcional al m&#225;ximo registrado en cualquier tramo.
         Esta informaci&#243;n es &#250;til para dimensionar el personal en futuras ceremonias y anticipar cuellos de botella.
     </div>
 
@@ -1089,7 +1090,7 @@ tbody td {
         <div class="info-box">
             <div class="info-box-title">Estad&#237;sticas de flujo</div>
             <div class="info-row">
-                <span class="info-row-lbl">Hora peak de mayor afluencia</span>
+                <span class="info-row-lbl">Tramo peak de mayor afluencia</span>
                 <span class="info-row-val c-ok">{{ datos.tiempos.hora_peak|default:"—" }}</span>
             </div>
             <div class="info-row">
@@ -1097,7 +1098,7 @@ tbody td {
                 <span class="info-row-val">{{ datos.tiempos.prom_por_minuto }}</span>
             </div>
             <div class="info-row">
-                <span class="info-row-lbl">Total horas con actividad</span>
+                <span class="info-row-lbl">Tramos de 30 min con actividad</span>
                 <span class="info-row-val">{{ datos.tiempos.por_hora|length }}</span>
             </div>
         </div>
