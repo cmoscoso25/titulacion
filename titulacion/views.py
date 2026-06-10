@@ -420,7 +420,7 @@ def ultimos_registros_ajax(request):
 
     data = [
         {
-            "fecha_hora": r.fecha_hora.strftime("%d/%m %H:%M"),
+            "fecha_hora": timezone.localtime(r.fecha_hora).strftime("%H:%M"),
             "nombre": r.estudiante.nombre_completo if r.estudiante else "-",
             "tipo": r.tipo,
             "resultado": r.resultado,
