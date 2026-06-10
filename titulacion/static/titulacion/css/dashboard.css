@@ -561,42 +561,44 @@ tbody tr:hover { background: #fafbfc; }
 }
 .pc-est-card {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    align-items: flex-start;
+    gap: 5px;
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 4px;
-    padding: 4px 8px;
+    padding: 4px 7px;
     transition: border-color 0.12s;
     min-width: 0;
 }
 .pc-est-card:hover { border-color: #c7d2fe; }
 .pc-est-avatar {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.6rem;
+    font-size: 0.57rem;
     font-weight: 700;
     color: #fff;
     flex-shrink: 0;
     letter-spacing: 0.02em;
+    margin-top: 1px;
 }
 .pc-est-info { min-width: 0; flex: 1; }
 .pc-est-nombre {
-    font-size: 0.72rem;
+    font-size: 0.69rem;
     font-weight: 600;
     color: #1f2937;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.25;
 }
 .pc-est-rut {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: #9ca3af;
     font-family: monospace;
+    white-space: nowrap;
 }
 
 /* Seguimiento header */
