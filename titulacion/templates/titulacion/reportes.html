@@ -565,29 +565,59 @@
                     <!-- TAB 5: Comparativo -->
                     <div id="tab-comparativo" class="panel-tab-rep" data-titulo="Comparativo entre Ceremonias">
 
+                        <div class="cmp-summary">
+                            <div class="cmp-stat-chip">
+                                <div class="cmp-stat-icon">&#9670;</div>
+                                <div class="cmp-stat-body">
+                                    <span class="cmp-stat-val" id="cmpTotalCeremonias">&#8212;</span>
+                                    <span class="cmp-stat-lbl">Ceremonias</span>
+                                </div>
+                            </div>
+                            <div class="cmp-stat-chip">
+                                <div class="cmp-stat-icon">#</div>
+                                <div class="cmp-stat-body">
+                                    <span class="cmp-stat-val" id="cmpTotalTitulados">&#8212;</span>
+                                    <span class="cmp-stat-lbl">Total titulados</span>
+                                </div>
+                            </div>
+                            <div class="cmp-stat-chip">
+                                <div class="cmp-stat-icon">%</div>
+                                <div class="cmp-stat-body">
+                                    <span class="cmp-stat-val" id="cmpPromAsistencia">&#8212;</span>
+                                    <span class="cmp-stat-lbl">Prom. asistencia</span>
+                                </div>
+                            </div>
+                            <div class="cmp-stat-chip">
+                                <div class="cmp-stat-icon">!</div>
+                                <div class="cmp-stat-body">
+                                    <span class="cmp-stat-val" id="cmpTotalAtrasados">&#8212;</span>
+                                    <span class="cmp-stat-lbl">Atrasados totales</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="panel-rep">
                             <div class="panel-rep-titulo">
                                 Comparativo entre bloques de ceremonia
-                                <small>Vista consolidada de todas las ceremonias</small>
+                                <small>Vista consolidada &middot; colores indican rendimiento relativo</small>
                             </div>
                             <div class="tabla-scroll">
                                 <table>
                                     <thead>
                                         <tr>
                                             <th>Ceremonia / bloque</th>
-                                            <th>Fecha</th>
                                             <th>Estado</th>
                                             <th>Titulados</th>
                                             <th>Ingresados</th>
                                             <th>% Asist.</th>
                                             <th>Invitados</th>
-                                            <th>Total</th>
+                                            <th>Total Asist.</th>
                                             <th>Atrasados</th>
                                             <th>Hora peak</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaComparativo">
-                                        <tr><td colspan="10">Cargando...</td></tr>
+                                        <tr><td colspan="9">Cargando...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -598,54 +628,52 @@
                     <!-- TAB 6: Invitaciones -->
                     <div id="tab-invitaciones" class="panel-tab-rep" data-titulo="Estado de Invitaciones">
 
-                        <div class="kpis-op">
-                            <div class="kpi-rep kpi-azul">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Total titulados</span>
-                                    <span class="kpi-rep-dot"></span>
+                        <div class="inv-layout">
+                            <div class="inv-hero-card">
+                                <div class="inv-hero-lbl">% Titulados gestionados</div>
+                                <div class="inv-hero-val" id="invPctGestionados">&#8212;</div>
+                                <div class="inv-hero-bar-track">
+                                    <div class="inv-hero-bar" id="invHeroBar"></div>
                                 </div>
-                                <span class="kpi-rep-valor" id="invTotalTitulados">—</span>
-                                <span class="kpi-rep-sub">En el sistema</span>
+                                <div class="inv-hero-sub">Del total de titulados en sistema</div>
                             </div>
-                            <div class="kpi-rep kpi-verde">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Gestionados</span>
-                                    <span class="kpi-rep-dot"></span>
+
+                            <div class="inv-chips-grid">
+                                <div class="inv-chip inv-chip--ok">
+                                    <div class="inv-chip-icon">&#10003;</div>
+                                    <div class="inv-chip-body">
+                                        <span class="inv-chip-val" id="invGestionados">&#8212;</span>
+                                        <span class="inv-chip-lbl">Gestionados</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="invGestionados">—</span>
-                                <span class="kpi-rep-sub">Invitaciones entregadas</span>
-                            </div>
-                            <div class="kpi-rep kpi-rojo">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">No gestionados</span>
-                                    <span class="kpi-rep-dot"></span>
+                                <div class="inv-chip inv-chip--err">
+                                    <div class="inv-chip-icon">&#10007;</div>
+                                    <div class="inv-chip-body">
+                                        <span class="inv-chip-val" id="invNoGestionados">&#8212;</span>
+                                        <span class="inv-chip-lbl">Sin gestionar</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="invNoGestionados">—</span>
-                                <span class="kpi-rep-sub">Sin invitaciones entregadas</span>
-                            </div>
-                            <div class="kpi-rep kpi-verde">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">% Gestionado</span>
-                                    <span class="kpi-rep-dot"></span>
+                                <div class="inv-chip inv-chip--info">
+                                    <div class="inv-chip-icon">&#8594;</div>
+                                    <div class="inv-chip-body">
+                                        <span class="inv-chip-val" id="invTotalTitulados">&#8212;</span>
+                                        <span class="inv-chip-lbl">Total titulados</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="invPctGestionados">—</span>
-                                <span class="kpi-rep-sub">Del total de titulados</span>
-                            </div>
-                            <div class="kpi-rep kpi-dorado">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Inv. entregadas</span>
-                                    <span class="kpi-rep-dot"></span>
+                                <div class="inv-chip inv-chip--teal">
+                                    <div class="inv-chip-icon">&#9993;</div>
+                                    <div class="inv-chip-body">
+                                        <span class="inv-chip-val" id="invInvGestionadas">&#8212;</span>
+                                        <span class="inv-chip-lbl">Inv. entregadas</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="invInvGestionadas">—</span>
-                                <span class="kpi-rep-sub">Tarjetas físicas entregadas</span>
-                            </div>
-                            <div class="kpi-rep kpi-rojo">
-                                <div class="kpi-rep-top">
-                                    <span class="kpi-rep-label">Inv. pendientes</span>
-                                    <span class="kpi-rep-dot"></span>
+                                <div class="inv-chip inv-chip--warn">
+                                    <div class="inv-chip-icon">&#9873;</div>
+                                    <div class="inv-chip-body">
+                                        <span class="inv-chip-val" id="invInvPendientes">&#8212;</span>
+                                        <span class="inv-chip-lbl">Inv. pendientes</span>
+                                    </div>
                                 </div>
-                                <span class="kpi-rep-valor" id="invInvPendientes">—</span>
-                                <span class="kpi-rep-sub">Tarjetas sin entregar</span>
                             </div>
                         </div>
 
@@ -663,7 +691,7 @@
                                             <th>Total est.</th>
                                             <th>Gestionados</th>
                                             <th>Pendientes</th>
-                                            <th>% Gestión</th>
+                                            <th>% Gesti&#243;n</th>
                                             <th>Inv. generadas</th>
                                             <th>Inv. entregadas</th>
                                             <th>Inv. pendientes</th>
@@ -1044,12 +1072,19 @@
     /* === INVITACIONES === */
     function renderInvitaciones(datos) {
         var inv = datos.invitaciones;
-        set("invTotalTitulados", inv.total_titulados);
-        set("invGestionados", inv.total_gestionados);
-        set("invNoGestionados", inv.total_no_gestionados);
-        set("invPctGestionados", inv.pct_gestionados + "%");
-        set("invInvGestionadas", inv.total_inv_gestionadas);
-        set("invInvPendientes", inv.total_inv_no_gestionadas);
+        set("invTotalTitulados",  inv.total_titulados);
+        set("invGestionados",     inv.total_gestionados);
+        set("invNoGestionados",   inv.total_no_gestionados);
+        set("invPctGestionados",  inv.pct_gestionados + "%");
+        set("invInvGestionadas",  inv.total_inv_gestionadas);
+        set("invInvPendientes",   inv.total_inv_no_gestionadas);
+
+        var heroBar = document.getElementById("invHeroBar");
+        if (heroBar) {
+            setTimeout(function() {
+                heroBar.style.width = Math.min(inv.pct_gestionados, 100) + "%";
+            }, 120);
+        }
 
         var tbody = document.getElementById("tablaInvitaciones");
         var bloques = datos.por_bloque;
@@ -1058,41 +1093,65 @@
             return;
         }
         tbody.innerHTML = bloques.map(function(b) {
-            var inv_total = b.inv_gestionadas + b.inv_no_gestionadas;
+            var inv_total  = b.inv_gestionadas + b.inv_no_gestionadas;
+            var pct        = b.pct_gestionados || 0;
+            var pctClass   = pct >= 80 ? "cmp-pct-num--ok" : pct >= 50 ? "cmp-pct-num--warn" : "cmp-pct-num--err";
+            var pendClass  = b.inv_no_gestionadas === 0 ? "cmp-late-pill--ok" : b.inv_no_gestionadas > 5 ? "cmp-late-pill--err" : "cmp-late-pill--warn";
+            var gestStyle  = b.est_gestionados > 0 ? " style='color:var(--c-ok);font-weight:600;'" : "";
             return '<tr>' +
-                '<td><strong>' + _esc(b.bloque) + '</strong></td>' +
+                '<td><span class="cmp-bloque-name">' + _esc(b.bloque) + '</span></td>' +
                 '<td>' + _esc(b.fecha) + '</td>' +
                 '<td>' + b.esperados + '</td>' +
-                '<td>' + b.est_gestionados + '</td>' +
+                '<td' + gestStyle + '>' + b.est_gestionados + '</td>' +
                 '<td>' + b.est_no_gestionados + '</td>' +
-                '<td><strong>' + b.pct_gestionados + '%</strong>' +
-                    '<div class="rep-prog-bar"><div style="width:' + Math.min(b.pct_gestionados, 100) + '%"></div></div>' +
-                '</td>' +
+                '<td><div class="cmp-pct-wrap"><span class="cmp-pct-num ' + pctClass + '">' + pct + '%</span>' +
+                    '<div class="rep-prog-bar"><div style="width:' + Math.min(pct, 100) + '%"></div></div></div></td>' +
                 '<td>' + inv_total + '</td>' +
                 '<td>' + b.inv_gestionadas + '</td>' +
-                '<td>' + b.inv_no_gestionadas + '</td>' +
+                '<td><span class="cmp-late-pill ' + pendClass + '">' + b.inv_no_gestionadas + '</span></td>' +
             '</tr>';
         }).join('');
     }
 
     /* === COMPARATIVO === */
     function renderComparativo(bloques) {
-        const tbody = document.getElementById("tablaComparativo");
+        var tbody = document.getElementById("tablaComparativo");
         if (!bloques.length) {
-            tbody.innerHTML = '<tr><td colspan="10">Sin datos para el filtro seleccionado.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="9">Sin datos para el filtro seleccionado.</td></tr>';
+            ["cmpTotalCeremonias","cmpTotalTitulados","cmpTotalAtrasados"].forEach(function(id){ set(id,"—"); });
+            var promEl = document.getElementById("cmpPromAsistencia");
+            if (promEl) promEl.textContent = "—";
             return;
         }
+        var totalTit   = bloques.reduce(function(s,b){ return s + b.esperados; }, 0);
+        var totalIngr  = bloques.reduce(function(s,b){ return s + b.ingresados; }, 0);
+        var totalAtras = bloques.reduce(function(s,b){ return s + b.atrasados; }, 0);
+        var promPct    = totalTit > 0 ? Math.round(totalIngr / totalTit * 100) : 0;
+        set("cmpTotalCeremonias", bloques.length);
+        set("cmpTotalTitulados",  totalTit);
+        set("cmpTotalAtrasados",  totalAtras);
+        var promEl = document.getElementById("cmpPromAsistencia");
+        if (promEl) {
+            promEl.textContent = promPct + "%";
+            promEl.className = "cmp-stat-val " + (promPct >= 70 ? "cmp-val--ok" : promPct >= 40 ? "cmp-val--warn" : "cmp-val--err");
+        }
         tbody.innerHTML = bloques.map(function(b) {
+            var pct       = b.pct || 0;
+            var pctClass  = pct >= 70 ? "cmp-pct-num--ok" : pct >= 40 ? "cmp-pct-num--warn" : "cmp-pct-num--err";
+            var lateClass = b.atrasados === 0 ? "cmp-late-pill--ok" : b.atrasados >= 20 ? "cmp-late-pill--err" : "cmp-late-pill--warn";
+            var ingStyle  = b.ingresados > 0 ? " style='color:var(--c-ok);font-weight:600;'" : "";
+            var jornada   = _jornadaLabel(b.hora_inicio);
             return '<tr>' +
-                '<td><strong>' + _esc(b.bloque) + '</strong></td>' +
-                '<td>' + _esc(b.fecha) + '</td>' +
+                '<td><span class="cmp-bloque-name">' + _esc(b.bloque) + '</span>' +
+                    '<span class="cmp-bloque-meta">' + _esc(b.fecha) + (jornada ? ' &middot; ' + jornada : '') + '</span></td>' +
                 '<td>' + badgeEstado(b.estado) + '</td>' +
                 '<td>' + b.esperados + '</td>' +
-                '<td>' + b.ingresados + '</td>' +
-                '<td><strong>' + b.pct + '%</strong></td>' +
+                '<td' + ingStyle + '>' + b.ingresados + '</td>' +
+                '<td><div class="cmp-pct-wrap"><span class="cmp-pct-num ' + pctClass + '">' + pct + '%</span>' +
+                    '<div class="rep-prog-bar"><div style="width:' + Math.min(pct, 100) + '%"></div></div></div></td>' +
                 '<td>' + b.inv_usadas + '</td>' +
-                '<td><strong>' + b.total_asistentes + '</strong></td>' +
-                '<td>' + b.atrasados + '</td>' +
+                '<td><span class="cmp-total-val">' + b.total_asistentes + '</span></td>' +
+                '<td><span class="cmp-late-pill ' + lateClass + '">' + b.atrasados + '</span></td>' +
                 '<td>' + _esc(b.hora_peak) + '</td>' +
             '</tr>';
         }).join('');
