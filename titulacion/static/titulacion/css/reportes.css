@@ -926,6 +926,133 @@
     .dash-hero-grid { gap:9px; }
 }
 
+/* ============================================================
+   TABLA POR CEREMONIA — diseño mejorado
+   ============================================================ */
+
+/* Badge adicional para estado PROGRAMADA */
+.badge-prog{ background:#e0f2fe; color:#075985; }
+
+/* Override tabla para ceremonia */
+.tabla-ceremonia{ min-width:740px !important; }
+
+/* Cabeceras con subtext */
+.tc-th-sub{
+    display:block;
+    font-weight:500;
+    font-size:.58rem;
+    text-transform:none;
+    letter-spacing:0;
+    color:#94a3b8;
+    margin-top:2px;
+}
+
+/* Anchos de columna */
+.tc-th-bloque { width:22%; }
+.tc-th-prog   { width:11%; white-space:nowrap; }
+.tc-th-estado { width:10%; }
+.tc-th-asist  { width:22%; }
+.tc-th-pct    { width:8%; text-align:center; }
+.tc-th-inv    { width:10%; }
+.tc-th-total  { width:9%; text-align:center; }
+.tc-th-atr    { width:8%; text-align:center; }
+
+/* Celda bloque */
+.tc-td-bloque{ vertical-align:middle; }
+
+.tc-bloque-name{
+    display:block;
+    font-size:.82rem;
+    font-weight:700;
+    color:var(--texto);
+    line-height:1.3;
+}
+
+.tc-bloque-sub{
+    display:block;
+    font-size:.65rem;
+    color:var(--texto-muted);
+    margin-top:2px;
+    font-weight:500;
+}
+
+/* Celda programación */
+.tc-td-prog{
+    vertical-align:middle;
+    white-space:nowrap;
+}
+
+.tc-prog-fecha{
+    display:block;
+    font-size:.78rem;
+    font-weight:700;
+    color:var(--texto);
+}
+
+.tc-prog-hora{
+    display:block;
+    font-size:.68rem;
+    color:var(--texto-muted);
+    margin-top:1px;
+}
+
+/* Celda asistencia */
+.tc-td-asist{ vertical-align:middle; }
+
+.tc-asist-nums{
+    display:block;
+    font-size:.78rem;
+    color:var(--texto);
+    margin-bottom:5px;
+    white-space:nowrap;
+}
+
+.tc-prog-bar{
+    width:100%;
+    height:4px;
+    border-radius:99px;
+    background:#e8edf4;
+    overflow:hidden;
+}
+
+.tc-prog-bar div{
+    height:100%;
+    border-radius:99px;
+    background:linear-gradient(90deg,#16a34a,#34d399);
+    transition:width .5s ease;
+}
+
+/* % asistencia coloreado */
+.tc-pct-ok  { font-weight:800; font-size:.9rem; color:#16a34a; text-align:center; }
+.tc-pct-warn{ font-weight:800; font-size:.9rem; color:#d97706; text-align:center; }
+.tc-pct-err { font-weight:800; font-size:.9rem; color:#dc2626; text-align:center; }
+
+/* Celda invitaciones */
+.tc-td-inv{
+    font-size:.78rem;
+    color:var(--texto);
+    white-space:nowrap;
+    vertical-align:middle;
+}
+
+/* Celda total asistentes */
+.tc-td-total{
+    font-size:1.35rem;
+    font-weight:800;
+    color:var(--texto);
+    text-align:center;
+    vertical-align:middle;
+    letter-spacing:-.02em;
+}
+
+/* Atrasados coloreado */
+.tc-atr-err { font-weight:800; font-size:.95rem; color:#dc2626; text-align:center; }
+.tc-atr-warn{ font-weight:800; font-size:.95rem; color:#d97706; text-align:center; }
+.tc-atr-none{ font-size:.82rem; color:#94a3b8; text-align:center; }
+
+/* Filas más altas para la tabla ceremonia */
+.tabla-ceremonia tbody tr td{ padding:13px 12px; }
+
 /* Pantalla baja / HDMI (max-height:800px — también aplica para notebook 15" 1366x768) */
 @media (max-height:800px) and (min-width:900px){
     .rep-header{ min-height:42px; }

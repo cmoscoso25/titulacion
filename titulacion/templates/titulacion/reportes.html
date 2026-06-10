@@ -367,28 +367,21 @@
                                 <small>Asistencia, invitaciones y tiempos por bloque</small>
                             </div>
                             <div class="tabla-scroll">
-                                <table>
+                                <table class="tabla-ceremonia">
                                     <thead>
                                         <tr>
-                                            <th>Bloque</th>
-                                            <th>Fecha</th>
-                                            <th>Hora</th>
-                                            <th>Estado</th>
-                                            <th>Esperados</th>
-                                            <th>Ingresados</th>
-                                            <th>Ausentes</th>
-                                            <th>% Asist.</th>
-                                            <th>Inv. usadas</th>
-                                            <th>Inv. libres</th>
-                                            <th>Total asist.</th>
-                                            <th>Atrasados</th>
-                                            <th>Primer ing.</th>
-                                            <th>Último ing.</th>
-                                            <th>Flujo</th>
+                                            <th class="tc-th-bloque">Bloque de<br>ceremonia</th>
+                                            <th class="tc-th-prog">Programación</th>
+                                            <th class="tc-th-estado">Estado</th>
+                                            <th class="tc-th-asist">Asistencia alumnos<br><span class="tc-th-sub">Esperados / Ingresados / Ausentes</span></th>
+                                            <th class="tc-th-pct">% Asist.</th>
+                                            <th class="tc-th-inv">Invitaciones<br><span class="tc-th-sub">Usadas / Libres</span></th>
+                                            <th class="tc-th-total">Total Asist.<br><span class="tc-th-sub">Alumnos + Inv</span></th>
+                                            <th class="tc-th-atr">Atrasados</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaCeremonia">
-                                        <tr><td colspan="15">Cargando...</td></tr>
+                                        <tr><td colspan="8">Cargando...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -666,8 +659,8 @@
         const map = {
             "ABIERTA":         '<span class="badge badge-si">Abierta</span>',
             "CERRADA":         '<span class="badge badge-no">Cerrada</span>',
-            "CERRADA_INGRESO": '<span class="badge badge-atrasado">Acepta atrasados</span>',
-            "PROGRAMADA":      '<span class="badge badge-atrasado">Programada</span>',
+            "CERRADA_INGRESO": '<span class="badge badge-atrasado">Con Atrasados</span>',
+            "PROGRAMADA":      '<span class="badge badge-prog">Programada</span>',
         };
         return map[estado] || estado;
     }
@@ -787,31 +780,46 @@
     }
 
     /* === POR CEREMONIA === */
+    function _jornadaLabel(hora) {
+        if (!hora) return "";
+        var h = parseInt(hora.split(":")[0], 10);
+        if (h < 12)  return "Jornada Mañana";
+        if (h < 18)  return "Jornada Tarde";
+        return "Jornada Noche";
+    }
+
     function renderCeremonia(bloques) {
         const tbody = document.getElementById("tablaCeremonia");
         if (!bloques.length) {
-            tbody.innerHTML = '<tr><td colspan="15">Sin datos para el filtro seleccionado.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8">Sin datos para el filtro seleccionado.</td></tr>';
             return;
         }
         tbody.innerHTML = bloques.map(function(b) {
+            var pct     = b.pct || 0;
+            var pctCls  = pct >= 70 ? "tc-pct-ok" : (pct >= 40 ? "tc-pct-warn" : "tc-pct-err");
+            var atrVal  = b.atrasados || 0;
+            var atrCls  = atrVal >= 20 ? "tc-atr-err" : (atrVal > 0 ? "tc-atr-warn" : "tc-atr-none");
+            var jornada = _jornadaLabel(b.hora_inicio);
             return '<tr>' +
-                '<td><strong>' + _esc(b.bloque) + '</strong></td>' +
-                '<td>' + _esc(b.fecha) + '</td>' +
-                '<td>' + _esc(b.hora_inicio) + '</td>' +
-                '<td>' + badgeEstado(b.estado) + '</td>' +
-                '<td>' + b.esperados + '</td>' +
-                '<td>' + b.ingresados + '</td>' +
-                '<td>' + b.ausentes + '</td>' +
-                '<td><strong>' + b.pct + '%</strong>' +
-                    '<div class="rep-prog-bar"><div style="width:' + Math.min(b.pct,100) + '%"></div></div>' +
+                '<td class="tc-td-bloque">' +
+                    '<strong class="tc-bloque-name">' + _esc(b.bloque) + '</strong>' +
+                    (jornada ? '<span class="tc-bloque-sub">' + jornada + '</span>' : '') +
                 '</td>' +
-                '<td>' + b.inv_usadas + '</td>' +
-                '<td>' + b.inv_no_usadas + '</td>' +
-                '<td><strong>' + b.total_asistentes + '</strong></td>' +
-                '<td>' + b.atrasados + '</td>' +
-                '<td>' + _esc(b.primer_ingreso) + '</td>' +
-                '<td>' + _esc(b.ultimo_ingreso) + '</td>' +
-                '<td>' + _esc(b.tiempo_flujo) + '</td>' +
+                '<td class="tc-td-prog">' +
+                    '<span class="tc-prog-fecha">' + _esc(b.fecha) + '</span>' +
+                    '<span class="tc-prog-hora">' + _esc(b.hora_inicio) + ' hrs</span>' +
+                '</td>' +
+                '<td>' + badgeEstado(b.estado) + '</td>' +
+                '<td class="tc-td-asist">' +
+                    '<span class="tc-asist-nums">' +
+                        b.esperados + ' / <strong>' + b.ingresados + '</strong> / ' + b.ausentes +
+                    '</span>' +
+                    '<div class="tc-prog-bar"><div style="width:' + Math.min(pct,100) + '%"></div></div>' +
+                '</td>' +
+                '<td class="' + pctCls + '">' + pct + '%</td>' +
+                '<td class="tc-td-inv">' + b.inv_usadas + ' / ' + b.inv_no_usadas + '</td>' +
+                '<td class="tc-td-total">' + b.total_asistentes + '</td>' +
+                '<td class="' + atrCls + '">' + atrVal + '</td>' +
             '</tr>';
         }).join('');
     }
