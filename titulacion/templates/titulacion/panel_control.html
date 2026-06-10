@@ -670,11 +670,17 @@
             tbody.innerHTML = '<tr><td colspan="5">No hay información para los filtros seleccionados.</td></tr>';
             return;
         }
-        items.forEach(function(item) {
+        items.forEach(function(item, idx) {
+            var detalleId = "plan-det-" + idx;
+            var btnVer = "";
+            if (item.presentes > 0) {
+                btnVer = ' <button class="pc-btn-ver-presentes" onclick="togglePlanDetalle(\'' + detalleId + '\', this)">ver ▾</button>';
+            }
             var fila = document.createElement("tr");
+            fila.className = "pc-plan-row";
             fila.innerHTML =
                 '<td>' + _esc(item.plan) + '</td>' +
-                '<td>' + item.presentes + ' / ' + item.total + '</td>' +
+                '<td><span>' + item.presentes + ' / ' + item.total + '</span>' + btnVer + '</td>' +
                 '<td>' + item.pendientes + '</td>' +
                 '<td>' + item.atrasados + '</td>' +
                 '<td>' +
@@ -684,7 +690,31 @@
                     '</div>' +
                 '</td>';
             tbody.appendChild(fila);
+
+            if (item.detalle_presentes && item.detalle_presentes.length > 0) {
+                var filaDetalle = document.createElement("tr");
+                filaDetalle.id = detalleId;
+                filaDetalle.className = "pc-plan-detalle";
+                filaDetalle.style.display = "none";
+                var html = '<td colspan="5"><div class="pc-detalle-inner">' +
+                    '<table class="pc-detalle-tabla"><thead><tr><th>RUT</th><th>Nombre</th></tr></thead><tbody>';
+                item.detalle_presentes.forEach(function(est) {
+                    html += '<tr><td>' + _esc(est.rut) + '</td><td>' + _esc(est.nombre) + '</td></tr>';
+                });
+                html += '</tbody></table></div></td>';
+                filaDetalle.innerHTML = html;
+                tbody.appendChild(filaDetalle);
+            }
         });
+    }
+
+    function togglePlanDetalle(id, btn) {
+        var row = document.getElementById(id);
+        if (!row) return;
+        var visible = row.style.display !== "none";
+        row.style.display = visible ? "none" : "";
+        btn.textContent = visible ? "ver ▾" : "ocultar ▴";
+        btn.classList.toggle("activo", !visible);
     }
 
     function cargarTablaMovimientos(items) {

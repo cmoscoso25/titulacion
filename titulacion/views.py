@@ -846,6 +846,19 @@ def datos_panel_control(request):
 
     avance_por_plan = []
 
+    # 1 query: detalle de estudiantes presentes por plan (evita N+1)
+    _presentes_detalle_por_plan = {}
+    for est in estudiantes_filtrados.filter(ingreso_confirmado=True).select_related(
+        "plan_estudio"
+    ).order_by("nombre_completo"):
+        plan_key = est.plan_estudio.nombre if est.plan_estudio else None
+        if plan_key not in _presentes_detalle_por_plan:
+            _presentes_detalle_por_plan[plan_key] = []
+        _presentes_detalle_por_plan[plan_key].append({
+            "nombre": est.nombre_completo,
+            "rut": est.rut,
+        })
+
     # 1 query: atrasados agrupados por plan (evita N+1 en el loop de planes)
     _atrasados_por_plan = {}
     for row in RegistroIngreso.objects.filter(
@@ -878,6 +891,7 @@ def datos_panel_control(request):
             "pendientes": total - presentes,
             "atrasados": atrasados_plan,
             "porcentaje": porcentaje,
+            "detalle_presentes": _presentes_detalle_por_plan.get(item["plan_estudio__nombre"], []),
         })
 
     seguimiento_estudiantes = []
