@@ -609,12 +609,8 @@ tbody td {
                 <span class="info-row-val c-indigo">{{ datos.invitaciones.pct_gestionados }}%</span>
             </div>
             <div class="info-row">
-                <span class="info-row-lbl">Invitaciones entregadas</span>
-                <span class="info-row-val">{{ datos.invitaciones.total_inv_gestionadas }}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-row-lbl">Invitaciones pendientes</span>
-                <span class="info-row-val c-warn">{{ datos.invitaciones.total_inv_no_gestionadas }}</span>
+                <span class="info-row-lbl">Base de cálculo</span>
+                <span class="info-row-val">{{ datos.invitaciones.total_titulados }} titulados</span>
             </div>
         </div>
     </div>
@@ -887,10 +883,10 @@ tbody td {
             <span class="kpi-card-lbl">Sin gestionar</span>
             <span class="kpi-card-sub">Sin invitaciones</span>
         </div>
-        <div class="kpi-card" style="border-top:3px solid #d97706;">
-            <span class="kpi-card-val" style="color:#d97706;">{{ datos.invitaciones.total_inv_no_gestionadas }}</span>
-            <span class="kpi-card-lbl">Inv. pendientes</span>
-            <span class="kpi-card-sub">Tarjetas sin entregar</span>
+        <div class="kpi-card" style="border-top:3px solid #4f46e5;">
+            <span class="kpi-card-val" style="color:#4f46e5;">{{ datos.invitaciones.total_titulados }}</span>
+            <span class="kpi-card-lbl">Total titulados</span>
+            <span class="kpi-card-sub">Base de c&#225;lculo</span>
         </div>
     </div>
 
@@ -899,13 +895,10 @@ tbody td {
             <tr>
                 <th>Bloque de ceremonia</th>
                 <th>Fecha</th>
-                <th class="text-right">Total est.</th>
+                <th class="text-right">Total titulados</th>
                 <th class="text-right">Gestionados</th>
                 <th class="text-right">Pendientes</th>
                 <th class="text-right" style="min-width:80px;">% Gesti&#243;n</th>
-                <th class="text-right">Inv. generadas</th>
-                <th class="text-right">Inv. entregadas</th>
-                <th class="text-right">Inv. pendientes</th>
             </tr>
         </thead>
         <tbody>
@@ -915,7 +908,11 @@ tbody td {
                 <td>{{ b.fecha }}</td>
                 <td class="text-right">{{ b.esperados }}</td>
                 <td class="text-right c-ok">{{ b.est_gestionados }}</td>
-                <td class="text-right {% if b.est_no_gestionados > 0 %}c-err{% endif %}">{{ b.est_no_gestionados }}</td>
+                <td class="text-right {% if b.est_no_gestionados > 0 %}c-err{% endif %}">
+                    <span class="badge {% if b.est_no_gestionados == 0 %}badge-ok{% elif b.est_no_gestionados > 5 %}badge-err{% else %}badge-warn{% endif %}">
+                        {{ b.est_no_gestionados }}
+                    </span>
+                </td>
                 <td class="text-right">
                     <div class="pbar-wrap">
                         <div class="pbar-track">
@@ -926,16 +923,9 @@ tbody td {
                             style="min-width:32px; text-align:right;">{{ b.pct_gestionados }}%</span>
                     </div>
                 </td>
-                <td class="text-right">{{ b.inv_gestionadas|add:b.inv_no_gestionadas }}</td>
-                <td class="text-right c-ok">{{ b.inv_gestionadas }}</td>
-                <td class="text-right">
-                    <span class="badge {% if b.inv_no_gestionadas == 0 %}badge-ok{% elif b.inv_no_gestionadas > 5 %}badge-err{% else %}badge-warn{% endif %}">
-                        {{ b.inv_no_gestionadas }}
-                    </span>
-                </td>
             </tr>
             {% empty %}
-            <tr><td colspan="9" class="text-center text-muted" style="padding:16px;">Sin datos disponibles.</td></tr>
+            <tr><td colspan="6" class="text-center text-muted" style="padding:16px;">Sin datos disponibles.</td></tr>
             {% endfor %}
         </tbody>
     </table>

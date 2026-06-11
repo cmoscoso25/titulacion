@@ -660,27 +660,13 @@
                                         <span class="inv-chip-lbl">Total titulados</span>
                                     </div>
                                 </div>
-                                <div class="inv-chip inv-chip--teal">
-                                    <div class="inv-chip-icon">&#9993;</div>
-                                    <div class="inv-chip-body">
-                                        <span class="inv-chip-val" id="invInvGestionadas">&#8212;</span>
-                                        <span class="inv-chip-lbl">Inv. entregadas</span>
-                                    </div>
-                                </div>
-                                <div class="inv-chip inv-chip--warn">
-                                    <div class="inv-chip-icon">&#9873;</div>
-                                    <div class="inv-chip-body">
-                                        <span class="inv-chip-val" id="invInvPendientes">&#8212;</span>
-                                        <span class="inv-chip-lbl">Inv. pendientes</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         <div class="panel-rep">
                             <div class="panel-rep-titulo">
-                                Gestión de invitaciones por ceremonia
-                                <small>Estudiantes con invitaciones entregadas vs pendientes</small>
+                                Gesti&#243;n DACOM por ceremonia
+                                <small>Titulados con invitaciones gestionadas vs pendientes</small>
                             </div>
                             <div class="tabla-scroll">
                                 <table>
@@ -688,17 +674,14 @@
                                         <tr>
                                             <th>Bloque</th>
                                             <th>Fecha</th>
-                                            <th>Total est.</th>
+                                            <th>Total titulados</th>
                                             <th>Gestionados</th>
                                             <th>Pendientes</th>
                                             <th>% Gesti&#243;n</th>
-                                            <th>Inv. generadas</th>
-                                            <th>Inv. entregadas</th>
-                                            <th>Inv. pendientes</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaInvitaciones">
-                                        <tr><td colspan="9">Cargando...</td></tr>
+                                        <tr><td colspan="6">Cargando...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1078,8 +1061,6 @@
         set("invGestionados",     inv.total_gestionados);
         set("invNoGestionados",   inv.total_no_gestionados);
         set("invPctGestionados",  inv.pct_gestionados + "%");
-        set("invInvGestionadas",  inv.total_inv_gestionadas);
-        set("invInvPendientes",   inv.total_inv_no_gestionadas);
 
         var heroBar = document.getElementById("invHeroBar");
         if (heroBar) {
@@ -1091,26 +1072,22 @@
         var tbody = document.getElementById("tablaInvitaciones");
         var bloques = datos.por_bloque;
         if (!bloques.length) {
-            tbody.innerHTML = '<tr><td colspan="9">Sin datos para el filtro seleccionado.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6">Sin datos para el filtro seleccionado.</td></tr>';
             return;
         }
         tbody.innerHTML = bloques.map(function(b) {
-            var inv_total  = b.inv_gestionadas + b.inv_no_gestionadas;
-            var pct        = b.pct_gestionados || 0;
-            var pctClass   = pct >= 80 ? "cmp-pct-num--ok" : pct >= 50 ? "cmp-pct-num--warn" : "cmp-pct-num--err";
-            var pendClass  = b.inv_no_gestionadas === 0 ? "cmp-late-pill--ok" : b.inv_no_gestionadas > 5 ? "cmp-late-pill--err" : "cmp-late-pill--warn";
-            var gestStyle  = b.est_gestionados > 0 ? " style='color:var(--c-ok);font-weight:600;'" : "";
+            var pct       = b.pct_gestionados || 0;
+            var pctClass  = pct >= 80 ? "cmp-pct-num--ok" : pct >= 50 ? "cmp-pct-num--warn" : "cmp-pct-num--err";
+            var pendClass = b.est_no_gestionados === 0 ? "cmp-late-pill--ok" : b.est_no_gestionados > 5 ? "cmp-late-pill--err" : "cmp-late-pill--warn";
+            var gestStyle = b.est_gestionados > 0 ? " style='color:var(--c-ok);font-weight:600;'" : "";
             return '<tr>' +
                 '<td><span class="cmp-bloque-name">' + _esc(b.bloque) + '</span></td>' +
                 '<td>' + _esc(b.fecha) + '</td>' +
                 '<td>' + b.esperados + '</td>' +
                 '<td' + gestStyle + '>' + b.est_gestionados + '</td>' +
-                '<td>' + b.est_no_gestionados + '</td>' +
+                '<td><span class="cmp-late-pill ' + pendClass + '">' + b.est_no_gestionados + '</span></td>' +
                 '<td><div class="cmp-pct-wrap"><span class="cmp-pct-num ' + pctClass + '">' + pct + '%</span>' +
                     '<div class="rep-prog-bar"><div style="width:' + Math.min(pct, 100) + '%"></div></div></div></td>' +
-                '<td>' + inv_total + '</td>' +
-                '<td>' + b.inv_gestionadas + '</td>' +
-                '<td><span class="cmp-late-pill ' + pendClass + '">' + b.inv_no_gestionadas + '</span></td>' +
             '</tr>';
         }).join('');
     }
