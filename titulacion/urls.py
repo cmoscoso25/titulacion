@@ -8,6 +8,7 @@ from .permisos import (
     acceso_entrega,
     acceso_general,
     acceso_ingreso,
+    acceso_reportes,
 )
 
 app_name = "titulacion"
@@ -151,31 +152,37 @@ urlpatterns = [
 
     path(
         "reportes/",
-        acceso_curricular(views.reportes),
+        acceso_reportes(views.reportes),
         name="reportes",
     ),
 
     path(
         "reportes/datos/",
-        acceso_curricular(views.datos_reportes),
+        acceso_reportes(views.datos_reportes),
         name="datos_reportes",
     ),
 
     path(
         "reportes/exportar/excel/",
-        acceso_curricular(views.exportar_reportes_excel),
+        acceso_reportes(views.exportar_reportes_excel),
         name="exportar_reportes_excel",
     ),
 
     path(
         "reportes/pdf/",
-        acceso_curricular(views.reporte_pdf),
+        acceso_reportes(views.reporte_pdf),
         name="reporte_pdf",
     ),
 
     path(
         "reportes/vicerrectoria-pdf/",
-        acceso_curricular(views.reporte_vicerrectoria_pdf),
+        acceso_reportes(views.reporte_vicerrectoria_pdf),
         name="reporte_vicerrectoria_pdf",
+    ),
+
+    path(
+        "cambiar-contrasena/",
+        views.cambiar_contrasena,
+        name="cambiar_contrasena",
     ),
 ]

@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambiar contraseña | Sistema Titulación INACAP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'titulacion/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'titulacion/css/inicio.css' %}">
+</head>
+
+<body>
+<div class="ops-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="ops-sidebar" id="ops-sidebar">
+
+        <div class="ops-sidebar-brand">
+            <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-logo">
+        </div>
+
+        <nav class="ops-nav" aria-label="Navegación principal">
+
+            <span class="ops-nav-label">Principal</span>
+            <a href="{% url 'titulacion:inicio' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                Panel Principal
+            </a>
+
+            {% if perm_admin %}
+            <span class="ops-nav-label">Gestión de Estudiantes</span>
+            <a href="{% url 'titulacion:cargar_excel' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Carga Masiva Excel
+            </a>
+            <a href="{% url 'titulacion:agregar_estudiante' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Agregar Estudiante
+            </a>
+            {% endif %}
+
+            {% if perm_entrega or perm_ingreso %}
+            <span class="ops-nav-label">Operación de Ceremonia</span>
+            {% if perm_entrega %}
+            <a href="{% url 'titulacion:entrega_invitaciones' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/></svg>
+                Entrega de Invitaciones
+            </a>
+            {% endif %}
+            {% if perm_ingreso %}
+            <a href="{% url 'titulacion:registro_ingreso' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="13" y="7" width="4" height="4" rx=".5"/><rect x="7" y="13" width="4" height="4" rx=".5"/></svg>
+                Registro de Ingreso
+            </a>
+            {% endif %}
+            {% endif %}
+
+            {% if perm_curricular %}
+            <span class="ops-nav-label">Gestión y Control</span>
+            <a href="{% url 'titulacion:panel_control' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                Panel de Control
+            </a>
+            <a href="{% url 'titulacion:cambio_ceremonia' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/></svg>
+                Cambio de Ceremonia
+            </a>
+            {% endif %}
+
+            {% if perm_reportes or perm_admin %}
+            <span class="ops-nav-label">Análisis</span>
+            {% if perm_reportes %}
+            <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Reportes
+            </a>
+            {% endif %}
+            {% if perm_admin %}
+            <a href="{% url 'titulacion:tarjetas' %}" class="ops-nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Tarjetas QR
+            </a>
+            {% endif %}
+            {% endif %}
+
+        </nav>
+
+        <div class="ops-sidebar-footer">Sede Arica · 2026</div>
+
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div class="ops-main">
+
+        <!-- TOPBAR -->
+        <header class="ops-topbar">
+            <div class="ops-topbar-left">
+                <button class="ops-hamburger" id="ops-hamburger" aria-label="Menú" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="ops-topbar-logo-cap">
+                    <img src="{% static 'titulacion/img/logo_inacap.svg' %}" alt="INACAP" class="ops-topbar-logo-img">
+                </div>
+                <span class="ops-topbar-sep" aria-hidden="true"></span>
+                <span class="ops-topbar-title">Ceremonia de Titulación 2026 - Sede Arica</span>
+            </div>
+            <div class="ops-topbar-right">
+                {% if request.user.is_authenticated %}
+                <div class="ops-user-chip">
+                    <div class="ops-avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":2"|upper }}</div>
+                    <span class="ops-username">{{ request.user.username }}</span>
+                </div>
+                <form method="POST" action="{% url 'titulacion:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ops-btn-logout">Cerrar sesión</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- OVERLAY MOBILE -->
+        <div class="ops-overlay" id="ops-overlay"></div>
+
+        <!-- MENSAJES -->
+        {% if messages %}
+        <div class="ops-mensajes">
+            {% for message in messages %}
+            <div class="ops-msg ops-msg--{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- CONTENIDO -->
+        <div class="ops-scroll">
+            <div style="max-width:480px; margin:48px auto; padding:0 16px;">
+
+                <div style="background:#fff; border:1px solid #dbe3ea; border-radius:10px; padding:32px; box-shadow:0 1px 3px rgba(0,0,0,.06);">
+
+                    <h2 style="font-size:1rem; font-weight:600; color:#1f2937; margin:0 0 4px;">
+                        Cambiar contraseña
+                    </h2>
+                    <p style="font-size:0.78rem; color:#6b7280; margin:0 0 24px;">
+                        Tu nueva contraseña debe tener al menos 8 caracteres.
+                    </p>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div style="margin-bottom:14px;">
+                            <label style="display:block; font-size:0.75rem; font-weight:500; color:#374151; margin-bottom:4px;">
+                                {{ field.label }}
+                            </label>
+                            <input
+                                type="password"
+                                name="{{ field.html_name }}"
+                                id="{{ field.id_for_label }}"
+                                style="width:100%; box-sizing:border-box; height:34px; padding:0 10px; border:1px solid #dbe3ea; border-radius:6px; font-size:0.82rem; font-family:inherit; outline:none;"
+                                {% if field.errors %}style="border-color:#e2001a;"{% endif %}
+                            >
+                            {% if field.errors %}
+                            <p style="font-size:0.72rem; color:#e2001a; margin:4px 0 0;">{{ field.errors|join:", " }}</p>
+                            {% endif %}
+                            {% if field.help_text %}
+                            <p style="font-size:0.70rem; color:#9ca3af; margin:3px 0 0;">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div style="display:flex; gap:10px; margin-top:20px;">
+                            <button type="submit" style="flex:1; height:34px; background:#06152f; color:#fff; border:none; border-radius:6px; font-size:0.78rem; font-weight:500; cursor:pointer; font-family:inherit;">
+                                Actualizar contraseña
+                            </button>
+                            <a href="{% url 'titulacion:inicio' %}" style="flex:1; height:34px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #dbe3ea; border-radius:6px; font-size:0.78rem; color:#6b7280; text-decoration:none;">
+                                Cancelar
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div><!-- /.ops-main -->
+
+</div><!-- /.ops-layout -->
+
+<script>
+(function() {
+    const ham = document.getElementById("ops-hamburger");
+    const sb = document.getElementById("ops-sidebar");
+    const ov = document.getElementById("ops-overlay");
+    if (ham && sb && ov) {
+        ham.addEventListener("click", () => {
+            const open = sb.classList.toggle("open");
+            ham.setAttribute("aria-expanded", open);
+            ov.classList.toggle("active", open);
+        });
+        ov.addEventListener("click", () => {
+            sb.classList.remove("open");
+            ham.setAttribute("aria-expanded", "false");
+            ov.classList.remove("active");
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

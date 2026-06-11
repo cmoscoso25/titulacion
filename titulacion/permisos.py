@@ -11,6 +11,7 @@ GRUPO_CURRICULAR = "CURRICULAR"
 GRUPO_ENTREGA = "ENTREGA_INVITACIONES"
 GRUPO_INGRESO = "INGRESO"         # Control de acceso QR (DAE)
 GRUPO_DACOM = "DACOM"             # Entrega de invitaciones (DACOM)
+GRUPO_REPORTES = "SOLO_REPORTES"  # Solo acceso a reportes (ej. Vicerrectoría)
 
 
 def usuario_en_grupo(usuario, nombre_grupo):
@@ -84,6 +85,28 @@ def acceso_curricular(view_func):
     def wrapper(request, *args, **kwargs):
 
         if es_curricular(request.user):
+            return view_func(request, *args, **kwargs)
+
+        return redireccion_sin_permiso(request)
+
+    return wrapper
+
+
+def es_reportes(usuario):
+    return usuario.is_authenticated and (
+        es_admin_titulacion(usuario)
+        or usuario_en_grupo(usuario, GRUPO_CURRICULAR)
+        or usuario_en_grupo(usuario, GRUPO_REPORTES)
+    )
+
+
+def acceso_reportes(view_func):
+
+    @wraps(view_func)
+    @login_required(login_url="titulacion:login")
+    def wrapper(request, *args, **kwargs):
+
+        if es_reportes(request.user):
             return view_func(request, *args, **kwargs)
 
         return redireccion_sin_permiso(request)

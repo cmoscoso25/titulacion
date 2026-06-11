@@ -2195,3 +2195,24 @@ def exportar_reportes_excel(request):
 
 def healthcheck(request):
     return HttpResponse("OK")
+
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+
+
+@login_required(login_url="titulacion:login")
+def cambiar_contrasena(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Tu contraseña fue actualizada correctamente.")
+            return redirect("titulacion:inicio")
+        else:
+            messages.error(request, "Corrige los errores del formulario.")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "titulacion/cambiar_contrasena.html", {"form": form})

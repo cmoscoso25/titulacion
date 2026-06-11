@@ -295,6 +295,26 @@ body {
     transform: none !important;
 }
 
+.ops-btn-cambiar-pass {
+    font-size: 0.71rem;
+    padding: 4px 10px;
+    border: 1px solid var(--border-ops);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--muted-ops);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    transition: border-color 0.13s, color 0.13s;
+}
+
+.ops-btn-cambiar-pass:hover {
+    border-color: #06152f;
+    color: #06152f;
+}
+
 /* ============================================================
    OVERLAY MOBILE
    ============================================================ */

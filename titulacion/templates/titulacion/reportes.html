@@ -119,6 +119,7 @@
                     <div class="ops-avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":2"|upper }}</div>
                     <span class="ops-username">{{ request.user.username }}</span>
                 </div>
+                <a href="{% url 'titulacion:cambiar_contrasena' %}" class="ops-btn-cambiar-pass">Cambiar clave</a>
                 <form method="POST" action="{% url 'titulacion:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="ops-btn-logout">Cerrar sesión</button>

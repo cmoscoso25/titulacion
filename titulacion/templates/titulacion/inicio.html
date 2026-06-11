@@ -69,9 +69,9 @@
             </a>
             {% endif %}
 
-            {% if perm_curricular or perm_admin %}
+            {% if perm_reportes or perm_admin %}
             <span class="ops-nav-label">Análisis</span>
-            {% if perm_curricular %}
+            {% if perm_reportes %}
             <a href="{% url 'titulacion:reportes' %}" class="ops-nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                 Reportes
@@ -122,6 +122,7 @@
                     <div class="ops-avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":2"|upper }}</div>
                     <span class="ops-username">{{ request.user.username }}</span>
                 </div>
+                <a href="{% url 'titulacion:cambiar_contrasena' %}" class="ops-btn-cambiar-pass">Cambiar clave</a>
                 <form method="POST" action="{% url 'titulacion:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="ops-btn-logout">Cerrar sesión</button>
