@@ -51,9 +51,11 @@ Valida por **nombre de grupo Django**, NO por permisos de modelo.
 | `ENTREGA_INVITACIONES` | Solo entrega |
 | `INGRESO` | Solo registro QR (DAE) |
 | `DACOM` | Solo entrega (DACOM) |
+| `SOLO_REPORTES` | Solo acceso a reportes (ej. Vicerrectoría) |
 
-Context vars en todos los templates: `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso`.
-Decorators de ruta: `acceso_admin` / `acceso_curricular` / `acceso_entrega` / `acceso_ingreso` / `acceso_general`.
+Context vars en todos los templates: `perm_admin`, `perm_admision`, `perm_curricular`, `perm_entrega`, `perm_ingreso`, `perm_reportes`.
+Decorators de ruta: `acceso_admin` / `acceso_curricular` / `acceso_reportes` / `acceso_entrega` / `acceso_ingreso` / `acceso_general`.
+`acceso_reportes` permite: ADMIN + CURRICULAR + SOLO_REPORTES (las 5 rutas `/reportes/*` lo usan).
 Al crear usuarios en Django Admin: asignar solo el grupo — NO permisos individuales de modelo.
 
 ## Advertencias técnicas
@@ -64,6 +66,7 @@ Al crear usuarios en Django Admin: asignar solo el grupo — NO permisos individ
 - Comando `reset_registro_ingreso`: en `titulacion/management/commands/`. Resetea SOLO RegistroIngreso +
   campos de presencia (ingreso_confirmado, usada). NO toca QRs, invitaciones ni ceremonias. Requiere "CONFIRMAR" o `--confirmar`.
 - Registro de Ingreso QR: el JSON de `validar_codigo_ingreso` tiene campo `tipo_entrada` ("Estudiante" / "Invitado 1" / "Invitado 2") y `ceremonia` (nombre del bloque). El campo `tipo` sigue siendo el código de estado para lógica JS — no cambiar.
+- Cambio de contraseña: vista `cambiar_contrasena` (login_required) en `/cambiar-contrasena/`. Usa `PasswordChangeForm` + `update_session_auth_hash`. Link "Cambiar clave" en topbar de los 8 módulos. Template: `cambiar_contrasena.html` (ops-layout).
 
 ## Reportes — separación Indicadores Institucionales vs DACOM ⚠️ CRÍTICO
 Auditado 2026-06-11. Regla: **KPIs institucionales solo usan `EstudianteTitulado` + `RegistroIngreso` con `tipo="ESTUDIANTE"`**.
