@@ -65,6 +65,24 @@ Al crear usuarios en Django Admin: asignar solo el grupo — NO permisos individ
   campos de presencia (ingreso_confirmado, usada). NO toca QRs, invitaciones ni ceremonias. Requiere "CONFIRMAR" o `--confirmar`.
 - Registro de Ingreso QR: el JSON de `validar_codigo_ingreso` tiene campo `tipo_entrada` ("Estudiante" / "Invitado 1" / "Invitado 2") y `ceremonia` (nombre del bloque). El campo `tipo` sigue siendo el código de estado para lógica JS — no cambiar.
 
+## Reportes — separación Indicadores Institucionales vs DACOM ⚠️ CRÍTICO
+Auditado 2026-06-11. Regla: **KPIs institucionales solo usan `EstudianteTitulado` + `RegistroIngreso` con `tipo="ESTUDIANTE"`**.
+
+**Indicadores Institucionales** (base = total de estudiantes titulados):
+`total_titulados`, `total_ingresados`, `total_ausentes`, `pct_asistencia`, `total_puntuales`, `total_atrasados`, `hora_peak`, puntualidad por bloque, tiempos de ingreso → filtro `tipo="ESTUDIANTE"` aplicado en todos.
+
+**Indicadores Operativos DACOM** (base = invitaciones):
+`total_inv_usadas`, `inv_gestionadas_b`, `inv_no_gestionadas_b` → correctamente separados en bloque `invitaciones_resumen`.
+
+**Métrica combinada `total_asistentes`** = `ingresados_b + inv_usadas_b`:
+Mostrada como "Total Presentes (Tit.+Inv.)" — etiqueta explícita en todos los templates.
+**NUNCA usar como denominador de % institucional.** No afecta % Asistencia ni % Gestión.
+
+**Filtros obligatorios** en `_calcular_reportes` para métricas de tiempo/puntualidad:
+```python
+tipo="ESTUDIANTE"  # en ingresos_qs, por_minuto_qs, tiempos_global, atrasados_b, tiempos_b, hora_peak_b_row
+```
+
 ## Reglas frontend (resumen)
 - Para cualquier tarea visual: leer `FRONTEND_MAP.md` primero.
 - No crear layouts nuevos — reutilizar `ops-layout` (inicio.css).

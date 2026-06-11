@@ -1563,10 +1563,10 @@ def _calcular_reportes(bloque_id=None):
     pct_asistencia = round(total_ingresados / total_titulados * 100, 1) if total_titulados > 0 else 0.0
     pct_ausencia = round(100 - pct_asistencia, 1)
 
-    # Puntualidad: ingresos a tiempo vs atrasados (por estudiante, no por registro)
-    ingresos_qs = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"])
-    total_puntuales = reg_qs.filter(resultado="PERMITIDO").values("estudiante_id").distinct().count()
-    total_atrasados = reg_qs.filter(resultado="ATRASADO").values("estudiante_id").distinct().count()
+    # Puntualidad: solo registros de ESTUDIANTES (tipo="ESTUDIANTE") para no inflar con invitados
+    ingresos_qs = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"], tipo="ESTUDIANTE")
+    total_puntuales = reg_qs.filter(resultado="PERMITIDO", tipo="ESTUDIANTE").values("estudiante_id").distinct().count()
+    total_atrasados = reg_qs.filter(resultado="ATRASADO", tipo="ESTUDIANTE").values("estudiante_id").distinct().count()
     base_puntualidad = total_puntuales + total_atrasados
     pct_puntuales = round(total_puntuales / base_puntualidad * 100, 1) if base_puntualidad > 0 else 0.0
     pct_atrasados = round(total_atrasados / base_puntualidad * 100, 1) if base_puntualidad > 0 else 0.0
@@ -1602,7 +1602,7 @@ def _calcular_reportes(bloque_id=None):
 
     peor = (
         RegistroIngreso.objects
-        .filter(resultado="ATRASADO")
+        .filter(resultado="ATRASADO", tipo="ESTUDIANTE")
         .values("estudiante__bloque_ceremonia__nombre")
         .annotate(n=Count("id"))
         .order_by("-n")
@@ -1656,9 +1656,9 @@ def _calcular_reportes(bloque_id=None):
         pct_gestionados_b = round(est_gestionados_b / esperados * 100, 1) if esperados > 0 else 0.0
 
         reg_b = RegistroIngreso.objects.filter(estudiante__bloque_ceremonia=bloque)
-        atrasados_b = reg_b.filter(resultado="ATRASADO").values("estudiante_id").distinct().count()
+        atrasados_b = reg_b.filter(resultado="ATRASADO", tipo="ESTUDIANTE").values("estudiante_id").distinct().count()
 
-        tiempos_b = reg_b.filter(resultado__in=["PERMITIDO", "ATRASADO"]).aggregate(
+        tiempos_b = reg_b.filter(resultado__in=["PERMITIDO", "ATRASADO"], tipo="ESTUDIANTE").aggregate(
             primer=Min("fecha_hora"), ultimo=Max("fecha_hora")
         )
         primer_b = tiempos_b["primer"].strftime("%H:%M") if tiempos_b["primer"] else "-"
@@ -1673,7 +1673,7 @@ def _calcular_reportes(bloque_id=None):
 
         hora_peak_b_row = (
             reg_b
-            .filter(resultado__in=["PERMITIDO", "ATRASADO"])
+            .filter(resultado__in=["PERMITIDO", "ATRASADO"], tipo="ESTUDIANTE")
             .annotate(hora=TruncHour("fecha_hora"))
             .values("hora")
             .annotate(n=Count("id"))
@@ -1729,10 +1729,10 @@ def _calcular_reportes(bloque_id=None):
         ],
     }
 
-    # Datos por minuto → agrupados en buckets de 30 min con timezone correcto
+    # Datos por minuto → solo ESTUDIANTES, agrupados en buckets de 30 min
     por_minuto_qs = list(
         reg_qs
-        .filter(resultado__in=["PERMITIDO", "ATRASADO"])
+        .filter(resultado__in=["PERMITIDO", "ATRASADO"], tipo="ESTUDIANTE")
         .annotate(minuto=TruncMinute("fecha_hora"))
         .values("minuto")
         .annotate(n=Count("id"))
@@ -1761,7 +1761,7 @@ def _calcular_reportes(bloque_id=None):
             max_tramo = total
             hora_peak_tramo = rango
 
-    tiempos_global = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"]).aggregate(
+    tiempos_global = reg_qs.filter(resultado__in=["PERMITIDO", "ATRASADO"], tipo="ESTUDIANTE").aggregate(
         primer=Min("fecha_hora"), ultimo=Max("fecha_hora"), total=Count("id")
     )
     prom_por_min = "-"
@@ -1877,7 +1877,7 @@ def exportar_reportes_excel(request):
     ws2 = wb.create_sheet("Por Ceremonia")
     cols2 = ["Bloque", "Fecha", "Hora", "Estado", "Esperados", "Ingresados",
              "Ausentes", "% Asist.", "Inv. Usadas", "Inv. No usadas",
-             "Total asistentes", "Atrasados", "Primer ingreso", "Último ingreso",
+             "Total presentes (tit.+inv.)", "Atrasados", "Primer ingreso", "Último ingreso",
              "Tiempo flujo", "Hora peak"]
     ws2.append(cols2)
     for i in range(1, len(cols2) + 1):
