@@ -222,11 +222,18 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="estado-pill {% if estudiante.invitaciones_entregadas %}estado-pill--ok{% else %}estado-pill--pendiente{% endif %}">
-                                {% if estudiante.invitaciones_entregadas %}
+                            <div class="estado-pill
+                                {% if estudiante.resultado_gestion == 'NO_ASISTIRA' %}estado-pill--err
+                                {% elif estudiante.resultado_gestion == 'NO_CONTACTADO' %}estado-pill--warn
+                                {% elif estudiante.resultado_gestion == 'PENDIENTE' %}estado-pill--pendiente
+                                {% elif estudiante.invitaciones_entregadas %}estado-pill--ok
+                                {% else %}estado-pill--pendiente{% endif %}">
+                                {% if estudiante.resultado_gestion %}
+                                    {{ estudiante.get_resultado_gestion_display }}
+                                {% elif estudiante.invitaciones_entregadas %}
                                     Invitaciones gestionadas
                                 {% else %}
-                                    Pendiente de gestión
+                                    Pendiente de gesti&oacute;n
                                 {% endif %}
                             </div>
                         </div>
@@ -239,9 +246,58 @@
                             >
                                 Descargar PDF
                             </button>
+                            <button
+                                type="button"
+                                class="btn-accion btn-entregado"
+                                onclick="toggleFormGestion({{ estudiante.id }})"
+                            >
+                                Registrar gesti&oacute;n
+                            </button>
+                        </div>
+
+                        <div id="form-gestion-{{ estudiante.id }}" class="form-gestion" style="display:none;">
                             <form method="POST" action="{% url 'titulacion:marcar_entrega_invitaciones' estudiante.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-accion btn-entregado">Marcar gestionadas</button>
+                                <div class="fg-row">
+                                    <label class="fg-label">Resultado de gesti&oacute;n <span class="fg-req">*</span></label>
+                                    <select name="resultado_gestion" class="fg-select" required
+                                        onchange="onResultadoChange(this, {{ estudiante.id }})"
+                                        id="resultado-{{ estudiante.id }}">
+                                        <option value="">— Seleccionar —</option>
+                                        <option value="ENTREGADAS"{% if estudiante.resultado_gestion == 'ENTREGADAS' %} selected{% endif %}>Invitaciones entregadas</option>
+                                        <option value="CONFIRMA_ASISTENCIA"{% if estudiante.resultado_gestion == 'CONFIRMA_ASISTENCIA' %} selected{% endif %}>Estudiante confirma asistencia</option>
+                                        <option value="NO_ASISTIRA"{% if estudiante.resultado_gestion == 'NO_ASISTIRA' %} selected{% endif %}>Estudiante informa que no asistir&aacute;</option>
+                                        <option value="NO_CONTACTADO"{% if estudiante.resultado_gestion == 'NO_CONTACTADO' %} selected{% endif %}>No fue posible contactar</option>
+                                        <option value="PENDIENTE"{% if estudiante.resultado_gestion == 'PENDIENTE' %} selected{% endif %}>Pendiente de confirmar</option>
+                                        <option value="OTRO"{% if estudiante.resultado_gestion == 'OTRO' %} selected{% endif %}>Otro</option>
+                                    </select>
+                                </div>
+                                <div id="motivo-wrap-{{ estudiante.id }}" class="fg-row" style="display:none;">
+                                    <label class="fg-label">Motivo de no asistencia <span class="fg-req">*</span></label>
+                                    <select name="motivo_no_asistencia" class="fg-select"
+                                        id="motivo-{{ estudiante.id }}"
+                                        onchange="onMotivoChange(this, {{ estudiante.id }})">
+                                        <option value="">— Seleccionar motivo —</option>
+                                        <option value="TRABAJO"{% if estudiante.motivo_no_asistencia == 'TRABAJO' %} selected{% endif %}>Trabajo</option>
+                                        <option value="TURNO_LABORAL"{% if estudiante.motivo_no_asistencia == 'TURNO_LABORAL' %} selected{% endif %}>Turno laboral</option>
+                                        <option value="VIAJE"{% if estudiante.motivo_no_asistencia == 'VIAJE' %} selected{% endif %}>Viaje</option>
+                                        <option value="PROBLEMAS_FAMILIARES"{% if estudiante.motivo_no_asistencia == 'PROBLEMAS_FAMILIARES' %} selected{% endif %}>Problemas familiares</option>
+                                        <option value="PROBLEMAS_SALUD"{% if estudiante.motivo_no_asistencia == 'PROBLEMAS_SALUD' %} selected{% endif %}>Problemas de salud</option>
+                                        <option value="NO_INTERESA"{% if estudiante.motivo_no_asistencia == 'NO_INTERESA' %} selected{% endif %}>No le interesa asistir</option>
+                                        <option value="FUERA_CIUDAD"{% if estudiante.motivo_no_asistencia == 'FUERA_CIUDAD' %} selected{% endif %}>Ya no reside en la ciudad</option>
+                                        <option value="OTRO"{% if estudiante.motivo_no_asistencia == 'OTRO' %} selected{% endif %}>Otro</option>
+                                    </select>
+                                </div>
+                                <div id="detalle-wrap-{{ estudiante.id }}" class="fg-row" style="display:none;">
+                                    <label class="fg-label">Detalle del motivo <span class="fg-req">*</span></label>
+                                    <input type="text" name="detalle_motivo" class="fg-input"
+                                        placeholder="Describe el motivo..."
+                                        value="{{ estudiante.detalle_motivo|default:'' }}">
+                                </div>
+                                <div class="fg-actions">
+                                    <button type="submit" class="fg-btn-guardar">Guardar gesti&oacute;n</button>
+                                    <button type="button" class="fg-btn-cancelar" onclick="toggleFormGestion({{ estudiante.id }})">Cancelar</button>
+                                </div>
                             </form>
                         </div>
 
@@ -532,6 +588,42 @@
     if (btn) btn.addEventListener('click', function () { toggle(!sidebar.classList.contains('open')); });
     if (overlay) overlay.addEventListener('click', function () { toggle(false); });
 }());
+</script>
+
+<script>
+function toggleFormGestion(id) {
+    var form = document.getElementById('form-gestion-' + id);
+    if (!form) return;
+    var visible = form.style.display !== 'none';
+    form.style.display = visible ? 'none' : 'block';
+}
+
+function onResultadoChange(sel, id) {
+    var motivoWrap  = document.getElementById('motivo-wrap-' + id);
+    var detalleWrap = document.getElementById('detalle-wrap-' + id);
+    var motivoSel   = document.getElementById('motivo-' + id);
+
+    if (sel.value === 'NO_ASISTIRA') {
+        motivoWrap.style.display  = 'block';
+        motivoSel.setAttribute('required', 'required');
+    } else {
+        motivoWrap.style.display  = 'none';
+        detalleWrap.style.display = 'none';
+        if (motivoSel) motivoSel.removeAttribute('required');
+    }
+}
+
+function onMotivoChange(sel, id) {
+    var detalleWrap = document.getElementById('detalle-wrap-' + id);
+    var detalleInput = detalleWrap ? detalleWrap.querySelector('input') : null;
+    if (sel.value === 'OTRO') {
+        detalleWrap.style.display = 'block';
+        if (detalleInput) detalleInput.setAttribute('required', 'required');
+    } else {
+        detalleWrap.style.display = 'none';
+        if (detalleInput) detalleInput.removeAttribute('required');
+    }
+}
 </script>
 
 </body>

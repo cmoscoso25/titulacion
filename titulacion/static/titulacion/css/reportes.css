@@ -196,6 +196,31 @@
     transform:translateY(-1px);
 }
 
+.btn-rep-vice{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    min-height:32px;
+    padding:0 13px;
+    border-radius:8px;
+    border:none;
+    background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%);
+    color:#fff;
+    font-size:.72rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s;
+    font-family:var(--fuente);
+    text-decoration:none;
+    white-space:nowrap;
+}
+.btn-rep-vice:hover{
+    opacity:.92;
+    transform:translateY(-1px);
+    box-shadow:0 4px 12px rgba(79,70,229,.3);
+}
+
 /* ============================================================
    KPI STRIP
    ============================================================ */
@@ -575,6 +600,7 @@
     .rep-controles,
     .btn-rep-excel,
     .btn-rep-print,
+    .btn-rep-vice,
     .rep-tabs-wrapper,
     .rep-actualizacion{ display:none !important; }
 
@@ -618,7 +644,8 @@
     .rep-controles select,
     #filtroBloque{ flex:1; min-width:0; width:auto; }
     .btn-rep-excel,
-    .btn-rep-print{ flex:1; }
+    .btn-rep-print,
+    .btn-rep-vice{ flex:1; }
     .rep-strip-inner{ flex-wrap:wrap; }
     .rep-strip-item{ min-width:40%; }
     .rep-strip-sep{ display:none; }

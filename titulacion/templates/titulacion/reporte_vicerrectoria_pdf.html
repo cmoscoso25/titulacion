@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte Vicerrectoría — Titulación INACAP 2026</title>
+<style>
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+    --rojo:#e30613; --navy:#06152f; --indigo:#4f46e5; --ok:#16a34a;
+    --warn:#d97706; --err:#dc2626; --muted:#6b7280; --border:#e5e7eb;
+    --bg:#f8fafc;
+}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:11px;color:#1e293b;background:#fff;line-height:1.5;}
+h1{font-size:1.4rem;}
+h2{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid var(--rojo);}
+h3{font-size:.88rem;font-weight:700;color:var(--navy);margin:12px 0 6px;}
+p{margin-bottom:8px;}
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+.portada{
+    background:linear-gradient(160deg,var(--navy) 0%,#0d2446 60%,#1a1a2e 100%);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:40px 50px;
+    page-break-after:always;
+}
+.portada-top{display:flex;align-items:center;gap:16px;border-bottom:2px solid rgba(255,255,255,.2);padding-bottom:20px;}
+.portada-badge{background:var(--rojo);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:4px;text-transform:uppercase;}
+.portada-inst{font-size:.8rem;opacity:.8;}
+.portada-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0;}
+.portada-main h1{font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:12px;}
+.portada-main .sub{font-size:1rem;opacity:.75;margin-bottom:30px;}
+.portada-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px;}
+.portada-kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:14px;text-align:center;}
+.portada-kpi-val{font-size:1.6rem;font-weight:800;display:block;}
+.portada-kpi-lbl{font-size:.65rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em;}
+.portada-bottom{display:flex;justify-content:space-between;align-items:flex-end;padding-top:20px;border-top:1px solid rgba(255,255,255,.15);font-size:.75rem;opacity:.65;}
+
+/* ============================================================
+   SECCIONES
+   ============================================================ */
+.seccion{padding:28px 40px 20px;page-break-inside:avoid;}
+.seccion-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.seccion-num{
+    width:28px;height:28px;border-radius:50%;
+    background:var(--navy);color:#fff;
+    font-size:.75rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+}
+.seccion-num.indigo{background:var(--indigo);}
+.seccion-num.rojo{background:var(--rojo);}
+.seccion-num.ok{background:var(--ok);}
+.seccion-num.warn{background:var(--warn);}
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+.kpi-card{border-radius:10px;border:1px solid var(--border);padding:14px;background:#fff;text-align:center;}
+.kpi-card-val{display:block;font-size:1.5rem;font-weight:800;line-height:1;}
+.kpi-card-lbl{display:block;font-size:.65rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
+.kpi-card-sub{display:block;font-size:.6rem;color:#9ca3af;margin-top:2px;}
+
+/* ============================================================
+   TABLAS
+   ============================================================ */
+table{width:100%;border-collapse:collapse;font-size:.72rem;margin-bottom:16px;}
+th{background:var(--navy);color:#fff;padding:7px 8px;text-align:left;font-weight:600;font-size:.65rem;letter-spacing:.03em;}
+th.text-right,td.text-right{text-align:right;}
+td{padding:6px 8px;border-bottom:1px solid var(--border);}
+tr:nth-child(even) td{background:#f8fafc;}
+.badge{display:inline-block;padding:2px 7px;border-radius:12px;font-size:.65rem;font-weight:700;}
+.badge-ok{background:#dcfce7;color:var(--ok);}
+.badge-warn{background:#fef3c7;color:var(--warn);}
+.badge-err{background:#fee2e2;color:var(--err);}
+.c-ok{color:var(--ok);font-weight:600;}
+.c-err{color:var(--err);}
+.c-warn{color:var(--warn);}
+.c-indigo{color:var(--indigo);font-weight:700;}
+.font-bold{font-weight:700;}
+
+/* ============================================================
+   BARRAS DE PROGRESO
+   ============================================================ */
+.pbar-wrap{display:flex;align-items:center;gap:6px;}
+.pbar-track{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:3px;}
+.pbar-fill--ok{background:var(--ok);}
+.pbar-fill--warn{background:var(--warn);}
+.pbar-fill--err{background:var(--rojo);}
+
+/* ============================================================
+   ANÁLISIS CUALITATIVO
+   ============================================================ */
+.analisis-block{
+    background:#f0f4ff;
+    border-left:4px solid var(--indigo);
+    border-radius:0 8px 8px 0;
+    padding:14px 16px;
+    margin-bottom:12px;
+}
+.analisis-block p{color:#1e293b;font-size:.78rem;line-height:1.6;margin-bottom:0;}
+.hallazgo-item{
+    display:flex;gap:10px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-left:3px solid var(--indigo);
+    border-radius:0 8px 8px 0;
+    padding:10px 12px;
+    margin-bottom:8px;
+}
+.hallazgo-ico{color:var(--indigo);font-size:.9rem;flex-shrink:0;margin-top:1px;}
+.recom-item{
+    display:flex;gap:10px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-left:3px solid var(--ok);
+    border-radius:0 8px 8px 0;
+    padding:10px 12px;
+    margin-bottom:8px;
+}
+.recom-ico{color:var(--ok);font-size:.9rem;flex-shrink:0;margin-top:1px;}
+.recom-item p,.hallazgo-item p{color:#1e293b;font-size:.76rem;line-height:1.6;margin:0;}
+
+/* ============================================================
+   INFO BOXES
+   ============================================================ */
+.info-boxes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.info-box{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
+.info-box-title{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.info-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9;font-size:.72rem;}
+.info-row:last-child{border-bottom:none;}
+.info-row-lbl{color:var(--muted);}
+.info-row-val{font-weight:600;}
+
+/* ============================================================
+   DACOM SECTION
+   ============================================================ */
+.dacom-header{
+    background:linear-gradient(90deg,#4f46e5 0%,#7c3aed 100%);
+    color:#fff;padding:12px 16px;border-radius:8px 8px 0 0;
+    font-weight:700;font-size:.8rem;
+    display:flex;align-items:center;gap:8px;
+}
+.dacom-body{border:1px solid #e0e7ff;border-top:none;border-radius:0 0 8px 8px;padding:14px;margin-bottom:16px;}
+.dacom-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.dacom-kpi{text-align:center;padding:10px;background:#f5f3ff;border-radius:8px;border:1px solid #e0e7ff;}
+.dacom-kpi-val{display:block;font-size:1.2rem;font-weight:800;color:var(--indigo);}
+.dacom-kpi-lbl{display:block;font-size:.62rem;color:#6d28d9;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+
+/* ============================================================
+   MOTIVOS TABLE
+   ============================================================ */
+.motivos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.motivo-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:#fef3c7;border-radius:6px;border:1px solid #fde68a;}
+.motivo-lbl{font-size:.72rem;font-weight:600;color:#92400e;}
+.motivo-val{font-size:.9rem;font-weight:800;color:var(--warn);}
+
+/* ============================================================
+   FIRMA/PIE
+   ============================================================ */
+.pie-pagina{
+    border-top:2px solid var(--border);
+    padding:10px 40px;
+    display:flex;
+    justify-content:space-between;
+    font-size:.62rem;
+    color:var(--muted);
+    background:#fff;
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media screen{
+    body{background:var(--bg);}
+    .page-wrap{max-width:900px;margin:0 auto;background:#fff;box-shadow:0 0 30px rgba(0,0,0,.12);}
+    .print-toolbar{
+        position:fixed;top:18px;right:18px;
+        background:var(--navy);color:#fff;
+        border:none;border-radius:8px;
+        padding:8px 18px;font-size:.78rem;font-weight:700;
+        cursor:pointer;z-index:999;
+        box-shadow:0 4px 14px rgba(6,21,47,.4);
+    }
+    .print-toolbar:hover{background:#0d2446;}
+}
+@media print{
+    @page{size:A4 portrait;margin:15mm 12mm 12mm;}
+    body{font-size:10px;}
+    .print-toolbar{display:none;}
+    .page-break{page-break-after:always;}
+    .no-break{page-break-inside:avoid;}
+    .portada{min-height:auto;padding:25px 30px;}
+    .seccion{padding:16px 20px 12px;}
+    .kpi-grid{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<button class="print-toolbar" onclick="window.print()">&#8659;&nbsp;Guardar / Imprimir PDF</button>
+
+<div class="page-wrap">
+
+<!-- ============================================================
+     PORTADA
+     ============================================================ -->
+<div class="portada">
+    <div class="portada-top">
+        <div>
+            <div class="portada-badge">Informe Ejecutivo</div>
+            <div class="portada-inst" style="margin-top:4px;">INACAP Sede Arica &mdash; Direcci&oacute;n Inform&aacute;tica, Ciberseguridad y Telecomunicaciones</div>
+        </div>
+    </div>
+
+    <div class="portada-main">
+        <h1>Reporte Vicerrector&iacute;a<br>Ceremonia de Titulaci&oacute;n 2026</h1>
+        <div class="sub">An&aacute;lisis cuantitativo y cualitativo del proceso &mdash; Base de c&aacute;lculo: estudiantes titulados</div>
+
+        <div class="portada-kpis">
+            <div class="portada-kpi">
+                <span class="portada-kpi-val">{{ datos.dashboard.total_titulados }}</span>
+                <span class="portada-kpi-lbl">Total titulados</span>
+            </div>
+            <div class="portada-kpi">
+                <span class="portada-kpi-val">{{ datos.dashboard.pct_asistencia }}%</span>
+                <span class="portada-kpi-lbl">% Asistencia</span>
+            </div>
+            <div class="portada-kpi">
+                <span class="portada-kpi-val">{{ analisis.pct_gestion }}%</span>
+                <span class="portada-kpi-lbl">% Gesti&oacute;n DACOM</span>
+            </div>
+            <div class="portada-kpi">
+                <span class="portada-kpi-val">{{ datos.por_bloque|length }}</span>
+                <span class="portada-kpi-lbl">Ceremonias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="portada-bottom">
+        <span>Generado: {{ ahora }}</span>
+        <span>Usuario: {{ usuario }}</span>
+        <span>Sistema Titulaci&oacute;n INACAP 2026</span>
+    </div>
+</div>
+
+<!-- ============================================================
+     SECCIÓN 1 — RESUMEN EJECUTIVO
+     ============================================================ -->
+<div class="seccion page-break">
+    <div class="seccion-header">
+        <div class="seccion-num">1</div>
+        <h2 style="border:none;margin:0;">Resumen Ejecutivo</h2>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card" style="border-top:3px solid var(--navy);">
+            <span class="kpi-card-val" style="color:var(--navy);">{{ datos.dashboard.total_titulados }}</span>
+            <span class="kpi-card-lbl">Total titulados</span>
+            <span class="kpi-card-sub">Nómina total del sistema</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid var(--ok);">
+            <span class="kpi-card-val" style="color:var(--ok);">{{ datos.dashboard.total_ingresados }}</span>
+            <span class="kpi-card-lbl">Ingresados</span>
+            <span class="kpi-card-sub">{{ datos.dashboard.pct_asistencia }}% de asistencia</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid var(--err);">
+            <span class="kpi-card-val" style="color:var(--err);">{{ datos.dashboard.total_ausentes }}</span>
+            <span class="kpi-card-lbl">No ingresaron</span>
+            <span class="kpi-card-sub">{{ datos.dashboard.pct_ausencia }}% de ausencia</span>
+        </div>
+        <div class="kpi-card" style="border-top:3px solid var(--indigo);">
+            <span class="kpi-card-val" style="color:var(--indigo);">{{ analisis.pct_asistencia }}%</span>
+            <span class="kpi-card-lbl">% Asistencia general</span>
+            <span class="kpi-card-sub">KPI institucional</span>
+        </div>
+    </div>
+
+    <div class="info-boxes">
+        <div class="info-box">
+            <div class="info-box-title">Gesti&oacute;n de invitaciones (DACOM)</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Titulados gestionados</span>
+                <span class="info-row-val c-ok">{{ datos_g.total_gestionados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Titulados sin gestionar</span>
+                <span class="info-row-val c-err">{{ datos_g.total_no_gestionados }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">% Gesti&oacute;n</span>
+                <span class="info-row-val c-indigo">{{ analisis.pct_gestion }}%</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">No fue posible contactar</span>
+                <span class="info-row-val c-warn">{{ datos_g.no_contactados }}</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">Invitaciones f&iacute;sicas</div>
+            <div class="info-row">
+                <span class="info-row-lbl">Invitaciones generadas</span>
+                <span class="info-row-val">{{ datos_g.inv_total }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Invitaciones entregadas</span>
+                <span class="info-row-val c-ok">{{ datos_g.inv_usadas }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Invitaciones pendientes</span>
+                <span class="info-row-val c-err">{{ datos_g.inv_pendientes }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-row-lbl">Estudiantes no asistir&aacute;n</span>
+                <span class="info-row-val c-warn">{{ datos_g.no_asistiran }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     SECCIÓN 2 — ANÁLISIS CUANTITATIVO POR CEREMONIA
+     ============================================================ -->
+<div class="seccion page-break">
+    <div class="seccion-header">
+        <div class="seccion-num rojo">2</div>
+        <h2 style="border:none;margin:0;">An&aacute;lisis Cuantitativo por Ceremonia</h2>
+    </div>
+    <p style="color:var(--muted);font-size:.72rem;margin-bottom:14px;">
+        Base de c&aacute;lculo: estudiantes titulados. Los porcentajes institucionales no incluyen invitados.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ceremonia</th>
+                <th>Fecha</th>
+                <th class="text-right">Titulados</th>
+                <th class="text-right">Ingresados</th>
+                <th class="text-right">Ausentes</th>
+                <th class="text-right" style="min-width:80px;">% Asist.</th>
+                <th class="text-right">Gestionados</th>
+                <th class="text-right">Sin gestionar</th>
+                <th class="text-right">% Gesti&oacute;n</th>
+                <th>Hora peak</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in datos.por_bloque %}
+            <tr class="no-break">
+                <td class="font-bold">{{ b.bloque }}</td>
+                <td>{{ b.fecha }}</td>
+                <td class="text-right">{{ b.esperados }}</td>
+                <td class="text-right c-ok">{{ b.ingresados }}</td>
+                <td class="text-right {% if b.ausentes > 0 %}c-err{% endif %}">{{ b.ausentes }}</td>
+                <td class="text-right">
+                    <div class="pbar-wrap">
+                        <div class="pbar-track">
+                            <div class="pbar-fill {% if b.pct >= 85 %}pbar-fill--ok{% elif b.pct >= 70 %}pbar-fill--warn{% else %}pbar-fill--err{% endif %}"
+                                style="width:{{ b.pct }}%;"></div>
+                        </div>
+                        <span class="font-bold {% if b.pct >= 85 %}c-ok{% elif b.pct >= 70 %}c-warn{% else %}c-err{% endif %}"
+                            style="min-width:34px;text-align:right;">{{ b.pct }}%</span>
+                    </div>
+                </td>
+                <td class="text-right c-ok">{{ b.est_gestionados }}</td>
+                <td class="text-right {% if b.est_no_gestionados > 0 %}c-err{% endif %}">
+                    <span class="badge {% if b.est_no_gestionados == 0 %}badge-ok{% elif b.est_no_gestionados > 10 %}badge-err{% else %}badge-warn{% endif %}">
+                        {{ b.est_no_gestionados }}
+                    </span>
+                </td>
+                <td class="text-right">
+                    <div class="pbar-wrap">
+                        <div class="pbar-track">
+                            <div class="pbar-fill {% if b.pct_gestionados >= 80 %}pbar-fill--ok{% elif b.pct_gestionados >= 50 %}pbar-fill--warn{% else %}pbar-fill--err{% endif %}"
+                                style="width:{{ b.pct_gestionados }}%;"></div>
+                        </div>
+                        <span class="font-bold {% if b.pct_gestionados >= 80 %}c-ok{% elif b.pct_gestionados >= 50 %}c-warn{% else %}c-err{% endif %}"
+                            style="min-width:34px;text-align:right;">{{ b.pct_gestionados }}%</span>
+                    </div>
+                </td>
+                <td>{{ b.hora_peak|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="10" class="text-center" style="padding:12px;color:var(--muted);">Sin datos disponibles.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if datos.tiempos.por_hora %}
+    <h3>Distribuci&oacute;n de ingresos de titulados por tramo horario</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Tramo horario</th>
+                <th class="text-right">Ingresos</th>
+                <th style="min-width:200px;">Distribuci&oacute;n</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in datos.tiempos.por_hora %}
+            <tr>
+                <td>{{ item.hora }}</td>
+                <td class="text-right font-bold">{{ item.total }}</td>
+                <td>
+                    <div class="pbar-track" style="height:8px;">
+                        {% widthratio item.total max_tiempos 100 as bar_w %}
+                        <div class="pbar-fill pbar-fill--ok" style="width:{{ bar_w }}%;"></div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+<!-- ============================================================
+     SECCIÓN 3 — ANÁLISIS CUALITATIVO (IA)
+     ============================================================ -->
+<div class="seccion page-break">
+    <div class="seccion-header">
+        <div class="seccion-num indigo">3</div>
+        <h2 style="border:none;margin:0;">An&aacute;lisis Cualitativo</h2>
+    </div>
+    <p style="color:var(--muted);font-size:.72rem;margin-bottom:16px;">
+        An&aacute;lisis interpretativo generado autom&aacute;ticamente a partir de los datos del proceso.
+        Identifica patrones, brechas y factores que explican los resultados obtenidos.
+    </p>
+
+    {% if analisis.hallazgos %}
+        <h3 style="color:var(--indigo);margin-bottom:10px;">&#128270; Hallazgos detectados</h3>
+        {% for h in analisis.hallazgos %}
+        <div class="hallazgo-item no-break">
+            <span class="hallazgo-ico">&#9656;</span>
+            <p>{{ h }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="analisis-block">
+            <p>No se detectaron patrones de alerta con los datos actuales. El proceso se desarrolló dentro de los parámetros esperados.</p>
+        </div>
+    {% endif %}
+
+    {% if datos_g.motivos %}
+    <h3 style="margin-top:16px;">Motivos de no asistencia registrados</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Motivo</th>
+                <th class="text-right">Estudiantes</th>
+                <th style="min-width:150px;">Proporci&oacute;n</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% with total_no_asistiran=datos_g.no_asistiran %}
+            {% for motivo, n in datos_g.motivos.items %}
+            <tr>
+                <td>
+                    {% if motivo == "TRABAJO" %}Trabajo
+                    {% elif motivo == "TURNO_LABORAL" %}Turno laboral
+                    {% elif motivo == "VIAJE" %}Viaje
+                    {% elif motivo == "PROBLEMAS_FAMILIARES" %}Problemas familiares
+                    {% elif motivo == "PROBLEMAS_SALUD" %}Problemas de salud
+                    {% elif motivo == "NO_INTERESA" %}No le interesa asistir
+                    {% elif motivo == "FUERA_CIUDAD" %}Ya no reside en la ciudad
+                    {% else %}Otro{% endif %}
+                </td>
+                <td class="text-right font-bold c-warn">{{ n }}</td>
+                <td>
+                    <div class="pbar-track" style="height:7px;">
+                        {% if total_no_asistiran > 0 %}
+                        {% widthratio n total_no_asistiran 100 as pct_m %}
+                        <div class="pbar-fill pbar-fill--warn" style="width:{{ pct_m }}%;"></div>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endwith %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+<!-- ============================================================
+     SECCIÓN 4 — RECOMENDACIONES
+     ============================================================ -->
+<div class="seccion page-break">
+    <div class="seccion-header">
+        <div class="seccion-num ok">4</div>
+        <h2 style="border:none;margin:0;">Recomendaciones para el Proceso Siguiente</h2>
+    </div>
+    <p style="color:var(--muted);font-size:.72rem;margin-bottom:16px;">
+        Las siguientes recomendaciones se generan autom&aacute;ticamente a partir del an&aacute;lisis de los datos del proceso actual,
+        con el objetivo de mejorar la gesti&oacute;n en futuras ceremonias de titulaci&oacute;n.
+    </p>
+
+    {% for r in analisis.recomendaciones %}
+    <div class="recom-item no-break">
+        <span class="recom-ico">&#10003;</span>
+        <p>{{ r }}</p>
+    </div>
+    {% empty %}
+    <div class="recom-item">
+        <span class="recom-ico">&#10003;</span>
+        <p>El proceso no presenta alertas que requieran cambios estructurales. Se recomienda mantener los procedimientos actuales.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ============================================================
+     SECCIÓN 5 — GESTIÓN DACOM
+     ============================================================ -->
+<div class="seccion page-break">
+    <div class="seccion-header">
+        <div class="seccion-num" style="background:var(--indigo);">5</div>
+        <h2 style="border:none;margin:0;">Gesti&oacute;n DACOM</h2>
+    </div>
+    <p style="color:var(--muted);font-size:.72rem;margin-bottom:14px;">
+        An&aacute;lisis espec&iacute;fico de la gesti&oacute;n de invitaciones por DACOM.
+        <strong>Esta secci&oacute;n es operativa y no modifica los indicadores institucionales de asistencia.</strong>
+    </p>
+
+    <div class="dacom-header">&#9783;&nbsp; Indicadores Operativos DACOM</div>
+    <div class="dacom-body">
+        <div class="dacom-kpis">
+            <div class="dacom-kpi">
+                <span class="dacom-kpi-val">{{ datos_g.total_gestionados }}</span>
+                <span class="dacom-kpi-lbl">Titulados gestionados</span>
+            </div>
+            <div class="dacom-kpi">
+                <span class="dacom-kpi-val" style="color:var(--err);">{{ datos_g.total_no_gestionados }}</span>
+                <span class="dacom-kpi-lbl">Sin gestionar</span>
+            </div>
+            <div class="dacom-kpi">
+                <span class="dacom-kpi-val">{{ analisis.pct_gestion }}%</span>
+                <span class="dacom-kpi-lbl">% Gesti&oacute;n</span>
+            </div>
+            <div class="dacom-kpi">
+                <span class="dacom-kpi-val" style="color:var(--warn);">{{ datos_g.no_contactados }}</span>
+                <span class="dacom-kpi-lbl">No contactados</span>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Ceremonia</th>
+                    <th>Fecha</th>
+                    <th class="text-right">Total Tit.</th>
+                    <th class="text-right">Gestionados</th>
+                    <th class="text-right">Sin gestionar</th>
+                    <th class="text-right">% Gesti&oacute;n</th>
+                    <th class="text-right">Inv. generadas</th>
+                    <th class="text-right">Inv. entregadas</th>
+                    <th class="text-right">Inv. pendientes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in datos.por_bloque %}
+                <tr class="no-break">
+                    <td class="font-bold">{{ b.bloque }}</td>
+                    <td>{{ b.fecha }}</td>
+                    <td class="text-right">{{ b.esperados }}</td>
+                    <td class="text-right c-ok">{{ b.est_gestionados }}</td>
+                    <td class="text-right">
+                        <span class="badge {% if b.est_no_gestionados == 0 %}badge-ok{% elif b.est_no_gestionados > 10 %}badge-err{% else %}badge-warn{% endif %}">
+                            {{ b.est_no_gestionados }}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <div class="pbar-wrap">
+                            <div class="pbar-track">
+                                <div class="pbar-fill {% if b.pct_gestionados >= 80 %}pbar-fill--ok{% elif b.pct_gestionados >= 50 %}pbar-fill--warn{% else %}pbar-fill--err{% endif %}"
+                                    style="width:{{ b.pct_gestionados }}%;"></div>
+                            </div>
+                            <span class="font-bold" style="min-width:32px;text-align:right;">{{ b.pct_gestionados }}%</span>
+                        </div>
+                    </td>
+                    <td class="text-right">{{ b.inv_gestionadas|add:b.inv_no_gestionadas }}</td>
+                    <td class="text-right c-ok">{{ b.inv_gestionadas }}</td>
+                    <td class="text-right">
+                        <span class="badge {% if b.inv_no_gestionadas == 0 %}badge-ok{% elif b.inv_no_gestionadas > 5 %}badge-err{% else %}badge-warn{% endif %}">
+                            {{ b.inv_no_gestionadas }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="9" style="padding:12px;color:var(--muted);text-align:center;">Sin datos.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if datos_g.resultados %}
+    <h3>Resultados de gesti&oacute;n registrados por DACOM</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Resultado de gesti&oacute;n</th>
+                <th class="text-right">Estudiantes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado, n in datos_g.resultados.items %}
+            <tr>
+                <td>
+                    {% if resultado == "ENTREGADAS" %}Invitaciones entregadas
+                    {% elif resultado == "CONFIRMA_ASISTENCIA" %}Estudiante confirma asistencia
+                    {% elif resultado == "NO_ASISTIRA" %}Estudiante informa que no asistir&aacute;
+                    {% elif resultado == "NO_CONTACTADO" %}No fue posible contactar
+                    {% elif resultado == "PENDIENTE" %}Pendiente de confirmar
+                    {% else %}Otro{% endif %}
+                </td>
+                <td class="text-right font-bold">{{ n }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+</div><!-- /page-wrap -->
+
+<div class="pie-pagina">
+    <span>Reporte Vicerrector&iacute;a &mdash; INACAP Sede Arica &mdash; Titulaci&oacute;n 2026</span>
+    <span>Generado: {{ ahora }} &nbsp;|&nbsp; {{ usuario }}</span>
+    <span>Solo para uso interno institucional</span>
+</div>
+
+<script>
+window.addEventListener("load", function() {
+    setTimeout(function() { window.print(); }, 700);
+});
+</script>
+</body>
+</html>

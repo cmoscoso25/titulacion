@@ -172,4 +172,10 @@ urlpatterns = [
         acceso_curricular(views.reporte_pdf),
         name="reporte_pdf",
     ),
+
+    path(
+        "reportes/vicerrectoria-pdf/",
+        acceso_curricular(views.reporte_vicerrectoria_pdf),
+        name="reporte_vicerrectoria_pdf",
+    ),
 ]

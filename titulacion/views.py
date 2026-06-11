@@ -1168,13 +1168,45 @@ def entrega_invitaciones(request):
 def marcar_entrega_invitaciones(request, estudiante_id):
     estudiante = get_object_or_404(EstudianteTitulado, id=estudiante_id)
 
-    estudiante.invitaciones_entregadas = True
-    estudiante.save()
+    if request.method == "POST":
+        resultado = request.POST.get("resultado_gestion", "").strip()
+        motivo    = request.POST.get("motivo_no_asistencia", "").strip()
+        detalle   = request.POST.get("detalle_motivo", "").strip()
 
-    messages.success(
-        request,
-        f"Invitaciones de {estudiante.nombre_completo} para {estudiante.bloque_ceremonia.nombre} marcadas como gestionadas."
-    )
+        if not resultado:
+            messages.error(request, "Debe seleccionar un resultado de gestión.")
+            return redirect(f"/entrega-invitaciones/?q={estudiante.rut}")
+
+        if resultado == "NO_ASISTIRA" and not motivo:
+            messages.error(request, "Debe seleccionar el motivo de no asistencia.")
+            return redirect(f"/entrega-invitaciones/?q={estudiante.rut}")
+
+        if resultado == "NO_ASISTIRA" and motivo == "OTRO" and not detalle:
+            messages.error(request, "Debe ingresar el detalle del motivo.")
+            return redirect(f"/entrega-invitaciones/?q={estudiante.rut}")
+
+        estudiante.resultado_gestion = resultado
+        estudiante.invitaciones_entregadas = (resultado not in ["NO_CONTACTADO", "PENDIENTE"])
+        if resultado == "NO_ASISTIRA":
+            estudiante.motivo_no_asistencia = motivo
+            estudiante.detalle_motivo = detalle if motivo == "OTRO" else ""
+        else:
+            estudiante.motivo_no_asistencia = None
+            estudiante.detalle_motivo = None
+        estudiante.save()
+
+        messages.success(
+            request,
+            f"Gestión de {estudiante.nombre_completo} registrada: {estudiante.get_resultado_gestion_display()}."
+        )
+    else:
+        estudiante.invitaciones_entregadas = True
+        estudiante.resultado_gestion = "ENTREGADAS"
+        estudiante.save()
+        messages.success(
+            request,
+            f"Invitaciones de {estudiante.nombre_completo} marcadas como gestionadas."
+        )
 
     return redirect(f"/entrega-invitaciones/?q={estudiante.rut}")
 
@@ -1821,6 +1853,230 @@ def reporte_pdf(request):
     return render(request, "titulacion/reporte_pdf.html", {
         "datos": datos,
         "ahora": ahora,
+        "max_tiempos": max_tiempos,
+    })
+
+
+# ---------------------------------------------------------------------------
+# Análisis IA rule-based — no requiere API externa
+# ---------------------------------------------------------------------------
+def _calcular_datos_gestion():
+    """Calcula motivos de no asistencia y resultados de gestión para el reporte Vicerrectoría."""
+    from django.db.models import Count, Q
+
+    total_gestionados   = EstudianteTitulado.objects.filter(invitaciones_entregadas=True).count()
+    total_no_gestionados = EstudianteTitulado.objects.filter(invitaciones_entregadas=False).count()
+    total_titulados     = EstudianteTitulado.objects.count()
+
+    resultados_qs = (
+        EstudianteTitulado.objects
+        .exclude(resultado_gestion=None)
+        .values("resultado_gestion")
+        .annotate(n=Count("id"))
+        .order_by("-n")
+    )
+    resultados = {r["resultado_gestion"]: r["n"] for r in resultados_qs}
+
+    no_asistiran = EstudianteTitulado.objects.filter(resultado_gestion="NO_ASISTIRA").count()
+    no_contactados = EstudianteTitulado.objects.filter(resultado_gestion="NO_CONTACTADO").count()
+    pendientes_gestion = EstudianteTitulado.objects.filter(
+        Q(resultado_gestion="PENDIENTE") | Q(resultado_gestion=None)
+    ).count()
+
+    motivos_qs = (
+        EstudianteTitulado.objects
+        .filter(resultado_gestion="NO_ASISTIRA")
+        .exclude(motivo_no_asistencia=None)
+        .values("motivo_no_asistencia")
+        .annotate(n=Count("id"))
+        .order_by("-n")
+    )
+    motivos = {m["motivo_no_asistencia"]: m["n"] for m in motivos_qs}
+
+    motivo_principal = max(motivos, key=motivos.get) if motivos else None
+
+    inv_total    = Invitacion.objects.count()
+    inv_usadas   = Invitacion.objects.filter(usada=True).count()
+    inv_pendientes = inv_total - inv_usadas
+
+    return {
+        "total_titulados":       total_titulados,
+        "total_gestionados":     total_gestionados,
+        "total_no_gestionados":  total_no_gestionados,
+        "no_asistiran":          no_asistiran,
+        "no_contactados":        no_contactados,
+        "pendientes_gestion":    pendientes_gestion,
+        "resultados":            resultados,
+        "motivos":               motivos,
+        "motivo_principal":      motivo_principal,
+        "inv_total":             inv_total,
+        "inv_usadas":            inv_usadas,
+        "inv_pendientes":        inv_pendientes,
+    }
+
+
+def _generar_analisis_ia(datos, datos_gestion):
+    """Genera análisis textual automático basado en reglas sobre los datos del proceso."""
+    hallazgos = []
+    recomendaciones = []
+    dashboard = datos["dashboard"]
+    por_bloque = datos["por_bloque"]
+
+    pct_asistencia = dashboard.get("pct_asistencia", 0)
+    total_titulados = dashboard.get("total_titulados", 1)
+    total_ingresados = dashboard.get("total_ingresados", 0)
+    total_ausentes = dashboard.get("total_ausentes", 0)
+
+    # --- Asistencia general ---
+    if pct_asistencia < 70:
+        hallazgos.append(
+            f"Se observa una tasa de asistencia de {pct_asistencia}%, por debajo del umbral esperado del 70%. "
+            "Esto puede estar relacionado con la anticipación en la entrega de invitaciones o con factores laborales "
+            "de los estudiantes titulados, quienes en su mayoría trabajan y requieren gestionar permisos con anticipación."
+        )
+        recomendaciones.append(
+            "Iniciar la entrega de invitaciones con al menos 3 semanas de anticipación a la ceremonia, "
+            "considerando que los estudiantes trabajan y necesitan tiempo para solicitar permisos laborales."
+        )
+    elif pct_asistencia >= 85:
+        hallazgos.append(
+            f"Se registró una tasa de asistencia de {pct_asistencia}%, resultado destacable que refleja "
+            "una gestión efectiva del proceso de invitaciones y una alta motivación de los titulados."
+        )
+    else:
+        hallazgos.append(
+            f"La tasa de asistencia alcanzó un {pct_asistencia}%, un resultado moderado que puede mejorarse "
+            "con ajustes en los tiempos de gestión y comunicación previa."
+        )
+
+    # --- Gestión DACOM ---
+    pct_gestion = round(datos_gestion["total_gestionados"] / max(1, datos_gestion["total_titulados"]) * 100, 1)
+    if pct_gestion < 60:
+        hallazgos.append(
+            f"Solo el {pct_gestion}% de los titulados tuvo sus invitaciones gestionadas. "
+            "Una cobertura insuficiente de la gestión DACOM puede explicar parte de la inasistencia registrada."
+        )
+        recomendaciones.append(
+            "Establecer una fecha límite institucional para el cierre de gestión DACOM (mínimo 5 días antes de cada ceremonia) "
+            "y habilitar alertas automáticas para estudiantes pendientes."
+        )
+    elif pct_gestion < 80:
+        hallazgos.append(
+            f"El {pct_gestion}% de los titulados fue gestionado por DACOM. "
+            "Existe margen de mejora para alcanzar cobertura total antes de la fecha de cada ceremonia."
+        )
+        recomendaciones.append(
+            "Incorporar seguimiento temprano a los estudiantes no gestionados, priorizando aquellos "
+            "a 7 días de su ceremonia."
+        )
+
+    # --- Estudiantes no contactados ---
+    if datos_gestion["no_contactados"] > 0:
+        pct_nc = round(datos_gestion["no_contactados"] / max(1, total_titulados) * 100, 1)
+        hallazgos.append(
+            f"Un {pct_nc}% de los estudiantes ({datos_gestion['no_contactados']}) no pudo ser contactado por DACOM. "
+            "Esto sugiere datos de contacto desactualizados o insuficientes."
+        )
+        recomendaciones.append(
+            "Implementar validación de datos de contacto (correo y teléfono) durante el proceso de titulación, "
+            "antes de la carga final de la nómina de titulados."
+        )
+
+    # --- Motivo principal de no asistencia ---
+    motivo_labels = {
+        "TRABAJO": "motivos laborales (trabajo)", "TURNO_LABORAL": "turnos laborales",
+        "VIAJE": "viajes planificados", "PROBLEMAS_FAMILIARES": "problemas familiares",
+        "PROBLEMAS_SALUD": "problemas de salud", "NO_INTERESA": "desinterés personal",
+        "FUERA_CIUDAD": "residir fuera de la ciudad", "OTRO": "otros motivos",
+    }
+    mp = datos_gestion.get("motivo_principal")
+    if mp and datos_gestion["no_asistiran"] > 0:
+        label = motivo_labels.get(mp, mp)
+        n_motivo = datos_gestion["motivos"].get(mp, 0)
+        hallazgos.append(
+            f"De los {datos_gestion['no_asistiran']} estudiantes que informaron que no asistirán, "
+            f"la causa principal es {label} ({n_motivo} estudiantes). "
+            "Esto confirma la necesidad de anticipar la comunicación y gestión de invitaciones."
+        )
+        if mp in ("TRABAJO", "TURNO_LABORAL"):
+            recomendaciones.append(
+                "Reforzar la comunicación formal de fechas de ceremonia vía correo y WhatsApp con un mínimo de "
+                "30 días de anticipación, para que los estudiantes puedan gestionar permisos laborales a tiempo."
+            )
+
+    # --- Brechas entre ceremonias ---
+    if len(por_bloque) >= 2:
+        pcts = [(b["bloque"], b["pct"]) for b in por_bloque if b["esperados"] > 0]
+        if pcts:
+            min_bloque, min_pct = min(pcts, key=lambda x: x[1])
+            max_bloque, max_pct = max(pcts, key=lambda x: x[1])
+            brecha = max_pct - min_pct
+            if brecha >= 15:
+                hallazgos.append(
+                    f"Existe una brecha de {brecha:.0f} puntos porcentuales entre la ceremonia con mayor asistencia "
+                    f"({max_bloque}: {max_pct}%) y la de menor asistencia ({min_bloque}: {min_pct}%). "
+                    "Esta variación merece análisis diferenciado por jornada, plan de estudio o fecha de ceremonia."
+                )
+                recomendaciones.append(
+                    f"Analizar las causas específicas de menor asistencia en '{min_bloque}', considerando su jornada, "
+                    "plan de estudios y anticipación en la gestión de invitaciones."
+                )
+
+    # --- Invitaciones pendientes ---
+    if datos_gestion["inv_pendientes"] > 0 and datos_gestion["inv_total"] > 0:
+        pct_inv_pend = round(datos_gestion["inv_pendientes"] / datos_gestion["inv_total"] * 100, 1)
+        if pct_inv_pend > 20:
+            hallazgos.append(
+                f"El {pct_inv_pend}% de las invitaciones físicas ({datos_gestion['inv_pendientes']}) permanecen sin uso. "
+                "Esto puede indicar inasistencias no anticipadas o gestión tardía de las invitaciones."
+            )
+            recomendaciones.append(
+                "Crear un tablero de avance diario para DACOM que permita visualizar en tiempo real "
+                "las invitaciones pendientes y los estudiantes aún no gestionados."
+            )
+
+    # --- Pendientes de confirmar ---
+    if datos_gestion["pendientes_gestion"] > 0:
+        recomendaciones.append(
+            f"Hay {datos_gestion['pendientes_gestion']} estudiantes pendientes de confirmar gestión. "
+            "Se recomienda activar seguimiento prioritario antes de la próxima ceremonia."
+        )
+
+    # Recomendaciones base siempre presentes
+    recomendaciones.append(
+        "Registrar sistemáticamente el motivo de no asistencia en cada estudiante para construir "
+        "un historial que permita tomar decisiones basadas en datos en futuras ceremonias."
+    )
+    recomendaciones.append(
+        "Separar claramente el módulo de gestión DACOM del módulo de indicadores institucionales, "
+        "manteniendo la base de cálculo de KPIs solo sobre estudiantes titulados."
+    )
+
+    return {
+        "hallazgos": hallazgos,
+        "recomendaciones": recomendaciones,
+        "pct_asistencia": pct_asistencia,
+        "pct_gestion": pct_gestion,
+    }
+
+
+def reporte_vicerrectoria_pdf(request):
+    bloque_id = request.GET.get("bloque", "").strip() or None
+    datos     = _calcular_reportes(bloque_id=bloque_id)
+    datos_g   = _calcular_datos_gestion()
+    analisis  = _generar_analisis_ia(datos, datos_g)
+
+    por_hora     = datos["tiempos"]["por_hora"]
+    max_tiempos  = max((item["total"] for item in por_hora), default=1)
+    ahora        = timezone.localtime(timezone.now()).strftime("%d/%m/%Y %H:%M hrs")
+    usuario      = request.user.get_full_name() or request.user.username
+
+    return render(request, "titulacion/reporte_vicerrectoria_pdf.html", {
+        "datos":       datos,
+        "datos_g":     datos_g,
+        "analisis":    analisis,
+        "ahora":       ahora,
+        "usuario":     usuario,
         "max_tiempos": max_tiempos,
     })
 

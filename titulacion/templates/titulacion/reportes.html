@@ -165,6 +165,9 @@
                         <a id="btnPdf" href="{% url 'titulacion:reporte_pdf' %}" target="_blank" class="btn-rep-print">
                             &#8659;&nbsp;Descargar PDF
                         </a>
+                        <a id="btnVicerrectoria" href="{% url 'titulacion:reporte_vicerrectoria_pdf' %}" target="_blank" class="btn-rep-vice">
+                            &#8659;&nbsp;Reporte Vicerrector&#237;a PDF
+                        </a>
                     </div>
                 </div>
             </div>
@@ -706,12 +709,14 @@
 </div><!-- ops-layout -->
 
 <script>
-    const URL_DATOS = "{% url 'titulacion:datos_reportes' %}";
-    const URL_EXCEL = "{% url 'titulacion:exportar_reportes_excel' %}";
-    const URL_PDF   = "{% url 'titulacion:reporte_pdf' %}";
-    const filtroBloque = document.getElementById("filtroBloque");
-    const btnExcel     = document.getElementById("btnExcel");
-    const btnPdf       = document.getElementById("btnPdf");
+    const URL_DATOS  = "{% url 'titulacion:datos_reportes' %}";
+    const URL_EXCEL  = "{% url 'titulacion:exportar_reportes_excel' %}";
+    const URL_PDF    = "{% url 'titulacion:reporte_pdf' %}";
+    const URL_VICE   = "{% url 'titulacion:reporte_vicerrectoria_pdf' %}";
+    const filtroBloque   = document.getElementById("filtroBloque");
+    const btnExcel       = document.getElementById("btnExcel");
+    const btnPdf         = document.getElementById("btnPdf");
+    const btnVicerrectoria = document.getElementById("btnVicerrectoria");
 
     let graficoTiempos = null;
     let graficoDashboard = null;
@@ -1142,6 +1147,7 @@
         const params = bloque ? "?bloque=" + bloque : "";
         btnExcel.href = URL_EXCEL + params;
         if (btnPdf) btnPdf.href = URL_PDF + params;
+        if (btnVicerrectoria) btnVicerrectoria.href = URL_VICE + params;
 
         try {
             const resp  = await fetch(URL_DATOS + params);

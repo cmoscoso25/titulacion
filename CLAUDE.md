@@ -83,6 +83,21 @@ Mostrada como "Total Presentes (Tit.+Inv.)" — etiqueta explícita en todos los
 tipo="ESTUDIANTE"  # en ingresos_qs, por_minuto_qs, tiempos_global, atrasados_b, tiempos_b, hora_peak_b_row
 ```
 
+## Entrega Invitaciones — Resultado Gestión ⚠️ NUEVO (2026-06-11)
+`EstudianteTitulado` tiene 3 nuevos campos (migración 0005):
+- `resultado_gestion`: ENTREGADAS / CONFIRMA_ASISTENCIA / NO_ASISTIRA / NO_CONTACTADO / PENDIENTE / OTRO
+- `motivo_no_asistencia`: TRABAJO / TURNO_LABORAL / VIAJE / PROBLEMAS_FAMILIARES / PROBLEMAS_SALUD / NO_INTERESA / FUERA_CIUDAD / OTRO (solo si resultado=NO_ASISTIRA)
+- `detalle_motivo`: texto libre (solo si motivo=OTRO)
+
+`marcar_entrega_invitaciones` ahora acepta POST con estos campos. JS en entrega_invitaciones.html controla visibilidad condicional. CSS en `entrega.css`.
+
+## Reporte Vicerrectoría ⚠️ NUEVO (2026-06-11)
+- URL: `/reportes/vicerrectoria-pdf/` · Vista: `reporte_vicerrectoria_pdf` · Template: `reporte_vicerrectoria_pdf.html`
+- Funciones: `_calcular_datos_gestion()` (motivos, resultados), `_generar_analisis_ia(datos, datos_g)` (análisis rule-based)
+- 5 secciones: Portada · Resumen Ejecutivo · Cuantitativo · Cualitativo (IA) · Recomendaciones · DACOM
+- KPIs base: solo estudiantes. DACOM separado en Sección 5.
+- Botón morado "Reporte Vicerrectoría PDF" en `reportes.html`. CSS: `btn-rep-vice` en `reportes.css`.
+
 ## Reglas frontend (resumen)
 - Para cualquier tarea visual: leer `FRONTEND_MAP.md` primero.
 - No crear layouts nuevos — reutilizar `ops-layout` (inicio.css).

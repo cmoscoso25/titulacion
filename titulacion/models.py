@@ -183,6 +183,39 @@ class EstudianteTitulado(models.Model):
 
     invitaciones_entregadas = models.BooleanField(default=False)
 
+    RESULTADO_GESTION_CHOICES = [
+        ("ENTREGADAS",          "Invitaciones entregadas"),
+        ("CONFIRMA_ASISTENCIA", "Estudiante confirma asistencia"),
+        ("NO_ASISTIRA",         "Estudiante informa que no asistirá"),
+        ("NO_CONTACTADO",       "No fue posible contactar"),
+        ("PENDIENTE",           "Pendiente de confirmar"),
+        ("OTRO",                "Otro"),
+    ]
+    resultado_gestion = models.CharField(
+        max_length=30,
+        choices=RESULTADO_GESTION_CHOICES,
+        blank=True,
+        null=True,
+    )
+
+    MOTIVO_NO_ASISTENCIA_CHOICES = [
+        ("TRABAJO",             "Trabajo"),
+        ("TURNO_LABORAL",       "Turno laboral"),
+        ("VIAJE",               "Viaje"),
+        ("PROBLEMAS_FAMILIARES","Problemas familiares"),
+        ("PROBLEMAS_SALUD",     "Problemas de salud"),
+        ("NO_INTERESA",         "No le interesa asistir"),
+        ("FUERA_CIUDAD",        "Ya no reside en la ciudad"),
+        ("OTRO",                "Otro"),
+    ]
+    motivo_no_asistencia = models.CharField(
+        max_length=30,
+        choices=MOTIVO_NO_ASISTENCIA_CHOICES,
+        blank=True,
+        null=True,
+    )
+    detalle_motivo = models.TextField(blank=True, null=True)
+
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
 
